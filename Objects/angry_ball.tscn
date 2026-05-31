@@ -14,6 +14,8 @@ radius = 25.0
 mass = 0.001
 physics_material_override = SubResource("PhysicsMaterial_f15s6")
 gravity_scale = 0.0
+contact_monitor = true
+max_contacts_reported = 99
 script = ExtResource("1_5kt4o")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=661971520]

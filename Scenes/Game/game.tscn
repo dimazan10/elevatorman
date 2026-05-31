@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://mt70rvdsdeyx" path="res://Objects/player.tscn" id="1_qikps"]
 [ext_resource type="PackedScene" uid="uid://dat4ixuir5ckq" path="res://Objects/angry_ball.tscn" id="2_i1e5p"]
+[ext_resource type="PackedScene" uid="uid://doss117q2j5gm" path="res://Objects/UI_HP.tscn" id="3_qikps"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_top"]
 size = Vector2(1280, 32)
@@ -76,9 +77,6 @@ offset_right = 16.0
 offset_bottom = 360.0
 color = Color(0.4, 0.4, 0.5, 1)
 
-[node name="Player" parent="." unique_id=1739531344 instance=ExtResource("1_qikps")]
-position = Vector2(640, 360)
-
 [node name="UI" type="CanvasLayer" parent="." unique_id=916710715]
 
 [node name="Label" type="Label" parent="UI" unique_id=1081602550]
@@ -93,10 +91,21 @@ horizontal_alignment = 1
 position = Vector2(-131, -111)
 
 [node name="AngryBall2" parent="." unique_id=1059355067 instance=ExtResource("2_i1e5p")]
-position = Vector2(-100, 263)
+position = Vector2(-116, 262)
 
 [node name="AngryBall3" parent="." unique_id=2006360340 instance=ExtResource("2_i1e5p")]
 position = Vector2(650, -118)
 
 [node name="AngryBall4" parent="." unique_id=614525278 instance=ExtResource("2_i1e5p")]
 position = Vector2(642, 285)
+
+[node name="HealthUI" parent="." unique_id=1102730205 instance=ExtResource("3_qikps")]
+anchors_preset = 15
+offset_left = -67.0
+offset_top = 589.0
+offset_right = 257.0
+offset_bottom = 865.0
+
+[node name="Player" parent="." unique_id=1739531344 instance=ExtResource("1_qikps")]
+process_mode = 3
+position = Vector2(645, 350)

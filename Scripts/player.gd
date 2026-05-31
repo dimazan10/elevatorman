@@ -1,5 +1,12 @@
 extends CharacterBody2D
 
+# --- НАШИ НОВЫЕ ПЕРЕМЕННЫЕ ДЛЯ UI И ЖИЗНЕЙ ---
+signal health_changed(new_health)
+
+@export var max_lives: int = 3
+var current_lives: int = max_lives
+# ---------------------------------------------
+
 const SPEED = 400.0
 
 var animated_sprite: AnimatedSprite2D
@@ -8,6 +15,9 @@ var footstep_sounds: Array[AudioStream] = []
 var footstep_timer: float = 0.0
 
 func _ready() -> void:
+	# Твой существующий код инициализации жизней
+	current_lives = max_lives
+	
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 
 	for child in get_children():
@@ -92,3 +102,31 @@ func _physics_process(_delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
+
+# --- НАША НОВАЯ ФУНКЦИЯ УРОНА ---
+func take_damage(amount: int):
+	current_lives -= amount
+	health_changed.emit(current_lives)
+	
+	# 1. ЗАПУСК ТРЯСКИ ЭКРАНА
+	# Обращаемся напрямую к переименованной камере через %
+	var my_camera = %PlayerCamera
+		
+	if my_camera and my_camera.has_method("apply_shake"):
+		my_camera.apply_shake(20.0) # 20.0 — сила тряски
+	else:
+		print("ВНИМАНИЕ: Скрипт не нашел %PlayerCamera или у неё нет функции apply_shake!")
+		
+	# 2. ХИТСТОП (ЗАМОРОЗКА ИГРЫ)
+	Engine.time_scale = 0.0
+	await get_tree().create_timer(0.2, true, false, true).timeout
+	Engine.time_scale = 1.0
+	
+	# 3. ПРОВЕРКА НА СМЕРТЬ
+	if current_lives <= 0:
+		die()
+
+func die() -> void:
+	print("Игрок погиб!")
+	# Здесь можно перезагрузить сцену:
+	get_tree().reload_current_scene()
