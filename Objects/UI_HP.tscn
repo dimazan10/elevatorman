@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://doss117q2j5gm"]
+
+[ext_resource type="Script" uid="uid://c8jqk3ebwbiu0" path="res://Scripts/HP.gd" id="1_40q8b"]
+[ext_resource type="Texture2D" uid="uid://bl83d5tsdn7sm" path="res://Assets/heart.png" id="2_j0d6q"]
+
+[node name="HealthUI" type="Control" unique_id=1102730205]
+script = ExtResource("1_40q8b")
+
+[node name="HeartsContainer" type="HBoxContainer" parent="." unique_id=1045063902]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+custom_minimum_size = Vector2(0, 64)
+
+[node name="Heart1" type="TextureRect" parent="HeartsContainer" unique_id=1098205935]
+texture_filter = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("2_j0d6q")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Heart2" type="TextureRect" parent="HeartsContainer" unique_id=1914161953]
+texture_filter = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("2_j0d6q")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Heart3" type="TextureRect" parent="HeartsContainer" unique_id=1212175470]
+texture_filter = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("2_j0d6q")
+expand_mode = 1
+stretch_mode = 5

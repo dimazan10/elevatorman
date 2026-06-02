@@ -1,0 +1,154 @@
+[gd_scene format=3 uid="uid://clyeuf24oww1x"]
+
+[ext_resource type="Script" uid="uid://6p0foblkvtd0" path="res://Scripts/player.gd" id="1_player"]
+[ext_resource type="Script" uid="uid://c8jqk3ebwbiu0" path="res://Scripts/HP.gd" id="2_hearts"]
+[ext_resource type="Texture2D" uid="uid://bl83d5tsdn7sm" path="res://Assets/heart.png" id="3_heart"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(410, 20.71106)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
+size = Vector2(32, 56)
+
+[node name="Game" type="Node2D" unique_id=418966575]
+
+[node name="Floor" type="Polygon2D" parent="." unique_id=576273999]
+position = Vector2(640, 360)
+color = Color(0.12, 0.15, 0.19, 1)
+polygon = PackedVector2Array(410, 0, 205, 355, -205, 355, -410, 0, -205, -355, 205, -355)
+
+[node name="Walls" type="Node2D" parent="." unique_id=1664800530]
+
+[node name="W0" type="StaticBody2D" parent="Walls" unique_id=1421614870]
+position = Vector2(947.5, 537.5)
+rotation = 2.094
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W0" unique_id=1550150888]
+position = Vector2(3.0517578e-05, 0.35559082)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Visual" type="Polygon2D" parent="Walls/W0" unique_id=38645603]
+color = Color(0.4, 0.4, 0.5, 1)
+polygon = PackedVector2Array(-205, -10, 205, -10, 205, 10, -205, 10)
+
+[node name="W1" type="StaticBody2D" parent="Walls" unique_id=1723320573]
+position = Vector2(640, 715)
+rotation = 3.1416
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W1" unique_id=172642806]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Visual" type="Polygon2D" parent="Walls/W1" unique_id=894986306]
+color = Color(0.4, 0.4, 0.5, 1)
+polygon = PackedVector2Array(-205, -10, 205, -10, 205, 10, -205, 10)
+
+[node name="W2" type="StaticBody2D" parent="Walls" unique_id=1428910298]
+position = Vector2(332.5, 537.5)
+rotation = -2.094
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W2" unique_id=1503057241]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Visual" type="Polygon2D" parent="Walls/W2" unique_id=1580269259]
+color = Color(0.4, 0.4, 0.5, 1)
+polygon = PackedVector2Array(-205, -10, 205, -10, 205, 10, -205, 10)
+
+[node name="W3" type="StaticBody2D" parent="Walls" unique_id=1842816672]
+position = Vector2(332.5, 182.5)
+rotation = -1.047
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W3" unique_id=1012727321]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Visual" type="Polygon2D" parent="Walls/W3" unique_id=1343662687]
+color = Color(0.4, 0.4, 0.5, 1)
+polygon = PackedVector2Array(-205, -10, 205, -10, 205, 10, -205, 10)
+
+[node name="W4" type="StaticBody2D" parent="Walls" unique_id=94984688]
+position = Vector2(640, 5)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W4" unique_id=1367935923]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Visual" type="Polygon2D" parent="Walls/W4" unique_id=716215063]
+color = Color(0.4, 0.4, 0.5, 1)
+polygon = PackedVector2Array(-205, -10, 205, -10, 205, 10, -205, 10)
+
+[node name="W5" type="StaticBody2D" parent="Walls" unique_id=1032028860]
+position = Vector2(947.5, 182.5)
+rotation = 1.047
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W5" unique_id=724878862]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Visual" type="Polygon2D" parent="Walls/W5" unique_id=2040065923]
+color = Color(0.4, 0.4, 0.5, 1)
+polygon = PackedVector2Array(-205, -10, 205, -10, 205, 10, -205, 10)
+
+[node name="Player" type="CharacterBody2D" parent="." unique_id=572281839]
+position = Vector2(640, 360)
+scale = Vector2(0.84582955, 0.7011705)
+script = ExtResource("1_player")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Player" unique_id=237702305]
+scale = Vector2(1.505, 1.505)
+shape = SubResource("RectangleShape2D_player")
+
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=2028565536]
+zoom = Vector2(1.4, 1.4)
+limit_left = 0
+limit_top = 0
+limit_right = 1280
+limit_bottom = 720
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=916710715]
+
+[node name="HeartsContainer" type="HBoxContainer" parent="UI" unique_id=1045063902]
+custom_minimum_size = Vector2(0, 64)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = -103.0
+offset_right = 260.0
+offset_bottom = -39.0
+grow_vertical = 0
+pivot_offset = Vector2(31, 31)
+script = ExtResource("2_hearts")
+
+[node name="Heart1" type="TextureRect" parent="UI/HeartsContainer" unique_id=1098205935]
+texture_filter = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("3_heart")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Heart2" type="TextureRect" parent="UI/HeartsContainer" unique_id=1914161953]
+texture_filter = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("3_heart")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Heart3" type="TextureRect" parent="UI/HeartsContainer" unique_id=1212175470]
+texture_filter = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("3_heart")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="UI" unique_id=1081602550]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -260.0
+offset_right = 260.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "ESC — назад в меню"
+horizontal_alignment = 1
