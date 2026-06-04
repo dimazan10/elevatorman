@@ -25,6 +25,7 @@ func _ready() -> void:
 	FadeTransition.fade_in()
 
 	lift_state = LiftState.START
+	$Hole/FloorElevator/TransportArea/CollisionShape.set_deferred("disabled", true)
 	anim.play("RESET")
 	anim.seek(0, true)
 	anim.stop()
@@ -32,6 +33,7 @@ func _ready() -> void:
 	await anim.animation_finished
 	anim.play("Open")
 	await anim.animation_finished
+	$Hole/FloorElevator/TransportArea/CollisionShape.set_deferred("disabled", false)
 	_show_player()
 	player_node.can_move = true
 
@@ -69,7 +71,7 @@ func start_exit_sequence() -> void:
 func _start_combat_timer() -> void:
 	combat_timer = Timer.new()
 	combat_timer.name = "CombatTimer"
-	combat_timer.wait_time = 30.0
+	combat_timer.wait_time = 15.0
 	combat_timer.one_shot = true
 	combat_timer.timeout.connect(_on_combat_timeout)
 	add_child(combat_timer)
@@ -128,22 +130,38 @@ func _hide_enemies() -> void:
 		enemy.hide()
 		enemy.z_index = 0
 		enemy.set_physics_process(false)
-		if "can_act" in enemy:
-			enemy.can_act = false
-		if "reset" in enemy:
-			enemy.reset()
+		_disable_collision_shapes(enemy)
+		for child in enemy.get_children():
+			if child is Timer:
+				if child.has_method("stop"):
+					child.stop()
 		if enemy is RigidBody2D:
-			enemy.set_deferred("freeze", true)
+			enemy.freeze = true
 
 func _show_enemies() -> void:
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		enemy.show()
 		enemy.z_index = 6
 		enemy.set_physics_process(true)
-		if "can_act" in enemy:
-			enemy.can_act = true
+		_enable_collision_shapes(enemy)
+		for child in enemy.get_children():
+			if child is Timer and child.name == "BurstTimer":
+				if enemy.has_method("set_random_burst_pause"):
+					enemy.set_random_burst_pause()
 		if enemy is RigidBody2D:
-			enemy.set_deferred("freeze", false)
+			enemy.freeze = false
+
+func _disable_collision_shapes(node: Node) -> void:
+	if node is CollisionShape2D:
+		node.set_deferred("disabled", true)
+	for child in node.get_children():
+		_disable_collision_shapes(child)
+
+func _enable_collision_shapes(node: Node) -> void:
+	if node is CollisionShape2D:
+		node.set_deferred("disabled", false)
+	for child in node.get_children():
+		_enable_collision_shapes(child)
 
 func _shake_camera(intensity: float = 8.0, duration: float = 0.4) -> void:
 	var camera := player_node.get_node("PlayerCamera") as Camera2D

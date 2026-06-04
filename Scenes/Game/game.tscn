@@ -545,6 +545,10 @@ position = Vector2(283, 567)
 z_index = 6
 position = Vector2(496, 360)
 
+[node name="DrunkKiller2" parent="." unique_id=1458140447 instance=ExtResource("12_drunk")]
+z_index = 6
+position = Vector2(800, 360)
+
 [node name="Player" parent="." unique_id=1739531344 instance=ExtResource("1_qikps")]
 process_mode = 3
 z_index = 2

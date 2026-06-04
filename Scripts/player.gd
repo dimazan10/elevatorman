@@ -20,12 +20,14 @@ var last_move_dir := Vector2.DOWN
 
 var animated_sprite: AnimatedSprite2D
 var audio_player: AudioStreamPlayer2D
-var can_move := true
 var footstep_sounds: Array[AudioStream] = []
 var footstep_timer: float = 0.0
 
+var is_stunned: bool = false
+var knockback_velocity: Vector2 = Vector2.ZERO
+var can_move: bool = true
+
 func _ready() -> void:
-	# Твой существующий код инициализации жизней
 	current_lives = max_lives
 	
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
@@ -93,10 +95,18 @@ func _process(delta: float) -> void:
 		perform_dash()
 	_shift_held = shift_down
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if not can_move:
 		velocity = Vector2.ZERO
+		move_and_slide()
 		return
+	if is_stunned:
+		# Во время оглушения игрока плавно тормозит отталкивание, а управление заблокировано
+		knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 1000 * delta)
+		velocity = knockback_velocity
+		move_and_slide()
+		return # Прерываем выполнение обычного движения
+	
 	if is_dashing:
 		move_and_slide()
 		return
@@ -121,7 +131,8 @@ func _physics_process(_delta: float) -> void:
 		velocity = direction * SPEED
 		move_and_slide()
 
-		footstep_timer -= _delta
+		# ЗАМЕНИЛИ _delta НА ОБЫЧНУЮ delta, чтобы время шагов считалось правильно
+		footstep_timer -= delta
 		if footstep_timer <= 0 and footstep_sounds.size() > 0:
 			footstep_timer = 0.3
 			var idx = randi() % footstep_sounds.size()
@@ -202,26 +213,21 @@ func perform_dash() -> void:
 
 	velocity = dir * DASH_SPEED
 
-# --- НАША НОВАЯ ФУНКЦИЯ УРОНА ---
 func take_damage(amount: int):
-	current_lives = max(0, current_lives - amount)
+	current_lives -= amount
 	health_changed.emit(current_lives)
 	
-	# 1. ЗАПУСК ТРЯСКИ ЭКРАНА
-	# Обращаемся напрямую к переименованной камере через %
 	var my_camera = %PlayerCamera
 		
 	if my_camera and my_camera.has_method("apply_shake"):
-		my_camera.apply_shake(20.0) # 20.0 — сила тряски
+		my_camera.apply_shake(20.0)
 	else:
 		print("ВНИМАНИЕ: Скрипт не нашел %PlayerCamera или у неё нет функции apply_shake!")
 		
-	# 2. ХИТСТОП (ЗАМОРОЗКА ИГРЫ)
 	Engine.time_scale = 0.0
 	await get_tree().create_timer(0.2, true, false, true).timeout
 	Engine.time_scale = 1.0
 	
-	# 3. ПРОВЕРКА НА СМЕРТЬ
 	if current_lives <= 0:
 		die()
 
@@ -229,10 +235,12 @@ func die() -> void:
 	print("Игрок погиб!")
 	get_tree().reload_current_scene()
 
-func apply_stun_and_knockback(force: Vector2, duration: float) -> void:
-	can_move = false
-	velocity = force
-	var tw := create_tween()
-	tw.tween_property(self, "velocity", Vector2.ZERO, 0.2)
+func apply_stun_and_knockback(knockback_impulse: Vector2, duration: float) -> void:
+	if is_stunned: 
+		return
+		
+	is_stunned = true
+	knockback_velocity = knockback_impulse
+	
 	await get_tree().create_timer(duration).timeout
-	can_move = true
+	is_stunned = false

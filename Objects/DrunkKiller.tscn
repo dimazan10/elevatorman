@@ -1,8 +1,31 @@
 [gd_scene format=3 uid="uid://cfukoxsdamguh"]
 
-[ext_resource type="Texture2D" path="res://Assets/Sprites_Killer/DrunkKiller.png" id="1_638sk"]
+[ext_resource type="Texture2D" path="res://Assets/Sprites_Killer/DrunkKillerRun1.png" id="2_dqplg"]
 [ext_resource type="Script" path="res://Scripts/DrunkKiller.gd" id="2_ljk35"]
 [ext_resource type="Texture2D" path="res://Assets/Sprites_Killer/BananaGun.png" id="2_v20ja"]
+[ext_resource type="Texture2D" path="res://Assets/Sprites_Killer/DrunkKillerRun2.png" id="3_1wgsp"]
+[ext_resource type="Texture2D" path="res://Assets/Sprites_Killer/DrunkKillerRun3.png" id="4_q8v8j"]
+[ext_resource type="Texture2D" path="res://Assets/Sprites_Killer/DrunkKillerRun4.png" id="5_w3j2m"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6b1qg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_dqplg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_1wgsp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_q8v8j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_w3j2m")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 8.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ljk35"]
 size = Vector2(24, 41)
@@ -10,12 +33,18 @@ size = Vector2(24, 41)
 [sub_resource type="CircleShape2D" id="CircleShape2D_7es6t"]
 radius = 33.0
 
-[node name="DrunkKiller" type="CharacterBody2D" unique_id=676731580 groups=["enemy"]]
-script = ExtResource("2_ljk35")
+[sub_resource type="CircleShape2D" id="CircleShape2D_dqplg"]
+radius = 69.28571
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=637891622]
+[node name="DrunkKiller" type="CharacterBody2D" unique_id=676731580 groups=["enemy"]]
+scale = Vector2(1.4, 1.4)
+script = ExtResource("2_ljk35")
+speed = 400.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=467026008]
 texture_filter = 1
-texture = ExtResource("1_638sk")
+sprite_frames = SubResource("SpriteFrames_6b1qg")
+animation = &"walk"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1130554703]
 position = Vector2(1, 9.5)
@@ -45,3 +74,8 @@ collision_layer = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeZone" unique_id=400377629]
 position = Vector2(0, 7)
 shape = SubResource("CircleShape2D_7es6t")
+
+[node name="SeparationZone" type="Area2D" parent="." unique_id=2079041027]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SeparationZone" unique_id=1309323044]
+shape = SubResource("CircleShape2D_dqplg")
