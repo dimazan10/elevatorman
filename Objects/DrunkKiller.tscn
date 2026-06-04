@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://cfukoxsdamguh"]
+
+[ext_resource type="Texture2D" path="res://Assets/Sprites_Killer/DrunkKiller.png" id="1_638sk"]
+[ext_resource type="Script" path="res://Scripts/DrunkKiller.gd" id="2_ljk35"]
+[ext_resource type="Texture2D" path="res://Assets/Sprites_Killer/BananaGun.png" id="2_v20ja"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ljk35"]
+size = Vector2(24, 41)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7es6t"]
+radius = 33.0
+
+[node name="DrunkKiller" type="CharacterBody2D" unique_id=676731580 groups=["enemy"]]
+script = ExtResource("2_ljk35")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=637891622]
+texture_filter = 1
+texture = ExtResource("1_638sk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1130554703]
+position = Vector2(1, 9.5)
+shape = SubResource("RectangleShape2D_ljk35")
+
+[node name="WeaponAnchor" type="Node2D" parent="." unique_id=585761420]
+texture_filter = 1
+
+[node name="Muzzle" type="Marker2D" parent="WeaponAnchor" unique_id=2008189847]
+position = Vector2(20, -4)
+
+[node name="WeaponSprite" type="Sprite2D" parent="WeaponAnchor" unique_id=42309771]
+texture_filter = 1
+position = Vector2(12, 0)
+texture = ExtResource("2_v20ja")
+
+[node name="BurstTimer" type="Timer" parent="." unique_id=1127215758]
+one_shot = true
+
+[node name="ShotDelayTimer" type="Timer" parent="." unique_id=1121192186]
+wait_time = 0.15
+one_shot = true
+
+[node name="MeleeZone" type="Area2D" parent="." unique_id=1974388539]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeZone" unique_id=400377629]
+position = Vector2(0, 7)
+shape = SubResource("CircleShape2D_7es6t")

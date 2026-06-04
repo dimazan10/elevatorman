@@ -3,14 +3,19 @@
 [ext_resource type="Script" uid="uid://c8jqk3ebwbiu0" path="res://Scripts/HP.gd" id="1_40q8b"]
 [ext_resource type="Texture2D" uid="uid://bl83d5tsdn7sm" path="res://Assets/heart.png" id="2_j0d6q"]
 
-[node name="HealthUI" type="Control" unique_id=1102730205]
-script = ExtResource("1_40q8b")
+[node name="HealthUI" type="CanvasLayer" unique_id=1102730205]
 
 [node name="HeartsContainer" type="HBoxContainer" parent="." unique_id=1045063902]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
 custom_minimum_size = Vector2(0, 64)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = -112.0
+offset_right = 260.0
+offset_bottom = -48.0
+grow_vertical = 0
+script = ExtResource("1_40q8b")
 
 [node name="Heart1" type="TextureRect" parent="HeartsContainer" unique_id=1098205935]
 texture_filter = 1

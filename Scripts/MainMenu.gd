@@ -23,7 +23,7 @@ func _process(_delta: float) -> void:
 	bg.offset_bottom = extra + dy
 
 func _on_play_pressed() -> void:
-	get_tree().change_scene_to_file("res://Scenes/Game/game.tscn")
+	get_tree().change_scene_to_file("res://Scenes/Game/start.tscn")
 
 func _on_settings_pressed() -> void:
 	print("Настройки — в разработке")

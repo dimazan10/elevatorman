@@ -12,7 +12,7 @@ func _ready() -> void:
 
 func update_hearts(current_health: int):
 	var hearts = get_children()
-	var hearts_to_remove = hearts.size() - current_health
+	var hearts_to_remove = clampi(hearts.size() - current_health, 0, hearts.size())
 
 	for i in range(hearts_to_remove):
 		var last_heart = hearts[hearts.size() - 1 - i]

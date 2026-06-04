@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://cury7lw1ntlld"]
+
+[ext_resource type="Script" uid="uid://crcm3ibxfs4ms" path="res://Scripts/DashUI.gd" id="1_y0qk3"]
+
+[node name="DashUI" type="CanvasLayer" unique_id=1836604793]
+script = ExtResource("1_y0qk3")
+
+[node name="DashContainer" type="HBoxContainer" parent="." unique_id=2084559679]
+custom_minimum_size = Vector2(0, 64)
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -78.0
+offset_top = -174.56
+offset_right = 78.0
+offset_bottom = -110.56
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1.5, 0.045)
+pivot_offset = Vector2(78, 32)
+theme_override_constants/separation = 6
+
+[node name="Bar1" type="ColorRect" parent="DashContainer" unique_id=1036980816]
+custom_minimum_size = Vector2(48, 8)
+layout_mode = 2
+color = Color(1, 1, 1, 0.784)
+
+[node name="Bar2" type="ColorRect" parent="DashContainer" unique_id=295913571]
+custom_minimum_size = Vector2(48, 8)
+layout_mode = 2
+color = Color(1, 1, 1, 0.784)
+
+[node name="Bar3" type="ColorRect" parent="DashContainer" unique_id=835804126]
+custom_minimum_size = Vector2(48, 8)
+layout_mode = 2
+color = Color(1, 1, 1, 0.784)

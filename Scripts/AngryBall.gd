@@ -3,17 +3,19 @@ extends RigidBody2D
 # Желаемая постоянная скорость шара (в пикселях в секунду)
 @export var CONSTANT_SPEED: float = 650.0
 
+var _direction: Vector2
+
 func _ready():
-	if linear_velocity == Vector2.ZERO:
-		var direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
-		linear_velocity = direction * CONSTANT_SPEED
-		
-	# Подключаем сигнал столкновения кодом, чтобы не делать это вручную через интерфейс
+	_direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
 	body_entered.connect(_on_body_entered)
 
-func _integrate_forces(_state: PhysicsDirectBodyState2D):
-	if linear_velocity.length() > 0:
-		linear_velocity = linear_velocity.normalized() * CONSTANT_SPEED
+func _integrate_forces(state: PhysicsDirectBodyState2D):
+	if not freeze:
+		var vel := state.linear_velocity
+		if vel.length() > 0:
+			state.linear_velocity = vel.normalized() * CONSTANT_SPEED
+		else:
+			state.linear_velocity = _direction * CONSTANT_SPEED
 
 # Эта функция срабатывает каждый раз, когда шар бьется обо что-то твердое
 func _on_body_entered(body: Node) -> void:

@@ -10,7 +10,7 @@ bounce = 1.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_5kt4o"]
 radius = 25.0
 
-[node name="AngryBall" type="RigidBody2D" unique_id=1051154257]
+[node name="AngryBall" type="RigidBody2D" unique_id=1051154257 groups=["enemy"]]
 mass = 0.001
 physics_material_override = SubResource("PhysicsMaterial_f15s6")
 gravity_scale = 0.0

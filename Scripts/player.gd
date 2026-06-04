@@ -1,16 +1,26 @@
 extends CharacterBody2D
 
-# --- НАШИ НОВЫЕ ПЕРЕМЕННЫЕ ДЛЯ UI И ЖИЗНЕЙ ---
 signal health_changed(new_health)
+signal dash_used(index: int)
+signal dash_recharged(index: int)
 
 @export var max_lives: int = 3
 var current_lives: int = max_lives
-# ---------------------------------------------
 
-const SPEED = 400.0
+const SPEED = 550.0
+const MAX_DASH_CHARGES = 3
+const DASH_COOLDOWN = 4.0
+const DASH_SPEED = 1200.0
+const DASH_DURATION = 0.15
+
+var dash_cooldowns: Array[float] = [0.0, 0.0, 0.0]
+var is_dashing := false
+var dash_timer := 0.0
+var last_move_dir := Vector2.DOWN
 
 var animated_sprite: AnimatedSprite2D
 var audio_player: AudioStreamPlayer2D
+var can_move := true
 var footstep_sounds: Array[AudioStream] = []
 var footstep_timer: float = 0.0
 
@@ -58,7 +68,39 @@ func _ready() -> void:
 		if stream:
 			footstep_sounds.append(stream)
 
+var _shift_held := false
+var _ghost_timer := 0.0
+
+func _process(delta: float) -> void:
+	for i in range(MAX_DASH_CHARGES):
+		if dash_cooldowns[i] > 0:
+			dash_cooldowns[i] -= delta
+			if dash_cooldowns[i] <= 0:
+				dash_cooldowns[i] = 0.0
+				dash_recharged.emit(i)
+
+	if is_dashing:
+		dash_timer -= delta
+		if dash_timer <= 0:
+			is_dashing = false
+		_ghost_timer += delta
+		if _ghost_timer >= 0.05:
+			_ghost_timer = 0.0
+			_spawn_ghost()
+
+	var shift_down := Input.is_key_pressed(KEY_SHIFT)
+	if shift_down and not _shift_held:
+		perform_dash()
+	_shift_held = shift_down
+
 func _physics_process(_delta: float) -> void:
+	if not can_move:
+		velocity = Vector2.ZERO
+		return
+	if is_dashing:
+		move_and_slide()
+		return
+
 	var direction := Vector2.ZERO
 
 	if Input.is_key_pressed(KEY_RIGHT) or Input.is_key_pressed(KEY_D):
@@ -74,6 +116,7 @@ func _physics_process(_delta: float) -> void:
 
 	if moving:
 		direction = direction.normalized()
+		last_move_dir = direction
 
 		velocity = direction * SPEED
 		move_and_slide()
@@ -103,9 +146,65 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
 
+func _spawn_ghost() -> void:
+	if not animated_sprite or not animated_sprite.sprite_frames:
+		return
+	var ghost := AnimatedSprite2D.new()
+	ghost.sprite_frames = animated_sprite.sprite_frames
+	ghost.animation = animated_sprite.animation
+	ghost.frame = animated_sprite.frame
+	ghost.global_position = global_position
+	ghost.scale = animated_sprite.scale
+	ghost.modulate = Color(1, 1, 1, 0.4)
+	var mat := CanvasItemMaterial.new()
+	mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	ghost.material = mat
+	ghost.stop()
+	get_parent().add_child(ghost)
+	var tw := create_tween()
+	tw.tween_property(ghost, "modulate:a", 0.0, 0.3)
+	tw.tween_callback(ghost.queue_free)
+
+func perform_dash() -> void:
+	if is_dashing:
+		return
+
+	var charge_idx := -1
+	for i in range(MAX_DASH_CHARGES):
+		if dash_cooldowns[i] <= 0:
+			charge_idx = i
+			break
+
+	if charge_idx == -1:
+		return
+
+	dash_cooldowns[charge_idx] = DASH_COOLDOWN
+	is_dashing = true
+	dash_timer = DASH_DURATION
+	dash_used.emit(charge_idx)
+	print("DASH! charge=", charge_idx)
+
+	var dir := Vector2.ZERO
+	if Input.is_key_pressed(KEY_RIGHT) or Input.is_key_pressed(KEY_D):
+		dir.x += 1
+	if Input.is_key_pressed(KEY_LEFT) or Input.is_key_pressed(KEY_A):
+		dir.x -= 1
+	if Input.is_key_pressed(KEY_DOWN) or Input.is_key_pressed(KEY_S):
+		dir.y += 1
+	if Input.is_key_pressed(KEY_UP) or Input.is_key_pressed(KEY_W):
+		dir.y -= 1
+
+	if dir == Vector2.ZERO:
+		dir = last_move_dir
+	else:
+		dir = dir.normalized()
+		last_move_dir = dir
+
+	velocity = dir * DASH_SPEED
+
 # --- НАША НОВАЯ ФУНКЦИЯ УРОНА ---
 func take_damage(amount: int):
-	current_lives -= amount
+	current_lives = max(0, current_lives - amount)
 	health_changed.emit(current_lives)
 	
 	# 1. ЗАПУСК ТРЯСКИ ЭКРАНА
@@ -128,5 +227,12 @@ func take_damage(amount: int):
 
 func die() -> void:
 	print("Игрок погиб!")
-	# Здесь можно перезагрузить сцену:
 	get_tree().reload_current_scene()
+
+func apply_stun_and_knockback(force: Vector2, duration: float) -> void:
+	can_move = false
+	velocity = force
+	var tw := create_tween()
+	tw.tween_property(self, "velocity", Vector2.ZERO, 0.2)
+	await get_tree().create_timer(duration).timeout
+	can_move = true
