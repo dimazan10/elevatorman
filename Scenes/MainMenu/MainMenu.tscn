@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bmgioa6x7knpu" path="res://Assets/buttonSettings.png" id="4_vapy7"]
 [ext_resource type="Script" uid="uid://duvm74ksi552c" path="res://Scripts/ButtonQuit.gd" id="5_ua038"]
 [ext_resource type="Script" uid="uid://bjfteco1ew5lh" path="res://Scripts/MainMenu.gd" id="6_75e0l"]
+[ext_resource type="AudioStream" path="res://Assets/Sounds/Click_Button.mp3" id="7_sclk5"]
 
 [node name="MainMenu" type="Control" unique_id=1026156905]
 layout_mode = 3
@@ -16,6 +17,10 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("6_75e0l")
 metadata/_edit_use_anchors_ = true
+
+[node name="ClickSound" type="AudioStreamPlayer" parent="." unique_id=827364512]
+stream = ExtResource("7_sclk5")
+volume_db = 6.0
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1892877604]
 layout_mode = 1
@@ -42,16 +47,19 @@ offset_bottom = 659.0
 theme_override_constants/separation = 16
 
 [node name="ButtonPlay" type="TextureButton" parent="VBoxContainer" unique_id=268296133]
+groups = ["menu_buttons"]
 layout_mode = 2
 texture_normal = ExtResource("3_ua038")
 stretch_mode = 6
 
 [node name="ButtonSettings" type="TextureButton" parent="VBoxContainer" unique_id=1861754611]
+groups = ["menu_buttons"]
 layout_mode = 2
 texture_normal = ExtResource("4_vapy7")
 stretch_mode = 6
 
 [node name="ButtonQuit" type="TextureButton" parent="VBoxContainer" unique_id=2065043417]
+groups = ["menu_buttons"]
 layout_mode = 2
 texture_normal = ExtResource("2_kpx3y")
 stretch_mode = 6

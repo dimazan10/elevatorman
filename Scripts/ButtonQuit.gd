@@ -1,5 +1,7 @@
 extends TextureButton
 
-# У этой функции на полях ОБЯЗАТЕЛЬНО должен гореть зеленый значок штекера
 func _on_pressed() -> void:
-	get_tree().quit() # Перенесли код сюда, не забыв отступ (Tab)
+	var mm = get_tree().current_scene
+	if mm and mm.has_node("ClickSound"):
+		mm.get_node("ClickSound").play()
+	get_tree().quit()

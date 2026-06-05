@@ -1,6 +1,7 @@
 extends Control
 
 @onready var bg := $TextureRect
+@onready var click := $ClickSound
 var extra := 60.0
 var max_move := 25.0
 
@@ -9,6 +10,8 @@ func _ready() -> void:
 	bg.offset_top -= extra
 	bg.offset_right += extra
 	bg.offset_bottom += extra
+	for b in get_tree().get_nodes_in_group("menu_buttons"):
+		_setup_hover(b)
 
 func _process(_delta: float) -> void:
 	var center := get_viewport_rect().size * 0.5
@@ -22,8 +25,21 @@ func _process(_delta: float) -> void:
 	bg.offset_right = extra + dx
 	bg.offset_bottom = extra + dy
 
+func _setup_hover(b: TextureButton) -> void:
+	b.mouse_entered.connect(func():
+		var t := create_tween()
+		t.tween_property(b, "scale", Vector2(1.2, 1.2), 0.1)
+	)
+	b.mouse_exited.connect(func():
+		var t := create_tween()
+		t.tween_property(b, "scale", Vector2(1.0, 1.0), 0.1)
+	)
+
 func _on_play_pressed() -> void:
+	click.play()
+	await get_tree().create_timer(0.15).timeout
 	get_tree().change_scene_to_file("res://Scenes/Game/start.tscn")
 
 func _on_settings_pressed() -> void:
+	click.play()
 	print("Настройки — в разработке")
