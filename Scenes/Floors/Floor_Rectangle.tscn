@@ -1,43 +1,31 @@
-[gd_scene format=3 uid="uid://floor_rectangle"]
+[gd_scene format=3 uid="uid://d30evl7gch02d"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_h"]
 size = Vector2(1840, 20)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
-size = Vector2(20, 620)
+[node name="Floor_Rectangle" type="Node2D" unique_id=1003405898]
 
-[node name="Floor_Rectangle" type="Node2D"]
-
-[node name="FloorPolygon" type="Polygon2D" parent="."]
-position = Vector2(640, 0)
+[node name="FloorPolygon" type="Polygon2D" parent="." unique_id=1906304972]
+position = Vector2(1090, 0)
+scale = Vector2(0.5199988, 0.5599991)
 color = Color(0.12, 0.15, 0.19, 1)
 polygon = PackedVector2Array(0, -310, 1840, -310, 1840, 310, 0, 310)
 
-[node name="Walls" type="Node2D" parent="."]
+[node name="Walls" type="Node2D" parent="FloorPolygon" unique_id=604211835]
+position = Vector2(-640, 0)
 
-[node name="Top" type="StaticBody2D" parent="Walls"]
-position = Vector2(640, -310)
+[node name="Top" type="StaticBody2D" parent="FloorPolygon/Walls" unique_id=822018298]
+position = Vector2(1559, -310)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Walls/Top"]
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon/Walls/Top" unique_id=984159783]
 shape = SubResource("RectangleShape2D_wall_h")
 
-[node name="Bottom" type="StaticBody2D" parent="Walls"]
-position = Vector2(640, 310)
+[node name="Bottom" type="StaticBody2D" parent="FloorPolygon/Walls" unique_id=1046843294]
+position = Vector2(1559, 310)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Walls/Bottom"]
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon/Walls/Bottom" unique_id=789724018]
 shape = SubResource("RectangleShape2D_wall_h")
 
-[node name="Left" type="StaticBody2D" parent="Walls"]
-position = Vector2(0, 0)
-
-[node name="CollisionShape" type="CollisionShape2D" parent="Walls/Left"]
-shape = SubResource("RectangleShape2D_wall_v")
-
-[node name="Right" type="StaticBody2D" parent="Walls"]
-position = Vector2(1840, 0)
-
-[node name="CollisionShape" type="CollisionShape2D" parent="Walls/Right"]
-shape = SubResource("RectangleShape2D_wall_v")
-
-[node name="SpawnPoint" type="Marker2D" parent="."]
-position = Vector2(120, 0)
+[node name="SpawnPoint" type="Marker2D" parent="." unique_id=1522809266]
+position = Vector2(1567, -3)
+scale = Vector2(1, 0.20000029)

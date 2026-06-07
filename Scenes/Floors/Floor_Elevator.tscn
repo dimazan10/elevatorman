@@ -1,11 +1,11 @@
-[gd_scene format=3 uid="uid://floor_elevator"]
+[gd_scene format=3 uid="uid://ccqtjywgdmjkc"]
 
 [ext_resource type="Texture2D" uid="uid://dxubss2onvayf" path="res://Assets/SpritesElevator/Hole.png" id="1_hole"]
 [ext_resource type="Texture2D" uid="uid://csha62md44m3r" path="res://Assets/SpritesElevator/Lift2.png" id="2_lift2"]
 [ext_resource type="Texture2D" uid="uid://74cir4cs1tst" path="res://Assets/SpritesElevator/roof3.png" id="3_roof3"]
 [ext_resource type="Texture2D" uid="uid://cdirbcheywinl" path="res://Assets/SpritesElevator/Lift.png" id="4_lift"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s527w"]
 size = Vector2(615, 20)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_roof"]
@@ -26,82 +26,182 @@ size = Vector2(27.41677, 282.5818)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_left"]
 size = Vector2(26.588142, 226.61873)
 
-[node name="Floor_Elevator" type="Node2D"]
+[node name="Floor_Elevator" type="Node2D" unique_id=2071804656]
 
-[node name="FloorPolygon" type="Polygon2D" parent="."]
-position = Vector2(0, 0)
+[node name="FloorPolygon2" type="Polygon2D" parent="." unique_id=1363210009]
 color = Color(0.12, 0.15, 0.19, 1)
 polygon = PackedVector2Array(615, 0, 307.5, 532.5, -307.5, 532.5, -615, 0, -307.5, -532.5, 307.5, -532.5)
 
-[node name="Walls" type="Node2D" parent="."]
+[node name="Walls" type="Node2D" parent="FloorPolygon2" unique_id=1961777394]
 
-[node name="W0" type="StaticBody2D" parent="Walls"]
-position = Vector2(1101.25, 626.25)
+[node name="W0" type="StaticBody2D" parent="FloorPolygon2/Walls" unique_id=1063696860]
+position = Vector2(555, 94.00003)
 rotation = 2.094
+scale = Vector2(0.3750336, 1)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W0"]
-shape = SubResource("RectangleShape2D_wall")
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Walls/W0" unique_id=1577751828]
+shape = SubResource("RectangleShape2D_s527w")
 
-[node name="W1" type="StaticBody2D" parent="Walls"]
-position = Vector2(0, 892.5)
+[node name="W9" type="StaticBody2D" parent="FloorPolygon2/Walls" unique_id=168025879]
+position = Vector2(364, 425.00003)
+rotation = 2.094
+scale = Vector2(0.3750336, 1)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Walls/W9" unique_id=1114694558]
+shape = SubResource("RectangleShape2D_s527w")
+
+[node name="W1" type="StaticBody2D" parent="FloorPolygon2/Walls" unique_id=1394924546]
+position = Vector2(-195.00002, 522)
 rotation = 3.1416
+scale = Vector2(0.3750336, 1)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W1"]
-shape = SubResource("RectangleShape2D_wall")
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Walls/W1" unique_id=1298520031]
+shape = SubResource("RectangleShape2D_s527w")
 
-[node name="W2" type="StaticBody2D" parent="Walls"]
-position = Vector2(-1101.25, 626.25)
+[node name="W10" type="StaticBody2D" parent="FloorPolygon2/Walls" unique_id=1212772631]
+position = Vector2(192.99998, 522)
+rotation = 3.1416
+scale = Vector2(0.3750336, 1)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Walls/W10" unique_id=305944543]
+shape = SubResource("RectangleShape2D_s527w")
+
+[node name="W2" type="StaticBody2D" parent="FloorPolygon2/Walls" unique_id=47655794]
+position = Vector2(-555, 90.999985)
 rotation = -2.094
+scale = Vector2(0.3750336, 1)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W2"]
-shape = SubResource("RectangleShape2D_wall")
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Walls/W2" unique_id=206961408]
+shape = SubResource("RectangleShape2D_s527w")
 
-[node name="W3" type="StaticBody2D" parent="Walls"]
-position = Vector2(-1101.25, -626.25)
+[node name="W11" type="StaticBody2D" parent="FloorPolygon2/Walls" unique_id=685354707]
+position = Vector2(-365.00006, 421.00003)
+rotation = -2.094
+scale = Vector2(0.3750336, 1)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Walls/W11" unique_id=1727999568]
+shape = SubResource("RectangleShape2D_s527w")
+
+[node name="W3" type="StaticBody2D" parent="FloorPolygon2/Walls" unique_id=966098431]
+position = Vector2(-554, -98.99997)
 rotation = -1.047
+scale = Vector2(0.3750336, 1)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W3"]
-shape = SubResource("RectangleShape2D_wall")
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Walls/W3" unique_id=544559039]
+shape = SubResource("RectangleShape2D_s527w")
 
-[node name="W4" type="StaticBody2D" parent="Walls"]
-position = Vector2(0, -892.5)
+[node name="W6" type="StaticBody2D" parent="FloorPolygon2/Walls" unique_id=799508652]
+position = Vector2(-365, -426)
+rotation = -1.047
+scale = Vector2(0.3750336, 1)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W4"]
-shape = SubResource("RectangleShape2D_wall")
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Walls/W6" unique_id=126395933]
+shape = SubResource("RectangleShape2D_s527w")
 
-[node name="W5" type="StaticBody2D" parent="Walls"]
-position = Vector2(1101.25, -626.25)
+[node name="W4" type="StaticBody2D" parent="FloorPolygon2/Walls" unique_id=1317217764]
+position = Vector2(-193, -524)
+scale = Vector2(0.3750336, 1)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Walls/W4" unique_id=562239410]
+shape = SubResource("RectangleShape2D_s527w")
+
+[node name="W7" type="StaticBody2D" parent="FloorPolygon2/Walls" unique_id=447654322]
+position = Vector2(191, -524)
+scale = Vector2(0.3750336, 1)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Walls/W7" unique_id=2081658055]
+shape = SubResource("RectangleShape2D_s527w")
+
+[node name="W5" type="StaticBody2D" parent="FloorPolygon2/Walls" unique_id=299398003]
+position = Vector2(367.00006, -430.00003)
 rotation = 1.047
+scale = Vector2(0.3750336, 1)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W5"]
-shape = SubResource("RectangleShape2D_wall")
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Walls/W5" unique_id=667993716]
+shape = SubResource("RectangleShape2D_s527w")
 
-[node name="Hole" type="Sprite2D" parent="."]
-position = Vector2(0, 0)
+[node name="W8" type="StaticBody2D" parent="FloorPolygon2/Walls" unique_id=1536589817]
+position = Vector2(557, -96.99997)
+rotation = 1.047
+scale = Vector2(0.3750336, 1)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Walls/W8" unique_id=1894907465]
+shape = SubResource("RectangleShape2D_s527w")
+
+[node name="Door" type="Node2D" parent="FloorPolygon2" unique_id=800663412]
+
+[node name="W0" type="StaticBody2D" parent="FloorPolygon2/Door" unique_id=1499744406]
+position = Vector2(459, 260.00003)
+rotation = 2.094
+scale = Vector2(0.3750336, 1)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Door/W0" unique_id=1978182235]
+shape = SubResource("RectangleShape2D_s527w")
+
+[node name="W1" type="StaticBody2D" parent="FloorPolygon2/Door" unique_id=912486568]
+position = Vector2(-1.5258789e-05, 522)
+rotation = 3.1416
+scale = Vector2(0.3750336, 1)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Door/W1" unique_id=39767712]
+shape = SubResource("RectangleShape2D_s527w")
+
+[node name="W2" type="StaticBody2D" parent="FloorPolygon2/Door" unique_id=1624318390]
+position = Vector2(-459, 257)
+rotation = -2.094
+scale = Vector2(0.3750336, 1)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Door/W2" unique_id=2043750567]
+shape = SubResource("RectangleShape2D_s527w")
+
+[node name="W3" type="StaticBody2D" parent="FloorPolygon2/Door" unique_id=409548218]
+position = Vector2(-458, -265)
+rotation = -1.047
+scale = Vector2(0.3750336, 1)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Door/W3" unique_id=101629376]
+shape = SubResource("RectangleShape2D_s527w")
+
+[node name="W4" type="StaticBody2D" parent="FloorPolygon2/Door" unique_id=1956834714]
+position = Vector2(-1.0000153, -524)
+scale = Vector2(0.3750336, 1)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Door/W4" unique_id=255041122]
+shape = SubResource("RectangleShape2D_s527w")
+
+[node name="W5" type="StaticBody2D" parent="FloorPolygon2/Door" unique_id=1772306718]
+position = Vector2(463, -263.00003)
+rotation = 1.047
+scale = Vector2(0.3750336, 1)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon2/Door/W5" unique_id=517538315]
+shape = SubResource("RectangleShape2D_s527w")
+
+[node name="Hole" type="Sprite2D" parent="." unique_id=202309953]
 scale = Vector2(1.7777777, 1.0149866)
 texture = ExtResource("1_hole")
 
-[node name="FloorElevator" type="Sprite2D" parent="Hole"]
+[node name="FloorElevator" type="Sprite2D" parent="Hole" unique_id=1473491752]
 z_as_relative = false
 position = Vector2(1.5228987e-05, -61.08454)
 scale = Vector2(0.32436147, 0.5702622)
 texture = SubResource("CompressedTexture2D_roof")
 
-[node name="Door2" type="Sprite2D" parent="Hole/FloorElevator"]
+[node name="Door2" type="Sprite2D" parent="Hole/FloorElevator" unique_id=416465398]
 light_mask = 2
 visibility_layer = 2
 position = Vector2(0, 2.218531)
 scale = Vector2(1, 0.9999999)
 texture = ExtResource("4_lift")
 
-[node name="Door1" type="Sprite2D" parent="Hole/FloorElevator"]
+[node name="Door1" type="Sprite2D" parent="Hole/FloorElevator" unique_id=1181643877]
 light_mask = 2
 visibility_layer = 2
 position = Vector2(0, 2.0723612)
 scale = Vector2(1, 1.0383357)
 texture = ExtResource("2_lift2")
 
-[node name="RoofElevator" type="Sprite2D" parent="Hole/FloorElevator"]
+[node name="RoofElevator" type="Sprite2D" parent="Hole/FloorElevator" unique_id=897988370]
 light_mask = 4
 visibility_layer = 4
 z_index = 1
@@ -109,46 +209,45 @@ position = Vector2(-0.29128265, 2.0809915)
 scale = Vector2(0.9934874, 0.99999994)
 texture = SubResource("CompressedTexture2D_roof2")
 
-[node name="RoofElevator2" type="Sprite2D" parent="Hole/FloorElevator"]
+[node name="RoofElevator2" type="Sprite2D" parent="Hole/FloorElevator" unique_id=78919764]
 light_mask = 4
 visibility_layer = 4
 position = Vector2(-0.8671422, -0.29339597)
 scale = Vector2(0.99533916, 0.99853295)
 texture = ExtResource("3_roof3")
 
-[node name="TransportArea" type="Area2D" parent="Hole/FloorElevator"]
+[node name="TransportArea" type="Area2D" parent="Hole/FloorElevator" unique_id=1681945360]
 z_index = 2
 position = Vector2(-3.0517578e-05, -20.732452)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/TransportArea"]
+[node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/TransportArea" unique_id=2117406636]
 z_index = 1
 position = Vector2(0, 55.28595)
 shape = SubResource("CircleShape2D_transport")
 
-[node name="Top" type="StaticBody2D" parent="Hole/FloorElevator"]
+[node name="Top" type="StaticBody2D" parent="Hole/FloorElevator" unique_id=477700939]
 position = Vector2(1.7341309, -10.366119)
 scale = Vector2(0.23695809, 1)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/Top"]
+[node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/Top" unique_id=1957870596]
 position = Vector2(-3.659668, -25.915344)
 shape = SubResource("RectangleShape2D_top")
 
-[node name="RightUpper" type="StaticBody2D" parent="Hole/FloorElevator"]
+[node name="RightUpper" type="StaticBody2D" parent="Hole/FloorElevator" unique_id=1876864550]
 position = Vector2(119.65813, 53.558296)
 scale = Vector2(3.9827793, 0.9232049)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/RightUpper"]
+[node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/RightUpper" unique_id=511744625]
 position = Vector2(3.7083435, 38.363724)
 scale = Vector2(0.9999992, 0.9999994)
 shape = SubResource("RectangleShape2D_right")
 
-[node name="LeftUpper" type="StaticBody2D" parent="Hole/FloorElevator"]
+[node name="LeftUpper" type="StaticBody2D" parent="Hole/FloorElevator" unique_id=539964014]
 position = Vector2(-124.86073, 38.009117)
 scale = Vector2(3.913425, 1.1305274)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/LeftUpper"]
+[node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/LeftUpper" unique_id=2012448193]
 position = Vector2(-2.6588135, 47.59619)
 shape = SubResource("RectangleShape2D_left")
 
-[node name="SpawnPoint" type="Marker2D" parent="."]
-position = Vector2(0, 0)
+[node name="SpawnPoint" type="Marker2D" parent="." unique_id=1839040890]
