@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://floor_arena_01"]
+
+[ext_resource type="Script" path="res://Scripts/FloorModule.gd" id="1_floor_module"]
+[ext_resource type="PackedScene" uid="uid://dat4ixuir5ckq" path="res://Objects/angry_ball.tscn" id="2_angry"]
+[ext_resource type="PackedScene" uid="uid://cfukoxsdamguh" path="res://Objects/DrunkKiller.tscn" id="3_drunk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(615, 20)
+
+[node name="Floor_Arena_01" type="Node2D"]
+script = ExtResource("1_floor_module")
+floor_index = 0
+quest_type = "SURVIVE"
+timer_duration = 15
+
+[node name="FloorPolygon" type="Polygon2D" parent="."]
+position = Vector2(0, 0)
+color = Color(0.12, 0.15, 0.19, 1)
+polygon = PackedVector2Array(615, 0, 307.5, 532.5, -307.5, 532.5, -615, 0, -307.5, -532.5, 307.5, -532.5)
+
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="W0" type="StaticBody2D" parent="Walls"]
+position = Vector2(1101.25, 626.25)
+rotation = 2.094
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W0"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="W1" type="StaticBody2D" parent="Walls"]
+position = Vector2(0, 892.5)
+rotation = 3.1416
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W1"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="W2" type="StaticBody2D" parent="Walls"]
+position = Vector2(-1101.25, 626.25)
+rotation = -2.094
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W2"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="W3" type="StaticBody2D" parent="Walls"]
+position = Vector2(-1101.25, -626.25)
+rotation = -1.047
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W3"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="W4" type="StaticBody2D" parent="Walls"]
+position = Vector2(0, -892.5)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W4"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="W5" type="StaticBody2D" parent="Walls"]
+position = Vector2(1101.25, -626.25)
+rotation = 1.047
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W5"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="AngryBall" parent="Enemies" instance=ExtResource("2_angry")]
+position = Vector2(300, 300)
+
+[node name="AngryBall2" parent="Enemies" instance=ExtResource("2_angry")]
+position = Vector2(-300, 300)
+
+[node name="AngryBall3" parent="Enemies" instance=ExtResource("2_angry")]
+position = Vector2(300, -300)
+
+[node name="DrunkKiller" parent="Enemies" instance=ExtResource("3_drunk")]
+position = Vector2(0, 0)
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(0, 0)
