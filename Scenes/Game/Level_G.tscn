@@ -1,9 +1,0 @@
-[gd_scene format=3 uid="uid://level_g"]
-
-[ext_resource type="Script" uid="uid://levelg_script" path="res://Scripts/LevelG.gd" id="1_levelg"]
-
-[node name="Level_G" type="Node2D" instance_of="" parent="" path="."]
-script = ExtResource("1_levelg")
-safe_mode = true
-spawn_player = false
-spawn_ui = false
