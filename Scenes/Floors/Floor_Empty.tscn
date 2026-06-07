@@ -1,15 +1,9 @@
-[gd_scene format=3 uid="uid://floor_corridor"]
-
-[ext_resource type="Script" path="res://Scripts/FloorModule.gd" id="1_floor_module"]
+[gd_scene format=3 uid="uid://floor_empty"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
 size = Vector2(615, 20)
 
-[node name="Floor_Corridor" type="Node2D"]
-script = ExtResource("1_floor_module")
-floor_index = 0
-quest_type = "SURVIVE"
-timer_duration = 10
+[node name="Floor_Empty" type="Node2D"]
 
 [node name="FloorPolygon" type="Polygon2D" parent="."]
 position = Vector2(0, 0)
@@ -58,8 +52,6 @@ rotation = 1.047
 
 [node name="CollisionShape" type="CollisionShape2D" parent="Walls/W5"]
 shape = SubResource("RectangleShape2D_wall")
-
-[node name="Enemies" type="Node2D" parent="."]
 
 [node name="SpawnPoint" type="Marker2D" parent="."]
 position = Vector2(0, 0)

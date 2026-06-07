@@ -1,0 +1,154 @@
+[gd_scene format=3 uid="uid://floor_elevator"]
+
+[ext_resource type="Texture2D" uid="uid://dxubss2onvayf" path="res://Assets/SpritesElevator/Hole.png" id="1_hole"]
+[ext_resource type="Texture2D" uid="uid://csha62md44m3r" path="res://Assets/SpritesElevator/Lift2.png" id="2_lift2"]
+[ext_resource type="Texture2D" uid="uid://74cir4cs1tst" path="res://Assets/SpritesElevator/roof3.png" id="3_roof3"]
+[ext_resource type="Texture2D" uid="uid://cdirbcheywinl" path="res://Assets/SpritesElevator/Lift.png" id="4_lift"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(615, 20)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_roof"]
+load_path = "res://.godot/imported/roof (1).png-8260933cb6459d90e2c678aecbb430af.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_roof2"]
+load_path = "res://.godot/imported/roof.png-0ab65e3f12467a3fa29043a5ab0df181.ctex"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_transport"]
+radius = 58.961914
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_top"]
+size = Vector2(1602.7505, 27.643005)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_right"]
+size = Vector2(27.41677, 282.5818)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_left"]
+size = Vector2(26.588142, 226.61873)
+
+[node name="Floor_Elevator" type="Node2D"]
+
+[node name="FloorPolygon" type="Polygon2D" parent="."]
+position = Vector2(0, 0)
+color = Color(0.12, 0.15, 0.19, 1)
+polygon = PackedVector2Array(615, 0, 307.5, 532.5, -307.5, 532.5, -615, 0, -307.5, -532.5, 307.5, -532.5)
+
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="W0" type="StaticBody2D" parent="Walls"]
+position = Vector2(1101.25, 626.25)
+rotation = 2.094
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W0"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="W1" type="StaticBody2D" parent="Walls"]
+position = Vector2(0, 892.5)
+rotation = 3.1416
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W1"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="W2" type="StaticBody2D" parent="Walls"]
+position = Vector2(-1101.25, 626.25)
+rotation = -2.094
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W2"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="W3" type="StaticBody2D" parent="Walls"]
+position = Vector2(-1101.25, -626.25)
+rotation = -1.047
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W3"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="W4" type="StaticBody2D" parent="Walls"]
+position = Vector2(0, -892.5)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W4"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="W5" type="StaticBody2D" parent="Walls"]
+position = Vector2(1101.25, -626.25)
+rotation = 1.047
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/W5"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Hole" type="Sprite2D" parent="."]
+position = Vector2(0, 0)
+scale = Vector2(1.7777777, 1.0149866)
+texture = ExtResource("1_hole")
+
+[node name="FloorElevator" type="Sprite2D" parent="Hole"]
+z_as_relative = false
+position = Vector2(1.5228987e-05, -61.08454)
+scale = Vector2(0.32436147, 0.5702622)
+texture = SubResource("CompressedTexture2D_roof")
+
+[node name="Door2" type="Sprite2D" parent="Hole/FloorElevator"]
+light_mask = 2
+visibility_layer = 2
+position = Vector2(0, 2.218531)
+scale = Vector2(1, 0.9999999)
+texture = ExtResource("4_lift")
+
+[node name="Door1" type="Sprite2D" parent="Hole/FloorElevator"]
+light_mask = 2
+visibility_layer = 2
+position = Vector2(0, 2.0723612)
+scale = Vector2(1, 1.0383357)
+texture = ExtResource("2_lift2")
+
+[node name="RoofElevator" type="Sprite2D" parent="Hole/FloorElevator"]
+light_mask = 4
+visibility_layer = 4
+z_index = 1
+position = Vector2(-0.29128265, 2.0809915)
+scale = Vector2(0.9934874, 0.99999994)
+texture = SubResource("CompressedTexture2D_roof2")
+
+[node name="RoofElevator2" type="Sprite2D" parent="Hole/FloorElevator"]
+light_mask = 4
+visibility_layer = 4
+position = Vector2(-0.8671422, -0.29339597)
+scale = Vector2(0.99533916, 0.99853295)
+texture = ExtResource("3_roof3")
+
+[node name="TransportArea" type="Area2D" parent="Hole/FloorElevator"]
+z_index = 2
+position = Vector2(-3.0517578e-05, -20.732452)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/TransportArea"]
+z_index = 1
+position = Vector2(0, 55.28595)
+shape = SubResource("CircleShape2D_transport")
+
+[node name="Top" type="StaticBody2D" parent="Hole/FloorElevator"]
+position = Vector2(1.7341309, -10.366119)
+scale = Vector2(0.23695809, 1)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/Top"]
+position = Vector2(-3.659668, -25.915344)
+shape = SubResource("RectangleShape2D_top")
+
+[node name="RightUpper" type="StaticBody2D" parent="Hole/FloorElevator"]
+position = Vector2(119.65813, 53.558296)
+scale = Vector2(3.9827793, 0.9232049)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/RightUpper"]
+position = Vector2(3.7083435, 38.363724)
+scale = Vector2(0.9999992, 0.9999994)
+shape = SubResource("RectangleShape2D_right")
+
+[node name="LeftUpper" type="StaticBody2D" parent="Hole/FloorElevator"]
+position = Vector2(-124.86073, 38.009117)
+scale = Vector2(3.913425, 1.1305274)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/LeftUpper"]
+position = Vector2(-2.6588135, 47.59619)
+shape = SubResource("RectangleShape2D_left")
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(0, 0)

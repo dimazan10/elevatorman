@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://floor_rectangle"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_h"]
+size = Vector2(1840, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
+size = Vector2(20, 620)
+
+[node name="Floor_Rectangle" type="Node2D"]
+
+[node name="FloorPolygon" type="Polygon2D" parent="."]
+position = Vector2(640, 0)
+color = Color(0.12, 0.15, 0.19, 1)
+polygon = PackedVector2Array(0, -310, 1840, -310, 1840, 310, 0, 310)
+
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="Top" type="StaticBody2D" parent="Walls"]
+position = Vector2(640, -310)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/Top"]
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="Bottom" type="StaticBody2D" parent="Walls"]
+position = Vector2(640, 310)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/Bottom"]
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="Left" type="StaticBody2D" parent="Walls"]
+position = Vector2(0, 0)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/Left"]
+shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="Right" type="StaticBody2D" parent="Walls"]
+position = Vector2(1840, 0)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Walls/Right"]
+shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(120, 0)
