@@ -29,3 +29,9 @@ shape = SubResource("RectangleShape2D_wall_h")
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=1522809266]
 position = Vector2(1567, -3)
 scale = Vector2(1, 0.20000029)
+
+[node name="DoorPoint_0" type="Marker2D" parent="."]
+position = Vector2(300, 0)
+
+[node name="DoorPoint_1" type="Marker2D" parent="."]
+position = Vector2(1800, 0)
