@@ -67,27 +67,35 @@ func _ready() -> void:
     var d = DASH_UI.instantiate()
     add_child(d)
 
-    # Extract Hole node from SecretLevel scene (don't add secret to tree)
+    # Extract Hole node from SecretLevel scene safely (duplicate and add)
     var secret_inst = SECRET_SCENE.instantiate()
     var hole = secret_inst.find_node("Hole", true, false)
     if hole:
-        # Detach from temporary instance and add to this scene
-        secret_inst.remove_child(hole)
-        add_child(hole)
-        hole.position = modules[0].position
+        var hole_clone = hole.duplicate()
+        add_child(hole_clone)
+        hole_clone.position = modules[0].position
 
-        # Try to run the elevator intro animations (DownUp -> Open)
-        var anim = hole.get_node_or_null("FloorElevator/AnimationPlayer")
+        # Run elevator intro animations using timers instead of awaiting signals
+        var anim = hole_clone.get_node_or_null("FloorElevator/AnimationPlayer")
         if anim:
             anim.play("RESET")
-            anim.seek(0, true)
-            anim.stop()
+            # wait a frame to ensure the reset takes effect
+            await get_tree().process_frame
+            # play DownUp then Open based on animation resource lengths
+            var down_anim = anim.get_animation("DownUp")
+            var down_len = 1.0
+            if down_anim:
+                down_len = down_anim.length
             anim.play("DownUp")
-            await anim.animation_finished
+            await get_tree().create_timer(down_len).timeout
+            var open_anim = anim.get_animation("Open")
+            var open_len = 1.0
+            if open_anim:
+                open_len = open_anim.length
             anim.play("Open")
-            await anim.animation_finished
+            await get_tree().create_timer(open_len).timeout
             # enable transport collision if present
-            var transport_shape = hole.get_node_or_null("FloorElevator/TransportArea/CollisionShape")
+            var transport_shape = hole_clone.get_node_or_null("FloorElevator/TransportArea/CollisionShape")
             if transport_shape:
                 transport_shape.set_deferred("disabled", false)
 
