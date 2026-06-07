@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://81f6ijw81d6p" path="res://Scripts/ElevatorTransport.gd" id="10_qtymf"]
 [ext_resource type="Script" uid="uid://blcyhtqt11qhv" path="res://Scripts/ElevatorExit.gd" id="11_exit"]
 [ext_resource type="PackedScene" uid="uid://cfukoxsdamguh" path="res://Objects/DrunkKiller.tscn" id="12_drunk"]
+[ext_resource type="PackedScene" uid="uid://iiwoceipwyew" path="res://Objects/Switch.tscn" id="13_switch"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
 size = Vector2(615, 20)
@@ -644,3 +645,9 @@ scale = Vector2(3.913425, 1.1305274)
 [node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/LeftUpper" unique_id=1702438361]
 position = Vector2(-2.6588135, 47.59619)
 shape = SubResource("RectangleShape2D_lemb1")
+
+[node name="Switch" parent="." unique_id=1511711801 instance=ExtResource("13_switch")]
+position = Vector2(627, 788)
+
+[node name="Switch2" parent="." unique_id=941308335 instance=ExtResource("13_switch")]
+position = Vector2(613, -56)

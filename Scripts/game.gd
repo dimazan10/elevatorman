@@ -2,11 +2,13 @@ extends Node2D
 
 const FadeTransition := preload("res://Scripts/FadeTransition.gd")
 
-enum LiftState { NONE, START, EXITING, COMBAT, RETURNING }
+enum LiftState { NONE, START, EXITING, WAITING, COMBAT, RETURNING }
 var lift_state := LiftState.NONE
 
 var combat_timer: Timer
 var time_label: Label
+var _switch_count := 0
+var _activated_switch_count := 0
 
 @onready var anim := $Hole/FloorElevator/AnimationPlayer
 @onready var player_node := get_tree().get_first_node_in_group("player") as Node2D
@@ -64,9 +66,9 @@ func start_exit_sequence() -> void:
 	anim.play("DownClose")
 	await anim.animation_finished
 	_show_enemies()
-	_start_combat_timer()
-	lift_state = LiftState.COMBAT
+	lift_state = LiftState.WAITING
 	player_node.can_move = true
+	_connect_switch()
 
 func _start_combat_timer() -> void:
 	combat_timer = Timer.new()
@@ -76,6 +78,27 @@ func _start_combat_timer() -> void:
 	combat_timer.timeout.connect(_on_combat_timeout)
 	add_child(combat_timer)
 	combat_timer.start()
+
+func _connect_switch() -> void:
+	var switches := get_tree().get_nodes_in_group("switch")
+	if switches.is_empty():
+		_start_combat_timer()
+		lift_state = LiftState.COMBAT
+		return
+
+	_switch_count = switches.size()
+	_activated_switch_count = 0
+	for s in switches:
+		if s.has_signal("activated"):
+			s.activated.connect(_on_switch_activated)
+
+func _on_switch_activated() -> void:
+	if lift_state != LiftState.WAITING:
+		return
+	_activated_switch_count += 1
+	if _activated_switch_count >= _switch_count:
+		_start_combat_timer()
+		lift_state = LiftState.COMBAT
 
 func _on_combat_timeout() -> void:
 	if lift_state != LiftState.COMBAT:

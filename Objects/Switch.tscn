@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://iiwoceipwyew"]
+
+[ext_resource type="Texture2D" uid="uid://boegxbo3hpeug" path="res://Assets/switch1.png" id="1_im362"]
+[ext_resource type="Texture2D" uid="uid://b1502rwuq0gwm" path="res://Assets/switch2.png" id="2_602vk"]
+[ext_resource type="Texture2D" uid="uid://b6imm7c4encpm" path="res://Assets/switch3.png" id="3_8ueku"]
+[ext_resource type="Texture2D" uid="uid://qy66cwoyhty4" path="res://Assets/switch4.png" id="4_ppy7b"]
+[ext_resource type="Texture2D" uid="uid://cdjurlde1m7hs" path="res://Assets/switch5.png" id="5_4vsas"]
+[ext_resource type="Script" path="res://Scripts/Switch.gd" id="6_switch"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ohhd8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_im362")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_602vk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_8ueku")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_ppy7b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_4vsas")
+}],
+"loop": false,
+"name": &"default",
+"speed": 20.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_im362"]
+size = Vector2(38, 34)
+
+[node name="Switch" type="CharacterBody2D" unique_id=941308335]
+script = ExtResource("6_switch")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=125194493]
+texture_filter = 1
+position = Vector2(19, 2)
+sprite_frames = SubResource("SpriteFrames_ohhd8")
+frame = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1330098495]
+position = Vector2(19, 17)
+shape = SubResource("RectangleShape2D_im362")
