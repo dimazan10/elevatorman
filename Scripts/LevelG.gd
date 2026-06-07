@@ -67,39 +67,24 @@ func _ready() -> void:
     var d = DASH_UI.instantiate()
     add_child(d)
 
-    # Extract Hole node from SecretLevel scene safely (duplicate and add)
-    var secret_inst = SECRET_SCENE.instantiate()
-    var hole = secret_inst.find_node("Hole", true, false)
-    if hole:
-        var hole_clone = hole.duplicate()
-        add_child(hole_clone)
-        hole_clone.position = modules[0].position
+    # Place a lightweight Hole placeholder (avoid instancing the full SecretLevel to prevent crashes)
+    var hole_node: Node2D = Node2D.new()
+    hole_node.name = "Hole"
+    hole_node.position = modules[0].position
+    var hole_sprite: Sprite2D = Sprite2D.new()
+    var hole_tex = load("res://Assets/SpritesElevator/Hole.png")
+    if hole_tex:
+        hole_sprite.texture = hole_tex
+    hole_node.add_child(hole_sprite)
 
-        # Run elevator intro animations using timers instead of awaiting signals
-        var anim = hole_clone.get_node_or_null("FloorElevator/AnimationPlayer")
-        if anim:
-            anim.play("RESET")
-            # wait a frame to ensure the reset takes effect
-            await get_tree().process_frame
-            # play DownUp then Open based on animation resource lengths
-            var down_anim = anim.get_animation("DownUp")
-            var down_len = 1.0
-            if down_anim:
-                down_len = down_anim.length
-            anim.play("DownUp")
-            await get_tree().create_timer(down_len).timeout
-            var open_anim = anim.get_animation("Open")
-            var open_len = 1.0
-            if open_anim:
-                open_len = open_anim.length
-            anim.play("Open")
-            await get_tree().create_timer(open_len).timeout
-            # enable transport collision if present
-            var transport_shape = hole_clone.get_node_or_null("FloorElevator/TransportArea/CollisionShape")
-            if transport_shape:
-                transport_shape.set_deferred("disabled", false)
+    var floor_elev: Sprite2D = Sprite2D.new()
+    var lift_tex = load("res://Assets/SpritesElevator/Lift2.png")
+    if lift_tex:
+        floor_elev.texture = lift_tex
+    floor_elev.position = Vector2(0, -61)
+    hole_node.add_child(floor_elev)
 
-    secret_inst.queue_free()
+    add_child(hole_node)
 
 
 func _hex_points(radius: float) -> PackedVector2Array:
