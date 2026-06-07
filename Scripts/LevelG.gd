@@ -8,6 +8,9 @@ const DASH_UI = preload("res://Objects/DashUI.tscn")
 @export var module_count: int = 5
 @export var module_radius: float = 300.0
 @export var module_spacing_extra: float = 32.0
+@export var safe_mode: bool = true # when true, do not instantiate player/UI/complex nodes
+@export var spawn_player: bool = false
+@export var spawn_ui: bool = false
 
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var modules: Array = []
@@ -55,17 +58,17 @@ func _ready() -> void:
             var rand_parent_idx: int = rng.randi_range(0, modules.size() - 1)
             _create_corridor(modules[rand_parent_idx].position, pos2, container)
 
-    # Spawn player
-    var player_inst = PLAYER_SCENE.instantiate()
-    add_child(player_inst)
-    # put player in first module center
-    player_inst.position = modules[0].position
+    # Optionally spawn player/UI — disabled in safe_mode to avoid crashes
+    if not safe_mode and spawn_player:
+        var player_inst = PLAYER_SCENE.instantiate()
+        add_child(player_inst)
+        player_inst.position = modules[0].position
 
-    # Spawn UI
-    var h = HEALTH_UI.instantiate()
-    add_child(h)
-    var d = DASH_UI.instantiate()
-    add_child(d)
+    if not safe_mode and spawn_ui:
+        var h = HEALTH_UI.instantiate()
+        add_child(h)
+        var d = DASH_UI.instantiate()
+        add_child(d)
 
     # Place a lightweight Hole placeholder (avoid instancing the full SecretLevel to prevent crashes)
     var hole_node: Node2D = Node2D.new()

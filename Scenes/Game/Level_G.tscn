@@ -4,3 +4,6 @@
 
 [node name="Level_G" type="Node2D" instance_of="" parent="" path="."]
 script = ExtResource("1_levelg")
+safe_mode = true
+spawn_player = false
+spawn_ui = false
