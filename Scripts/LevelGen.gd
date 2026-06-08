@@ -50,6 +50,7 @@ func _ready() -> void:
 	floor_container = Node2D.new()
 	floor_container.name = "Floors"
 	add_child(floor_container)
+	move_child(floor_container, 0)  # floors render BEHIND player/UI
 	generate()
 
 func generate() -> void:
