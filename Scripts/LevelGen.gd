@@ -61,9 +61,9 @@ func generate() -> void:
 
 	_place_rectangles()
 
-	_open_close_doors()
-
 	_add_wall_visuals()
+
+	_open_close_doors()
 
 	_move_player_to_start()
 
@@ -167,19 +167,18 @@ func _add_wall_visuals() -> void:
 
 	for key in generated_rooms:
 		var room = generated_rooms[key]
-		var all_nodes = [room.scene]
-		while all_nodes.size() > 0:
-			var node = all_nodes.pop_back()
+		var stack = [room.scene]
+		while stack.size() > 0:
+			var node = stack.pop_back()
 			for child in node.get_children():
 				if child is StaticBody2D and child.name.begins_with("W"):
-					var existing = child.get_node_or_null("Visual")
-					if not existing:
+					if not child.get_node_or_null("Visual"):
 						var vis = Polygon2D.new()
 						vis.name = "Visual"
 						vis.color = wall_color
 						vis.polygon = wall_polygon
 						child.add_child(vis)
-				all_nodes.append(child)
+				stack.append(child)
 
 func _find_door_shape(room: RoomData, door_idx: int) -> Node:
 	var doors = _find_child_recursive(room.scene, "Doors")
