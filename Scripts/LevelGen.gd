@@ -63,6 +63,8 @@ func generate() -> void:
 
 	_open_close_doors()
 
+	_add_wall_visuals()
+
 	_move_player_to_start()
 
 	print("LevelGen: generated %d rooms" % generated_rooms.size())
@@ -159,6 +161,26 @@ func _move_player_to_start() -> void:
 		if player:
 			player.position = spawn.global_position
 
+func _add_wall_visuals() -> void:
+	var wall_color = Color(0.4, 0.4, 0.5, 1)
+	var wall_polygon = PackedVector2Array([-307.5, -10, 307.5, -10, 307.5, 10, -307.5, 10])
+
+	for key in generated_rooms:
+		var room = generated_rooms[key]
+		var all_nodes = [room.scene]
+		while all_nodes.size() > 0:
+			var node = all_nodes.pop_back()
+			for child in node.get_children():
+				if child is StaticBody2D and child.name.begins_with("W"):
+					var existing = child.get_node_or_null("Visual")
+					if not existing:
+						var vis = Polygon2D.new()
+						vis.name = "Visual"
+						vis.color = wall_color
+						vis.polygon = wall_polygon
+						child.add_child(vis)
+				all_nodes.append(child)
+
 func _find_door_shape(room: RoomData, door_idx: int) -> Node:
 	var doors = _find_child_recursive(room.scene, "Doors")
 	if not doors:
@@ -181,6 +203,9 @@ func _open_close_doors() -> void:
 			var cs = w.get_node_or_null("CollisionShape")
 			if cs:
 				cs.set_deferred("disabled", room.doors_open[i])
+			var vis = w.get_node_or_null("Visual")
+			if vis:
+				vis.visible = not room.doors_open[i]
 
 func _find_child_recursive(node: Node, name: String) -> Node:
 	if node.name == name:
