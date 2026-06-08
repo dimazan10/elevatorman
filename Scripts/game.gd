@@ -9,9 +9,12 @@ var combat_timer: Timer
 var time_label: Label
 var _switch_count := 0
 var _activated_switch_count := 0
+var _arena_rotator: Node2D
 
 @onready var anim := $Hole/FloorElevator/AnimationPlayer
 @onready var player_node := get_tree().get_first_node_in_group("player") as Node2D
+@onready var _spawner := $EnemySpawner
+@onready var _switch_spawner := $SwitchSpawner
 
 @onready var shaft_colliders := [
 	$Hole/FloorElevator/Top/CollisionShape,
@@ -20,6 +23,7 @@ var _activated_switch_count := 0
 ]
 
 func _ready() -> void:
+	_setup_arena_rotation()
 	_hide_enemies()
 	_hide_player()
 	_set_shaft_collision(true)
@@ -38,6 +42,40 @@ func _ready() -> void:
 	$Hole/FloorElevator/TransportArea/CollisionShape.set_deferred("disabled", false)
 	_show_player()
 	player_node.can_move = true
+
+func _setup_arena_rotation() -> void:
+	_arena_rotator = Node2D.new()
+	_arena_rotator.name = "ArenaRotator"
+	_arena_rotator.position = Vector2(640, 360)
+	add_child(_arena_rotator)
+
+	var floor = $Floor
+	var walls = $Walls
+	remove_child(floor)
+	remove_child(walls)
+	floor.position -= Vector2(640, 360)
+	walls.position -= Vector2(640, 360)
+	_arena_rotator.add_child(floor)
+	_arena_rotator.add_child(walls)
+
+	for wall in walls.get_children():
+		_add_wall_pusher(wall)
+
+func _add_wall_pusher(wall: StaticBody2D) -> void:
+	var pusher := Area2D.new()
+	pusher.name = "WallPusher"
+	pusher.set_script(preload("res://Scripts/WallPusher.gd"))
+	for child in wall.get_children():
+		var cs := child as CollisionShape2D
+		if cs and cs.shape:
+			var copy := CollisionShape2D.new()
+			copy.shape = cs.shape
+			pusher.add_child(copy)
+	wall.add_child(pusher)
+	if wall.name == "W4":
+		var gate = wall.get_node("Gate") as StaticBody2D
+		if gate:
+			_add_wall_pusher(gate)
 
 func _setup_ui() -> void:
 	var ui := CanvasLayer.new()
@@ -65,6 +103,8 @@ func start_exit_sequence() -> void:
 	_set_shaft_collision(false)
 	anim.play("DownClose")
 	await anim.animation_finished
+	_spawn_enemies(1)
+	_spawn_switches(1)
 	_show_enemies()
 	lift_state = LiftState.WAITING
 	player_node.can_move = true
@@ -104,6 +144,8 @@ func _on_combat_timeout() -> void:
 	if lift_state != LiftState.COMBAT:
 		return
 	_hide_enemies()
+	_spawner.clear_spawned()
+	_switch_spawner.clear_spawned()
 	_set_shaft_collision(true)
 	lift_state = LiftState.RETURNING
 	anim.play("DownUp")
@@ -186,6 +228,12 @@ func _enable_collision_shapes(node: Node) -> void:
 	for child in node.get_children():
 		_enable_collision_shapes(child)
 
+func _spawn_enemies(level: int) -> void:
+	_spawner.spawn(level, self)
+
+func _spawn_switches(level: int) -> void:
+	_switch_spawner.spawn(level, self)
+
 func _shake_camera(intensity: float = 8.0, duration: float = 0.4) -> void:
 	var camera := player_node.get_node("PlayerCamera") as Camera2D
 	if not camera:
@@ -202,7 +250,31 @@ func _set_shaft_collision(enabled: bool) -> void:
 		cs.set_deferred("disabled", not enabled)
 
 
-func _process(_delta: float) -> void:
+var _rotation_speed := 0.5
+
+func _update_gate() -> void:
+	var gate = _arena_rotator.get_node("Walls/W4/Gate") as StaticBody2D
+	var trigger_pos = $DoorTrigger.global_position
+	var gate_pos = gate.global_position
+	var dist = gate_pos.distance_to(trigger_pos)
+	var is_near = dist < 80.0
+
+	gate.get_node("CollisionShape").set_deferred("disabled", is_near)
+	gate.get_node("Visual").modulate = Color(1, 1, 1, 0.3 if is_near else 1.0)
+
+	var pusher = gate.get_node("WallPusher") as Area2D
+	if pusher:
+		for child in pusher.get_children():
+			if child is CollisionShape2D:
+				child.set_deferred("disabled", is_near)
+
+	_rotation_speed = 0.05 if is_near else 0.5
+
+
+func _process(delta: float) -> void:
+	_arena_rotator.rotation += delta * _rotation_speed
+	_update_gate()
+
 	if combat_timer and not combat_timer.is_stopped():
 		var remaining: float = ceil(combat_timer.time_left)
 		var m := int(remaining / 60.0)

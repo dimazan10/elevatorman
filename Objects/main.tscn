@@ -1,18 +1,18 @@
-[gd_scene format=3 uid="uid://dhgvb3lqgldo1"]
+[gd_scene format=3 uid="uid://cqa47d5gds1ea"]
 
-[ext_resource type="PackedScene" uid="uid://mt70rvdsdeyx" path="res://Objects/player.tscn" id="1_qikps"]
-[ext_resource type="PackedScene" uid="uid://doss117q2j5gm" path="res://Objects/UI_HP.tscn" id="5_ui"]
-[ext_resource type="PackedScene" uid="uid://cury7lw1ntlld" path="res://Objects/DashUI.tscn" id="6_dash"]
-[ext_resource type="Script" uid="uid://dyap3dpjeta56" path="res://Scripts/game.gd" id="7_game"]
-[ext_resource type="Texture2D" uid="uid://dxubss2onvayf" path="res://Assets/SpritesElevator/Hole.png" id="8_hole"]
-[ext_resource type="Texture2D" uid="uid://csha62md44m3r" path="res://Assets/SpritesElevator/Lift2.png" id="9_lift2"]
-[ext_resource type="Texture2D" uid="uid://74cir4cs1tst" path="res://Assets/SpritesElevator/roof3.png" id="9_qtymf"]
-[ext_resource type="Texture2D" uid="uid://cdirbcheywinl" path="res://Assets/SpritesElevator/Lift.png" id="10_lift"]
-[ext_resource type="Script" uid="uid://81f6ijw81d6p" path="res://Scripts/ElevatorTransport.gd" id="10_qtymf"]
-[ext_resource type="Script" uid="uid://blcyhtqt11qhv" path="res://Scripts/ElevatorExit.gd" id="11_exit"]
-[ext_resource type="Script" uid="uid://dirqucluw2ck4" path="res://Scripts/DoorTrigger.gd" id="11_ypmwd"]
-[ext_resource type="PackedScene" uid="uid://dkax3cjeu00gs" path="res://Objects/EnemySpawner.tscn" id="12_oejk7"]
-[ext_resource type="PackedScene" uid="uid://cvl0thapds4n1" path="res://Objects/SwitchSpawner.tscn" id="13_oejk7"]
+[ext_resource type="Script" uid="uid://dyap3dpjeta56" path="res://Scripts/game.gd" id="1_m80wk"]
+[ext_resource type="PackedScene" uid="uid://mt70rvdsdeyx" path="res://Objects/player.tscn" id="2_ehhbk"]
+[ext_resource type="PackedScene" uid="uid://doss117q2j5gm" path="res://Objects/UI_HP.tscn" id="3_ju4ev"]
+[ext_resource type="PackedScene" uid="uid://cury7lw1ntlld" path="res://Objects/DashUI.tscn" id="4_5bxvv"]
+[ext_resource type="Texture2D" uid="uid://dxubss2onvayf" path="res://Assets/SpritesElevator/Hole.png" id="5_jjvm4"]
+[ext_resource type="Texture2D" uid="uid://cdirbcheywinl" path="res://Assets/SpritesElevator/Lift.png" id="6_00mwp"]
+[ext_resource type="Texture2D" uid="uid://csha62md44m3r" path="res://Assets/SpritesElevator/Lift2.png" id="7_k45bu"]
+[ext_resource type="Texture2D" uid="uid://74cir4cs1tst" path="res://Assets/SpritesElevator/roof3.png" id="8_5ho1q"]
+[ext_resource type="Script" uid="uid://blcyhtqt11qhv" path="res://Scripts/ElevatorExit.gd" id="9_24cto"]
+[ext_resource type="Script" uid="uid://81f6ijw81d6p" path="res://Scripts/ElevatorTransport.gd" id="10_jilbn"]
+[ext_resource type="Script" uid="uid://dirqucluw2ck4" path="res://Scripts/DoorTrigger.gd" id="11_dt"]
+[ext_resource type="PackedScene" uid="uid://dkax3cjeu00gs" path="res://Objects/EnemySpawner.tscn" id="12_tkpsk"]
+[ext_resource type="PackedScene" uid="uid://cvl0thapds4n1" path="res://Objects/SwitchSpawner.tscn" id="13_8d71f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
 size = Vector2(615, 20)
@@ -464,7 +464,7 @@ size = Vector2(26.588142, 226.61873)
 size = Vector2(120, 80)
 
 [node name="MainArena2" type="Node2D" unique_id=418966575]
-script = ExtResource("7_game")
+script = ExtResource("1_m80wk")
 
 [node name="Floor" type="Polygon2D" parent="." unique_id=1231110711]
 position = Vector2(640, 360)
@@ -554,19 +554,19 @@ shape = SubResource("RectangleShape2D_wall")
 color = Color(0.4, 0.4, 0.5, 1)
 polygon = PackedVector2Array(-307.5, -10, 307.5, -10, 307.5, 10, -307.5, 10)
 
-[node name="Player" parent="." unique_id=1739531344 instance=ExtResource("1_qikps")]
+[node name="Player" parent="." unique_id=1739531344 instance=ExtResource("2_ehhbk")]
 process_mode = 3
 z_index = 2
 position = Vector2(640, 360)
 
-[node name="HealthUI" parent="." unique_id=308322847 instance=ExtResource("5_ui")]
+[node name="HealthUI" parent="." unique_id=308322847 instance=ExtResource("3_ju4ev")]
 
-[node name="DashUI" parent="." unique_id=383817108 instance=ExtResource("6_dash")]
+[node name="DashUI" parent="." unique_id=383817108 instance=ExtResource("4_5bxvv")]
 
 [node name="Hole" type="Sprite2D" parent="." unique_id=374001480]
 position = Vector2(640.00006, 360)
 scale = Vector2(1.7777777, 1.0149866)
-texture = ExtResource("8_hole")
+texture = ExtResource("5_jjvm4")
 
 [node name="FloorElevator" type="Sprite2D" parent="Hole" unique_id=1818614393]
 z_as_relative = false
@@ -582,14 +582,14 @@ light_mask = 2
 visibility_layer = 2
 position = Vector2(0, 2.218531)
 scale = Vector2(1, 0.9999999)
-texture = ExtResource("10_lift")
+texture = ExtResource("6_00mwp")
 
 [node name="Door1" type="Sprite2D" parent="Hole/FloorElevator" unique_id=1197145430]
 light_mask = 2
 visibility_layer = 2
 position = Vector2(0, 2.0723612)
 scale = Vector2(1, 1.0383357)
-texture = ExtResource("9_lift2")
+texture = ExtResource("7_k45bu")
 
 [node name="RoofElevator" type="Sprite2D" parent="Hole/FloorElevator" unique_id=1893031447]
 light_mask = 4
@@ -604,12 +604,12 @@ light_mask = 4
 visibility_layer = 4
 position = Vector2(-0.8671422, -0.29339597)
 scale = Vector2(0.99533916, 0.99853295)
-texture = ExtResource("9_qtymf")
+texture = ExtResource("8_5ho1q")
 
 [node name="ExitArea" type="Area2D" parent="Hole/FloorElevator" unique_id=148055356]
 z_index = 2
 position = Vector2(0, 174.49646)
-script = ExtResource("11_exit")
+script = ExtResource("9_24cto")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/ExitArea" unique_id=954473980]
 position = Vector2(0, -93.295044)
@@ -618,7 +618,7 @@ shape = SubResource("CircleShape2D_exit")
 [node name="TransportArea" type="Area2D" parent="Hole/FloorElevator" unique_id=935066742]
 z_index = 2
 position = Vector2(-3.0517578e-05, -20.732452)
-script = ExtResource("10_qtymf")
+script = ExtResource("10_jilbn")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/TransportArea" unique_id=1678318920]
 z_index = 1
@@ -653,7 +653,7 @@ shape = SubResource("RectangleShape2D_lemb1")
 [node name="DoorTrigger" type="Area2D" parent="." unique_id=1919663256]
 position = Vector2(640, 892.5)
 scale = Vector2(1.8, 0.599)
-script = ExtResource("11_ypmwd")
+script = ExtResource("11_dt")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="DoorTrigger" unique_id=1982203049]
 scale = Vector2(2, 2)
@@ -663,7 +663,7 @@ shape = SubResource("RectangleShape2D_door_trigger")
 color = Color(0, 1, 0, 0.3)
 polygon = PackedVector2Array(-120, -80, 120, -80, 120, 80, -120, 80)
 
-[node name="EnemySpawner" parent="." unique_id=2077439795 instance=ExtResource("12_oejk7")]
+[node name="EnemySpawner" parent="." unique_id=2077439795 instance=ExtResource("12_tkpsk")]
 
 [node name="SpawnPoint1" type="Marker2D" parent="." unique_id=2124699469 groups=["spawn_point"]]
 position = Vector2(641, 87)
@@ -686,7 +686,7 @@ position = Vector2(959, 340)
 [node name="SpawnPoint7" type="Marker2D" parent="." unique_id=785713911 groups=["spawn_point"]]
 position = Vector2(357, 329)
 
-[node name="SwitchSpawner" parent="." unique_id=313199116 instance=ExtResource("13_oejk7")]
+[node name="SwitchSpawner" parent="." unique_id=313199116 instance=ExtResource("13_8d71f")]
 
 [node name="SwitchPoint1" type="Marker2D" parent="." unique_id=1709319868 groups=["switch_point"]]
 position = Vector2(193, 346)

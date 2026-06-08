@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cvl0thapds4n1"]
+
+[ext_resource type="Script" path="res://Scripts/SwitchSpawner.gd" id="1_j1ipb"]
+
+[node name="SwitchSpawner" type="Node" groups=["switch_spawner"]]
+script = ExtResource("1_j1ipb")
