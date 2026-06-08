@@ -108,7 +108,7 @@ shape = SubResource("RectangleShape2D_wall")
 [node name="Doors" type="Node2D" parent="FloorPolygon" unique_id=690259243]
 
 [node name="W0" type="StaticBody2D" parent="FloorPolygon/Doors" unique_id=336749316]
-position = Vector2(459, 260.00003)
+position = Vector2(461.25, 266.25)
 rotation = 2.094
 scale = Vector2(0.3750336, 1)
 
@@ -116,7 +116,7 @@ scale = Vector2(0.3750336, 1)
 shape = SubResource("RectangleShape2D_wall")
 
 [node name="W1" type="StaticBody2D" parent="FloorPolygon/Doors" unique_id=75258813]
-position = Vector2(-1.5258789e-05, 522)
+position = Vector2(0, 532.5)
 rotation = 3.1416
 scale = Vector2(0.3750336, 1)
 
@@ -124,7 +124,7 @@ scale = Vector2(0.3750336, 1)
 shape = SubResource("RectangleShape2D_wall")
 
 [node name="W2" type="StaticBody2D" parent="FloorPolygon/Doors" unique_id=2087891582]
-position = Vector2(-459, 257)
+position = Vector2(-461.25, 266.25)
 rotation = -2.094
 scale = Vector2(0.3750336, 1)
 
@@ -132,7 +132,7 @@ scale = Vector2(0.3750336, 1)
 shape = SubResource("RectangleShape2D_wall")
 
 [node name="W3" type="StaticBody2D" parent="FloorPolygon/Doors" unique_id=261826087]
-position = Vector2(-458, -265)
+position = Vector2(-461.25, -266.25)
 rotation = -1.047
 scale = Vector2(0.3750336, 1)
 
@@ -140,14 +140,14 @@ scale = Vector2(0.3750336, 1)
 shape = SubResource("RectangleShape2D_wall")
 
 [node name="W4" type="StaticBody2D" parent="FloorPolygon/Doors" unique_id=1495268146]
-position = Vector2(-1.0000153, -524)
+position = Vector2(0, -532.5)
 scale = Vector2(0.3750336, 1)
 
 [node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon/Doors/W4" unique_id=1173054599]
 shape = SubResource("RectangleShape2D_wall")
 
 [node name="W5" type="StaticBody2D" parent="FloorPolygon/Doors" unique_id=91116320]
-position = Vector2(463, -263.00003)
+position = Vector2(461.25, -266.25)
 rotation = 1.047
 scale = Vector2(0.3750336, 1)
 
@@ -155,21 +155,21 @@ scale = Vector2(0.3750336, 1)
 shape = SubResource("RectangleShape2D_wall")
 
 [node name="DoorPoint_0" type="Marker2D" parent="."]
-position = Vector2(459, 260)
+position = Vector2(461.25, 266.25)
 
 [node name="DoorPoint_1" type="Marker2D" parent="."]
-position = Vector2(0, 522)
+position = Vector2(0, 532.5)
 
 [node name="DoorPoint_2" type="Marker2D" parent="."]
-position = Vector2(-459, 257)
+position = Vector2(-461.25, 266.25)
 
 [node name="DoorPoint_3" type="Marker2D" parent="."]
-position = Vector2(-458, -265)
+position = Vector2(-461.25, -266.25)
 
 [node name="DoorPoint_4" type="Marker2D" parent="."]
-position = Vector2(0, -524)
+position = Vector2(0, -532.5)
 
 [node name="DoorPoint_5" type="Marker2D" parent="."]
-position = Vector2(463, -263)
+position = Vector2(461.25, -266.25)
 
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=1747542368]

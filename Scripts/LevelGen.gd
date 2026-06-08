@@ -5,12 +5,12 @@ const FLOOR_ELEVATOR = preload("res://Scenes/Floors/Floor_Elevator.tscn")
 const FLOOR_RECTANGLE = preload("res://Scenes/Floors/Floor_Rectangle.tscn")
 
 const DOOR_POINTS = [
-	Vector2(459, 260),
-	Vector2(0, 522),
-	Vector2(-459, 257),
-	Vector2(-458, -265),
-	Vector2(0, -524),
-	Vector2(463, -263),
+	Vector2(461.25, 266.25),
+	Vector2(0, 532.5),
+	Vector2(-461.25, 266.25),
+	Vector2(-461.25, -266.25),
+	Vector2(0, -532.5),
+	Vector2(461.25, -266.25),
 ]
 
 const HEX_DIRS = [
@@ -24,10 +24,11 @@ const HEX_DIRS = [
 
 const OPPOSITE_DOOR = [3, 4, 5, 0, 1, 2]
 
-const DIR_TO_DOOR = [0, 1, 2, 3, 4, 5]
-
 const RECT_DOORPOINT_0 = Vector2(300, 0)
 const RECT_DOORPOINT_1 = Vector2(1800, 0)
+
+const STEP_Q = DOOR_POINTS[0] - DOOR_POINTS[3]
+const STEP_R = DOOR_POINTS[1] - DOOR_POINTS[4]
 
 @export var room_count: int = 5
 @export var stretch: float = 1.0
@@ -66,19 +67,7 @@ func generate() -> void:
 	print("LevelGen: generated %d rooms" % generated_rooms.size())
 
 func axial_to_world(q: int, r: int) -> Vector2:
-	var hex_step = DOOR_POINTS[0] - DOOR_POINTS[3]
-	var step_len = hex_step.length()
-	var dir_0 = hex_step.normalized()
-	var angle_60 = PI / 3.0
-	var cos60 = cos(angle_60)
-	var sin60 = sin(angle_60)
-
-	var v = dir_0 * step_len * q
-	var v2 = Vector2(
-		dir_0.x * cos60 - dir_0.y * sin60,
-		dir_0.x * sin60 + dir_0.y * cos60
-	) * step_len * r
-	return v + v2
+	return STEP_Q * q + STEP_R * r
 
 func _add_room(axial: Vector2i, is_start: bool) -> RoomData:
 	var key = "%d,%d" % [axial.x, axial.y]
