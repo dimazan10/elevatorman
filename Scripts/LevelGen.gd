@@ -127,6 +127,9 @@ func _place_rectangles() -> void:
 			var other_key = "%d,%d" % [conn["other_axial"].x, conn["other_axial"].y]
 			if not generated_rooms.has(other_key):
 				continue
+			if key > other_key:
+				continue  # process each connection once only
+
 			var other = generated_rooms[other_key]
 
 			var my_door_world = room.world_pos + DOOR_POINTS[door_idx]
