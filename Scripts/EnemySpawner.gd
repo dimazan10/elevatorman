@@ -7,8 +7,11 @@ var _level_configs := {
 		"total": 5,
 		"min_angry_ball": 1,
 		"min_drunk_killer": 1,
+		"min_spider": 1,
 	}
 }
+
+var _pool := ["angry_ball", "DrunkKiller", "Spider"]
 
 func spawn(level: int, parent: Node) -> Array[Node]:
 	var config = _level_configs.get(level)
@@ -24,11 +27,12 @@ func spawn(level: int, parent: Node) -> Array[Node]:
 		types.append("angry_ball")
 	for _i in config.min_drunk_killer:
 		types.append("DrunkKiller")
+	for _i in config.get("min_spider", 0):
+		types.append("Spider")
 
 	var remaining = config.total - types.size()
-	var pool = ["angry_ball", "DrunkKiller"]
 	for _i in remaining:
-		types.append(pool[randi() % pool.size()])
+		types.append(_pool[randi() % _pool.size()])
 
 	types.shuffle()
 

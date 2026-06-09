@@ -26,5 +26,3 @@ func _physics_process(delta: float) -> void:
 		var dir = (center - body.global_position).normalized()
 		if body is RigidBody2D:
 			body.apply_central_impulse(dir * push_force * delta)
-		elif body is CharacterBody2D:
-			body.global_position += dir * push_force * delta

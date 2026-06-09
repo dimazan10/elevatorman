@@ -1,11 +1,11 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bgdg4ma2ce0ub"]
 
-[ext_resource type="Script" path="res://Scripts/Spider.gd" id="1_spider"]
-[ext_resource type="Texture2D" path="res://Assets/Sprites_Spider/spider1.png" id="2_s1"]
-[ext_resource type="Texture2D" path="res://Assets/Sprites_Spider/spider2.png" id="3_s2"]
-[ext_resource type="Texture2D" path="res://Assets/Sprites_Spider/spider3.png" id="4_s3"]
-[ext_resource type="Texture2D" path="res://Assets/Sprites_Spider/spider4.png" id="5_s4"]
-[ext_resource type="Texture2D" path="res://Assets/Sprites_Spider/spider5.png" id="6_s5"]
+[ext_resource type="Script" uid="uid://batw0t4m8qbnw" path="res://Scripts/Spider.gd" id="1_spider"]
+[ext_resource type="Texture2D" uid="uid://caak13fa5yk2v" path="res://Assets/Sprites_Spider/spider1.png" id="2_s1"]
+[ext_resource type="Texture2D" uid="uid://bxfbpkmaewaxx" path="res://Assets/Sprites_Spider/spider2.png" id="3_s2"]
+[ext_resource type="Texture2D" uid="uid://vrk0midj7owl" path="res://Assets/Sprites_Spider/spider3.png" id="4_s3"]
+[ext_resource type="Texture2D" uid="uid://dwd5fqyihisvy" path="res://Assets/Sprites_Spider/spider4.png" id="5_s4"]
+[ext_resource type="Texture2D" uid="uid://cbx38t67q4uww" path="res://Assets/Sprites_Spider/spider5.png" id="6_s5"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_spider"]
 animations = [{
@@ -36,25 +36,31 @@ radius = 15.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_melee"]
 radius = 40.0
 
-[node name="Spider" type="CharacterBody2D" groups=["enemy"]]
+[sub_resource type="CircleShape2D" id="CircleShape2D_sep"]
+radius = 71.02816
+
+[node name="Spider" type="CharacterBody2D" unique_id=1653153450 groups=["enemy"]]
 script = ExtResource("1_spider")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2106639397]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_spider")
 animation = &"walk"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 0)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=109799827]
 shape = SubResource("CircleShape2D_col")
 
-[node name="ShootTimer" type="Timer" parent="."]
+[node name="ShootTimer" type="Timer" parent="." unique_id=540424724]
 wait_time = 10.0
-one_shot = false
 
-[node name="MeleeZone" type="Area2D" parent="."]
+[node name="MeleeZone" type="Area2D" parent="." unique_id=2053876645]
 collision_layer = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeZone"]
-position = Vector2(0, 0)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeZone" unique_id=24414465]
 shape = SubResource("CircleShape2D_melee")
+
+[node name="SeparationZone" type="Area2D" parent="." unique_id=547825008]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SeparationZone" unique_id=1080399315]
+shape = SubResource("CircleShape2D_sep")
