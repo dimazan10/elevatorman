@@ -210,9 +210,9 @@ func _show_enemies() -> void:
 		enemy.set_physics_process(true)
 		_enable_collision_shapes(enemy)
 		for child in enemy.get_children():
-			if child is Timer and child.name == "BurstTimer":
-				if enemy.has_method("set_random_burst_pause"):
-					enemy.set_random_burst_pause()
+			if child is Timer and child.has_method("start"):
+				if child.has_method("stop") and child.is_stopped():
+					child.start()
 		if enemy is RigidBody2D:
 			enemy.freeze = false
 

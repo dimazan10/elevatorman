@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d26bnw6mx2m8t"
-path="res://.godot/imported/switch5.png-a4125ee681116e29a85004468492ec7b.ctex"
+uid="uid://cbx38t67q4uww"
+path="res://.godot/imported/spider5.png-973ec63efe6e3eeb31d71a7acb752964.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/switch5.png"
-dest_files=["res://.godot/imported/switch5.png-a4125ee681116e29a85004468492ec7b.ctex"]
+source_file="res://Assets/Sprites_Spider/spider5.png"
+dest_files=["res://.godot/imported/spider5.png-973ec63efe6e3eeb31d71a7acb752964.ctex"]
 
 [params]
 

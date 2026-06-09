@@ -1,47 +1,81 @@
 [gd_scene format=3 uid="uid://iiwoceipwyew"]
 
-[ext_resource type="Texture2D" uid="uid://boegxbo3hpeug" path="res://Assets/switch1.png" id="1_im362"]
-[ext_resource type="Texture2D" uid="uid://b1502rwuq0gwm" path="res://Assets/switch2.png" id="2_602vk"]
-[ext_resource type="Texture2D" uid="uid://b6imm7c4encpm" path="res://Assets/switch3.png" id="3_8ueku"]
-[ext_resource type="Texture2D" uid="uid://qy66cwoyhty4" path="res://Assets/switch4.png" id="4_ppy7b"]
-[ext_resource type="Texture2D" uid="uid://cdjurlde1m7hs" path="res://Assets/switch5.png" id="5_4vsas"]
-[ext_resource type="Script" path="res://Scripts/Switch.gd" id="6_switch"]
+[ext_resource type="Texture2D" uid="uid://boegxbo3hpeug" path="res://Assets/Sprite_Switch/switch1.png" id="2_fc1ex"]
+[ext_resource type="Texture2D" uid="uid://b1502rwuq0gwm" path="res://Assets/Sprite_Switch/switch2.png" id="3_pv20a"]
+[ext_resource type="Texture2D" uid="uid://b6imm7c4encpm" path="res://Assets/Sprite_Switch/switch3.png" id="4_6g3rt"]
+[ext_resource type="Texture2D" uid="uid://qy66cwoyhty4" path="res://Assets/Sprite_Switch/switch4.png" id="5_l4ylu"]
+[ext_resource type="Texture2D" uid="uid://cdjurlde1m7hs" path="res://Assets/Sprite_Switch/switch5.png" id="6_12ht5"]
+[ext_resource type="Script" uid="uid://dsm20tve7nxo2" path="res://Scripts/Switch.gd" id="6_switch"]
+[ext_resource type="Texture2D" uid="uid://d4c62vkep485" path="res://Assets/Sprite_Switch/LegSwitch/LegGoSwitch1.png" id="7_npklf"]
+[ext_resource type="Texture2D" uid="uid://pnbtw47nlqk2" path="res://Assets/Sprite_Switch/LegSwitch/LegGoSwitch2.png" id="8_blagf"]
+[ext_resource type="Texture2D" uid="uid://bxv2bqh8fcmdr" path="res://Assets/Sprite_Switch/LegSwitch/LegGoSwitch3.png" id="9_0vg0t"]
+[ext_resource type="Texture2D" uid="uid://boyevm72cqpg4" path="res://Assets/Sprite_Switch/LegSwitch/LegGoSwitch4.png" id="10_xh1h4"]
+[ext_resource type="Texture2D" uid="uid://dr1byy1ap6ssk" path="res://Assets/Sprite_Switch/LegSwitch/LegStaySwitch.png" id="11_bpenp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_im362"]
+size = Vector2(38, 42)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ohhd8"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_im362")
+"texture": ExtResource("2_fc1ex")
 }, {
 "duration": 1.0,
-"texture": ExtResource("2_602vk")
+"texture": ExtResource("3_pv20a")
 }, {
 "duration": 1.0,
-"texture": ExtResource("3_8ueku")
+"texture": ExtResource("4_6g3rt")
 }, {
 "duration": 1.0,
-"texture": ExtResource("4_ppy7b")
+"texture": ExtResource("5_l4ylu")
 }, {
 "duration": 1.0,
-"texture": ExtResource("5_4vsas")
+"texture": ExtResource("6_12ht5")
 }],
 "loop": false,
 "name": &"default",
 "speed": 20.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_im362"]
-size = Vector2(38, 34)
+[sub_resource type="SpriteFrames" id="SpriteFrames_oqy18"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_npklf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_blagf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_0vg0t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_xh1h4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_bpenp")
+}],
+"loop": true,
+"name": &"default",
+"speed": 20.0
+}]
 
 [node name="Switch" type="CharacterBody2D" unique_id=941308335]
 script = ExtResource("6_switch")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=125194493]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1330098495]
+position = Vector2(19, 21)
+shape = SubResource("RectangleShape2D_im362")
+
+[node name="Switch" type="AnimatedSprite2D" parent="." unique_id=125194493]
 texture_filter = 1
 position = Vector2(19, 2)
 sprite_frames = SubResource("SpriteFrames_ohhd8")
 frame = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1330098495]
-position = Vector2(19, 17)
-shape = SubResource("RectangleShape2D_im362")
+[node name="Lag" type="AnimatedSprite2D" parent="." unique_id=1430538417]
+texture_filter = 1
+position = Vector2(19, 38)
+sprite_frames = SubResource("SpriteFrames_oqy18")
+frame_progress = 0.5549742

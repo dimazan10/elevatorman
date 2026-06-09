@@ -27,6 +27,12 @@ var is_stunned: bool = false
 var knockback_velocity: Vector2 = Vector2.ZERO
 var can_move: bool = true
 
+var slow_factor: float = 1.0
+var slow_timer: float = 0.0
+
+var pull_target: Node2D = null
+var pull_offset: Vector2 = Vector2.ZERO
+
 func _ready() -> void:
 	current_lives = max_lives
 	
@@ -95,17 +101,27 @@ func _process(delta: float) -> void:
 		perform_dash()
 	_shift_held = shift_down
 
+	if slow_timer > 0:
+		slow_timer -= delta
+		if slow_timer <= 0:
+			slow_timer = 0.0
+			slow_factor = 1.0
+
 func _physics_process(delta: float) -> void:
 	if not can_move:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
 	if is_stunned:
-		# Во время оглушения игрока плавно тормозит отталкивание, а управление заблокировано
-		knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 1000 * delta)
-		velocity = knockback_velocity
+		if pull_target:
+			var target_pos = pull_target.global_position + pull_offset
+			var dir = (target_pos - global_position).normalized()
+			velocity = dir * 300.0
+		else:
+			knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 1000 * delta)
+			velocity = knockback_velocity
 		move_and_slide()
-		return # Прерываем выполнение обычного движения
+		return
 	
 	if is_dashing:
 		move_and_slide()
@@ -128,7 +144,7 @@ func _physics_process(delta: float) -> void:
 		direction = direction.normalized()
 		last_move_dir = direction
 
-		velocity = direction * SPEED
+		velocity = direction * SPEED * slow_factor
 		move_and_slide()
 
 		# ЗАМЕНИЛИ _delta НА ОБЫЧНУЮ delta, чтобы время шагов считалось правильно
@@ -244,3 +260,23 @@ func apply_stun_and_knockback(knockback_impulse: Vector2, duration: float) -> vo
 	
 	await get_tree().create_timer(duration).timeout
 	is_stunned = false
+
+func apply_slow(factor: float, duration: float) -> void:
+	slow_factor = factor
+	slow_timer = duration
+
+func apply_pull_toward(target: Node2D, duration: float, offset: Vector2 = Vector2.ZERO) -> void:
+	if is_stunned:
+		return
+	is_stunned = true
+	pull_target = target
+	pull_offset = offset
+	knockback_velocity = Vector2.ZERO
+	if is_instance_valid(target):
+		add_collision_exception_with(target)
+	await get_tree().create_timer(duration).timeout
+	is_stunned = false
+	pull_target = null
+	pull_offset = Vector2.ZERO
+	if is_instance_valid(target):
+		remove_collision_exception_with(target)

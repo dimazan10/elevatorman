@@ -1,0 +1,60 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scripts/Spider.gd" id="1_spider"]
+[ext_resource type="Texture2D" path="res://Assets/Sprites_Spider/spider1.png" id="2_s1"]
+[ext_resource type="Texture2D" path="res://Assets/Sprites_Spider/spider2.png" id="3_s2"]
+[ext_resource type="Texture2D" path="res://Assets/Sprites_Spider/spider3.png" id="4_s3"]
+[ext_resource type="Texture2D" path="res://Assets/Sprites_Spider/spider4.png" id="5_s4"]
+[ext_resource type="Texture2D" path="res://Assets/Sprites_Spider/spider5.png" id="6_s5"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_spider"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_s1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_s2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_s3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_s4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_s5")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 8.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_col"]
+radius = 15.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_melee"]
+radius = 40.0
+
+[node name="Spider" type="CharacterBody2D" groups=["enemy"]]
+script = ExtResource("1_spider")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_spider")
+animation = &"walk"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0)
+shape = SubResource("CircleShape2D_col")
+
+[node name="ShootTimer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = false
+
+[node name="MeleeZone" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeZone"]
+position = Vector2(0, 0)
+shape = SubResource("CircleShape2D_melee")

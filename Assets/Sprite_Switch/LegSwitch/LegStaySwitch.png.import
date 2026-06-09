@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d26bnw6mx2m8t"
-path="res://.godot/imported/switch5.png-a4125ee681116e29a85004468492ec7b.ctex"
+uid="uid://dr1byy1ap6ssk"
+path="res://.godot/imported/LegStaySwitch.png-a87680396e728c167f40c9f42db44962.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/switch5.png"
-dest_files=["res://.godot/imported/switch5.png-a4125ee681116e29a85004468492ec7b.ctex"]
+source_file="res://Assets/Sprite_Switch/LegSwitch/LegStaySwitch.png"
+dest_files=["res://.godot/imported/LegStaySwitch.png-a87680396e728c167f40c9f42db44962.ctex"]
 
 [params]
 
