@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cqa47d5gds1ea"]
 
-[ext_resource type="Script" uid="uid://dyap3dpjeta56" path="res://Scripts/game.gd" id="1_m80wk"]
+[ext_resource type="Script" path="res://Scripts/MainArena3.gd" id="1_m80wk"]
 [ext_resource type="PackedScene" uid="uid://mt70rvdsdeyx" path="res://Objects/player.tscn" id="2_ehhbk"]
 [ext_resource type="PackedScene" uid="uid://doss117q2j5gm" path="res://Objects/UI_HP.tscn" id="3_ju4ev"]
 [ext_resource type="PackedScene" uid="uid://cury7lw1ntlld" path="res://Objects/DashUI.tscn" id="4_5bxvv"]
@@ -10,7 +10,6 @@
 [ext_resource type="Texture2D" uid="uid://74cir4cs1tst" path="res://Assets/SpritesElevator/roof3.png" id="8_5ho1q"]
 [ext_resource type="Script" uid="uid://blcyhtqt11qhv" path="res://Scripts/ElevatorExit.gd" id="9_24cto"]
 [ext_resource type="Script" uid="uid://81f6ijw81d6p" path="res://Scripts/ElevatorTransport.gd" id="10_jilbn"]
-[ext_resource type="Script" uid="uid://dirqucluw2ck4" path="res://Scripts/DoorTrigger.gd" id="11_dt"]
 [ext_resource type="PackedScene" uid="uid://dkax3cjeu00gs" path="res://Objects/EnemySpawner.tscn" id="12_tkpsk"]
 [ext_resource type="PackedScene" uid="uid://cvl0thapds4n1" path="res://Objects/SwitchSpawner.tscn" id="13_8d71f"]
 
@@ -463,10 +462,11 @@ size = Vector2(26.588142, 226.61873)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_door_trigger"]
 size = Vector2(120, 80)
 
-[node name="MainArena2" type="Node2D" unique_id=418966575]
+[node name="MainArena3" type="Node2D" unique_id=418966575]
 script = ExtResource("1_m80wk")
 
 [node name="Floor" type="Polygon2D" parent="." unique_id=1231110711]
+z_index = -1
 position = Vector2(640, 360)
 color = Color(0.12, 0.15, 0.19, 1)
 polygon = PackedVector2Array(615, 0, 307.5, 532.5, -307.5, 532.5, -615, 0, -307.5, -532.5, 307.5, -532.5)
@@ -650,55 +650,30 @@ scale = Vector2(3.913425, 1.1305274)
 position = Vector2(-2.6588135, 47.59619)
 shape = SubResource("RectangleShape2D_lemb1")
 
-[node name="DoorTrigger" type="Area2D" parent="." unique_id=1919663256]
-position = Vector2(640, 892.5)
-scale = Vector2(1.8, 0.599)
-script = ExtResource("11_dt")
-
-[node name="CollisionShape" type="CollisionShape2D" parent="DoorTrigger" unique_id=1982203049]
-scale = Vector2(2, 2)
-shape = SubResource("RectangleShape2D_door_trigger")
-
-[node name="Visual" type="Polygon2D" parent="DoorTrigger" unique_id=1452721397]
-color = Color(0, 1, 0, 0.3)
-polygon = PackedVector2Array(-120, -80, 120, -80, 120, 80, -120, 80)
-
 [node name="EnemySpawner" parent="." unique_id=2077439795 instance=ExtResource("12_tkpsk")]
 
-[node name="SpawnPoint1" type="Marker2D" parent="." unique_id=2124699469 groups=["spawn_point"]]
+[node name="ArenaSpawner" parent="." unique_id=1212330471 instance=ExtResource("12_tkpsk")]
+
+[node name="SpawnPoint1" type="Marker2D" parent="." unique_id=2124699469 groups=["spawn_point_main"]]
 position = Vector2(641, 87)
 
-[node name="SpawnPoint2" type="Marker2D" parent="." unique_id=1989789208 groups=["spawn_point"]]
+[node name="SpawnPoint2" type="Marker2D" parent="." unique_id=1989789208 groups=["spawn_point_main"]]
 position = Vector2(400, 520)
 
-[node name="SpawnPoint3" type="Marker2D" parent="." unique_id=909885700 groups=["spawn_point"]]
+[node name="SpawnPoint3" type="Marker2D" parent="." unique_id=909885700 groups=["spawn_point_main"]]
 position = Vector2(880, 520)
 
-[node name="SpawnPoint4" type="Marker2D" parent="." unique_id=1501583779 groups=["spawn_point"]]
+[node name="SpawnPoint4" type="Marker2D" parent="." unique_id=1501583779 groups=["spawn_point_main"]]
 position = Vector2(384, 162)
 
-[node name="SpawnPoint5" type="Marker2D" parent="." unique_id=587129701 groups=["spawn_point"]]
+[node name="SpawnPoint5" type="Marker2D" parent="." unique_id=587129701 groups=["spawn_point_main"]]
 position = Vector2(873, 166)
 
-[node name="SpawnPoint6" type="Marker2D" parent="." unique_id=369093571 groups=["spawn_point"]]
+[node name="SpawnPoint6" type="Marker2D" parent="." unique_id=369093571 groups=["spawn_point_main"]]
 position = Vector2(959, 340)
 
-[node name="SpawnPoint7" type="Marker2D" parent="." unique_id=785713911 groups=["spawn_point"]]
+[node name="SpawnPoint7" type="Marker2D" parent="." unique_id=785713911 groups=["spawn_point_main"]]
 position = Vector2(357, 329)
 
 [node name="SwitchSpawner" parent="." unique_id=313199116 instance=ExtResource("13_8d71f")]
 
-[node name="SwitchPoint1" type="Marker2D" parent="." unique_id=1709319868 groups=["switch_point"]]
-position = Vector2(193, 346)
-
-[node name="SwitchPoint2" type="Marker2D" parent="." unique_id=2029902561 groups=["switch_point"]]
-position = Vector2(1096, 360)
-
-[node name="SwitchPoint3" type="Marker2D" parent="." unique_id=923886427 groups=["switch_point"]]
-position = Vector2(386, -39)
-
-[node name="SwitchPoint4" type="Marker2D" parent="." unique_id=395891179 groups=["switch_point"]]
-position = Vector2(893, -33)
-
-[node name="SwitchPoint5" type="Marker2D" parent="." unique_id=253896944 groups=["switch_point"]]
-position = Vector2(421, 745)

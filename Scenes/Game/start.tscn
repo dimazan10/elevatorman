@@ -10,7 +10,6 @@
 [ext_resource type="Texture2D" uid="uid://74cir4cs1tst" path="res://Assets/SpritesElevator/roof3.png" id="7_j5evx"]
 [ext_resource type="Script" uid="uid://bati0k0r2dk3i" path="res://Scripts/ElevatorTransportStart.gd" id="8_transport"]
 [ext_resource type="Script" uid="uid://cobvttk2gmcfm" path="res://Scripts/Start.gd" id="9_start"]
-[ext_resource type="PackedScene" path="res://Objects/Spider.tscn" id="11_vw3dq"]
 
 [sub_resource type="RectangleShape2D" id="RectShape_top"]
 size = Vector2(1100, 20)
@@ -352,8 +351,3 @@ scale = Vector2(3.913425, 1.1305274)
 position = Vector2(-2.6588135, 51.95926)
 shape = SubResource("RectangleShape2D_j5evx")
 
-[node name="Spider" parent="." unique_id=2124192833 instance=ExtResource("11_vw3dq")]
-position = Vector2(447, 128)
-
-[node name="Spider2" parent="." unique_id=1832035652 instance=ExtResource("11_vw3dq")]
-position = Vector2(828, 131)

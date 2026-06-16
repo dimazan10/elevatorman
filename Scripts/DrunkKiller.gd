@@ -100,7 +100,6 @@ func move_around_player() -> void:
 	velocity = movement_vector + (separation_vector * separation_force)
 	move_and_slide()
 
-# НОВАЯ ФУНКЦИЯ: Проверяет личную зону и высчитывает вектор побега от союзников
 func calculate_separation_vector() -> Vector2:
 	var separation = Vector2.ZERO
 	var overlapping_bodies = separation_zone.get_overlapping_bodies()

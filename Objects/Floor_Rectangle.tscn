@@ -1,0 +1,81 @@
+[gd_scene format=3 uid="uid://d30evl7gch02d"]
+
+[ext_resource type="Script" uid="uid://dirqucluw2ck4" path="res://Scripts/DoorTrigger.gd" id="1_huqpp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_h"]
+size = Vector2(1840, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vhfxq"]
+size = Vector2(120, 80)
+
+[node name="Floor_Rectangle" type="Node2D" unique_id=1003405898]
+z_index = -1
+
+[node name="FloorPolygon" type="Polygon2D" parent="." unique_id=1906304972]
+position = Vector2(1090, 0)
+scale = Vector2(0.5199988, 0.5599991)
+color = Color(0.12, 0.15, 0.19, 1)
+polygon = PackedVector2Array(-400, -310, 2240, -310, 2240, 310, -400, 310)
+
+[node name="Walls" type="Node2D" parent="FloorPolygon" unique_id=604211835]
+position = Vector2(-640, 0)
+
+[node name="Top" type="StaticBody2D" parent="FloorPolygon/Walls" unique_id=822018298]
+position = Vector2(1559, -310)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon/Walls/Top" unique_id=984159783]
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="Bottom" type="StaticBody2D" parent="FloorPolygon/Walls" unique_id=1046843294]
+position = Vector2(1559, 310)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon/Walls/Bottom" unique_id=789724018]
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="SpawnPoint" type="Marker2D" parent="." unique_id=1522809266]
+position = Vector2(1568, 0)
+groups = ["spawn_point_corridor"]
+
+[node name="SpawnPoint2" type="Marker2D" parent="." groups=["spawn_point_corridor"]]
+position = Vector2(950, 0)
+
+[node name="SpawnPoint3" type="Marker2D" parent="." groups=["spawn_point_corridor"]]
+position = Vector2(2400, 0)
+
+[node name="SpawnPoint4" type="Marker2D" parent="." groups=["spawn_point_corridor"]]
+position = Vector2(3000, 0)
+scale = Vector2(1, 0.20000029)
+
+[node name="DoorPoint_0" type="Marker2D" parent="." unique_id=1508061916]
+position = Vector2(1090, 0)
+
+[node name="DoorPoint_1" type="Marker2D" parent="." unique_id=151345083]
+position = Vector2(2047, 0)
+
+[node name="DoorTrigger" type="Area2D" parent="." unique_id=681062249]
+position = Vector2(1090.0001, -1.0000005)
+rotation = 1.5707964
+scale = Vector2(1.8, 0.599)
+script = ExtResource("1_huqpp")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="DoorTrigger" unique_id=1035025865]
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_vhfxq")
+
+[node name="Visual" type="Polygon2D" parent="DoorTrigger" unique_id=1341674622]
+color = Color(0, 1, 0, 0.3)
+polygon = PackedVector2Array(-120, -80, 120, -80, 120, 80, -120, 80)
+
+[node name="DoorTrigger2" type="Area2D" parent="." unique_id=859663453]
+position = Vector2(2042.9999, -0.9999999)
+rotation = 1.5707964
+scale = Vector2(1.8, 0.599)
+script = ExtResource("1_huqpp")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="DoorTrigger2" unique_id=509183032]
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_vhfxq")
+
+[node name="Visual" type="Polygon2D" parent="DoorTrigger2" unique_id=277678029]
+color = Color(0, 1, 0, 0.3)
+polygon = PackedVector2Array(-120, -80, 120, -80, 120, 80, -120, 80)

@@ -13,12 +13,12 @@ var _level_configs := {
 
 var _pool := ["angry_ball", "DrunkKiller", "Spider"]
 
-func spawn(level: int, parent: Node) -> Array[Node]:
+func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_name: String = "") -> Array[Node]:
 	var config = _level_configs.get(level)
 	if not config:
 		return []
 
-	var points := get_tree().get_nodes_in_group("spawn_point")
+	var points := get_tree().get_nodes_in_group(group_name)
 	if points.is_empty():
 		return []
 
@@ -36,13 +36,14 @@ func spawn(level: int, parent: Node) -> Array[Node]:
 
 	types.shuffle()
 
-	clear_spawned()
 	for t in types:
 		var pt = points[randi() % points.size()]
 		var scene = load("res://Objects/" + t + ".tscn")
 		var inst = scene.instantiate()
-		parent.add_child(inst)
 		inst.global_position = pt.global_position
+		inst.set_meta("spawn_position", pt.global_position)
+		inst.set_meta("zone_name", zone_name)
+		parent.add_child(inst)
 		if not inst.is_in_group("enemy"):
 			inst.add_to_group("enemy")
 		_spawned_enemies.append(inst)
