@@ -171,7 +171,7 @@ func start_exit_sequence() -> void:
 	_set_shaft_collision(false)
 	anim.play("DownClose")
 	await anim.animation_finished
-	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 1)
+	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 0)
 	_spawn_enemies(1)
 	_spawn_switches(1)
 	_show_enemies()
