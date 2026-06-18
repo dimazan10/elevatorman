@@ -21,7 +21,7 @@ var _current_player_zone: String = ""
 const _ZONE_PRIORITY := {
 	"main_arena": 1,
 	"corridor": 0,
-	"secondary_arena": 0,
+	"secondary_arena": 1,
 }
 
 

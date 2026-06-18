@@ -118,7 +118,9 @@ func _physics_process(_delta: float) -> void:
 func move_around_player() -> void:
 	var to_player = player.global_position - global_position
 	var distance = to_player.length()
-	var direction_to_player = to_player.normalized()
+	if distance < 0.001:
+		return
+	var direction_to_player = to_player / distance
 	
 	var clockwise_tangent = Vector2(-direction_to_player.y, direction_to_player.x)
 	var desired_velocity = Vector2.ZERO

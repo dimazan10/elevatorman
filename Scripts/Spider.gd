@@ -87,7 +87,10 @@ func _physics_process(_delta: float) -> void:
 		return
 
 	var to_player = player.global_position - global_position
-	var direction = to_player.normalized()
+	var dist = to_player.length()
+	if dist < 0.001:
+		return
+	var direction = to_player / dist
 	var current_speed = speed * (web_boost_multiplier if _web_boost else 1.0)
 
 	var separation = _get_separation_vector()
