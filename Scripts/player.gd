@@ -4,7 +4,7 @@ signal health_changed(new_health)
 signal dash_used(index: int)
 signal dash_recharged(index: int)
 
-@export var max_lives: int = 3
+@export var max_lives: int = 5
 var current_lives: int = max_lives
 
 const SPEED = 550.0

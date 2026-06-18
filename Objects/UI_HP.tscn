@@ -15,6 +15,7 @@ offset_top = -112.0
 offset_right = 260.0
 offset_bottom = -48.0
 grow_vertical = 0
+theme_override_constants/separation = -36
 script = ExtResource("1_40q8b")
 
 [node name="Heart1" type="TextureRect" parent="HeartsContainer" unique_id=1098205935]
@@ -34,6 +35,22 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Heart3" type="TextureRect" parent="HeartsContainer" unique_id=1212175470]
+texture_filter = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("2_j0d6q")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Heart4" type="TextureRect" parent="HeartsContainer"]
+texture_filter = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("2_j0d6q")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Heart5" type="TextureRect" parent="HeartsContainer"]
 texture_filter = 1
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
