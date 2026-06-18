@@ -10,6 +10,7 @@ var lift_state := LiftState.NONE
 
 var combat_timer: Timer
 var time_label: Label
+var floor_label: Label
 var _switch_count := 0
 var _activated_switch_count := 0
 var _arena_rotator: Node2D
@@ -53,6 +54,7 @@ func _ready() -> void:
 	anim.play("RESET")
 	anim.seek(0, true)
 	anim.stop()
+	_show_floor_label()
 	anim.play("DownUp")
 	await anim.animation_finished
 	anim.play("Open")
@@ -60,6 +62,7 @@ func _ready() -> void:
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 1)
 	$Hole/FloorElevator/TransportArea/CollisionShape.set_deferred("disabled", false)
 	_show_player()
+	_hide_floor_label()
 	player_node.can_move = true
 
 func _setup_arena_rotation() -> void:
@@ -157,6 +160,20 @@ func _setup_ui() -> void:
 	time_label.position = Vector2(10, 10)
 	ui.add_child(time_label)
 
+	floor_label = Label.new()
+	floor_label.name = "FloorLabel"
+	floor_label.add_theme_font_size_override("font_size", 64)
+	floor_label.add_theme_color_override("font_color", Color.WHITE)
+	floor_label.add_theme_constant_override("outline_size", 6)
+	floor_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	floor_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	floor_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	floor_label.size = Vector2(600, 100)
+	floor_label.set_anchors_and_offsets_preset(Control.PRESET_CENTER, Control.PRESET_MODE_KEEP_SIZE)
+	floor_label.modulate = Color(1, 1, 1, 0)
+	floor_label.text = "Этаж " + str(GameState.current_floor)
+	ui.add_child(floor_label)
+
 func start_exit_sequence() -> void:
 	if lift_state != LiftState.START:
 		return
@@ -216,11 +233,13 @@ func _on_combat_timeout() -> void:
 	_switch_spawner.clear_spawned()
 	_set_shaft_collision(true)
 	lift_state = LiftState.RETURNING
+	_show_floor_label()
 	anim.play("DownUp")
 	await anim.animation_finished
 	anim.play("Open")
 	await anim.animation_finished
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 1)
+	_hide_floor_label()
 
 func start_restart() -> void:
 	if lift_state != LiftState.RETURNING:
@@ -232,6 +251,7 @@ func start_restart() -> void:
 	anim.stop()
 	anim.play("Close")
 	await anim.animation_finished
+	GameState.current_floor += 1
 	anim.play("Up")
 	await anim.animation_finished
 	await FadeTransition.fade_out()
@@ -338,6 +358,21 @@ func _spawn_enemies(level: int) -> void:
 
 func _spawn_switches(level: int) -> void:
 	_switch_spawner.spawn(level, self)
+
+func _show_floor_label() -> void:
+	if not floor_label:
+		return
+	floor_label.text = "Этаж " + str(GameState.current_floor)
+	floor_label.modulate = Color(1, 1, 1, 0)
+	floor_label.show()
+	var tw = create_tween()
+	tw.tween_property(floor_label, "modulate:a", 1.0, 0.5)
+
+func _hide_floor_label() -> void:
+	if not floor_label:
+		return
+	var tw = create_tween()
+	tw.tween_property(floor_label, "modulate:a", 0.0, 0.5)
 
 func _shake_camera(intensity: float = 8.0, duration: float = 0.4) -> void:
 	var camera := player_node.get_node("PlayerCamera") as Camera2D
