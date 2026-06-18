@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://cfukoxsdamguh"]
 
-[ext_resource type="Texture2D" path="res://Assets/Sprites_Killer/DrunkKillerRun1.png" id="2_dqplg"]
-[ext_resource type="Script" path="res://Scripts/DrunkKiller.gd" id="2_ljk35"]
-[ext_resource type="Texture2D" path="res://Assets/Sprites_Killer/BananaGun.png" id="2_v20ja"]
-[ext_resource type="Texture2D" path="res://Assets/Sprites_Killer/DrunkKillerRun2.png" id="3_1wgsp"]
-[ext_resource type="Texture2D" path="res://Assets/Sprites_Killer/DrunkKillerRun3.png" id="4_q8v8j"]
-[ext_resource type="Texture2D" path="res://Assets/Sprites_Killer/DrunkKillerRun4.png" id="5_w3j2m"]
+[ext_resource type="Texture2D" uid="uid://dci8sss81er7i" path="res://Assets/Sprites_Killer/DrunkKillerRun1.png" id="2_dqplg"]
+[ext_resource type="Script" uid="uid://vbxt3u1bj6us" path="res://Scripts/DrunkKiller.gd" id="2_ljk35"]
+[ext_resource type="Texture2D" uid="uid://cws8jltpnyfcu" path="res://Assets/Sprites_Killer/BananaGun.png" id="2_v20ja"]
+[ext_resource type="Texture2D" uid="uid://3yog0ryqbbgj" path="res://Assets/Sprites_Killer/DrunkKillerRun2.png" id="3_1wgsp"]
+[ext_resource type="Texture2D" uid="uid://deki6wykp4k64" path="res://Assets/Sprites_Killer/DrunkKillerRun3.png" id="4_q8v8j"]
+[ext_resource type="Texture2D" uid="uid://b3615tdfgv6qo" path="res://Assets/Sprites_Killer/DrunkKillerRun4.png" id="5_w3j2m"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_6b1qg"]
 animations = [{

@@ -78,6 +78,8 @@ func _ready() -> void:
 
 var _shift_held := false
 var _ghost_timer := 0.0
+var _noclip := false
+var _f1_held := false
 
 func _process(delta: float) -> void:
 	for i in range(MAX_DASH_CHARGES):
@@ -107,7 +109,20 @@ func _process(delta: float) -> void:
 			slow_timer = 0.0
 			slow_factor = 1.0
 
+func _toggle_noclip() -> void:
+	_noclip = not _noclip
+	$CollisionShape.disabled = _noclip
+	if _noclip:
+		modulate = Color(1, 1, 1, 0.5)
+	else:
+		modulate = Color(1, 1, 1, 1)
+
 func _physics_process(delta: float) -> void:
+	var f1_down := Input.is_key_pressed(KEY_F1)
+	if f1_down and not _f1_held:
+		_toggle_noclip()
+	_f1_held = f1_down
+
 	if not can_move:
 		velocity = Vector2.ZERO
 		move_and_slide()
@@ -125,6 +140,21 @@ func _physics_process(delta: float) -> void:
 	
 	if is_dashing:
 		move_and_slide()
+		return
+
+	if _noclip:
+		var dir := Vector2.ZERO
+		if Input.is_key_pressed(KEY_RIGHT) or Input.is_key_pressed(KEY_D):
+			dir.x += 1
+		if Input.is_key_pressed(KEY_LEFT) or Input.is_key_pressed(KEY_A):
+			dir.x -= 1
+		if Input.is_key_pressed(KEY_DOWN) or Input.is_key_pressed(KEY_S):
+			dir.y += 1
+		if Input.is_key_pressed(KEY_UP) or Input.is_key_pressed(KEY_W):
+			dir.y -= 1
+		if dir.length() > 0:
+			dir = dir.normalized()
+			global_position += dir * SPEED * delta
 		return
 
 	var direction := Vector2.ZERO
@@ -230,6 +260,8 @@ func perform_dash() -> void:
 	velocity = dir * DASH_SPEED
 
 func take_damage(amount: int):
+	if _noclip:
+		return
 	current_lives -= amount
 	health_changed.emit(current_lives)
 	

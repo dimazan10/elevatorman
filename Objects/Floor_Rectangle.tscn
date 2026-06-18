@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dirqucluw2ck4" path="res://Scripts/DoorTrigger.gd" id="1_huqpp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_h"]
-size = Vector2(1840, 20)
+size = Vector2(1833.9203, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vhfxq"]
 size = Vector2(120, 80)
@@ -17,32 +17,42 @@ scale = Vector2(0.5199988, 0.5599991)
 color = Color(0.12, 0.15, 0.19, 1)
 polygon = PackedVector2Array(-400, -310, 2240, -310, 2240, 310, -400, 310)
 
+[node name="ZoneTrigger" type="Area2D" parent="FloorPolygon" unique_id=1076728445]
+monitorable = false
+
+[node name="CollisionPolygon" type="CollisionPolygon2D" parent="FloorPolygon/ZoneTrigger" unique_id=1144770952]
+polygon = PackedVector2Array(-400, -310, 2240, -310, 2240, 310, -400, 310)
+
 [node name="Walls" type="Node2D" parent="FloorPolygon" unique_id=604211835]
 position = Vector2(-640, 0)
+scale = Vector2(1.1, 1)
 
 [node name="Top" type="StaticBody2D" parent="FloorPolygon/Walls" unique_id=822018298]
 position = Vector2(1559, -310)
 
 [node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon/Walls/Top" unique_id=984159783]
+position = Vector2(-144.13794, 0)
+scale = Vector2(1.0000001, 1.0000001)
 shape = SubResource("RectangleShape2D_wall_h")
 
 [node name="Bottom" type="StaticBody2D" parent="FloorPolygon/Walls" unique_id=1046843294]
 position = Vector2(1559, 310)
 
 [node name="CollisionShape" type="CollisionShape2D" parent="FloorPolygon/Walls/Bottom" unique_id=789724018]
+position = Vector2(-143.26392, 0)
+scale = Vector2(1.0000001, 1.0000001)
 shape = SubResource("RectangleShape2D_wall_h")
 
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=1522809266]
 position = Vector2(1568, 0)
-groups = ["spawn_point_corridor"]
 
-[node name="SpawnPoint2" type="Marker2D" parent="." groups=["spawn_point_corridor"]]
+[node name="SpawnPoint2" type="Marker2D" parent="." unique_id=730103772 groups=["spawn_point_corridor"]]
 position = Vector2(950, 0)
 
-[node name="SpawnPoint3" type="Marker2D" parent="." groups=["spawn_point_corridor"]]
+[node name="SpawnPoint3" type="Marker2D" parent="." unique_id=2143430383 groups=["spawn_point_corridor"]]
 position = Vector2(2400, 0)
 
-[node name="SpawnPoint4" type="Marker2D" parent="." groups=["spawn_point_corridor"]]
+[node name="SpawnPoint4" type="Marker2D" parent="." unique_id=2059517504 groups=["spawn_point_corridor"]]
 position = Vector2(3000, 0)
 scale = Vector2(1, 0.20000029)
 

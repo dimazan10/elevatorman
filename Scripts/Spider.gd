@@ -11,6 +11,9 @@ const WEB_SCENE = preload("res://Objects/Web.tscn")
 
 var player: Node2D = null
 var _web_boost := false
+var _spawn_pos: Vector2 = Vector2.ZERO
+var _zone_name: String = ""
+var _is_waiting: bool = false
 
 @onready var animated_sprite := $AnimatedSprite2D
 @onready var shoot_timer := $ShootTimer
@@ -19,6 +22,10 @@ var _web_boost := false
 
 func _ready() -> void:
 	add_to_group("enemy")
+	if has_meta("spawn_position"):
+		_spawn_pos = get_meta("spawn_position")
+	if has_meta("zone_name"):
+		_zone_name = get_meta("zone_name")
 	var players = get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
 		player = players[0]
@@ -49,8 +56,34 @@ func _get_separation_vector() -> Vector2:
 		sep = sep.normalized()
 	return sep
 
+func _check_zone_teleport() -> bool:
+	if _zone_name == "":
+		return false
+	var main = get_tree().current_scene
+	var player_zone = ""
+	if main and main.has_method("get_player_zone"):
+		player_zone = main.get_player_zone()
+	if player_zone != _zone_name:
+		if not _is_waiting:
+			_is_waiting = true
+			global_position = _spawn_pos
+			velocity = Vector2.ZERO
+			shoot_timer.stop()
+			if animated_sprite and animated_sprite.sprite_frames.has_animation("walk"):
+				animated_sprite.stop()
+		return true
+	if _is_waiting:
+		_is_waiting = false
+		shoot_timer.start()
+		if animated_sprite and animated_sprite.sprite_frames.has_animation("walk"):
+			animated_sprite.play("walk")
+	return false
+
 func _physics_process(_delta: float) -> void:
 	if not player:
+		return
+	if _check_zone_teleport():
+		animated_sprite.flip_h = player.global_position.x < global_position.x
 		return
 
 	var to_player = player.global_position - global_position
@@ -67,7 +100,7 @@ func _physics_process(_delta: float) -> void:
 		animated_sprite.flip_h = true
 
 func _on_shoot_timer_timeout() -> void:
-	if not player:
+	if _is_waiting or not player:
 		return
 
 	var web = WEB_SCENE.instantiate()

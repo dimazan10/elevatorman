@@ -37,7 +37,11 @@ func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_na
 	types.shuffle()
 
 	for t in types:
-		var pt = points[randi() % points.size()]
+		if points.is_empty():
+			break
+		var idx = randi() % points.size()
+		var pt = points[idx]
+		points.remove_at(idx)
 		var scene = load("res://Objects/" + t + ".tscn")
 		var inst = scene.instantiate()
 		inst.global_position = pt.global_position

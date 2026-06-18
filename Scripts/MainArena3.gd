@@ -3,9 +3,6 @@ extends Node2D
 const FadeTransition := preload("res://Scripts/FadeTransition.gd")
 const WALL_PUSHER_SCRIPT = preload("res://Scripts/WallPusher.gd")
 
-var MAIN_HEX_POLYGON := PackedVector2Array([615, 0, 307.5, 532.5, -307.5, 532.5, -615, 0, -307.5, -532.5, 307.5, -532.5])
-var CORRIDOR_POLYGON := PackedVector2Array([-400, -310, 2240, -310, 2240, 310, -400, 310])
-
 signal player_zone_changed(zone_name: String)
 
 enum LiftState { NONE, START, EXITING, WAITING, COMBAT, RETURNING }
@@ -21,6 +18,11 @@ var _main_pushers: Array[Node] = []
 var _sec_pushers: Array[Node] = []
 var _player_zones: Array[String] = []
 var _current_player_zone: String = ""
+const _ZONE_PRIORITY := {
+	"main_arena": 1,
+	"corridor": 0,
+	"secondary_arena": 0,
+}
 
 
 @onready var anim := $Hole/FloorElevator/AnimationPlayer
@@ -99,51 +101,47 @@ func _add_pusher_to_wall(wall: Node) -> Node:
 			pusher.add_child(dup)
 	return pusher
 
-func _add_zone(name: String, parent: Node, polygon: PackedVector2Array) -> Area2D:
-	var area = Area2D.new()
-	area.name = "ZoneTrigger_" + name
-	area.collision_layer = 1
-	area.collision_mask = 1
-	area.monitoring = true
-	area.monitorable = false
-	parent.add_child(area)
-
-	var col = CollisionPolygon2D.new()
-	col.polygon = polygon
-	area.add_child(col)
-
-	area.body_entered.connect(_on_zone_entered.bind(name))
-	area.body_exited.connect(_on_zone_exited.bind(name))
-	return area
-
 func _on_zone_entered(body: Node2D, zone_name: String) -> void:
 	if body.is_in_group("player"):
 		if zone_name not in _player_zones:
 			_player_zones.append(zone_name)
-		_current_player_zone = zone_name
-		player_zone_changed.emit(zone_name)
+		var prio: int = _ZONE_PRIORITY.get(zone_name, 0)
+		var cur_prio: int = _ZONE_PRIORITY.get(_current_player_zone, -1)
+		if prio >= cur_prio:
+			_current_player_zone = zone_name
+		player_zone_changed.emit(_current_player_zone)
 
 func _on_zone_exited(body: Node2D, zone_name: String) -> void:
 	if body.is_in_group("player"):
 		_player_zones.erase(zone_name)
-		_current_player_zone = _player_zones.back() if _player_zones else ""
+		var best := ""
+		var best_prio := -1
+		for z in _player_zones:
+			var p: int = _ZONE_PRIORITY.get(z, 0)
+			if p > best_prio:
+				best = z
+				best_prio = p
+		_current_player_zone = best
 		player_zone_changed.emit(_current_player_zone)
 
 func _setup_zone_triggers() -> void:
-	_add_zone("main_arena", _arena_rotator.get_node("Floor"), MAIN_HEX_POLYGON)
+	var main_zone = _arena_rotator.get_node("Floor/ZoneTrigger") as Area2D
+	if main_zone:
+		main_zone.body_entered.connect(_on_zone_entered.bind("main_arena"))
+		main_zone.body_exited.connect(_on_zone_exited.bind("main_arena"))
 
 	for child in get_children():
-		var fp = child.get_node_or_null("FloorPolygon")
-		if fp:
-			var area = _add_zone("corridor", child, CORRIDOR_POLYGON)
-			area.position = fp.position
-			area.scale = fp.scale
+		var z = child.get_node_or_null("FloorPolygon/ZoneTrigger") as Area2D
+		if z:
+			z.body_entered.connect(_on_zone_entered.bind("corridor"))
+			z.body_exited.connect(_on_zone_exited.bind("corridor"))
 			break
 
 	if _secondary_arena:
-		var sec_floor = _secondary_arena.get_node_or_null("Pivot/Floor")
-		if sec_floor:
-			_add_zone("secondary_arena", sec_floor, MAIN_HEX_POLYGON)
+		var sec_zone = _secondary_arena.get_node_or_null("Pivot/Floor/ZoneTrigger") as Area2D
+		if sec_zone:
+			sec_zone.body_entered.connect(_on_zone_entered.bind("secondary_arena"))
+			sec_zone.body_exited.connect(_on_zone_exited.bind("secondary_arena"))
 
 func _setup_ui() -> void:
 	var ui := CanvasLayer.new()

@@ -23,12 +23,19 @@ const BULLET_SCENE = preload("res://Objects/Bullet.tscn")
 @onready var separation_zone := $SeparationZone # Наша новая зона личного пространства
 
 var player: Node2D = null
+var _spawn_pos: Vector2 = Vector2.ZERO
+var _zone_name: String = ""
+var _is_waiting: bool = false
 
 enum States { MOVING, SHOOTING }
 var current_state = States.MOVING
 var bullets_in_burst: int = 0
 
 func _ready() -> void:
+	if has_meta("spawn_position"):
+		_spawn_pos = get_meta("spawn_position")
+	if has_meta("zone_name"):
+		_zone_name = get_meta("zone_name")
 	var players = get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
 		player = players[0]
@@ -45,8 +52,42 @@ func _ready() -> void:
 	if enemy_sprite and enemy_sprite.sprite_frames.has_animation("walk"):
 		enemy_sprite.play("walk")
 
+func _check_zone_teleport() -> bool:
+	if _zone_name == "":
+		return false
+	var main = get_tree().current_scene
+	var player_zone = ""
+	if main and main.has_method("get_player_zone"):
+		player_zone = main.get_player_zone()
+	if player_zone != _zone_name:
+		if not _is_waiting:
+			_is_waiting = true
+			global_position = _spawn_pos
+			velocity = Vector2.ZERO
+			burst_timer.stop()
+			shot_delay_timer.stop()
+			current_state = States.MOVING
+			if enemy_sprite and enemy_sprite.sprite_frames.has_animation("walk"):
+				enemy_sprite.stop()
+		return true
+	if _is_waiting:
+		_is_waiting = false
+		set_random_burst_pause()
+		if enemy_sprite and enemy_sprite.sprite_frames.has_animation("walk"):
+			enemy_sprite.play("walk")
+	return false
+
 func _physics_process(_delta: float) -> void:
 	if not player:
+		return
+	if _check_zone_teleport():
+		weapon_anchor.look_at(player.global_position)
+		if player.global_position.x < global_position.x:
+			enemy_sprite.flip_h = true
+			weapon_anchor.scale.y = -1
+		else:
+			enemy_sprite.flip_h = false
+			weapon_anchor.scale.y = 1
 		return
 		
 	# 1. ПЛАВНОЕ ВРАЩЕНИЕ ОРУЖИЯ ЗА ИГРОКОМ
@@ -119,6 +160,8 @@ func set_random_burst_pause() -> void:
 	burst_timer.start()
 
 func _on_burst_timer_timeout() -> void:
+	if _is_waiting:
+		return
 	if current_state == States.MOVING:
 		current_state = States.SHOOTING
 		bullets_in_burst = randi_range(3, 4)
@@ -146,6 +189,8 @@ func fire_single_shot() -> void:
 		set_random_burst_pause()
 
 func _on_shot_delay_timer_timeout() -> void:
+	if _is_waiting:
+		return
 	fire_single_shot()
 
 func _on_melee_zone_body_entered(body: Node2D) -> void:
