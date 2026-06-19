@@ -209,10 +209,6 @@ func _physics_process(delta: float) -> void:
 		animated_sprite.speed_scale = 0.0
 		footstep_timer = 0.0
 
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel"):
-		get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
-
 func _spawn_ghost() -> void:
 	if not animated_sprite or not animated_sprite.sprite_frames:
 		return
