@@ -32,6 +32,7 @@ var slow_timer: float = 0.0
 
 var pull_target: Node2D = null
 var pull_offset: Vector2 = Vector2.ZERO
+var _is_dying := false
 
 func _ready() -> void:
 	current_lives = max_lives
@@ -261,10 +262,12 @@ func perform_dash() -> void:
 	velocity = dir * DASH_SPEED
 
 func take_damage(amount: int):
-	if _noclip:
+	if _noclip or _is_dying:
 		return
 	current_lives -= amount
 	health_changed.emit(current_lives)
+	if current_lives <= 0:
+		_is_dying = true
 	
 	var my_camera = %PlayerCamera
 		
@@ -282,7 +285,9 @@ func take_damage(amount: int):
 
 func die() -> void:
 	print("Игрок погиб!")
-	get_tree().reload_current_scene()
+	var tree := get_tree()
+	if tree:
+		tree.reload_current_scene()
 
 func apply_stun_and_knockback(knockback_impulse: Vector2, duration: float) -> void:
 	if is_stunned: 
