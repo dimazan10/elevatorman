@@ -245,19 +245,14 @@ func _on_combat_timeout() -> void:
 	_rotation_speed = 0.5
 	if _secondary_arena:
 		_secondary_arena.rotation_speed = 0.5
-	_hide_enemies()
-	_spawner.clear_spawned()
-	_arena_spawner.clear_spawned()
 	_switch_spawner.clear_spawned()
 	_set_shaft_collision(true)
 	lift_state = LiftState.RETURNING
-	_show_floor_label()
 	anim.play("DownUp")
 	await anim.animation_finished
 	anim.play("Open")
 	await anim.animation_finished
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 1)
-	_hide_floor_label()
 
 func start_restart() -> void:
 	if lift_state != LiftState.RETURNING:
@@ -422,6 +417,10 @@ func _update_gate() -> void:
 	var main_near = false
 	var sec_near = false
 	for gate in gates:
+		if lift_state == LiftState.COMBAT:
+			gate.collision_layer = 3
+			gate.get_node("Visual").modulate = Color(1, 1, 1, 1.0)
+			continue
 		var gate_pos = gate.global_position
 		var is_near = false
 		for t in get_tree().get_nodes_in_group("gate_trigger"):
