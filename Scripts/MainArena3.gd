@@ -493,8 +493,16 @@ func _toggle_pause() -> void:
 	_paused = not _paused
 	Engine.time_scale = 0.0 if _paused else 1.0
 	_world_env.environment = _pause_env if _paused else null
+
+	var proc = Node.PROCESS_MODE_DISABLED if _paused else Node.PROCESS_MODE_INHERIT
 	if player_node:
-		player_node.process_mode = Node.PROCESS_MODE_DISABLED if _paused else Node.PROCESS_MODE_INHERIT
+		player_node.process_mode = proc
+	for e in get_tree().get_nodes_in_group("enemy"):
+		if is_instance_valid(e):
+			e.process_mode = proc
+	for s in get_tree().get_nodes_in_group("switch"):
+		if is_instance_valid(s):
+			s.process_mode = proc
 
 	if _paused:
 		_pause_menu = preload("res://Scripts/PauseMenu.gd").new()
