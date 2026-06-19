@@ -1,5 +1,9 @@
 extends Control
 
+signal back_pressed
+
+var return_to_game := false
+
 @onready var master_slider := $VBoxContainer/MasterHSlider as HSlider
 @onready var master_label := $VBoxContainer/MasterPct as Label
 @onready var music_slider := $VBoxContainer/MusicHSlider as HSlider
@@ -20,7 +24,10 @@ func _on_music_slider_value_changed(value: float) -> void:
 	music_label.text = _db_to_pct(value)
 
 func _on_back_pressed() -> void:
-	get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
+	if return_to_game:
+		back_pressed.emit()
+	else:
+		get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
 
 func _db_to_pct(db: float) -> String:
 	var pct = roundi((db + 40.0) / 40.0 * 100.0)

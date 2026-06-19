@@ -42,6 +42,7 @@ var _paused := false
 var _pause_menu: Control = null
 var _pause_env: Environment
 var _world_env: WorldEnvironment
+var _pause_layer: CanvasLayer
 
 func _ready() -> void:
 	randomize()
@@ -479,6 +480,12 @@ func _setup_pause() -> void:
 	add_child(_world_env)
 	_world_env.environment = null
 
+	_pause_layer = CanvasLayer.new()
+	_pause_layer.name = "PauseLayer"
+	_pause_layer.layer = 129
+	_pause_layer.visible = false
+	add_child(_pause_layer)
+
 
 func _toggle_pause() -> void:
 	if not _pause_env or not _world_env:
@@ -493,11 +500,13 @@ func _toggle_pause() -> void:
 		_pause_menu = preload("res://Scripts/PauseMenu.gd").new()
 		_pause_menu.resume_pressed.connect(_toggle_pause)
 		_pause_menu.exit_pressed.connect(_on_pause_exit)
-		add_child(_pause_menu)
+		_pause_layer.add_child(_pause_menu)
+		_pause_layer.visible = true
 	else:
 		if _pause_menu:
 			_pause_menu.queue_free()
 			_pause_menu = null
+		_pause_layer.visible = false
 
 
 func _on_pause_exit() -> void:
