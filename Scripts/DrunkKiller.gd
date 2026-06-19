@@ -53,7 +53,7 @@ func _ready() -> void:
 		enemy_sprite.play("walk")
 
 func _check_zone_teleport() -> bool:
-	if _zone_name == "":
+	if _zone_name == "" or Engine.time_scale == 0:
 		return false
 	var main = get_tree().current_scene
 	var player_zone = ""
