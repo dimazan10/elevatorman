@@ -498,6 +498,8 @@ func _toggle_pause() -> void:
 	_world_env.environment = _pause_env if _paused else null
 	if _paused:
 		_paused_saved_zone = _current_player_zone
+	else:
+		_current_player_zone = _paused_saved_zone
 
 	var proc = Node.PROCESS_MODE_DISABLED if _paused else Node.PROCESS_MODE_INHERIT
 	if player_node:
