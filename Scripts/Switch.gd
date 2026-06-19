@@ -64,6 +64,8 @@ func _physics_process(delta: float) -> void:
 		_pick_random_direction()
 
 	velocity = _move_direction * _move_speed
+	if not velocity.is_finite():
+		velocity = Vector2.ZERO
 	move_and_slide()
 
 	var hit_wall := false

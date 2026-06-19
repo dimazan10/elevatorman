@@ -134,13 +134,19 @@ func _physics_process(delta: float) -> void:
 			var pull_vec = target_pos - global_position
 			var dir = pull_vec.normalized() if pull_vec.length_squared() > 0.001 else Vector2.ZERO
 			velocity = dir * 300.0
+			if not velocity.is_finite():
+				velocity = Vector2.ZERO
 		else:
 			knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 1000 * delta)
 			velocity = knockback_velocity
+			if not velocity.is_finite():
+				velocity = Vector2.ZERO
 		move_and_slide()
 		return
 	
 	if is_dashing:
+		if not velocity.is_finite():
+			velocity = Vector2.ZERO
 		move_and_slide()
 		return
 
@@ -177,6 +183,8 @@ func _physics_process(delta: float) -> void:
 		last_move_dir = direction
 
 		velocity = direction * SPEED * slow_factor
+		if not velocity.is_finite():
+			velocity = Vector2.ZERO
 		move_and_slide()
 
 		# ЗАМЕНИЛИ _delta НА ОБЫЧНУЮ delta, чтобы время шагов считалось правильно
