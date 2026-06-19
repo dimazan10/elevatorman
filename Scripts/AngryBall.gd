@@ -12,9 +12,13 @@ func _ready():
 			_direction = Vector2.RIGHT
 		linear_velocity = _direction * CONSTANT_SPEED
 	else:
-		_direction = linear_velocity.normalized()
-		if not _direction.is_finite():
+		if linear_velocity.is_finite():
+			_direction = linear_velocity.normalized()
+			if not _direction.is_finite():
+				_direction = Vector2.RIGHT
+		else:
 			_direction = Vector2.RIGHT
+			linear_velocity = _direction * CONSTANT_SPEED
 	body_entered.connect(_on_body_entered)
 
 func _integrate_forces(_state: PhysicsDirectBodyState2D):

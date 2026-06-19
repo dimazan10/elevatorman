@@ -129,9 +129,11 @@ func move_around_player() -> void:
 	
 	# Твоя базовая логика орбиты вокруг игрока
 	if distance > orbit_distance + 20:
-		desired_velocity = (clockwise_tangent + direction_to_player).normalized()
+		var raw = clockwise_tangent + direction_to_player
+		desired_velocity = raw.normalized() if raw.is_finite() else clockwise_tangent
 	elif distance < orbit_distance - 20:
-		desired_velocity = (clockwise_tangent - direction_to_player).normalized()
+		var raw = clockwise_tangent - direction_to_player
+		desired_velocity = raw.normalized() if raw.is_finite() else clockwise_tangent
 	else:
 		desired_velocity = clockwise_tangent
 		
@@ -156,7 +158,7 @@ func calculate_separation_vector() -> Vector2:
 		if body != self and body.is_in_group("enemy") or body is CharacterBody2D and body != player and body != self:
 			var diff = global_position - body.global_position
 			# Чем ближе к нам чужой враг, тем сильнее мы от него толкаемся
-			if diff.length() > 0:
+			if diff.length() > 0.001 and diff.is_finite():
 				separation += diff.normalized() / diff.length()
 				
 	return separation.normalized() if separation.length_squared() > 0 else Vector2.ZERO

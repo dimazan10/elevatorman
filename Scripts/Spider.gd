@@ -50,7 +50,7 @@ func _get_separation_vector() -> Vector2:
 			continue
 		if body is CharacterBody2D or body.is_in_group("enemy"):
 			var diff = global_position - body.global_position
-			if diff.length() > 0:
+			if diff.length() > 0.001 and diff.is_finite():
 				sep += diff.normalized() / diff.length()
 	if sep.length() > 0:
 		sep = sep.normalized()
