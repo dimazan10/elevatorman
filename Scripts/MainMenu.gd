@@ -42,4 +42,5 @@ func _on_play_pressed() -> void:
 
 func _on_settings_pressed() -> void:
 	click.play()
-	print("Настройки — в разработке")
+	await get_tree().create_timer(0.15).timeout
+	get_tree().change_scene_to_file("res://Scenes/Settings/Settings.tscn")

@@ -1,0 +1,27 @@
+extends Control
+
+@onready var master_slider := $VBoxContainer/MasterHSlider as HSlider
+@onready var master_label := $VBoxContainer/MasterPct as Label
+@onready var music_slider := $VBoxContainer/MusicHSlider as HSlider
+@onready var music_label := $VBoxContainer/MusicPct as Label
+
+func _ready() -> void:
+	master_slider.value = GameState.master_volume
+	master_label.text = _db_to_pct(GameState.master_volume)
+	music_slider.value = GameState.music_volume
+	music_label.text = _db_to_pct(GameState.music_volume)
+
+func _on_master_slider_value_changed(value: float) -> void:
+	GameState.set_master_volume(value)
+	master_label.text = _db_to_pct(value)
+
+func _on_music_slider_value_changed(value: float) -> void:
+	GameState.set_music_volume(value)
+	music_label.text = _db_to_pct(value)
+
+func _on_back_pressed() -> void:
+	get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
+
+func _db_to_pct(db: float) -> String:
+	var pct = roundi((db + 40.0) / 40.0 * 100.0)
+	return str(clampi(pct, 0, 100)) + "%"

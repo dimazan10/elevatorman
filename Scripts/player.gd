@@ -130,7 +130,8 @@ func _physics_process(delta: float) -> void:
 	if is_stunned:
 		if pull_target:
 			var target_pos = pull_target.global_position + pull_offset
-			var dir = (target_pos - global_position).normalized()
+			var pull_vec = target_pos - global_position
+			var dir = pull_vec.normalized() if pull_vec.length_squared() > 0.001 else Vector2.ZERO
 			velocity = dir * 300.0
 		else:
 			knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 1000 * delta)

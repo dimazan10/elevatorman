@@ -28,6 +28,8 @@ func _on_wake_up() -> void:
 
 func _pick_random_direction() -> void:
 	_move_direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
+	if not _move_direction.is_finite():
+		_move_direction = Vector2.RIGHT
 	_change_dir_interval = randf_range(1.0, 3.0)
 	_change_dir_timer = 0.0
 

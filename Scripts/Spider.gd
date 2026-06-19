@@ -95,6 +95,8 @@ func _physics_process(_delta: float) -> void:
 
 	var separation = _get_separation_vector()
 	velocity = direction * current_speed + separation * separation_force
+	if not velocity.is_finite():
+		velocity = Vector2.ZERO
 	move_and_slide()
 
 	if direction.x > 0:

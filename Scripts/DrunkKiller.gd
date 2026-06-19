@@ -111,6 +111,8 @@ func _physics_process(_delta: float) -> void:
 			# Даже когда враг стоит и стреляет, мы позволяем ему немного расталкиваться,
 			# чтобы они не перекрывали друг другу обзор во время стрельбы
 			velocity = calculate_separation_vector() * (separation_force * 0.5)
+			if not velocity.is_finite():
+				velocity = Vector2.ZERO
 			move_and_slide()
 			enemy_sprite.stop()
 			enemy_sprite.frame = 0
@@ -141,6 +143,8 @@ func move_around_player() -> void:
 	
 	# Финальная скорость — это смесь орбиты и расталкивания
 	velocity = movement_vector + (separation_vector * separation_force)
+	if not velocity.is_finite():
+		velocity = Vector2.ZERO
 	move_and_slide()
 
 func calculate_separation_vector() -> Vector2:
@@ -155,7 +159,7 @@ func calculate_separation_vector() -> Vector2:
 			if diff.length() > 0:
 				separation += diff.normalized() / diff.length()
 				
-	return separation.normalized()
+	return separation.normalized() if separation.length_squared() > 0 else Vector2.ZERO
 
 func set_random_burst_pause() -> void:
 	burst_timer.wait_time = randf_range(1.0, 2.0)
@@ -198,7 +202,8 @@ func _on_shot_delay_timer_timeout() -> void:
 func _on_melee_zone_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		if body.has_method("apply_stun_and_knockback"):
-			var knockback_dir = (body.global_position - global_position).normalized()
+			var kb_vec = body.global_position - global_position
+			var knockback_dir = kb_vec.normalized() if kb_vec.length() > 0.001 else Vector2.DOWN
 			var knockback_force = 500.0
 			var stun_duration = 1.0
 			body.apply_stun_and_knockback(knockback_dir * knockback_force, stun_duration)

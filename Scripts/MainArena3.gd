@@ -174,6 +174,13 @@ func _setup_ui() -> void:
 	floor_label.text = "Этаж " + str(GameState.current_floor)
 	ui.add_child(floor_label)
 
+	var music = AudioStreamPlayer.new()
+	music.name = "MusicPlayer"
+	music.stream = load("res://Assets/Sounds/music/neon-pulse_93545.mp3")
+	music.bus = &"Music"
+	music.autoplay = true
+	add_child(music)
+
 func start_exit_sequence() -> void:
 	if lift_state != LiftState.START:
 		return
