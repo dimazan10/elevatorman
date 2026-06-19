@@ -39,11 +39,7 @@ const _ZONE_PRIORITY := {
 	$Hole/FloorElevator/LeftUpper/CollisionShape
 ]
 
-var _paused := false
-var _pause_menu: Control = null
-var _pause_env: Environment
-var _world_env: WorldEnvironment
-var _pause_layer: CanvasLayer
+@onready var _pause_manager := get_node("/root/PauseManager")
 
 func _ready() -> void:
 	randomize()
@@ -71,7 +67,8 @@ func _ready() -> void:
 	_show_player()
 	_hide_floor_label()
 	player_node.can_move = true
-	_setup_pause()
+	add_to_group("pausable")
+	_pause_manager.paused_state_changed.connect(_on_pause_state_changed)
 
 func _setup_arena_rotation() -> void:
 	_arena_rotator = AnimatableBody2D.new()
@@ -363,7 +360,7 @@ func _generate_world() -> void:
 				_sec_pushers.append(p)
 
 func get_player_zone() -> String:
-	if _paused:
+	if _pause_manager and _pause_manager.is_paused():
 		return _paused_saved_zone
 	return _current_player_zone
 
@@ -458,11 +455,6 @@ func _physics_process(delta: float) -> void:
 				p.angular_velocity = _secondary_arena.rotation_speed
 				p.rotation_center = sec_center
 
-func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel"):
-		_toggle_pause()
-		get_viewport().set_input_as_handled()
-
 func _process(delta: float) -> void:
 	if combat_timer and not combat_timer.is_stopped():
 		var remaining: float = ceil(combat_timer.time_left)
@@ -473,57 +465,8 @@ func _process(delta: float) -> void:
 		time_label.text = "00:00"
 
 
-func _setup_pause() -> void:
-	_pause_env = Environment.new()
-	_pause_env.adjustment_enabled = true
-	_pause_env.adjustment_saturation = 0.0
-	_world_env = WorldEnvironment.new()
-	_world_env.name = "PauseWorldEnvironment"
-	_world_env.environment = _pause_env
-	add_child(_world_env)
-	_world_env.environment = null
-
-	_pause_layer = CanvasLayer.new()
-	_pause_layer.name = "PauseLayer"
-	_pause_layer.layer = 129
-	_pause_layer.visible = false
-	add_child(_pause_layer)
-
-
-func _toggle_pause() -> void:
-	if not _pause_env or not _world_env:
-		return
-	_paused = not _paused
-	Engine.time_scale = 0.0 if _paused else 1.0
-	_world_env.environment = _pause_env if _paused else null
-	if _paused:
+func _on_pause_state_changed(is_paused: bool) -> void:
+	if is_paused:
 		_paused_saved_zone = _current_player_zone
 	else:
 		_current_player_zone = _paused_saved_zone
-
-	var proc = Node.PROCESS_MODE_DISABLED if _paused else Node.PROCESS_MODE_INHERIT
-	if player_node:
-		player_node.process_mode = proc
-	for e in get_tree().get_nodes_in_group("enemy"):
-		if is_instance_valid(e):
-			e.process_mode = proc
-	for s in get_tree().get_nodes_in_group("switch"):
-		if is_instance_valid(s):
-			s.process_mode = proc
-
-	if _paused:
-		_pause_menu = preload("res://Scripts/PauseMenu.gd").new()
-		_pause_menu.resume_pressed.connect(_toggle_pause)
-		_pause_menu.exit_pressed.connect(_on_pause_exit)
-		_pause_layer.add_child(_pause_menu)
-		_pause_layer.visible = true
-	else:
-		if _pause_menu:
-			_pause_menu.queue_free()
-			_pause_menu = null
-		_pause_layer.visible = false
-
-
-func _on_pause_exit() -> void:
-	_toggle_pause()
-	get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
