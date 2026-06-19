@@ -19,6 +19,7 @@ var _main_pushers: Array[Node] = []
 var _sec_pushers: Array[Node] = []
 var _player_zones: Array[String] = []
 var _current_player_zone: String = ""
+var _paused_saved_zone: String = ""
 const _ZONE_PRIORITY := {
 	"main_arena": 1,
 	"corridor": 0,
@@ -362,6 +363,8 @@ func _generate_world() -> void:
 				_sec_pushers.append(p)
 
 func get_player_zone() -> String:
+	if _paused:
+		return _paused_saved_zone
 	return _current_player_zone
 
 func _spawn_enemies(level: int) -> void:
@@ -493,6 +496,8 @@ func _toggle_pause() -> void:
 	_paused = not _paused
 	Engine.time_scale = 0.0 if _paused else 1.0
 	_world_env.environment = _pause_env if _paused else null
+	if _paused:
+		_paused_saved_zone = _current_player_zone
 
 	var proc = Node.PROCESS_MODE_DISABLED if _paused else Node.PROCESS_MODE_INHERIT
 	if player_node:
