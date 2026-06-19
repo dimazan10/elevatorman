@@ -214,6 +214,9 @@ func _start_combat_timer() -> void:
 	combat_timer.timeout.connect(_on_combat_timeout)
 	add_child(combat_timer)
 	combat_timer.start()
+	_rotation_speed = 0.0
+	if _secondary_arena:
+		_secondary_arena.rotation_speed = 0.0
 
 func _connect_switch() -> void:
 	var switches := get_tree().get_nodes_in_group("switch")
@@ -239,6 +242,9 @@ func _on_switch_activated() -> void:
 func _on_combat_timeout() -> void:
 	if lift_state != LiftState.COMBAT:
 		return
+	_rotation_speed = 0.5
+	if _secondary_arena:
+		_secondary_arena.rotation_speed = 0.5
 	_hide_enemies()
 	_spawner.clear_spawned()
 	_arena_spawner.clear_spawned()
@@ -430,9 +436,10 @@ func _update_gate() -> void:
 			else:
 				main_near = true
 
-	_rotation_speed = 0.05 if main_near else 0.5
-	if _secondary_arena:
-		_secondary_arena.rotation_speed = 0.05 if sec_near else 0.5
+	if lift_state != LiftState.COMBAT:
+		_rotation_speed = 0.05 if main_near else 0.5
+		if _secondary_arena:
+			_secondary_arena.rotation_speed = 0.05 if sec_near else 0.5
 
 
 func _physics_process(delta: float) -> void:
