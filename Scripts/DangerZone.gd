@@ -1,8 +1,12 @@
 extends Area2D
+class_name DangerZone
+
+static var show_debug := false
 
 @export var radius: float = 250.0
 
 func _ready() -> void:
+	add_to_group("danger_zone")
 	var cs = $CollisionShape2D
 	if cs and cs.shape is CircleShape2D:
 		cs.shape.radius = radius
@@ -11,6 +15,8 @@ func _ready() -> void:
 	body_exited.connect(_on_body_exited)
 
 func _draw() -> void:
+	if not show_debug:
+		return
 	var cs = $CollisionShape2D
 	if not cs or not cs.shape:
 		return
