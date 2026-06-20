@@ -62,10 +62,15 @@ layout_mode = 2
 text = "100%"
 horizontal_alignment = 1
 
+[node name="FPSCheckbox" type="CheckBox" parent="VBoxContainer"]
+layout_mode = 2
+text = "Показать FPS"
+
 [node name="Back" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Назад"
 
 [connection signal="value_changed" from="VBoxContainer/MasterHSlider" to="." method="_on_master_slider_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/MusicHSlider" to="." method="_on_music_slider_value_changed"]
+[connection signal="toggled" from="VBoxContainer/FPSCheckbox" to="." method="_on_fps_checkbox_toggled"]
 [connection signal="pressed" from="VBoxContainer/Back" to="." method="_on_back_pressed"]

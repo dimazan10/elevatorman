@@ -11,6 +11,7 @@ var lift_state := LiftState.NONE
 var combat_timer: Timer
 var time_label: Label
 var floor_label: Label
+var _fps_label: Label
 var _switch_count := 0
 var _activated_switch_count := 0
 var _arena_rotator: Node2D
@@ -166,6 +167,17 @@ func _setup_ui() -> void:
 	time_label.add_theme_color_override("font_outline_color", Color.BLACK)
 	time_label.position = Vector2(10, 10)
 	ui.add_child(time_label)
+
+	_fps_label = Label.new()
+	_fps_label.name = "FPSLabel"
+	_fps_label.add_theme_font_size_override("font_size", 20)
+	_fps_label.add_theme_color_override("font_color", Color(0.6, 0.9, 0.6))
+	_fps_label.add_theme_constant_override("outline_size", 2)
+	_fps_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	_fps_label.position = Vector2(10, 50)
+	_fps_label.visible = GameState.show_fps
+	_fps_label.add_to_group("fps_label")
+	ui.add_child(_fps_label)
 
 	floor_label = Label.new()
 	floor_label.name = "FloorLabel"
@@ -459,9 +471,10 @@ func _update_gate() -> void:
 		if g:
 			gates.append(g)
 
+	var in_corridor = _current_player_zone == "corridor"
 	if lift_state != LiftState.COMBAT:
 		for sa in _secondary_arenas:
-			sa.rotation_speed = 0.5
+			sa.rotation_speed = 1.0 if in_corridor else 0.5
 
 	var main_near = false
 	for gate in gates:
@@ -486,7 +499,7 @@ func _update_gate() -> void:
 				main_near = true
 
 	if lift_state != LiftState.COMBAT:
-		_rotation_speed = 0.05 if main_near else 0.5
+		_rotation_speed = 0.05 if main_near else (1.0 if in_corridor else 0.5)
 
 
 func _physics_process(delta: float) -> void:
@@ -513,6 +526,8 @@ func _physics_process(delta: float) -> void:
 				p.rotation_center = center
 
 func _process(delta: float) -> void:
+	if _fps_label:
+		_fps_label.text = "FPS: " + str(Engine.get_frames_per_second())
 	if combat_timer and not combat_timer.is_stopped():
 		var remaining: float = ceil(combat_timer.time_left)
 		var m := int(remaining / 60.0)
