@@ -4,11 +4,11 @@
 [ext_resource type="Script" path="res://Scripts/DangerZone.gd" id="2_danger_script"]
 [ext_resource type="Texture2D" path="res://Assets/Sprites_Killer/Bullet.png" id="1_ubr88"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ljs67"]
-size = Vector2(17, 15)
+[sub_resource type="CircleShape2D" id="CircleShape2D_bullet"]
+radius = 9.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_danger_bullet"]
-size = Vector2(27.2, 24.0)
+[sub_resource type="CircleShape2D" id="CircleShape2D_danger_bullet"]
+radius = 17.1
 
 [node name="Bullet" type="Area2D" unique_id=237565614]
 collision_mask = 7
@@ -20,7 +20,7 @@ texture = ExtResource("1_ubr88")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1460782072]
 position = Vector2(-0.5, 0.5)
-shape = SubResource("RectangleShape2D_ljs67")
+shape = SubResource("CircleShape2D_bullet")
 
 [node name="DangerZone" type="Area2D" parent="."]
 collision_layer = 0
@@ -28,6 +28,7 @@ collision_mask = 1
 monitoring = true
 monitorable = false
 script = ExtResource("2_danger_script")
+radius = 17.1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DangerZone"]
-shape = SubResource("RectangleShape2D_danger_bullet")
+shape = SubResource("CircleShape2D_danger_bullet")
