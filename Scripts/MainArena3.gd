@@ -366,7 +366,7 @@ func _generate_world() -> void:
 			if p:
 				_none_pushers.append(p)
 
-	var arena_none_pivot = arena.position + Vector2(640, 360)
+	var arena_none_pivot = arena.get_node("Pivot").global_position
 	var second_angles := angles.duplicate()
 	second_angles.erase(chosen)
 	second_angles.erase((chosen + 180) % 360)
