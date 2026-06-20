@@ -41,7 +41,7 @@ radius = 40.0
 radius = 71.02816
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_danger_spider"]
-radius = 84.0
+radius = 100.0
 
 [node name="Spider" type="CharacterBody2D" unique_id=1653153450 groups=["enemy"]]
 script = ExtResource("1_spider")
@@ -75,7 +75,7 @@ collision_mask = 1
 monitoring = true
 monitorable = false
 script = ExtResource("7_danger_script")
-radius = 84.0
+radius = 100.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DangerZone"]
 shape = SubResource("CircleShape2D_danger_spider")
