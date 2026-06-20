@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dat4ixuir5ckq"]
 
 [ext_resource type="Script" uid="uid://3vp0ijjnam0n" path="res://Scripts/AngryBall.gd" id="1_5kt4o"]
-[ext_resource type="PackedScene" path="res://Objects/DangerZone.tscn" id="2_w3j2m"]
+[ext_resource type="Script" path="res://Scripts/DangerZone.gd" id="2_danger_script"]
 [ext_resource type="Texture2D" uid="uid://chhc7m7lkhcne" path="res://Assets/AngryBall.png" id="1_uhfjk"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_f15s6"]
@@ -10,6 +10,9 @@ bounce = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5kt4o"]
 radius = 25.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_danger_ball"]
+radius = 32.5
 
 [node name="AngryBall" type="RigidBody2D" unique_id=1051154257 groups=["enemy"]]
 mass = 0.001
@@ -28,5 +31,13 @@ texture = ExtResource("1_uhfjk")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=273689266]
 shape = SubResource("CircleShape2D_5kt4o")
 
-[node name="DangerZone" parent="." instance=ExtResource("2_w3j2m")]
+[node name="DangerZone" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+monitorable = false
+script = ExtResource("2_danger_script")
 radius = 32.5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DangerZone"]
+shape = SubResource("CircleShape2D_danger_ball")

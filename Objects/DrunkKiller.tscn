@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dci8sss81er7i" path="res://Assets/Sprites_Killer/DrunkKillerRun1.png" id="2_dqplg"]
 [ext_resource type="Script" uid="uid://vbxt3u1bj6us" path="res://Scripts/DrunkKiller.gd" id="2_ljk35"]
-[ext_resource type="PackedScene" path="res://Objects/DangerZone.tscn" id="6_w3j2m"]
+[ext_resource type="Script" path="res://Scripts/DangerZone.gd" id="6_danger_script"]
 [ext_resource type="Texture2D" uid="uid://cws8jltpnyfcu" path="res://Assets/Sprites_Killer/BananaGun.png" id="2_v20ja"]
 [ext_resource type="Texture2D" uid="uid://3yog0ryqbbgj" path="res://Assets/Sprites_Killer/DrunkKillerRun2.png" id="3_1wgsp"]
 [ext_resource type="Texture2D" uid="uid://deki6wykp4k64" path="res://Assets/Sprites_Killer/DrunkKillerRun3.png" id="4_q8v8j"]
@@ -36,6 +36,9 @@ radius = 33.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dqplg"]
 radius = 69.28571
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_danger_drunk"]
+radius = 42.9
 
 [node name="DrunkKiller" type="CharacterBody2D" unique_id=676731580 groups=["enemy"]]
 scale = Vector2(1.4, 1.4)
@@ -81,5 +84,13 @@ shape = SubResource("CircleShape2D_7es6t")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SeparationZone" unique_id=1309323044]
 shape = SubResource("CircleShape2D_dqplg")
 
-[node name="DangerZone" parent="." instance=ExtResource("6_w3j2m")]
+[node name="DangerZone" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+monitorable = false
+script = ExtResource("6_danger_script")
 radius = 42.9
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DangerZone"]
+shape = SubResource("CircleShape2D_danger_drunk")

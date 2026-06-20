@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bgdg4ma2ce0ub"]
 
 [ext_resource type="Script" uid="uid://batw0t4m8qbnw" path="res://Scripts/Spider.gd" id="1_spider"]
-[ext_resource type="PackedScene" path="res://Objects/DangerZone.tscn" id="7_w3j2m"]
+[ext_resource type="Script" path="res://Scripts/DangerZone.gd" id="7_danger_script"]
 [ext_resource type="Texture2D" uid="uid://caak13fa5yk2v" path="res://Assets/Sprites_Spider/spider1.png" id="2_s1"]
 [ext_resource type="Texture2D" uid="uid://bxfbpkmaewaxx" path="res://Assets/Sprites_Spider/spider2.png" id="3_s2"]
 [ext_resource type="Texture2D" uid="uid://vrk0midj7owl" path="res://Assets/Sprites_Spider/spider3.png" id="4_s3"]
@@ -40,6 +40,9 @@ radius = 40.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_sep"]
 radius = 71.02816
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_danger_spider"]
+radius = 52.0
+
 [node name="Spider" type="CharacterBody2D" unique_id=1653153450 groups=["enemy"]]
 script = ExtResource("1_spider")
 
@@ -66,5 +69,13 @@ collision_layer = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SeparationZone" unique_id=1080399315]
 shape = SubResource("CircleShape2D_sep")
 
-[node name="DangerZone" parent="." instance=ExtResource("7_w3j2m")]
+[node name="DangerZone" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+monitorable = false
+script = ExtResource("7_danger_script")
 radius = 52.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DangerZone"]
+shape = SubResource("CircleShape2D_danger_spider")
