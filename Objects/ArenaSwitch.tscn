@@ -139,23 +139,23 @@ position = Vector2(253, -393)
 [node name="SwitchPoint5" type="Marker2D" parent="Pivot" unique_id=253896944 groups=["switch_point"]]
 position = Vector2(-17, 400)
 
-[node name="SpawnPoint1" type="Marker2D" parent="." unique_id=2124699469 groups=["spawn_point_arena"]]
+[node name="SpawnPoint1" type="Marker2D" parent="." unique_id=2124699469 groups=["spawn_point_switch"]]
 position = Vector2(651, 116)
 
-[node name="SpawnPoint2" type="Marker2D" parent="." unique_id=1989789208 groups=["spawn_point_arena"]]
+[node name="SpawnPoint2" type="Marker2D" parent="." unique_id=1989789208 groups=["spawn_point_switch"]]
 position = Vector2(435, 517)
 
-[node name="SpawnPoint3" type="Marker2D" parent="." unique_id=909885700 groups=["spawn_point_arena"]]
+[node name="SpawnPoint3" type="Marker2D" parent="." unique_id=909885700 groups=["spawn_point_switch"]]
 position = Vector2(854, 529)
 
-[node name="SpawnPoint4" type="Marker2D" parent="." unique_id=1501583779 groups=["spawn_point_arena"]]
+[node name="SpawnPoint4" type="Marker2D" parent="." unique_id=1501583779 groups=["spawn_point_switch"]]
 position = Vector2(424, 112)
 
-[node name="SpawnPoint5" type="Marker2D" parent="." unique_id=587129701 groups=["spawn_point_arena"]]
+[node name="SpawnPoint5" type="Marker2D" parent="." unique_id=587129701 groups=["spawn_point_switch"]]
 position = Vector2(879, 147)
 
-[node name="SpawnPoint6" type="Marker2D" parent="." unique_id=369093571 groups=["spawn_point_arena"]]
+[node name="SpawnPoint6" type="Marker2D" parent="." unique_id=369093571 groups=["spawn_point_switch"]]
 position = Vector2(870, 332)
 
-[node name="SpawnPoint7" type="Marker2D" parent="." unique_id=785713911 groups=["spawn_point_arena"]]
+[node name="SpawnPoint7" type="Marker2D" parent="." unique_id=785713911 groups=["spawn_point_switch"]]
 position = Vector2(405, 314)

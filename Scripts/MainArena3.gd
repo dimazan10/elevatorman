@@ -146,7 +146,6 @@ func _setup_zone_triggers() -> void:
 		if z:
 			z.body_entered.connect(_on_zone_entered.bind("corridor"))
 			z.body_exited.connect(_on_zone_exited.bind("corridor"))
-			break
 
 	for sa in _secondary_arenas:
 		var sec_zone = sa.get_node_or_null("Pivot/Floor/ZoneTrigger") as Area2D
@@ -358,7 +357,6 @@ func _generate_world() -> void:
 	arena.position = corridor_end + dir * 532.5 - Vector2(640, 360)
 	_secondary_arenas.append(arena)
 
-	_arena_none = arena
 	var none_walls = arena.get_node_or_null("Pivot/Walls")
 	if none_walls:
 		for wall in none_walls.get_children():
@@ -366,13 +364,18 @@ func _generate_world() -> void:
 			if p:
 				_none_pushers.append(p)
 
-	var arena_none_pivot = arena.get_node("Pivot").global_position
-	var second_angles := angles.duplicate()
-	second_angles.erase(chosen)
-	second_angles.erase((chosen + 180) % 360)
-	var second_chosen = second_angles[randi() % second_angles.size()]
+	_arena_none = arena
+
+	var hex_angles := [0, 60, 120, 180, 240, 300]
+	var main_idx = hex_angles.find(chosen)
+	var second_indices := []
+	for i in 6:
+		if i != main_idx and i != (main_idx + 3) % 6:
+			second_indices.append(i)
+	var second_chosen = hex_angles[second_indices[randi() % second_indices.size()]]
 	var second_rad = deg_to_rad(second_chosen)
 	var second_dir = Vector2(cos(second_rad), sin(second_rad))
+	var arena_none_pivot = corridor_end + dir * 532.5
 	var second_inst = floor_rect.instantiate()
 	second_inst.rotation = second_rad
 	second_inst.position = arena_none_pivot + second_dir * corridor_dist - door_offset.rotated(second_rad)
@@ -402,7 +405,14 @@ func get_player_zone() -> String:
 
 func _spawn_enemies(level: int) -> void:
 	_spawner.spawn(level, self, "spawn_point_main", "main_arena")
-	_arena_spawner.spawn(level, self, "spawn_point_arena", "secondary_arena")
+	if _arena_none:
+		var none_spawner = _arena_none.get_node_or_null("Pivot/EnemySpawner")
+		if none_spawner:
+			none_spawner.spawn(level, self, "spawn_point_none", "secondary_arena")
+	if _arena_switch:
+		var switch_spawner = _arena_switch.get_node_or_null("Pivot/EnemySpawner")
+		if switch_spawner:
+			switch_spawner.spawn(level, self, "spawn_point_switch", "secondary_arena")
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		enemy.collision_mask |= 2
 
@@ -449,8 +459,11 @@ func _update_gate() -> void:
 		if g:
 			gates.append(g)
 
+	if lift_state != LiftState.COMBAT:
+		for sa in _secondary_arenas:
+			sa.rotation_speed = 0.5
+
 	var main_near = false
-	var sec_near = false
 	for gate in gates:
 		if lift_state == LiftState.COMBAT:
 			gate.collision_layer = 3
@@ -464,20 +477,16 @@ func _update_gate() -> void:
 				break
 		gate.collision_layer = 2 if is_near else 3
 		gate.get_node("Visual").modulate = Color(1, 1, 1, 0.3 if is_near else 1.0)
-		if is_near:
-			var in_secondary := false
-			for sa in _secondary_arenas:
-				if sa.is_ancestor_of(gate):
-					sec_near = true
-					in_secondary = true
-					break
-			if not in_secondary:
+		if is_near and lift_state != LiftState.COMBAT:
+			var sa_owner = _arena_none if _arena_none and _arena_none.is_ancestor_of(gate) else \
+				_arena_switch if _arena_switch and _arena_switch.is_ancestor_of(gate) else null
+			if sa_owner:
+				sa_owner.rotation_speed = 0.05
+			else:
 				main_near = true
 
 	if lift_state != LiftState.COMBAT:
 		_rotation_speed = 0.05 if main_near else 0.5
-		for sa in _secondary_arenas:
-			sa.rotation_speed = 0.05 if sec_near else 0.5
 
 
 func _physics_process(delta: float) -> void:
