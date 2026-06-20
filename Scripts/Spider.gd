@@ -32,7 +32,7 @@ func _ready() -> void:
 
 	shoot_timer.one_shot = true
 	shoot_timer.timeout.connect(_on_shoot_timer_timeout)
-	shoot_timer.start(randf_range(6.0, 9.0))
+	shoot_timer.start(3.0)
 
 	melee_zone.body_entered.connect(_on_melee_zone_body_entered)
 
@@ -73,7 +73,7 @@ func _check_zone_teleport() -> bool:
 		return true
 	if _is_waiting:
 		_is_waiting = false
-		shoot_timer.start(randf_range(6.0, 9.0))
+		shoot_timer.start(randf_range(8.0, 12.0))
 		if animated_sprite and animated_sprite.sprite_frames.has_animation("walk"):
 			animated_sprite.play("walk")
 	return false
@@ -111,7 +111,7 @@ func _on_shoot_timer_timeout() -> void:
 	web.global_position = global_position
 	web.z_index = 1
 	get_parent().add_child(web)
-	shoot_timer.start(randf_range(6.0, 9.0))
+	shoot_timer.start(randf_range(8.0, 12.0))
 
 func _get_nearest_enemy() -> Node2D:
 	var nearest: Node2D = null

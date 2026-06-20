@@ -14,9 +14,12 @@ var floor_label: Label
 var _switch_count := 0
 var _activated_switch_count := 0
 var _arena_rotator: Node2D
-var _secondary_arena: Node2D
+var _secondary_arenas: Array[Node2D] = []
+var _arena_none: Node2D
+var _arena_switch: Node2D
+var _none_pushers: Array[Node] = []
+var _switch_pushers: Array[Node] = []
 var _main_pushers: Array[Node] = []
-var _sec_pushers: Array[Node] = []
 var _player_zones: Array[String] = []
 var _current_player_zone: String = ""
 var _paused_saved_zone: String = ""
@@ -145,8 +148,8 @@ func _setup_zone_triggers() -> void:
 			z.body_exited.connect(_on_zone_exited.bind("corridor"))
 			break
 
-	if _secondary_arena:
-		var sec_zone = _secondary_arena.get_node_or_null("Pivot/Floor/ZoneTrigger") as Area2D
+	for sa in _secondary_arenas:
+		var sec_zone = sa.get_node_or_null("Pivot/Floor/ZoneTrigger") as Area2D
 		if sec_zone:
 			sec_zone.body_entered.connect(_on_zone_entered.bind("secondary_arena"))
 			sec_zone.body_exited.connect(_on_zone_exited.bind("secondary_arena"))
@@ -215,8 +218,8 @@ func _start_combat_timer() -> void:
 	add_child(combat_timer)
 	combat_timer.start()
 	_rotation_speed = 0.0
-	if _secondary_arena:
-		_secondary_arena.rotation_speed = 0.0
+	for sa in _secondary_arenas:
+		sa.rotation_speed = 0.0
 
 func _connect_switch() -> void:
 	var switches := get_tree().get_nodes_in_group("switch")
@@ -243,8 +246,8 @@ func _on_combat_timeout() -> void:
 	if lift_state != LiftState.COMBAT:
 		return
 	_rotation_speed = 0.5
-	if _secondary_arena:
-		_secondary_arena.rotation_speed = 0.5
+	for sa in _secondary_arenas:
+		sa.rotation_speed = 0.5
 	_switch_spawner.clear_spawned()
 	_set_shaft_collision(true)
 	lift_state = LiftState.RETURNING
@@ -332,7 +335,8 @@ func _enable_collision_shapes(node: Node) -> void:
 
 func _generate_world() -> void:
 	var floor_rect = preload("res://Objects/Floor_Rectangle.tscn")
-	var arena_scene = preload("res://Objects/ArenaSwitch.tscn")
+	var arena_none_scene = preload("res://Objects/ArenaNone.tscn")
+	var arena_switch_scene = preload("res://Objects/ArenaSwitch.tscn")
 	var center = Vector2(640, 360)
 	var door_offset = Vector2(1090, 0)
 	var corridor_dist = 570
@@ -348,17 +352,47 @@ func _generate_world() -> void:
 		if child is Area2D and child.script and child.script.resource_path == "res://Scripts/DoorTrigger.gd":
 			child.add_to_group("gate_trigger")
 	var corridor_end = center + dir * corridor_dist + Vector2(2043, 0).rotated(rad) - door_offset.rotated(rad)
-	var arena = arena_scene.instantiate()
+	var arena = arena_none_scene.instantiate()
+	arena.name = "ArenaNone"
 	add_child(arena)
-	_secondary_arena = arena
 	arena.position = corridor_end + dir * 532.5 - Vector2(640, 360)
+	_secondary_arenas.append(arena)
 
-	var sec_walls = arena.get_node_or_null("Pivot/Walls")
-	if sec_walls:
-		for wall in sec_walls.get_children():
+	_arena_none = arena
+	var none_walls = arena.get_node_or_null("Pivot/Walls")
+	if none_walls:
+		for wall in none_walls.get_children():
 			var p = _add_pusher_to_wall(wall)
 			if p:
-				_sec_pushers.append(p)
+				_none_pushers.append(p)
+
+	var arena_none_pivot = arena.position + Vector2(640, 360)
+	var second_angles := angles.duplicate()
+	second_angles.erase(chosen)
+	var second_chosen = second_angles[randi() % second_angles.size()]
+	var second_rad = deg_to_rad(second_chosen)
+	var second_dir = Vector2(cos(second_rad), sin(second_rad))
+	var second_inst = floor_rect.instantiate()
+	second_inst.rotation = second_rad
+	second_inst.position = arena_none_pivot + second_dir * corridor_dist - door_offset.rotated(second_rad)
+	add_child(second_inst)
+	for child in second_inst.get_children():
+		if child is Area2D and child.script and child.script.resource_path == "res://Scripts/DoorTrigger.gd":
+			child.add_to_group("gate_trigger")
+	var second_corridor_end = arena_none_pivot + second_dir * corridor_dist + Vector2(2043, 0).rotated(second_rad) - door_offset.rotated(second_rad)
+	var arena_switch = arena_switch_scene.instantiate()
+	arena_switch.name = "ArenaSwitch"
+	add_child(arena_switch)
+	arena_switch.position = second_corridor_end + second_dir * 532.5 - Vector2(640, 360)
+	_secondary_arenas.append(arena_switch)
+
+	_arena_switch = arena_switch
+	var switch_walls = arena_switch.get_node_or_null("Pivot/Walls")
+	if switch_walls:
+		for wall in switch_walls.get_children():
+			var p = _add_pusher_to_wall(wall)
+			if p:
+				_switch_pushers.append(p)
 
 func get_player_zone() -> String:
 	if _pause_manager and _pause_manager.is_paused():
@@ -409,8 +443,8 @@ var _rotation_speed := 0.5
 
 func _update_gate() -> void:
 	var gates := [_arena_rotator.get_node("Walls/W4/Gate") as StaticBody2D]
-	if _secondary_arena:
-		var g = _secondary_arena.get_node_or_null("Pivot/Walls/W4/Gate") as StaticBody2D
+	for sa in _secondary_arenas:
+		var g = sa.get_node_or_null("Pivot/Walls/W4/Gate") as StaticBody2D
 		if g:
 			gates.append(g)
 
@@ -430,15 +464,19 @@ func _update_gate() -> void:
 		gate.collision_layer = 2 if is_near else 3
 		gate.get_node("Visual").modulate = Color(1, 1, 1, 0.3 if is_near else 1.0)
 		if is_near:
-			if _secondary_arena and _secondary_arena.is_ancestor_of(gate):
-				sec_near = true
-			else:
+			var in_secondary := false
+			for sa in _secondary_arenas:
+				if sa.is_ancestor_of(gate):
+					sec_near = true
+					in_secondary = true
+					break
+			if not in_secondary:
 				main_near = true
 
 	if lift_state != LiftState.COMBAT:
 		_rotation_speed = 0.05 if main_near else 0.5
-		if _secondary_arena:
-			_secondary_arena.rotation_speed = 0.05 if sec_near else 0.5
+		for sa in _secondary_arenas:
+			sa.rotation_speed = 0.05 if sec_near else 0.5
 
 
 func _physics_process(delta: float) -> void:
@@ -451,15 +489,18 @@ func _physics_process(delta: float) -> void:
 			p.angular_velocity = _rotation_speed
 			p.rotation_center = main_center
 
-	if _secondary_arena and is_instance_valid(_secondary_arena):
-		var pivot = _secondary_arena.get_node_or_null("Pivot")
+	for sa in [_arena_none, _arena_switch]:
+		if not is_instance_valid(sa):
+			continue
+		var pivot = sa.get_node_or_null("Pivot")
 		if not pivot:
-			return
-		var sec_center = pivot.global_position
-		for p in _sec_pushers:
+			continue
+		var center = pivot.global_position
+		var pushers = _none_pushers if sa == _arena_none else _switch_pushers
+		for p in pushers:
 			if is_instance_valid(p):
-				p.angular_velocity = _secondary_arena.rotation_speed
-				p.rotation_center = sec_center
+				p.angular_velocity = sa.rotation_speed
+				p.rotation_center = center
 
 func _process(delta: float) -> void:
 	if combat_timer and not combat_timer.is_stopped():
