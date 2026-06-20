@@ -200,6 +200,10 @@ func _setup_ui() -> void:
 	music.autoplay = true
 	add_child(music)
 
+	var sm = get_node("/root/StyleManager")
+	if sm and sm.has_method("setup_display"):
+		sm.setup_display(self)
+
 func start_exit_sequence() -> void:
 	if lift_state != LiftState.START:
 		return

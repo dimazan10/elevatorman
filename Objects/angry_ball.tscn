@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dat4ixuir5ckq"]
 
 [ext_resource type="Script" uid="uid://3vp0ijjnam0n" path="res://Scripts/AngryBall.gd" id="1_5kt4o"]
+[ext_resource type="PackedScene" path="res://Objects/DangerZone.tscn" id="2_w3j2m"]
 [ext_resource type="Texture2D" uid="uid://chhc7m7lkhcne" path="res://Assets/AngryBall.png" id="1_uhfjk"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_f15s6"]
@@ -26,3 +27,5 @@ texture = ExtResource("1_uhfjk")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=273689266]
 shape = SubResource("CircleShape2D_5kt4o")
+
+[node name="DangerZone" parent="." instance=ExtResource("2_w3j2m")]

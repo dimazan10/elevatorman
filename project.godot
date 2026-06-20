@@ -23,6 +23,7 @@ audio/buses/default_bus_layout="res://default_bus_layout.tres"
 
 GameState="*res://Scripts/GameState.gd"
 PauseManager="*res://Scripts/PauseManager.gd"
+StyleManager="*res://Scripts/StyleManager.gd"
 
 [display]
 
