@@ -369,6 +369,7 @@ func _generate_world() -> void:
 	var arena_none_pivot = arena.position + Vector2(640, 360)
 	var second_angles := angles.duplicate()
 	second_angles.erase(chosen)
+	second_angles.erase((chosen + 180) % 360)
 	var second_chosen = second_angles[randi() % second_angles.size()]
 	var second_rad = deg_to_rad(second_chosen)
 	var second_dir = Vector2(cos(second_rad), sin(second_rad))

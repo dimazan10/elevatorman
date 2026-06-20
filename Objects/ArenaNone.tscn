@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://b1ejp2jwr5uu"]
+[gd_scene format=3 uid="uid://lpa1jpfwwdbd"]
 
 [ext_resource type="Script" path="res://Scripts/ArenaRotating.gd" id="1_mv0v1"]
 [ext_resource type="PackedScene" uid="uid://dkax3cjeu00gs" path="res://Objects/EnemySpawner.tscn" id="12_vms8c"]
