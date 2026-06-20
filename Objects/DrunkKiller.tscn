@@ -38,7 +38,7 @@ radius = 33.0
 radius = 69.28571
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_danger_drunk"]
-radius = 62.7
+radius = 69.3
 
 [node name="DrunkKiller" type="CharacterBody2D" unique_id=676731580 groups=["enemy"]]
 scale = Vector2(1.4, 1.4)
@@ -90,7 +90,7 @@ collision_mask = 1
 monitoring = true
 monitorable = false
 script = ExtResource("6_danger_script")
-radius = 62.7
+radius = 69.3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DangerZone"]
 shape = SubResource("CircleShape2D_danger_drunk")
