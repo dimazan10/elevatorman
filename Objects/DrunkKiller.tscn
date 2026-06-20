@@ -82,3 +82,4 @@ shape = SubResource("CircleShape2D_7es6t")
 shape = SubResource("CircleShape2D_dqplg")
 
 [node name="DangerZone" parent="." instance=ExtResource("6_w3j2m")]
+radius = 42.9

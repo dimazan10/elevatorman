@@ -1,6 +1,11 @@
 extends Area2D
 
+@export var radius: float = 250.0
+
 func _ready() -> void:
+	var cs = $CollisionShape2D
+	if cs and cs.shape is CircleShape2D:
+		cs.shape.radius = radius
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 

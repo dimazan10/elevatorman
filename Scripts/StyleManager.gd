@@ -35,7 +35,7 @@ func _reset_score(_new_hp: int) -> void:
 func _calc_multiplier() -> float:
 	if not _player:
 		return 1.0
-	return 1.0 + float(_player.max_lives - _player.current_lives) * 1.0
+	return float(_player.current_lives)
 
 func setup_display(parent: Node) -> void:
 	if _label and is_instance_valid(_label):

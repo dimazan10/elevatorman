@@ -29,3 +29,4 @@ texture = ExtResource("1_uhfjk")
 shape = SubResource("CircleShape2D_5kt4o")
 
 [node name="DangerZone" parent="." instance=ExtResource("2_w3j2m")]
+radius = 32.5
