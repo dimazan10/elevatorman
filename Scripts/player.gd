@@ -33,6 +33,7 @@ var slow_timer: float = 0.0
 var pull_target: Node2D = null
 var pull_offset: Vector2 = Vector2.ZERO
 var _is_dying := false
+var _invulnerable := false
 
 func _ready() -> void:
 	current_lives = max_lives
@@ -266,8 +267,9 @@ func perform_dash() -> void:
 	velocity = dir * DASH_SPEED
 
 func take_damage(amount: int):
-	if _noclip or _is_dying:
+	if _noclip or _is_dying or _invulnerable:
 		return
+	_invulnerable = true
 	current_lives -= amount
 	health_changed.emit(current_lives)
 	if current_lives <= 0:
@@ -283,6 +285,7 @@ func take_damage(amount: int):
 	Engine.time_scale = 0.0
 	await get_tree().create_timer(0.2, true, false, true).timeout
 	Engine.time_scale = 1.0
+	_invulnerable = false
 	
 	if current_lives <= 0:
 		die()
