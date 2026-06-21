@@ -15,6 +15,7 @@ var _spawn_pos: Vector2 = Vector2.ZERO
 var _zone_name: String = ""
 var _is_waiting: bool = false
 var _melee_cooldown := false
+var _knockback := Vector2.ZERO
 
 @onready var animated_sprite := $AnimatedSprite2D
 @onready var shoot_timer := $ShootTimer
@@ -30,6 +31,7 @@ func _ready() -> void:
 	var players = get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
 		player = players[0]
+		add_collision_exception_with(player)
 
 	shoot_timer.one_shot = true
 	shoot_timer.timeout.connect(_on_shoot_timer_timeout)
@@ -79,11 +81,17 @@ func _check_zone_teleport() -> bool:
 			animated_sprite.play("walk")
 	return false
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if not player:
 		return
 	if _check_zone_teleport():
 		animated_sprite.flip_h = player.global_position.x < global_position.x
+		return
+
+	if _knockback.length_squared() > 0:
+		velocity = _knockback
+		_knockback = _knockback.move_toward(Vector2.ZERO, 2000.0 * delta)
+		move_and_slide()
 		return
 
 	var to_player = player.global_position - global_position
@@ -134,6 +142,7 @@ func _on_melee_zone_body_entered(body: Node2D) -> void:
 			body.apply_pull_toward(target, 0.6, Vector2(0, -40))
 		if body.has_method("take_damage"):
 			body.take_damage(melee_damage)
+		_knockback = (global_position - body.global_position).normalized() * 400.0
 		await get_tree().create_timer(1.5).timeout
 		_melee_cooldown = false
 
