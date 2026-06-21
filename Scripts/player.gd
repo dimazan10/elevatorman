@@ -21,6 +21,8 @@ var last_move_dir := Vector2.DOWN
 var animated_sprite: AnimatedSprite2D
 var audio_player: AudioStreamPlayer2D
 var dash_audio: AudioStreamPlayer2D
+var hit_blow_audio: AudioStreamPlayer2D
+var hit_fierce_audio: AudioStreamPlayer2D
 var footstep_sounds: Array[AudioStream] = []
 var footstep_timer: float = 0.0
 
@@ -80,6 +82,18 @@ func _ready() -> void:
 	dash_audio.stream = load("res://Assets/Sounds/Effects/dash.mp3")
 	dash_audio.bus = &"Effects"
 	add_child(dash_audio)
+
+	hit_blow_audio = AudioStreamPlayer2D.new()
+	hit_blow_audio.name = "HitBlowAudio"
+	hit_blow_audio.stream = load("res://Assets/Sounds/Effects/the-blow-is-muffled-decisive.mp3")
+	hit_blow_audio.bus = &"Effects"
+	add_child(hit_blow_audio)
+
+	hit_fierce_audio = AudioStreamPlayer2D.new()
+	hit_fierce_audio.name = "HitFierceAudio"
+	hit_fierce_audio.stream = load("res://Assets/Sounds/Effects/Звук лютого удару в тіло.mp3")
+	hit_fierce_audio.bus = &"Effects"
+	add_child(hit_fierce_audio)
 
 	for i in range(1, 5):
 		var stream = load("res://Assets/Sounds/FootStepsSound/FootStep_" + str(i) + ".wav")
@@ -291,6 +305,8 @@ func take_damage(amount: int):
 		
 	can_move = false
 	velocity = Vector2.ZERO
+	hit_blow_audio.play()
+	hit_fierce_audio.play()
 	modulate = Color(1, 0.3, 0.3)
 	await get_tree().create_timer(0.15).timeout
 	modulate = Color.WHITE

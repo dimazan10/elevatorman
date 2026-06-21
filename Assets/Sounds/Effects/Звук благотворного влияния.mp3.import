@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cdxjmyw7bagj3"
+path="res://.godot/imported/Звук благотворного влияния.mp3-8c74dfcf7926cee452fe5a8443e1d3a1.mp3str"
+
+[deps]
+
+source_file="res://Assets/Sounds/Effects/Звук благотворного влияния.mp3"
+dest_files=["res://.godot/imported/Звук благотворного влияния.mp3-8c74dfcf7926cee452fe5a8443e1d3a1.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
