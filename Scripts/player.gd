@@ -52,25 +52,17 @@ func _ready() -> void:
 	animated_sprite.name = "AnimatedSprite"
 	add_child(animated_sprite)
 
-	var dirs = ["Walk_Right", "Walk_Left", "Walk_Up", "Walk_Back"]
-	var anim_names = ["walk_right", "walk_left", "walk_up", "walk_back"]
 	var frames = SpriteFrames.new()
-
-	for j in dirs.size():
-		var anim = anim_names[j]
-		frames.add_animation(anim)
-		frames.set_animation_speed(anim, 5)
-		for i in range(1, 6):
-			var tex = load("res://Assets/Sprites_Animation/" + dirs[j] + "/" + dirs[j] + "_" + str(i) + ".png")
-			frames.add_frame(anim, tex)
+	frames.add_animation("idle")
+	frames.set_animation_speed("idle", 5)
+	for i in range(1, 5):
+		var tex = load("res://Assets/Sprites_Player/gg" + (str(i) if i > 0 else "") + ".png")
+		frames.add_frame("idle", tex)
+	frames.set_animation_loop("idle", true)
 
 	animated_sprite.sprite_frames = frames
-	animated_sprite.play("walk_back")
-	animated_sprite.scale = Vector2(0.5, 0.5)
-
-	var mat = CanvasItemMaterial.new()
-	mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
-	animated_sprite.material = mat
+	animated_sprite.play("idle")
+	animated_sprite.scale = Vector2(0.15, 0.15)
 
 	audio_player = AudioStreamPlayer2D.new()
 	audio_player.name = "FootstepAudio"
@@ -218,15 +210,11 @@ func _physics_process(delta: float) -> void:
 			audio_player.stream = footstep_sounds[idx]
 			audio_player.play()
 
-		if direction.x > 0:
-			animated_sprite.play("walk_right")
-		elif direction.x < 0:
-			animated_sprite.play("walk_left")
-		elif direction.y < 0:
-			animated_sprite.play("walk_up")
-		else:
-			animated_sprite.play("walk_back")
 		animated_sprite.speed_scale = 1.0
+		if direction.x > 0:
+			animated_sprite.flip_h = false
+		elif direction.x < 0:
+			animated_sprite.flip_h = true
 	else:
 		velocity = Vector2.ZERO
 		animated_sprite.speed_scale = 0.0
