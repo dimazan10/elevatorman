@@ -18,7 +18,7 @@ size = Vector2(247.5, 20)
 size = Vector2(120, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bucket_pickup"]
-size = Vector2(40, 40)
+size = Vector2(24, 24)
 
 [node name="ArenaNone" type="AnimatableBody2D" unique_id=418966575]
 script = ExtResource("1_mv0v1")
@@ -53,7 +53,7 @@ shape = SubResource("RectangleShape2D_bucket_pickup")
 
 [node name="Sprite" type="Sprite2D" parent="Pivot/BucketPickup"]
 texture = ExtResource("2_k0mef")
-scale = Vector2(0.15, 0.15)
+scale = Vector2(0.08, 0.08)
 
 [node name="Walls" type="Node2D" parent="Pivot" unique_id=1366043826]
 position = Vector2(-640, -360)
