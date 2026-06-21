@@ -5,8 +5,8 @@ var _error_label: Label
 
 func _ready() -> void:
 	var panel = Panel.new()
-	panel.size = Vector2(400, 200)
-	panel.position = Vector2(440, 250)
+	panel.size = Vector2(400, 240)
+	panel.position = Vector2(440, 230)
 	add_child(panel)
 
 	var label = Label.new()
@@ -38,14 +38,22 @@ func _ready() -> void:
 	panel.add_child(btn)
 
 	_error_label = Label.new()
-	_error_label.position = Vector2(30, 130)
+	_error_label.position = Vector2(30, 155)
 	_error_label.size = Vector2(340, 30)
 	_error_label.add_theme_color_override("font_color", Color.RED)
 	panel.add_child(_error_label)
 
+	var bucket_btn = Button.new()
+	bucket_btn.text = "+ Ведро"
+	bucket_btn.position = Vector2(30, 120)
+	bucket_btn.size = Vector2(150, 30)
+	bucket_btn.pressed.connect(_add_bucket)
+	bucket_btn.add_theme_color_override("font_color", Color.GOLD)
+	panel.add_child(bucket_btn)
+
 	var close_btn = Button.new()
 	close_btn.text = "Закрыть"
-	close_btn.position = Vector2(140, 160)
+	close_btn.position = Vector2(140, 195)
 	close_btn.size = Vector2(120, 30)
 	close_btn.pressed.connect(_close)
 	panel.add_child(close_btn)
@@ -77,6 +85,19 @@ func _apply_hp() -> void:
 	player.max_lives = val
 	player.health_changed.emit(val)
 	_input.text = ""
+	_error_label.text = ""
+
+func _add_bucket() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if not player:
+		return
+	if player.has_node("Bucket"):
+		_error_label.text = "Ведро уже есть"
+		return
+	var bucket = preload("res://Objects/Bucket.tscn").instantiate()
+	bucket.name = "Bucket"
+	bucket.position = Vector2(0, -30)
+	player.add_child(bucket)
 	_error_label.text = ""
 
 func _close() -> void:
