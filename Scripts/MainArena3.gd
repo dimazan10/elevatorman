@@ -25,7 +25,6 @@ var _player_zones: Array[String] = []
 var _current_player_zone: String = ""
 var _paused_saved_zone: String = ""
 var _gate_audio: AudioStreamPlayer2D
-var _prev_gate_near: Dictionary = {}
 const _ZONE_PRIORITY := {
 	"main_arena": 1,
 	"corridor": 0,
@@ -67,6 +66,8 @@ func _ready() -> void:
 	anim.play("DownUp")
 	await anim.animation_finished
 	anim.play("Open")
+	if _gate_audio:
+		_gate_audio.play()
 	await anim.animation_finished
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 1)
 	$Hole/FloorElevator/TransportArea/CollisionShape.set_deferred("disabled", false)
@@ -505,11 +506,6 @@ func _update_gate() -> void:
 			if gate_pos.distance_to(t.global_position) < 80.0:
 				is_near = true
 				break
-		var gate_key = gate.name + str(gate.get_instance_id())
-		var was_near = _prev_gate_near.get(gate_key, false)
-		if is_near and not was_near and _gate_audio:
-			_gate_audio.play()
-		_prev_gate_near[gate_key] = is_near
 		gate.collision_layer = 2 if is_near else 3
 		gate.get_node("Visual").modulate = Color(1, 1, 1, 0.3 if is_near else 1.0)
 		if is_near and lift_state != LiftState.COMBAT:
