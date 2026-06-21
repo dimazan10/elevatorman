@@ -198,6 +198,7 @@ func _setup_ui() -> void:
 	music.stream = load("res://Assets/Sounds/music/neon-pulse_93545.mp3")
 	music.bus = &"Music"
 	music.autoplay = true
+	music.finished.connect(music.play)
 	add_child(music)
 
 	var sm = get_node("/root/StyleManager")
