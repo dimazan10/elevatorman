@@ -22,7 +22,7 @@ func _load_settings() -> void:
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), master_volume)
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), music_volume)
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Effects"), effects_volume)
-	current_floor = cfg.get_value("game", "current_floor", 1)
+	current_floor = 1
 	show_fps = cfg.get_value("display", "show_fps", false)
 
 func _save_settings() -> void:
