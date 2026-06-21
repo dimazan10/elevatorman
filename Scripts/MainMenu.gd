@@ -1,7 +1,6 @@
 extends Control
 
 @onready var bg := $TextureRect
-@onready var click := $ClickSound
 var extra := 60.0
 var max_move := 25.0
 
@@ -36,11 +35,9 @@ func _setup_hover(b: TextureButton) -> void:
 	)
 
 func _on_play_pressed() -> void:
-	click.play()
 	await get_tree().create_timer(0.15).timeout
 	get_tree().change_scene_to_file("res://Scenes/Game/start.tscn")
 
 func _on_settings_pressed() -> void:
-	click.play()
 	await get_tree().create_timer(0.15).timeout
 	get_tree().change_scene_to_file("res://Scenes/Settings/Settings.tscn")

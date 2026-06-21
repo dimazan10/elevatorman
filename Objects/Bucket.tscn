@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" uid="uid://c0s0tumy47yqj" path="res://Assets/Sprites_Animation/Shield/Bucket.png" id="1_bucket"]
+[ext_resource type="Script" path="res://Scripts/Bucket.gd" id="2_bucket"]
+
+[node name="Bucket" type="Sprite2D"]
+script = ExtResource("2_bucket")
+texture = ExtResource("1_bucket")

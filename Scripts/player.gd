@@ -99,6 +99,8 @@ func _ready() -> void:
 		var stream = load("res://Assets/Sounds/FootStepsSound/FootStep_" + str(i) + ".wav")
 		if stream:
 			footstep_sounds.append(stream)
+	
+	_setup_bucket()
 
 var _shift_held := false
 var _ghost_timer := 0.0
@@ -292,6 +294,10 @@ func perform_dash() -> void:
 func take_damage(amount: int):
 	if _noclip or _is_dying or _invulnerable:
 		return
+	
+	if _try_bucket_hit():
+		return
+	
 	_invulnerable = true
 	current_lives -= amount
 	health_changed.emit(current_lives)
@@ -351,3 +357,20 @@ func apply_pull_toward(target: Node2D, duration: float, offset: Vector2 = Vector
 	pull_offset = Vector2.ZERO
 	if is_instance_valid(target):
 		remove_collision_exception_with(target)
+
+const BUCKET_SCENE = preload("res://Objects/Bucket.tscn")
+var _bucket: Node = null
+
+func _setup_bucket() -> void:
+	_bucket = BUCKET_SCENE.instantiate()
+	_bucket.name = "Bucket"
+	_bucket.position = Vector2(0, -33)
+	_bucket.scale = Vector2(0.05, 0.05)
+	_bucket.z_index = z_index
+	add_child(_bucket)
+
+func _try_bucket_hit() -> bool:
+	if not _bucket or not _bucket.active or _bucket.charges <= 0:
+		return false
+	_bucket.hit()
+	return true

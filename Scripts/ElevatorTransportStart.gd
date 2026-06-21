@@ -27,6 +27,8 @@ func _hide_player_visual() -> void:
 			continue
 		if child is AnimatedSprite2D:
 			child.hide()
+		if child is Sprite2D:
+			child.hide()
 		if child is CollisionShape2D:
 			child.set_deferred("disabled", true)
 		if child is AudioStreamPlayer2D:
