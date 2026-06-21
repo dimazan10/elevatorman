@@ -62,7 +62,7 @@ func _ready() -> void:
 
 	animated_sprite.sprite_frames = frames
 	animated_sprite.play("idle")
-	animated_sprite.scale = Vector2(0.3, 0.3)
+	animated_sprite.scale = Vector2(1.0, 1.0)
 
 	audio_player = AudioStreamPlayer2D.new()
 	audio_player.name = "FootstepAudio"
