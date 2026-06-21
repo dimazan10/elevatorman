@@ -68,6 +68,14 @@ script = ExtResource("6_switch")
 position = Vector2(19, 21)
 shape = SubResource("RectangleShape2D_im362")
 
+[node name="TriggerZone" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TriggerZone"]
+position = Vector2(19, 21)
+shape = SubResource("RectangleShape2D_im362")
+
 [node name="Switch" type="AnimatedSprite2D" parent="." unique_id=125194493]
 texture_filter = 1
 position = Vector2(19, 2)

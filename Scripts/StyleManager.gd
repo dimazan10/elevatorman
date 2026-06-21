@@ -46,7 +46,9 @@ func _reset_score(_new_hp: int) -> void:
 func _calc_multiplier() -> float:
 	if not _player:
 		return 1.0
-	return float(_player.current_lives)
+	var lives = float(_player.current_lives)
+	var max_lives = float(_player.max_lives)
+	return 1.0 + (lives - 1.0) / (max_lives - 1.0) * 0.5
 
 func setup_display(parent: Node) -> void:
 	if _label and is_instance_valid(_label):

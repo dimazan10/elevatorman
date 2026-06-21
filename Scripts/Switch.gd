@@ -13,12 +13,17 @@ var _change_dir_timer := 0.0
 func _ready() -> void:
 	add_to_group("switch")
 	call_deferred("_disable_player_collision")
+	$TriggerZone.body_entered.connect(_on_body_entered)
 	$Lag.hide()
 
 func _disable_player_collision() -> void:
 	var player := get_tree().get_first_node_in_group("player")
 	if player:
 		add_collision_exception_with(player)
+
+func _on_body_entered(body: Node2D) -> void:
+	if body.is_in_group("player") and not _activated:
+		_activate()
 
 func _on_wake_up() -> void:
 	_chasing = true
@@ -53,10 +58,6 @@ func _physics_process(delta: float) -> void:
 	if not _chasing:
 		velocity = Vector2.ZERO
 		move_and_slide()
-		return
-
-	if dist < 20.0:
-		_activate()
 		return
 
 	_change_dir_timer += delta
