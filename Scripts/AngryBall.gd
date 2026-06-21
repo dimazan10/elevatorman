@@ -4,6 +4,7 @@ extends RigidBody2D
 @export var ROTATION_SPEED: float = 12.0
 
 var _direction: Vector2
+var _bounce_audio: AudioStreamPlayer2D
 
 func _ready():
 	if linear_velocity == Vector2.ZERO:
@@ -19,6 +20,11 @@ func _ready():
 		else:
 			_direction = Vector2.RIGHT
 			linear_velocity = _direction * CONSTANT_SPEED
+	_bounce_audio = AudioStreamPlayer2D.new()
+	_bounce_audio.name = "BounceAudio"
+	_bounce_audio.stream = preload("res://Assets/Sounds/Effects/sound-hitting-metal.mp3")
+	add_child(_bounce_audio)
+
 	body_entered.connect(_on_body_entered)
 
 func _integrate_forces(_state: PhysicsDirectBodyState2D):
@@ -30,6 +36,8 @@ func _integrate_forces(_state: PhysicsDirectBodyState2D):
 	angular_velocity = ROTATION_SPEED
 
 func _on_body_entered(body: Node) -> void:
+	if _bounce_audio:
+		_bounce_audio.play()
 	if body.is_in_group("player"):
 		if body.has_method("take_damage"):
 			body.take_damage(1)
