@@ -485,7 +485,7 @@ func _update_gate() -> void:
 	for gate in gates:
 		if lift_state == LiftState.COMBAT:
 			gate.collision_layer = 3
-			gate.get_node("Visual").modulate = Color(1, 1, 1, 1.0)
+			gate.get_node("Visual").modulate = Color(1, 0.15, 0.15)
 			continue
 		var gate_pos = gate.global_position
 		var is_near = false
