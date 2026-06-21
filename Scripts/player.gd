@@ -72,11 +72,13 @@ func _ready() -> void:
 
 	audio_player = AudioStreamPlayer2D.new()
 	audio_player.name = "FootstepAudio"
+	audio_player.bus = &"Effects"
 	add_child(audio_player)
 
 	dash_audio = AudioStreamPlayer2D.new()
 	dash_audio.name = "DashAudio"
 	dash_audio.stream = load("res://Assets/Sounds/Effects/dash.mp3")
+	dash_audio.bus = &"Effects"
 	add_child(dash_audio)
 
 	for i in range(1, 5):

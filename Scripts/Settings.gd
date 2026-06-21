@@ -8,6 +8,8 @@ var return_to_game := false
 @onready var master_label := $VBoxContainer/MasterPct as Label
 @onready var music_slider := $VBoxContainer/MusicHSlider as HSlider
 @onready var music_label := $VBoxContainer/MusicPct as Label
+@onready var effects_slider := $VBoxContainer/EffectsHSlider as HSlider
+@onready var effects_label := $VBoxContainer/EffectsPct as Label
 
 @onready var fps_checkbox := $VBoxContainer/FPSCheckbox as CheckBox
 
@@ -16,6 +18,8 @@ func _ready() -> void:
 	master_label.text = _db_to_pct(GameState.master_volume)
 	music_slider.value = GameState.music_volume
 	music_label.text = _db_to_pct(GameState.music_volume)
+	effects_slider.value = GameState.effects_volume
+	effects_label.text = _db_to_pct(GameState.effects_volume)
 	fps_checkbox.button_pressed = GameState.show_fps
 
 func _on_master_slider_value_changed(value: float) -> void:
@@ -25,6 +29,10 @@ func _on_master_slider_value_changed(value: float) -> void:
 func _on_music_slider_value_changed(value: float) -> void:
 	GameState.set_music_volume(value)
 	music_label.text = _db_to_pct(value)
+
+func _on_effects_slider_value_changed(value: float) -> void:
+	GameState.set_effects_volume(value)
+	effects_label.text = _db_to_pct(value)
 
 func _on_fps_checkbox_toggled(enabled: bool) -> void:
 	GameState.set_show_fps(enabled)

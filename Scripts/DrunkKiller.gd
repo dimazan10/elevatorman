@@ -227,6 +227,7 @@ func _ready_add_shot_audio() -> void:
 		var ap = AudioStreamPlayer2D.new()
 		ap.name = "ShotAudio" + str(i)
 		ap.stream = preload("res://Assets/Sounds/Effects/KillerShot.mp3")
+		ap.bus = &"Effects"
 		add_child(ap)
 		_shot_audio_pool.append(ap)
 
