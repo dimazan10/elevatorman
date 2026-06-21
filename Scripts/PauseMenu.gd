@@ -20,8 +20,13 @@ func _ready() -> void:
 
 	var vbox := VBoxContainer.new()
 	vbox.name = "VBox"
-	vbox.anchor_left = 0.0
-	vbox.anchor_right = 1.0
+	vbox.anchors_preset = Control.PRESET_CENTER
+	vbox.offset_left = -100.0
+	vbox.offset_top = -80.0
+	vbox.offset_right = 100.0
+	vbox.offset_bottom = 80.0
+	vbox.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	vbox.grow_vertical = Control.GROW_DIRECTION_BOTH
 	vbox.add_theme_constant_override("separation", 12)
 	add_child(vbox)
 
