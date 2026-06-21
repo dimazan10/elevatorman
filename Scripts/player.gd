@@ -279,12 +279,13 @@ func take_damage(amount: int):
 		
 	if my_camera and my_camera.has_method("apply_shake"):
 		my_camera.apply_shake(20.0)
-	else:
-		print("ВНИМАНИЕ: Скрипт не нашел %PlayerCamera или у неё нет функции apply_shake!")
 		
-	Engine.time_scale = 0.0
-	await get_tree().create_timer(0.2, true, false, true).timeout
-	Engine.time_scale = 1.0
+	can_move = false
+	velocity = Vector2.ZERO
+	modulate = Color(1, 0.3, 0.3)
+	await get_tree().create_timer(0.15).timeout
+	modulate = Color.WHITE
+	can_move = true
 	_invulnerable = false
 	
 	if current_lives <= 0:
