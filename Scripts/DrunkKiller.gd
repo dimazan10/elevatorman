@@ -11,6 +11,8 @@ const BULLET_SCENE = preload("res://Objects/Bullet.tscn")
 # Настройки расталкивания врагов между собой
 @export var separation_force: float = 80.0 # Сила расталкивания (чем выше, тем жестче держат дистанцию)
 
+var _shot_audio: AudioStreamPlayer2D
+
 # Ссылки на узлы
 @onready var enemy_sprite := $AnimatedSprite2D
 @onready var weapon_anchor := $WeaponAnchor
@@ -48,6 +50,11 @@ func _ready() -> void:
 	shot_delay_timer.timeout.connect(_on_shot_delay_timer_timeout)
 	
 	melee_zone.body_entered.connect(_on_melee_zone_body_entered)
+
+	_shot_audio = AudioStreamPlayer2D.new()
+	_shot_audio.name = "ShotAudio"
+	_shot_audio.stream = preload("res://Assets/Sounds/Effects/KillerShot.mp3")
+	add_child(_shot_audio)
 	
 	if enemy_sprite and enemy_sprite.sprite_frames.has_animation("walk"):
 		enemy_sprite.play("walk")
@@ -187,6 +194,8 @@ func fire_single_shot() -> void:
 	
 	bullet.direction = final_direction
 	get_tree().current_scene.add_child(bullet)
+	if _shot_audio:
+		_shot_audio.play()
 	
 	bullets_in_burst -= 1
 	
