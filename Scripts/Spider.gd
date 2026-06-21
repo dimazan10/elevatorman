@@ -25,6 +25,7 @@ var _run_audio_playing := false
 
 var spawn_web_audio: AudioStreamPlayer2D
 var run_audio: AudioStreamPlayer2D
+var bite_audio: AudioStreamPlayer2D
 
 func _ready() -> void:
 	add_to_group("enemy")
@@ -45,7 +46,13 @@ func _ready() -> void:
 		run_audio.name = "RunAudio"
 		run_audio.stream = preload("res://Assets/Sounds/Effects/spider-run-stop-2.mp3")
 		run_audio.bus = &"Effects"
+		run_audio.finished.connect(run_audio.play)
 		add_child(run_audio)
+		bite_audio = AudioStreamPlayer2D.new()
+		bite_audio.name = "BiteAudio"
+		bite_audio.stream = preload("res://Assets/Sounds/Effects/insect-chew-bite_mkkbnnvd.mp3")
+		bite_audio.bus = &"Effects"
+		add_child(bite_audio)
 
 	shoot_timer.one_shot = true
 	shoot_timer.timeout.connect(_on_shoot_timer_timeout)
@@ -173,6 +180,8 @@ func _on_melee_zone_body_entered(body: Node2D) -> void:
 			body.apply_pull_toward(target, 0.6, Vector2(0, -40))
 		if body.has_method("take_damage"):
 			body.take_damage(melee_damage)
+		if bite_audio:
+			bite_audio.play()
 		_knockback = (global_position - body.global_position).normalized() * 400.0
 		await get_tree().create_timer(1.5).timeout
 		_melee_cooldown = false
