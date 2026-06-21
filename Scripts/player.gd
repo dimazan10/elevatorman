@@ -56,9 +56,15 @@ func _ready() -> void:
 	frames.add_animation("idle")
 	frames.set_animation_speed("idle", 5)
 	for i in range(1, 5):
-		var tex = load("res://Assets/Sprites_Player/gg" + (str(i) if i > 0 else "") + ".png")
+		var tex = load("res://Assets/Sprites_Player/gg" + str(i) + ".png")
 		frames.add_frame("idle", tex)
 	frames.set_animation_loop("idle", true)
+	frames.add_animation("walk_up")
+	frames.set_animation_speed("walk_up", 5)
+	for i in range(1, 5):
+		var tex = load("res://Assets/Sprites_Player/ggspina" + str(i) + ".png")
+		frames.add_frame("walk_up", tex)
+	frames.set_animation_loop("walk_up", true)
 
 	animated_sprite.sprite_frames = frames
 	animated_sprite.play("idle")
@@ -211,12 +217,17 @@ func _physics_process(delta: float) -> void:
 			audio_player.play()
 
 		animated_sprite.speed_scale = 1.0
-		if direction.x > 0:
-			animated_sprite.flip_h = false
-		elif direction.x < 0:
-			animated_sprite.flip_h = true
+		if direction.y < 0:
+			animated_sprite.play("walk_up")
+		else:
+			animated_sprite.play("idle")
+			if direction.x > 0:
+				animated_sprite.flip_h = false
+			elif direction.x < 0:
+				animated_sprite.flip_h = true
 	else:
 		velocity = Vector2.ZERO
+		animated_sprite.play("idle")
 		animated_sprite.speed_scale = 0.0
 		footstep_timer = 0.0
 
