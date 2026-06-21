@@ -22,7 +22,7 @@ func _ready():
 			linear_velocity = _direction * CONSTANT_SPEED
 	_bounce_audio = AudioStreamPlayer2D.new()
 	_bounce_audio.name = "BounceAudio"
-	_bounce_audio.stream = preload("res://Assets/Sounds/Effects/sound-hitting-metal.mp3")
+	_bounce_audio.stream = preload("res://Assets/Sounds/Effects/AngryBallHit.mp3")
 	_bounce_audio.bus = &"Effects"
 	_bounce_audio.volume_db = -8.0
 	add_child(_bounce_audio)
