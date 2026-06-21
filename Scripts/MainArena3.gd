@@ -83,18 +83,14 @@ func _setup_arena_rotation() -> void:
 	_arena_rotator.position = Vector2(640, 360)
 	add_child(_arena_rotator)
 
-	var pivot = Node2D.new()
-	pivot.name = "Pivot"
-	_arena_rotator.add_child(pivot)
-
 	var floor = $Floor
 	var walls = $Walls
 	remove_child(floor)
 	remove_child(walls)
 	floor.position -= Vector2(640, 360)
 	walls.position -= Vector2(640, 360)
-	pivot.add_child(floor)
-	pivot.add_child(walls)
+	_arena_rotator.add_child(floor)
+	_arena_rotator.add_child(walls)
 
 	for wall in walls.get_children():
 		var p = _add_pusher_to_wall(wall)
@@ -144,7 +140,7 @@ func _on_zone_exited(body: Node2D, zone_name: String) -> void:
 		player_zone_changed.emit(_current_player_zone)
 
 func _setup_zone_triggers() -> void:
-	var main_zone = _arena_rotator.get_node("Pivot/Floor/ZoneTrigger") as Area2D
+	var main_zone = _arena_rotator.get_node("Floor/ZoneTrigger") as Area2D
 	if main_zone:
 		main_zone.body_entered.connect(_on_zone_entered.bind("main_arena"))
 		main_zone.body_exited.connect(_on_zone_exited.bind("main_arena"))
@@ -498,14 +494,12 @@ func _add_spawn_points(level: int) -> void:
 	var extra = level * 2
 	var hex_radius = 540.0
 	var groups := ["spawn_point_main", "spawn_point_none", "spawn_point_switch"]
-	var arenas := [_arena_rotator, _arena_none, _arena_switch]
+	var arenas := [null, _arena_none, _arena_switch]
 	for gi in groups.size():
 		var group = groups[gi]
 		var arena = arenas[gi]
-		if not arena or not arena.get_node_or_null("Pivot"):
-			continue
-		var parent = arena if arena != _arena_rotator else self
-		var center = arena.get_node("Pivot").global_position
+		var parent = arena if arena else self
+		var center = (parent.get_node_or_null("Pivot") if arena else _arena_rotator.get_node("Pivot")).global_position
 		var existing = get_tree().get_nodes_in_group(group)
 		if existing.size() + extra > 30:
 			continue
@@ -526,7 +520,7 @@ func _set_shaft_collision(enabled: bool) -> void:
 var _rotation_speed := 0.5
 
 func _update_gate() -> void:
-	var gates := [_arena_rotator.get_node("Pivot/Walls/W4/Gate") as StaticBody2D]
+	var gates := [_arena_rotator.get_node("Walls/W4/Gate") as StaticBody2D]
 	for sa in _secondary_arenas:
 		var g = sa.get_node_or_null("Pivot/Walls/W4/Gate") as StaticBody2D
 		if g:
