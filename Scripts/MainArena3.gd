@@ -24,6 +24,8 @@ var _main_pushers: Array[Node] = []
 var _player_zones: Array[String] = []
 var _current_player_zone: String = ""
 var _paused_saved_zone: String = ""
+var _gate_audio: AudioStreamPlayer2D
+var _prev_gate_near: Dictionary = {}
 const _ZONE_PRIORITY := {
 	"main_arena": 1,
 	"corridor": 0,
@@ -200,6 +202,12 @@ func _setup_ui() -> void:
 	music.autoplay = true
 	music.finished.connect(music.play)
 	add_child(music)
+
+	_gate_audio = AudioStreamPlayer2D.new()
+	_gate_audio.name = "GateAudio"
+	_gate_audio.stream = load("res://Assets/Sounds/Effects/elevator-ringing.mp3")
+	_gate_audio.bus = &"Effects"
+	add_child(_gate_audio)
 
 	var sm = get_node("/root/StyleManager")
 	if sm and sm.has_method("setup_display"):
@@ -497,6 +505,11 @@ func _update_gate() -> void:
 			if gate_pos.distance_to(t.global_position) < 80.0:
 				is_near = true
 				break
+		var gate_key = gate.name + str(gate.get_instance_id())
+		var was_near = _prev_gate_near.get(gate_key, false)
+		if is_near and not was_near and _gate_audio:
+			_gate_audio.play()
+		_prev_gate_near[gate_key] = is_near
 		gate.collision_layer = 2 if is_near else 3
 		gate.get_node("Visual").modulate = Color(1, 1, 1, 0.3 if is_near else 1.0)
 		if is_near and lift_state != LiftState.COMBAT:
