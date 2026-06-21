@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://lpa1jpfwwdbd"]
 
 [ext_resource type="Script" path="res://Scripts/ArenaRotating.gd" id="1_mv0v1"]
+[ext_resource type="Texture2D" uid="uid://c0s0tumy47yqj" path="res://Assets/Sprites_Animation/Shield/Bucket.png" id="2_k0mef"]
+[ext_resource type="Script" path="res://Scripts/BucketPickup.gd" id="3_tp1qj"]
 [ext_resource type="PackedScene" uid="uid://dkax3cjeu00gs" path="res://Objects/EnemySpawner.tscn" id="12_vms8c"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
@@ -14,6 +16,9 @@ size = Vector2(247.5, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gate"]
 size = Vector2(120, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bucket_pickup"]
+size = Vector2(40, 40)
 
 [node name="ArenaNone" type="AnimatableBody2D" unique_id=418966575]
 script = ExtResource("1_mv0v1")
@@ -33,6 +38,21 @@ monitoring = true
 monitorable = false
 
 [node name="CollisionPolygon" type="CollisionPolygon2D" parent="Pivot/Floor/ZoneTrigger"]
+
+[node name="BucketPickup" type="Area2D" parent="Pivot"]
+position = Vector2(0, 0)
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+monitorable = false
+script = ExtResource("3_tp1qj")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/BucketPickup"]
+shape = SubResource("RectangleShape2D_bucket_pickup")
+
+[node name="Sprite" type="Sprite2D" parent="Pivot/BucketPickup"]
+texture = ExtResource("2_k0mef")
+scale = Vector2(0.15, 0.15)
 polygon = PackedVector2Array(615, 0, 307.5, 532.5, -307.5, 532.5, -615, 0, -307.5, -532.5, 307.5, -532.5)
 
 [node name="Walls" type="Node2D" parent="Pivot" unique_id=1366043826]

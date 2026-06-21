@@ -39,9 +39,9 @@ func remove_danger() -> void:
 	_active_dangers = maxi(0, _active_dangers - 1)
 
 func _reset_score(_new_hp: int) -> void:
-	_score = 0.0
+	_score *= 0.5
 	if _label:
-		_label.text = "СТИЛЬ: 0"
+		_label.text = "СТИЛЬ: " + str(int(_score))
 
 func _calc_multiplier() -> float:
 	if not _player:
