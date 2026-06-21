@@ -38,6 +38,7 @@ monitoring = true
 monitorable = false
 
 [node name="CollisionPolygon" type="CollisionPolygon2D" parent="Pivot/Floor/ZoneTrigger"]
+polygon = PackedVector2Array(615, 0, 307.5, 532.5, -307.5, 532.5, -615, 0, -307.5, -532.5, 307.5, -532.5)
 
 [node name="BucketPickup" type="Area2D" parent="Pivot"]
 position = Vector2(0, 0)
@@ -53,7 +54,6 @@ shape = SubResource("RectangleShape2D_bucket_pickup")
 [node name="Sprite" type="Sprite2D" parent="Pivot/BucketPickup"]
 texture = ExtResource("2_k0mef")
 scale = Vector2(0.15, 0.15)
-polygon = PackedVector2Array(615, 0, 307.5, 532.5, -307.5, 532.5, -615, 0, -307.5, -532.5, 307.5, -532.5)
 
 [node name="Walls" type="Node2D" parent="Pivot" unique_id=1366043826]
 position = Vector2(-640, -360)
