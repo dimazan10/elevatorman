@@ -6,6 +6,7 @@ var _paused := false
 var _pause_env: Environment
 var _world_env: WorldEnvironment
 var _pause_layer: CanvasLayer
+var _cheat_menu: Control
 
 
 func _ready() -> void:
@@ -30,6 +31,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		if not get_tree().get_nodes_in_group("pausable").is_empty():
 			toggle_pause()
 			get_viewport().set_input_as_handled()
+	if event is InputEventKey and event.keycode == KEY_F2 and event.pressed and not event.echo:
+		if _cheat_menu and is_instance_valid(_cheat_menu):
+			_cheat_menu.queue_free()
+			_cheat_menu = null
+			if not _paused:
+				_pause_layer.visible = false
+		else:
+			_cheat_menu = preload("res://Scripts/CheatMenu.gd").new()
+			_pause_layer.add_child(_cheat_menu)
+			_pause_layer.visible = true
+		get_viewport().set_input_as_handled()
 
 
 func toggle_pause() -> void:
@@ -81,6 +93,7 @@ func _show_pause_menu() -> void:
 
 func _clear_pause_ui() -> void:
 	_pause_layer.visible = false
+	_cheat_menu = null
 	for c in _pause_layer.get_children():
 		c.queue_free()
 
