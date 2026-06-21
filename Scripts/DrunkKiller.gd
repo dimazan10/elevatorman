@@ -48,6 +48,7 @@ func _ready() -> void:
 	shot_delay_timer.timeout.connect(_on_shot_delay_timer_timeout)
 	
 	melee_zone.body_entered.connect(_on_melee_zone_body_entered)
+	_ready_add_shot_audio()
 	
 	if enemy_sprite and enemy_sprite.sprite_frames.has_animation("walk"):
 		enemy_sprite.play("walk")
@@ -218,11 +219,20 @@ func _on_melee_zone_body_entered(body: Node2D) -> void:
 			burst_timer.stop() 
 			set_random_burst_pause() 
 
+var _shot_audio_pool: Array[AudioStreamPlayer2D] = []
+var _shot_audio_idx := 0
+
+func _ready_add_shot_audio() -> void:
+	for i in 4:
+		var ap = AudioStreamPlayer2D.new()
+		ap.name = "ShotAudio" + str(i)
+		ap.stream = preload("res://Assets/Sounds/Effects/KillerShot.mp3")
+		add_child(ap)
+		_shot_audio_pool.append(ap)
+
 func _play_shot_sound() -> void:
-	var ap = AudioStreamPlayer2D.new()
-	ap.stream = preload("res://Assets/Sounds/Effects/KillerShot.mp3")
-	ap.finished.connect(ap.queue_free)
-	add_child(ap)
+	var ap = _shot_audio_pool[_shot_audio_idx]
+	_shot_audio_idx = (_shot_audio_idx + 1) % _shot_audio_pool.size()
 	ap.play()
 
 func take_damage(amount: int) -> void:
