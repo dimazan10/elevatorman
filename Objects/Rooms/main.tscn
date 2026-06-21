@@ -1,17 +1,17 @@
 [gd_scene format=3 uid="uid://cqa47d5gds1ea"]
 
-[ext_resource type="Script" path="res://Scripts/MainArena3.gd" id="1_m80wk"]
-[ext_resource type="PackedScene" uid="uid://mt70rvdsdeyx" path="res://Objects/player.tscn" id="2_ehhbk"]
-[ext_resource type="PackedScene" uid="uid://doss117q2j5gm" path="res://Objects/UI_HP.tscn" id="3_ju4ev"]
-[ext_resource type="PackedScene" uid="uid://cury7lw1ntlld" path="res://Objects/DashUI.tscn" id="4_5bxvv"]
-[ext_resource type="Texture2D" uid="uid://dxubss2onvayf" path="res://Assets/SpritesElevator/Hole.png" id="5_jjvm4"]
-[ext_resource type="Texture2D" uid="uid://cdirbcheywinl" path="res://Assets/SpritesElevator/Lift.png" id="6_00mwp"]
-[ext_resource type="Texture2D" uid="uid://csha62md44m3r" path="res://Assets/SpritesElevator/Lift2.png" id="7_k45bu"]
-[ext_resource type="Texture2D" uid="uid://74cir4cs1tst" path="res://Assets/SpritesElevator/roof3.png" id="8_5ho1q"]
-[ext_resource type="Script" uid="uid://blcyhtqt11qhv" path="res://Scripts/ElevatorExit.gd" id="9_24cto"]
-[ext_resource type="Script" uid="uid://81f6ijw81d6p" path="res://Scripts/ElevatorTransport.gd" id="10_jilbn"]
-[ext_resource type="PackedScene" uid="uid://dkax3cjeu00gs" path="res://Objects/EnemySpawner.tscn" id="12_tkpsk"]
-[ext_resource type="PackedScene" uid="uid://cvl0thapds4n1" path="res://Objects/SwitchSpawner.tscn" id="13_8d71f"]
+[ext_resource type="Script" uid="uid://dyap3dpjeta56" path="res://Scripts/MainArena3.gd" id="1_dpwxk"]
+[ext_resource type="PackedScene" uid="uid://mt70rvdsdeyx" path="res://Objects/Summons/player.tscn" id="2_dlk0h"]
+[ext_resource type="PackedScene" uid="uid://doss117q2j5gm" path="res://Objects/UI_HP.tscn" id="3_76u1c"]
+[ext_resource type="PackedScene" uid="uid://cury7lw1ntlld" path="res://Objects/DashUI.tscn" id="4_vigag"]
+[ext_resource type="Texture2D" uid="uid://dxubss2onvayf" path="res://Assets/SpritesElevator/Hole.png" id="5_apsb7"]
+[ext_resource type="Texture2D" uid="uid://cdirbcheywinl" path="res://Assets/SpritesElevator/Lift.png" id="6_rdy5f"]
+[ext_resource type="Texture2D" uid="uid://csha62md44m3r" path="res://Assets/SpritesElevator/Lift2.png" id="7_8dppo"]
+[ext_resource type="Texture2D" uid="uid://74cir4cs1tst" path="res://Assets/SpritesElevator/roof3.png" id="8_fhoav"]
+[ext_resource type="Script" uid="uid://blcyhtqt11qhv" path="res://Scripts/ElevatorExit.gd" id="9_hch4p"]
+[ext_resource type="Script" uid="uid://81f6ijw81d6p" path="res://Scripts/ElevatorTransport.gd" id="10_tprsa"]
+[ext_resource type="PackedScene" uid="uid://dkax3cjeu00gs" path="res://Objects/EnemySpawner.tscn" id="11_wr286"]
+[ext_resource type="PackedScene" uid="uid://cvl0thapds4n1" path="res://Objects/SwitchSpawner.tscn" id="12_uf2av"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
 size = Vector2(615, 20)
@@ -459,11 +459,8 @@ size = Vector2(27.41677, 282.5818)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lemb1"]
 size = Vector2(26.588142, 226.61873)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_door_trigger"]
-size = Vector2(120, 80)
-
 [node name="MainArena3" type="Node2D" unique_id=418966575]
-script = ExtResource("1_m80wk")
+script = ExtResource("1_dpwxk")
 
 [node name="Floor" type="Polygon2D" parent="." unique_id=1231110711]
 z_index = -1
@@ -471,14 +468,11 @@ position = Vector2(640, 360)
 color = Color(0.12, 0.15, 0.19, 1)
 polygon = PackedVector2Array(615, 0, 307.5, 532.5, -307.5, 532.5, -615, 0, -307.5, -532.5, 307.5, -532.5)
 
-[node name="ZoneTrigger" type="Area2D" parent="Floor"]
-priority = 1
-collision_layer = 1
-collision_mask = 1
-monitoring = true
+[node name="ZoneTrigger" type="Area2D" parent="Floor" unique_id=2139177161]
 monitorable = false
+priority = 1
 
-[node name="CollisionPolygon" type="CollisionPolygon2D" parent="Floor/ZoneTrigger"]
+[node name="CollisionPolygon" type="CollisionPolygon2D" parent="Floor/ZoneTrigger" unique_id=1454499540]
 polygon = PackedVector2Array(615, 0, 307.5, 532.5, -307.5, 532.5, -615, 0, -307.5, -532.5, 307.5, -532.5)
 
 [node name="Walls" type="Node2D" parent="." unique_id=1664800530]
@@ -564,19 +558,19 @@ shape = SubResource("RectangleShape2D_wall")
 color = Color(0.4, 0.4, 0.5, 1)
 polygon = PackedVector2Array(-307.5, -10, 307.5, -10, 307.5, 10, -307.5, 10)
 
-[node name="Player" parent="." unique_id=1739531344 instance=ExtResource("2_ehhbk")]
+[node name="Player" parent="." unique_id=1739531344 instance=ExtResource("2_dlk0h")]
 process_mode = 3
 z_index = 2
 position = Vector2(640, 360)
 
-[node name="HealthUI" parent="." unique_id=308322847 instance=ExtResource("3_ju4ev")]
+[node name="HealthUI" parent="." unique_id=308322847 instance=ExtResource("3_76u1c")]
 
-[node name="DashUI" parent="." unique_id=383817108 instance=ExtResource("4_5bxvv")]
+[node name="DashUI" parent="." unique_id=383817108 instance=ExtResource("4_vigag")]
 
 [node name="Hole" type="Sprite2D" parent="." unique_id=374001480]
 position = Vector2(640.00006, 360)
 scale = Vector2(1.7777777, 1.0149866)
-texture = ExtResource("5_jjvm4")
+texture = ExtResource("5_apsb7")
 
 [node name="FloorElevator" type="Sprite2D" parent="Hole" unique_id=1818614393]
 z_as_relative = false
@@ -592,14 +586,14 @@ light_mask = 2
 visibility_layer = 2
 position = Vector2(0, 2.218531)
 scale = Vector2(1, 0.9999999)
-texture = ExtResource("6_00mwp")
+texture = ExtResource("6_rdy5f")
 
 [node name="Door1" type="Sprite2D" parent="Hole/FloorElevator" unique_id=1197145430]
 light_mask = 2
 visibility_layer = 2
 position = Vector2(0, 2.0723612)
 scale = Vector2(1, 1.0383357)
-texture = ExtResource("7_k45bu")
+texture = ExtResource("7_8dppo")
 
 [node name="RoofElevator" type="Sprite2D" parent="Hole/FloorElevator" unique_id=1893031447]
 light_mask = 4
@@ -614,12 +608,12 @@ light_mask = 4
 visibility_layer = 4
 position = Vector2(-0.8671422, -0.29339597)
 scale = Vector2(0.99533916, 0.99853295)
-texture = ExtResource("8_5ho1q")
+texture = ExtResource("8_fhoav")
 
 [node name="ExitArea" type="Area2D" parent="Hole/FloorElevator" unique_id=148055356]
 z_index = 2
 position = Vector2(0, 174.49646)
-script = ExtResource("9_24cto")
+script = ExtResource("9_hch4p")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/ExitArea" unique_id=954473980]
 position = Vector2(0, -93.295044)
@@ -628,7 +622,7 @@ shape = SubResource("CircleShape2D_exit")
 [node name="TransportArea" type="Area2D" parent="Hole/FloorElevator" unique_id=935066742]
 z_index = 2
 position = Vector2(-3.0517578e-05, -20.732452)
-script = ExtResource("10_jilbn")
+script = ExtResource("10_tprsa")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/TransportArea" unique_id=1678318920]
 z_index = 1
@@ -660,45 +654,44 @@ scale = Vector2(3.913425, 1.1305274)
 position = Vector2(-2.6588135, 47.59619)
 shape = SubResource("RectangleShape2D_lemb1")
 
-[node name="EnemySpawner" parent="." unique_id=2077439795 instance=ExtResource("12_tkpsk")]
+[node name="EnemySpawner" parent="." unique_id=2077439795 instance=ExtResource("11_wr286")]
 
-[node name="ArenaSpawner" parent="." unique_id=1212330471 instance=ExtResource("12_tkpsk")]
+[node name="ArenaSpawner" parent="." unique_id=1212330471 instance=ExtResource("11_wr286")]
 
 [node name="SpawnPoint1" type="Marker2D" parent="." unique_id=2124699469 groups=["spawn_point_main"]]
-position = Vector2(641, 87)
+position = Vector2(642, -49)
 
 [node name="SpawnPoint2" type="Marker2D" parent="." unique_id=1989789208 groups=["spawn_point_main"]]
-position = Vector2(400, 520)
+position = Vector2(280, 600)
 
 [node name="SpawnPoint3" type="Marker2D" parent="." unique_id=909885700 groups=["spawn_point_main"]]
-position = Vector2(880, 520)
+position = Vector2(1000, 600)
 
 [node name="SpawnPoint4" type="Marker2D" parent="." unique_id=1501583779 groups=["spawn_point_main"]]
-position = Vector2(384, 162)
+position = Vector2(256, 63)
 
 [node name="SpawnPoint5" type="Marker2D" parent="." unique_id=587129701 groups=["spawn_point_main"]]
-position = Vector2(873, 166)
+position = Vector2(990, 69)
 
 [node name="SpawnPoint6" type="Marker2D" parent="." unique_id=369093571 groups=["spawn_point_main"]]
-position = Vector2(959, 340)
+position = Vector2(1119, 330)
 
 [node name="SpawnPoint7" type="Marker2D" parent="." unique_id=785713911 groups=["spawn_point_main"]]
-position = Vector2(357, 329)
+position = Vector2(216, 314)
 
-[node name="SpawnPoint8" type="Marker2D" parent="." groups=["spawn_point_main"]]
-position = Vector2(641, 200)
+[node name="SpawnPoint8" type="Marker2D" parent="." unique_id=392262433 groups=["spawn_point_main"]]
+position = Vector2(642, 120)
 
-[node name="SpawnPoint9" type="Marker2D" parent="." groups=["spawn_point_main"]]
-position = Vector2(530, 430)
+[node name="SpawnPoint9" type="Marker2D" parent="." unique_id=617367932 groups=["spawn_point_main"]]
+position = Vector2(475, 465)
 
-[node name="SpawnPoint10" type="Marker2D" parent="." groups=["spawn_point_main"]]
-position = Vector2(750, 430)
+[node name="SpawnPoint10" type="Marker2D" parent="." unique_id=253353327 groups=["spawn_point_main"]]
+position = Vector2(805, 465)
 
-[node name="SpawnPoint11" type="Marker2D" parent="." groups=["spawn_point_main"]]
-position = Vector2(641, 480)
+[node name="SpawnPoint11" type="Marker2D" parent="." unique_id=1860664252 groups=["spawn_point_main"]]
+position = Vector2(642, 540)
 
-[node name="SpawnPoint12" type="Marker2D" parent="." groups=["spawn_point_main"]]
-position = Vector2(530, 250)
+[node name="SpawnPoint12" type="Marker2D" parent="." unique_id=722402809 groups=["spawn_point_main"]]
+position = Vector2(475, 195)
 
-[node name="SwitchSpawner" parent="." unique_id=313199116 instance=ExtResource("13_8d71f")]
-
+[node name="SwitchSpawner" parent="." unique_id=313199116 instance=ExtResource("12_uf2av")]

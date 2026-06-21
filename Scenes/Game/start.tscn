@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dsahtbavks7i5"]
 
-[ext_resource type="PackedScene" uid="uid://mt70rvdsdeyx" path="res://Objects/player.tscn" id="1_qikps"]
+[ext_resource type="PackedScene" uid="uid://mt70rvdsdeyx" path="res://Objects/Summons/player.tscn" id="1_qikps"]
 [ext_resource type="PackedScene" uid="uid://doss117q2j5gm" path="res://Objects/UI_HP.tscn" id="2_ui"]
 [ext_resource type="PackedScene" uid="uid://cury7lw1ntlld" path="res://Objects/DashUI.tscn" id="3_dash"]
 [ext_resource type="Texture2D" uid="uid://dxubss2onvayf" path="res://Assets/SpritesElevator/Hole.png" id="4_a1q7l"]

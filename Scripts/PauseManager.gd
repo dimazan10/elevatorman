@@ -80,6 +80,7 @@ func _on_exit() -> void:
 	_world_env.environment = null
 	_set_process_mode_all(Node.PROCESS_MODE_INHERIT)
 	paused_state_changed.emit(false)
+	GameState.current_floor = 1
 	get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
 
 

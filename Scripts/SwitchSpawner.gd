@@ -3,9 +3,9 @@ extends Node
 var _spawned_switches: Array[Node] = []
 
 var _level_configs := {
-	1: {
-		"total": 3,
-	}
+	1: { "total": 3 },
+	2: { "total": 3 },
+	3: { "total": 3 },
 }
 
 func spawn(level: int, parent: Node) -> Array[Node]:
@@ -24,7 +24,7 @@ func spawn(level: int, parent: Node) -> Array[Node]:
 	var count = mini(config.total, shuffled.size())
 	var selected = shuffled.slice(0, count)
 
-	var scene = load("res://Objects/Switch.tscn")
+	var scene = load("res://Objects/Summons/Switch.tscn")
 	for pt in selected:
 		var inst = scene.instantiate()
 		parent.add_child(inst)

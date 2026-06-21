@@ -25,10 +25,12 @@ var _player_zones: Array[String] = []
 var _current_player_zone: String = ""
 var _paused_saved_zone: String = ""
 var _gate_audio: AudioStreamPlayer2D
+var _arena_scale_factor := 1.0
 const _ZONE_PRIORITY := {
 	"main_arena": 1,
+	"arena_none": 1,
+	"arena_switch": 1,
 	"corridor": 0,
-	"secondary_arena": 1,
 }
 
 
@@ -48,8 +50,12 @@ const _ZONE_PRIORITY := {
 
 func _ready() -> void:
 	randomize()
+	var floor_num = GameState.current_floor
+	if floor_num > 1:
+		_arena_scale_factor = 1.0 + (floor_num - 1) * 0.15
 	_setup_arena_rotation()
 	_generate_world()
+	_scale_arenas()
 	_setup_zone_triggers()
 	_hide_enemies()
 	_hide_player()
@@ -83,14 +89,18 @@ func _setup_arena_rotation() -> void:
 	_arena_rotator.position = Vector2(640, 360)
 	add_child(_arena_rotator)
 
+	var scaler = Node2D.new()
+	scaler.name = "ArenaScaler"
+	_arena_rotator.add_child(scaler)
+
 	var floor = $Floor
 	var walls = $Walls
 	remove_child(floor)
 	remove_child(walls)
 	floor.position -= Vector2(640, 360)
 	walls.position -= Vector2(640, 360)
-	_arena_rotator.add_child(floor)
-	_arena_rotator.add_child(walls)
+	scaler.add_child(floor)
+	scaler.add_child(walls)
 
 	for wall in walls.get_children():
 		var p = _add_pusher_to_wall(wall)
@@ -140,7 +150,7 @@ func _on_zone_exited(body: Node2D, zone_name: String) -> void:
 		player_zone_changed.emit(_current_player_zone)
 
 func _setup_zone_triggers() -> void:
-	var main_zone = _arena_rotator.get_node("Floor/ZoneTrigger") as Area2D
+	var main_zone = _arena_rotator.get_node("ArenaScaler/Floor/ZoneTrigger") as Area2D
 	if main_zone:
 		main_zone.body_entered.connect(_on_zone_entered.bind("main_arena"))
 		main_zone.body_exited.connect(_on_zone_exited.bind("main_arena"))
@@ -151,11 +161,16 @@ func _setup_zone_triggers() -> void:
 			z.body_entered.connect(_on_zone_entered.bind("corridor"))
 			z.body_exited.connect(_on_zone_exited.bind("corridor"))
 
-	for sa in _secondary_arenas:
-		var sec_zone = sa.get_node_or_null("Pivot/Floor/ZoneTrigger") as Area2D
-		if sec_zone:
-			sec_zone.body_entered.connect(_on_zone_entered.bind("secondary_arena"))
-			sec_zone.body_exited.connect(_on_zone_exited.bind("secondary_arena"))
+	if _arena_none:
+		var none_zone = _arena_none.get_node_or_null("Pivot/Floor/ZoneTrigger") as Area2D
+		if none_zone:
+			none_zone.body_entered.connect(_on_zone_entered.bind("arena_none"))
+			none_zone.body_exited.connect(_on_zone_exited.bind("arena_none"))
+	if _arena_switch:
+		var switch_zone = _arena_switch.get_node_or_null("Pivot/Floor/ZoneTrigger") as Area2D
+		if switch_zone:
+			switch_zone.body_entered.connect(_on_zone_entered.bind("arena_switch"))
+			switch_zone.body_exited.connect(_on_zone_exited.bind("arena_switch"))
 
 func _setup_ui() -> void:
 	var ui := CanvasLayer.new()
@@ -227,8 +242,8 @@ func start_exit_sequence() -> void:
 	anim.play("DownClose")
 	await anim.animation_finished
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 0)
-	_spawn_enemies(1)
-	_spawn_switches(1)
+	_spawn_enemies(GameState.current_floor)
+	_spawn_switches(GameState.current_floor)
 	_show_enemies()
 	lift_state = LiftState.WAITING
 	player_node.can_move = true
@@ -282,6 +297,8 @@ func _on_combat_timeout() -> void:
 	await anim.animation_finished
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 1)
 
+const MAX_FLOOR := 3
+
 func start_restart() -> void:
 	if lift_state != LiftState.RETURNING:
 		return
@@ -292,6 +309,11 @@ func start_restart() -> void:
 	anim.stop()
 	anim.play("Close")
 	await anim.animation_finished
+	if GameState.current_floor >= MAX_FLOOR:
+		GameState.current_floor = 1
+		await FadeTransition.fade_out()
+		get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
+		return
 	GameState.current_floor += 1
 	anim.play("Up")
 	await anim.animation_finished
@@ -363,12 +385,13 @@ func _enable_collision_shapes(node: Node) -> void:
 		_enable_collision_shapes(child)
 
 func _generate_world() -> void:
-	var floor_rect = preload("res://Objects/Floor_Rectangle.tscn")
-	var arena_none_scene = preload("res://Objects/ArenaNone.tscn")
-	var arena_switch_scene = preload("res://Objects/ArenaSwitch.tscn")
+	var floor_rect = preload("res://Objects/Rooms/Floor_Rectangle.tscn")
+	var arena_none_scene = preload("res://Objects/Rooms/ArenaNone.tscn")
+	var arena_switch_scene = preload("res://Objects/Rooms/ArenaSwitch.tscn")
+	var arena_radius = 532.5 * _arena_scale_factor
+	var corridor_dist = 570.0 * _arena_scale_factor
 	var center = Vector2(640, 360)
 	var door_offset = Vector2(1090, 0)
-	var corridor_dist = 570
 	var angles := [0, 60, 120, 180, 240, 300]
 	var chosen = angles[randi() % angles.size()]
 	var rad = deg_to_rad(chosen)
@@ -384,7 +407,7 @@ func _generate_world() -> void:
 	var arena = arena_none_scene.instantiate()
 	arena.name = "ArenaNone"
 	add_child(arena)
-	arena.position = corridor_end + dir * 532.5 - Vector2(640, 360)
+	arena.position = corridor_end + dir * arena_radius - Vector2(640, 360)
 	_secondary_arenas.append(arena)
 
 	var none_walls = arena.get_node_or_null("Pivot/Walls")
@@ -405,7 +428,7 @@ func _generate_world() -> void:
 	var second_chosen = hex_angles[second_indices[randi() % second_indices.size()]]
 	var second_rad = deg_to_rad(second_chosen)
 	var second_dir = Vector2(cos(second_rad), sin(second_rad))
-	var arena_none_pivot = corridor_end + dir * 532.5
+	var arena_none_pivot = corridor_end + dir * arena_radius
 	var second_inst = floor_rect.instantiate()
 	second_inst.rotation = second_rad
 	second_inst.position = arena_none_pivot + second_dir * corridor_dist - door_offset.rotated(second_rad)
@@ -417,7 +440,7 @@ func _generate_world() -> void:
 	var arena_switch = arena_switch_scene.instantiate()
 	arena_switch.name = "ArenaSwitch"
 	add_child(arena_switch)
-	arena_switch.position = second_corridor_end + second_dir * 532.5 - Vector2(640, 360)
+	arena_switch.position = second_corridor_end + second_dir * arena_radius - Vector2(640, 360)
 	_secondary_arenas.append(arena_switch)
 
 	_arena_switch = arena_switch
@@ -433,16 +456,27 @@ func get_player_zone() -> String:
 		return _paused_saved_zone
 	return _current_player_zone
 
+func _scale_arenas() -> void:
+	if _arena_scale_factor == 1.0:
+		return
+	var scaler = _arena_rotator.get_node_or_null("ArenaScaler")
+	if scaler:
+		scaler.scale = Vector2(_arena_scale_factor, _arena_scale_factor)
+	for sa in _secondary_arenas:
+		var pivot = sa.get_node_or_null("Pivot")
+		if pivot:
+			pivot.scale = Vector2(_arena_scale_factor, _arena_scale_factor)
+
 func _spawn_enemies(level: int) -> void:
 	_spawner.spawn(level, self, "spawn_point_main", "main_arena")
 	if _arena_none:
 		var none_spawner = _arena_none.get_node_or_null("Pivot/EnemySpawner")
 		if none_spawner:
-			none_spawner.spawn(level, self, "spawn_point_none", "secondary_arena")
+			none_spawner.spawn(level, self, "spawn_point_none", "arena_none")
 	if _arena_switch:
 		var switch_spawner = _arena_switch.get_node_or_null("Pivot/EnemySpawner")
 		if switch_spawner:
-			switch_spawner.spawn(level, self, "spawn_point_switch", "secondary_arena")
+			switch_spawner.spawn(level, self, "spawn_point_switch", "arena_switch")
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		enemy.collision_mask |= 2
 
@@ -483,7 +517,7 @@ func _set_shaft_collision(enabled: bool) -> void:
 var _rotation_speed := 0.5
 
 func _update_gate() -> void:
-	var gates := [_arena_rotator.get_node("Walls/W4/Gate") as StaticBody2D]
+	var gates := [_arena_rotator.get_node("ArenaScaler/Walls/W4/Gate") as StaticBody2D]
 	for sa in _secondary_arenas:
 		var g = sa.get_node_or_null("Pivot/Walls/W4/Gate") as StaticBody2D
 		if g:

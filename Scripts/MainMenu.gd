@@ -35,6 +35,7 @@ func _setup_hover(b: TextureButton) -> void:
 	)
 
 func _on_play_pressed() -> void:
+	GameState.current_floor = 1
 	await get_tree().create_timer(0.15).timeout
 	get_tree().change_scene_to_file("res://Scenes/Game/start.tscn")
 

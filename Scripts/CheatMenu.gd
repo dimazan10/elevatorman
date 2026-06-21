@@ -5,8 +5,8 @@ var _error_label: Label
 
 func _ready() -> void:
 	var panel = Panel.new()
-	panel.size = Vector2(400, 240)
-	panel.position = Vector2(440, 230)
+	panel.size = Vector2(400, 280)
+	panel.position = Vector2(440, 200)
 	add_child(panel)
 
 	var label = Label.new()
@@ -38,7 +38,7 @@ func _ready() -> void:
 	panel.add_child(btn)
 
 	_error_label = Label.new()
-	_error_label.position = Vector2(30, 155)
+	_error_label.position = Vector2(30, 195)
 	_error_label.size = Vector2(340, 30)
 	_error_label.add_theme_color_override("font_color", Color.RED)
 	panel.add_child(_error_label)
@@ -51,9 +51,17 @@ func _ready() -> void:
 	bucket_btn.add_theme_color_override("font_color", Color.GOLD)
 	panel.add_child(bucket_btn)
 
+	var return_btn = Button.new()
+	return_btn.text = "Следующий этаж"
+	return_btn.position = Vector2(200, 120)
+	return_btn.size = Vector2(170, 30)
+	return_btn.pressed.connect(_return_elevator)
+	return_btn.add_theme_color_override("font_color", Color.CORNFLOWER_BLUE)
+	panel.add_child(return_btn)
+
 	var close_btn = Button.new()
 	close_btn.text = "Закрыть"
-	close_btn.position = Vector2(140, 195)
+	close_btn.position = Vector2(140, 235)
 	close_btn.size = Vector2(120, 30)
 	close_btn.pressed.connect(_close)
 	panel.add_child(close_btn)
@@ -102,6 +110,15 @@ func _add_bucket() -> void:
 	player.add_child(bucket)
 	player._bucket = bucket
 	_error_label.text = ""
+
+func _return_elevator() -> void:
+	var arena = get_tree().current_scene.get_node_or_null("MainArena3")
+	if not arena:
+		_error_label.text = "Арена не найдена"
+		return
+	if arena.has_method("start_restart"):
+		arena.lift_state = 5
+		arena.start_restart()
 
 func _close() -> void:
 	queue_free()

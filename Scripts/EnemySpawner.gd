@@ -2,35 +2,17 @@ extends Node
 
 var _spawned_enemies: Array[Node] = []
 
-var _level_configs := {
-	1: {
-		"total": 5,
-		"min_angry_ball": 1,
-		"min_drunk_killer": 1,
-		"min_spider": 1,
-	}
-}
-
 var _pool := ["angry_ball", "DrunkKiller", "Spider"]
 
 func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_name: String = "") -> Array[Node]:
-	var config = _level_configs.get(level)
-	if not config:
-		return []
-
 	var points := get_tree().get_nodes_in_group(group_name)
 	if points.is_empty():
 		return []
 
-	var types: Array[String] = []
-	for _i in config.min_angry_ball:
-		types.append("angry_ball")
-	for _i in config.min_drunk_killer:
-		types.append("DrunkKiller")
-	for _i in config.get("min_spider", 0):
-		types.append("Spider")
+	var total = 3 + level + randi() % 3
+	var types: Array[String] = ["angry_ball", "DrunkKiller", "Spider"]
 
-	var remaining = config.total - types.size()
+	var remaining = total - types.size()
 	for _i in remaining:
 		types.append(_pool[randi() % _pool.size()])
 
@@ -42,7 +24,7 @@ func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_na
 		var idx = randi() % points.size()
 		var pt = points[idx]
 		points.remove_at(idx)
-		var scene = load("res://Objects/" + t + ".tscn")
+		var scene = load("res://Objects/Summons/" + t + ".tscn")
 		var inst = scene.instantiate()
 		inst.global_position = pt.global_position
 		inst.set_meta("spawn_position", pt.global_position)

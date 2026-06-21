@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-const BULLET_SCENE = preload("res://Objects/Bullet.tscn")
+const BULLET_SCENE = preload("res://Objects/Summons/Bullet.tscn")
 
 @export var speed: float = 150.0
 @export var orbit_distance: float = 250.0 

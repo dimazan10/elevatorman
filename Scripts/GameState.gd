@@ -30,7 +30,6 @@ func _save_settings() -> void:
 	cfg.set_value("audio", "master_volume", master_volume)
 	cfg.set_value("audio", "music_volume", music_volume)
 	cfg.set_value("audio", "effects_volume", effects_volume)
-	cfg.set_value("game", "current_floor", current_floor)
 	cfg.set_value("display", "show_fps", show_fps)
 	cfg.save(SAVE_PATH)
 

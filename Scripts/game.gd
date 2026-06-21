@@ -1,6 +1,6 @@
 extends Node2D
 
-const MainArenaScene := preload("res://Objects/main.tscn")
+const MainArenaScene := preload("res://Objects/Rooms/main.tscn")
 var _arena: Node
 
 func _ready() -> void:
