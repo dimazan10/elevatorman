@@ -3,12 +3,6 @@ extends Area2D
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	monitoring = true
-	call_deferred("_fix_global")
-
-func _fix_global() -> void:
-	var gp = global_position
-	top_level = true
-	global_position = gp
 
 func _on_body_entered(body: Node2D) -> void:
 	if not body.is_in_group("player"):
