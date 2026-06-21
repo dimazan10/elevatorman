@@ -100,8 +100,6 @@ func _ready() -> void:
 		if stream:
 			footstep_sounds.append(stream)
 	
-	_setup_bucket()
-
 var _shift_held := false
 var _ghost_timer := 0.0
 var _noclip := false

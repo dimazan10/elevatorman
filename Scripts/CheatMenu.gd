@@ -96,8 +96,11 @@ func _add_bucket() -> void:
 		return
 	var bucket = preload("res://Objects/Bucket.tscn").instantiate()
 	bucket.name = "Bucket"
-	bucket.position = Vector2(0, -30)
+	bucket.position = Vector2(0, -33)
+	bucket.scale = Vector2(0.05, 0.05)
+	bucket.z_index = player.z_index
 	player.add_child(bucket)
+	player._bucket = bucket
 	_error_label.text = ""
 
 func _close() -> void:
