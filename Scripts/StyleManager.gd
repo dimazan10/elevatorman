@@ -52,12 +52,16 @@ func _calc_multiplier() -> float:
 
 func setup_display(parent: Node) -> void:
 	if _label and is_instance_valid(_label):
-		_label.get_parent().queue_free()
+		_label.get_parent().get_parent().queue_free()
 	_score = 0.0
 	var ui = CanvasLayer.new()
 	ui.name = "StyleUI"
 	ui.layer = 128
 	parent.add_child(ui)
+	var container = Control.new()
+	container.name = "StyleContainer"
+	container.set_anchors_preset(Control.PRESET_FULL_RECT)
+	ui.add_child(container)
 	_label = Label.new()
 	_label.name = "StyleLabel"
 	_label.add_theme_font_size_override("font_size", 28)
@@ -69,4 +73,4 @@ func setup_display(parent: Node) -> void:
 	_label.size = Vector2(270, 40)
 	_label.position = Vector2(-10, 10)
 	_label.text = "СТИЛЬ: 0"
-	ui.add_child(_label)
+	container.add_child(_label)
