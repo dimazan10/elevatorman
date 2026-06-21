@@ -64,8 +64,9 @@ func setup_display(parent: Node) -> void:
 	_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2))
 	_label.add_theme_constant_override("outline_size", 4)
 	_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	_label.anchors_preset = Control.PRESET_TOP_RIGHT
 	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_label.size = Vector2(270, 40)
-	_label.position = Vector2(1000, 10)
+	_label.position = Vector2(-10, 10)
 	_label.text = "СТИЛЬ: 0"
 	ui.add_child(_label)
