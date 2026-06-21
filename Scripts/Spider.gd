@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 const WEB_SCENE = preload("res://Objects/Web.tscn")
 
-@export var speed: float = 300.0
+@export var speed: float = 250.0
 @export var web_boost_multiplier: float = 2.5
 @export var separation_force: float = 80.0
 @export var shoot_interval: float = 4.0
