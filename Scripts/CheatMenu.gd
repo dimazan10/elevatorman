@@ -27,6 +27,7 @@ func _ready() -> void:
 	_input.position = Vector2(80, 75)
 	_input.size = Vector2(150, 35)
 	_input.placeholder_text = "кол-во HP"
+	_input.text_changed.connect(_on_text_changed)
 	panel.add_child(_input)
 
 	var btn = Button.new()
@@ -50,6 +51,15 @@ func _ready() -> void:
 	panel.add_child(close_btn)
 
 	_input.grab_focus()
+
+func _on_text_changed(new_text: String) -> void:
+	var filtered = ""
+	for c in new_text:
+		if c >= "0" and c <= "9":
+			filtered += c
+	if filtered != new_text:
+		_input.text = filtered
+		_input.caret_column = filtered.length()
 
 func _apply_hp() -> void:
 	var val = _input.text.strip_edges().to_int()
