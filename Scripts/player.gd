@@ -20,6 +20,7 @@ var last_move_dir := Vector2.DOWN
 
 var animated_sprite: AnimatedSprite2D
 var audio_player: AudioStreamPlayer2D
+var dash_audio: AudioStreamPlayer2D
 var footstep_sounds: Array[AudioStream] = []
 var footstep_timer: float = 0.0
 
@@ -72,6 +73,11 @@ func _ready() -> void:
 	audio_player = AudioStreamPlayer2D.new()
 	audio_player.name = "FootstepAudio"
 	add_child(audio_player)
+
+	dash_audio = AudioStreamPlayer2D.new()
+	dash_audio.name = "DashAudio"
+	dash_audio.stream = load("res://Assets/Sounds/Effects/dash.mp3")
+	add_child(dash_audio)
 
 	for i in range(1, 5):
 		var stream = load("res://Assets/Sounds/FootStepsSound/FootStep_" + str(i) + ".wav")
@@ -246,7 +252,8 @@ func perform_dash() -> void:
 	is_dashing = true
 	dash_timer = DASH_DURATION
 	dash_used.emit(charge_idx)
-	print("DASH! charge=", charge_idx)
+	if dash_audio:
+		dash_audio.play()
 
 	var dir := Vector2.ZERO
 	if Input.is_key_pressed(KEY_RIGHT) or Input.is_key_pressed(KEY_D):
