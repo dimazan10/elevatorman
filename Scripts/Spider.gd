@@ -16,11 +16,15 @@ var _zone_name: String = ""
 var _is_waiting: bool = false
 var _melee_cooldown := false
 var _knockback := Vector2.ZERO
+var _run_audio_playing := false
 
 @onready var animated_sprite := $AnimatedSprite2D
 @onready var shoot_timer := $ShootTimer
 @onready var melee_zone := $MeleeZone
 @onready var separation_zone := $SeparationZone
+
+var spawn_web_audio: AudioStreamPlayer2D
+var run_audio: AudioStreamPlayer2D
 
 func _ready() -> void:
 	add_to_group("enemy")
@@ -32,6 +36,16 @@ func _ready() -> void:
 	if players.size() > 0:
 		player = players[0]
 		add_collision_exception_with(player)
+		spawn_web_audio = AudioStreamPlayer2D.new()
+		spawn_web_audio.name = "SpawnWebAudio"
+		spawn_web_audio.stream = preload("res://Assets/Sounds/Effects/SpawnWeb.mp3")
+		spawn_web_audio.bus = &"Effects"
+		add_child(spawn_web_audio)
+		run_audio = AudioStreamPlayer2D.new()
+		run_audio.name = "RunAudio"
+		run_audio.stream = preload("res://Assets/Sounds/Effects/spider-run-stop-2.mp3")
+		run_audio.bus = &"Effects"
+		add_child(run_audio)
 
 	shoot_timer.one_shot = true
 	shoot_timer.timeout.connect(_on_shoot_timer_timeout)
@@ -44,6 +58,11 @@ func _ready() -> void:
 
 func set_web_boost(enabled: bool) -> void:
 	_web_boost = enabled
+
+func _stop_run_audio() -> void:
+	if _run_audio_playing and run_audio:
+		run_audio.stop()
+		_run_audio_playing = false
 
 func _get_separation_vector() -> Vector2:
 	var sep := Vector2.ZERO
@@ -71,6 +90,9 @@ func _check_zone_teleport() -> bool:
 			global_position = _spawn_pos
 			velocity = Vector2.ZERO
 			shoot_timer.stop()
+			if run_audio:
+				run_audio.stop()
+				_run_audio_playing = false
 			if animated_sprite and animated_sprite.sprite_frames.has_animation("walk"):
 				animated_sprite.stop()
 		return true
@@ -83,21 +105,29 @@ func _check_zone_teleport() -> bool:
 
 func _physics_process(delta: float) -> void:
 	if not player:
+		_stop_run_audio()
 		return
 	if _check_zone_teleport():
 		animated_sprite.flip_h = player.global_position.x < global_position.x
+		_stop_run_audio()
 		return
 
 	if _knockback.length_squared() > 0:
 		velocity = _knockback
 		_knockback = _knockback.move_toward(Vector2.ZERO, 2000.0 * delta)
 		move_and_slide()
+		_stop_run_audio()
 		return
 
 	var to_player = player.global_position - global_position
 	var dist = to_player.length()
 	if dist < 0.001:
+		_stop_run_audio()
 		return
+
+	if not _run_audio_playing and run_audio:
+		run_audio.play()
+		_run_audio_playing = true
 	var direction = to_player / dist
 	var current_speed = speed * (web_boost_multiplier if _web_boost else 1.0)
 
@@ -120,6 +150,7 @@ func _on_shoot_timer_timeout() -> void:
 	web.global_position = global_position
 	web.z_index = 1
 	get_parent().add_child(web)
+	spawn_web_audio.play()
 	shoot_timer.start(randf_range(8.0, 12.0))
 
 func _get_nearest_enemy() -> Node2D:
@@ -149,4 +180,5 @@ func _on_melee_zone_body_entered(body: Node2D) -> void:
 func take_damage(amount: int) -> void:
 	health -= amount
 	if health <= 0:
+		_stop_run_audio()
 		queue_free()
