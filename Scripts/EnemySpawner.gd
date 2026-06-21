@@ -2,10 +2,21 @@ extends Node
 
 var _spawned_enemies: Array[Node] = []
 
+var _level_configs := {
+	1: {
+		"total": 5,
+		"min_angry_ball": 1,
+		"min_drunk_killer": 1,
+		"min_spider": 1,
+	}
+}
+
 var _pool := ["angry_ball", "DrunkKiller", "Spider"]
 
 func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_name: String = "") -> Array[Node]:
-	var config = _get_level_config(level)
+	var config = _level_configs.get(level)
+	if not config:
+		return []
 
 	var points := get_tree().get_nodes_in_group(group_name)
 	if points.is_empty():
@@ -42,14 +53,6 @@ func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_na
 		_spawned_enemies.append(inst)
 
 	return _spawned_enemies
-
-func _get_level_config(level: int) -> Dictionary:
-	return {
-		"total": 4 + level * 3,
-		"min_angry_ball": 1 + level / 3,
-		"min_drunk_killer": 1 + level / 2,
-		"min_spider": 1 + level / 2,
-	}
 
 func clear_spawned() -> void:
 	for e in _spawned_enemies:

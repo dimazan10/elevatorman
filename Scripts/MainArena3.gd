@@ -227,11 +227,8 @@ func start_exit_sequence() -> void:
 	anim.play("DownClose")
 	await anim.animation_finished
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 0)
-	var level = GameState.current_floor
-	_apply_arena_scaling(level)
-	_add_spawn_points(level)
-	_spawn_enemies(level)
-	_spawn_switches(level)
+	_spawn_enemies(1)
+	_spawn_switches(1)
 	_show_enemies()
 	lift_state = LiftState.WAITING
 	player_node.can_move = true
@@ -240,7 +237,7 @@ func start_exit_sequence() -> void:
 func _start_combat_timer() -> void:
 	combat_timer = Timer.new()
 	combat_timer.name = "CombatTimer"
-	combat_timer.wait_time = 15.0 + GameState.current_floor * 5.0
+	combat_timer.wait_time = 15.0
 	combat_timer.one_shot = true
 	combat_timer.timeout.connect(_on_combat_timeout)
 	add_child(combat_timer)
@@ -477,40 +474,6 @@ func _shake_camera(intensity: float = 8.0, duration: float = 0.4) -> void:
 		var target := original + Vector2(randf_range(-intensity, intensity), randf_range(-intensity, intensity))
 		tween.tween_property(camera, "offset", target, duration / 8.0)
 	tween.tween_property(camera, "offset", original, duration / 8.0)
-
-func _apply_arena_scaling(level: int) -> void:
-	var scale_factor = 1.0 + (level - 1) * 0.1
-	_arena_rotator.get_node("Pivot").scale = Vector2(scale_factor, scale_factor)
-	if _arena_none:
-		var p = _arena_none.get_node_or_null("Pivot")
-		if p:
-			p.scale = Vector2(scale_factor, scale_factor)
-	if _arena_switch:
-		var p = _arena_switch.get_node_or_null("Pivot")
-		if p:
-			p.scale = Vector2(scale_factor, scale_factor)
-
-func _add_spawn_points(level: int) -> void:
-	var extra = level * 2
-	var hex_radius = 540.0
-	var groups := ["spawn_point_main", "spawn_point_none", "spawn_point_switch"]
-	var arenas := [null, _arena_none, _arena_switch]
-	for gi in groups.size():
-		var group = groups[gi]
-		var arena = arenas[gi]
-		var parent = arena if arena else self
-		var center = (parent.get_node_or_null("Pivot") if arena else _arena_rotator.get_node("Pivot")).global_position
-		var existing = get_tree().get_nodes_in_group(group)
-		if existing.size() + extra > 30:
-			continue
-		for _i in extra:
-			var angle = randf() * TAU
-			var dist = hex_radius * sqrt(randf())
-			var pos = center + Vector2(cos(angle), sin(angle)) * dist
-			var pt = Marker2D.new()
-			pt.global_position = pos
-			pt.add_to_group(group)
-			parent.add_child(pt)
 
 func _set_shaft_collision(enabled: bool) -> void:
 	for cs in shaft_colliders:
