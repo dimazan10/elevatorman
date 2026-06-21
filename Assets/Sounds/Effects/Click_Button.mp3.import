@@ -3,7 +3,7 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://g7lsuis7yl21"
-valid=true
+valid=false
 
 [deps]
 
@@ -12,3 +12,7 @@ source_file="res://Assets/Sounds/Effects/Click_Button.mp3"
 [params]
 
 loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
