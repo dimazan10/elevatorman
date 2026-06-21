@@ -46,12 +46,14 @@ func _ready() -> void:
 		run_audio.name = "RunAudio"
 		run_audio.stream = preload("res://Assets/Sounds/Effects/spider-run-stop-2.mp3")
 		run_audio.bus = &"Effects"
+		run_audio.volume_db = -3.0
 		run_audio.finished.connect(run_audio.play)
 		add_child(run_audio)
 		bite_audio = AudioStreamPlayer2D.new()
 		bite_audio.name = "BiteAudio"
 		bite_audio.stream = preload("res://Assets/Sounds/Effects/insect-chew-bite_mkkbnnvd.mp3")
 		bite_audio.bus = &"Effects"
+		bite_audio.volume_db = 3.0
 		add_child(bite_audio)
 
 	shoot_timer.one_shot = true
