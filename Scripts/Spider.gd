@@ -14,6 +14,7 @@ var _web_boost := false
 var _spawn_pos: Vector2 = Vector2.ZERO
 var _zone_name: String = ""
 var _is_waiting: bool = false
+var _melee_cooldown := false
 
 @onready var animated_sprite := $AnimatedSprite2D
 @onready var shoot_timer := $ShootTimer
@@ -126,12 +127,15 @@ func _get_nearest_enemy() -> Node2D:
 	return nearest
 
 func _on_melee_zone_body_entered(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body.is_in_group("player") and not _melee_cooldown:
+		_melee_cooldown = true
 		var target = _get_nearest_enemy()
 		if target and body.has_method("apply_pull_toward"):
-			body.apply_pull_toward(target, 1.0, Vector2(0, -40))
+			body.apply_pull_toward(target, 0.6, Vector2(0, -40))
 		if body.has_method("take_damage"):
 			body.take_damage(melee_damage)
+		await get_tree().create_timer(1.5).timeout
+		_melee_cooldown = false
 
 func take_damage(amount: int) -> void:
 	health -= amount
