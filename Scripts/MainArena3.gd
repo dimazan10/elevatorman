@@ -242,14 +242,39 @@ func start_exit_sequence() -> void:
 	anim.play("DownClose")
 	await anim.animation_finished
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 0)
-	_spawn_enemies(GameState.current_floor)
+	_spawn_secondary_enemies(GameState.current_floor)
 	_spawn_switches(GameState.current_floor)
 	_show_enemies()
 	lift_state = LiftState.WAITING
 	player_node.can_move = true
 	_connect_switch()
 
+func _spawn_secondary_enemies(level: int) -> void:
+	if _arena_none:
+		var none_spawner = _arena_none.get_node_or_null("Pivot/EnemySpawner")
+		if none_spawner:
+			none_spawner.spawn(level, self, "spawn_point_none", "arena_none")
+	if _arena_switch:
+		var switch_spawner = _arena_switch.get_node_or_null("Pivot/EnemySpawner")
+		if switch_spawner:
+			switch_spawner.spawn(level, self, "spawn_point_switch", "arena_switch")
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		enemy.collision_mask |= 2
+
 func _start_combat_timer() -> void:
+	_spawner.spawn(GameState.current_floor, self, "spawn_point_main", "main_arena")
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		enemy.show()
+		enemy.z_index = 6
+		enemy.set_physics_process(true)
+		enemy.collision_mask |= 2
+		_enable_collision_shapes(enemy)
+		for child in enemy.get_children():
+			if child is Timer and child.has_method("start"):
+				if child.has_method("stop") and child.is_stopped():
+					child.start()
+		if enemy is RigidBody2D:
+			enemy.freeze = false
 	combat_timer = Timer.new()
 	combat_timer.name = "CombatTimer"
 	combat_timer.wait_time = 15.0
@@ -487,19 +512,6 @@ func _scale_arenas() -> void:
 		var pivot = sa.get_node_or_null("Pivot")
 		if pivot:
 			pivot.scale = Vector2(_arena_scale_factor, _arena_scale_factor)
-
-func _spawn_enemies(level: int) -> void:
-	_spawner.spawn(level, self, "spawn_point_main", "main_arena")
-	if _arena_none:
-		var none_spawner = _arena_none.get_node_or_null("Pivot/EnemySpawner")
-		if none_spawner:
-			none_spawner.spawn(level, self, "spawn_point_none", "arena_none")
-	if _arena_switch:
-		var switch_spawner = _arena_switch.get_node_or_null("Pivot/EnemySpawner")
-		if switch_spawner:
-			switch_spawner.spawn(level, self, "spawn_point_switch", "arena_switch")
-	for enemy in get_tree().get_nodes_in_group("enemy"):
-		enemy.collision_mask |= 2
 
 func _spawn_switches(level: int) -> void:
 	_switch_spawner.spawn(level, self)
