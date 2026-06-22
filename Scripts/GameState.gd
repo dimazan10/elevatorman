@@ -12,6 +12,7 @@ var bucket_charges: int = 3
 var currency: int = 0
 var last_floor_hp: int = 0
 var last_floor_time: float = 0.0
+var start_bonus_given: bool = false
 
 func _ready() -> void:
 	_load_settings()
