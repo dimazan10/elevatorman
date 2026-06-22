@@ -45,7 +45,6 @@ func _on_play_pressed() -> void:
 	GameState.has_bucket = false
 	GameState.currency = 0
 	GameState.last_floor_hp = 0
-	GameState.start_bonus_given = false
 	StyleManager.reset_score()
 	await get_tree().create_timer(0.15).timeout
 	get_tree().change_scene_to_file("res://Scenes/Game/start.tscn")

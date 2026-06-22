@@ -23,9 +23,6 @@ var _collected := false
 
 func _ready() -> void:
 	_setup_bottle_style()
-	if not GameState.start_bonus_given:
-		GameState.currency += 5
-		GameState.start_bonus_given = true
 	var t = GameState.last_floor_time
 	var m = int(t) / 60
 	var s = int(t) % 60
