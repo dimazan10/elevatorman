@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bmgioa6x7knpu" path="res://Assets/buttonSettings.png" id="4_vapy7"]
 [ext_resource type="Script" uid="uid://duvm74ksi552c" path="res://Scripts/ButtonQuit.gd" id="5_ua038"]
 [ext_resource type="Script" uid="uid://bjfteco1ew5lh" path="res://Scripts/MainMenu.gd" id="6_75e0l"]
-[ext_resource type="AudioStream" uid="uid://chcd2s0407kjq" path="res://Assets/Sounds/Effects/Click_Button.mp3" id="1_click"]
+[ext_resource type="AudioStream" path="res://Assets/Sounds/Effects/Click_Button.mp3" id="7"]
 
 [node name="MainMenu" type="Control" unique_id=1026156905]
 layout_mode = 3
@@ -19,7 +19,7 @@ script = ExtResource("6_75e0l")
 metadata/_edit_use_anchors_ = true
 
 [node name="ClickSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("1_click")
+stream = ExtResource("7")
 bus = &"Effects"
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1892877604]
