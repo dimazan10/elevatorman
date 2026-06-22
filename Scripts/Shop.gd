@@ -95,8 +95,8 @@ func _on_collect() -> void:
 	_update_bucket_ui()
 
 func _animate_liquid(v: float) -> void:
-	var bh := bottle_clip.size.y * v
-	liquid.size.y = max(bh, 0)
+	var bh: float = bottle_clip.size.y * v
+	liquid.size.y = maxf(bh, 0.0)
 
 func _spawn_coins(count: int) -> void:
 	var start := bottle_body.global_position + bottle_body.size * Vector2(0.5, 0.0)
