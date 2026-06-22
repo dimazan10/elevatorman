@@ -78,7 +78,7 @@ func _on_collect() -> void:
 	_collected = true
 	collect_btn.disabled = true
 
-	var tween := create_tween().set_parallel(false)
+	var tween: Tween = create_tween().set_parallel(false)
 	var hp := GameState.last_floor_hp
 	var ratio := clampf(hp / float(MAX_HP), 0.0, 1.0)
 
@@ -89,7 +89,7 @@ func _on_collect() -> void:
 	_spawn_coins(hp)
 	await tween.finished
 
-	var bounce := create_tween().set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	var bounce: Tween = create_tween().set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 	bounce.tween_property(coin_icon, "scale", Vector2(1.5, 1.5), 0.2)
 	bounce.tween_property(coin_icon, "scale", Vector2(1.0, 1.0), 0.3)
 	currency_label.text = str(GameState.currency)
@@ -113,7 +113,7 @@ func _spawn_coins(count: int) -> void:
 		coin.position = start + Vector2(randf_range(-20, 20), randf_range(-30, 0)) - coin_layer.global_position
 		coin_layer.add_child(coin)
 
-		var ct := create_tween().set_delay(i * 0.08)
+		var ct: Tween = create_tween().set_delay(i * 0.08)
 		ct.tween_property(coin, "position", target + Vector2(randf_range(-10, 10), randf_range(-10, 10)), 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK)
 		ct.tween_callback(coin.queue_free)
 
