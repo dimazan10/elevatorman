@@ -43,6 +43,7 @@ func _on_play_pressed() -> void:
 	_play_click()
 	GameState.current_floor = 1
 	GameState.has_bucket = false
+	StyleManager.reset_score()
 	await get_tree().create_timer(0.15).timeout
 	get_tree().change_scene_to_file("res://Scenes/Game/start.tscn")
 

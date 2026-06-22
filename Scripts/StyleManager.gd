@@ -50,10 +50,14 @@ func _calc_multiplier() -> float:
 	var max_lives = float(_player.max_lives)
 	return 1.0 + (lives - 1.0) / (max_lives - 1.0) * 0.5
 
+func reset_score() -> void:
+	_score = 0.0
+	if _label and is_instance_valid(_label):
+		_label.text = "СТИЛЬ: 0"
+
 func setup_display(parent: Node) -> void:
 	if _label and is_instance_valid(_label):
 		_label.get_parent().get_parent().queue_free()
-	_score = 0.0
 	var ui = CanvasLayer.new()
 	ui.name = "StyleUI"
 	ui.layer = 128

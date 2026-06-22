@@ -331,6 +331,7 @@ func start_restart() -> void:
 	if GameState.current_floor >= MAX_FLOOR:
 		GameState.current_floor = 1
 		GameState.has_bucket = false
+		StyleManager.reset_score()
 		await FadeTransition.fade_out()
 		get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
 		return

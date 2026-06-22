@@ -680,18 +680,18 @@ position = Vector2(1119, 330)
 position = Vector2(216, 314)
 
 [node name="SpawnPoint8" type="Marker2D" parent="." unique_id=392262433 groups=["spawn_point_main"]]
-position = Vector2(642, 120)
+position = Vector2(836, 153)
 
 [node name="SpawnPoint9" type="Marker2D" parent="." unique_id=617367932 groups=["spawn_point_main"]]
-position = Vector2(475, 465)
+position = Vector2(397, 472)
 
 [node name="SpawnPoint10" type="Marker2D" parent="." unique_id=253353327 groups=["spawn_point_main"]]
-position = Vector2(805, 465)
+position = Vector2(888, 474)
 
 [node name="SpawnPoint11" type="Marker2D" parent="." unique_id=1860664252 groups=["spawn_point_main"]]
-position = Vector2(642, 540)
+position = Vector2(640, 685)
 
 [node name="SpawnPoint12" type="Marker2D" parent="." unique_id=722402809 groups=["spawn_point_main"]]
-position = Vector2(475, 195)
+position = Vector2(448, 154)
 
 [node name="SwitchSpawner" parent="." unique_id=313199116 instance=ExtResource("12_uf2av")]
