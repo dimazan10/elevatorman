@@ -40,10 +40,17 @@ func _on_fps_checkbox_toggled(enabled: bool) -> void:
 	if fps_label:
 		fps_label.visible = enabled
 
+func _play_click() -> void:
+	var cs = get_node_or_null("ClickSound")
+	if cs:
+		cs.play()
+
 func _on_back_pressed() -> void:
+	_play_click()
 	if return_to_game:
 		back_pressed.emit()
 	else:
+		await get_tree().create_timer(0.15).timeout
 		get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
 
 func _db_to_pct(db: float) -> String:

@@ -34,11 +34,18 @@ func _setup_hover(b: TextureButton) -> void:
 		t.tween_property(b, "scale", Vector2(1.0, 1.0), 0.1)
 	)
 
+func _play_click() -> void:
+	var cs = get_node_or_null("ClickSound")
+	if cs:
+		cs.play()
+
 func _on_play_pressed() -> void:
+	_play_click()
 	GameState.current_floor = 1
 	await get_tree().create_timer(0.15).timeout
 	get_tree().change_scene_to_file("res://Scenes/Game/start.tscn")
 
 func _on_settings_pressed() -> void:
+	_play_click()
 	await get_tree().create_timer(0.15).timeout
 	get_tree().change_scene_to_file("res://Scenes/Settings/Settings.tscn")

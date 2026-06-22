@@ -1,8 +1,13 @@
 [gd_scene format=3 uid="uid://bqbjv7p2dwqk3"]
 
 [ext_resource type="Script" path="res://Scripts/Settings.gd" id="1_3rng0"]
+[ext_resource type="AudioStream" uid="uid://chcd2s0407kjq" path="res://Assets/Sounds/Effects/Click_Button.mp3" id="2_click"]
 
 [node name="Settings" type="Control"]
+
+[node name="ClickSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_click")
+bus = &"Effects"
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
