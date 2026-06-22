@@ -28,7 +28,7 @@ func _ready() -> void:
 	var s = int(t) % 60
 	time_label.text = "Время: %02d:%02d" % [m, s]
 	hp_count_label.text = str(GameState.last_floor_hp)
-	_liquid_height()
+	_set_liquid_fill(clampf(GameState.last_floor_hp / float(MAX_HP), 0.0, 1.0))
 	currency_label.text = str(GameState.currency)
 	_update_bucket_ui()
 
@@ -55,11 +55,13 @@ func _setup_bottle_style() -> void:
 
 	liquid.color = Color(0.2, 0.7, 0.3)
 	neck_liquid.color = Color(0.2, 0.7, 0.3)
+	liquid.size.x = bottle_clip.size.x
+	neck_liquid.size.x = neck.size.x - 2
 
-func _liquid_height() -> void:
-	var ratio: float = clampf(GameState.last_floor_hp / float(MAX_HP), 0.0, 1.0)
-	var bh: float = bottle_clip.size.y * ratio
-	liquid.size.y = maxf(bh, 0.0)
+func _set_liquid_fill(ratio: float) -> void:
+	var ch: float = bottle_clip.size.y
+	liquid.position.y = ch * (1.0 - ratio)
+	liquid.size.y = ch * ratio
 	neck_liquid.visible = ratio >= 0.99
 
 func _update_bucket_ui() -> void:
@@ -96,8 +98,7 @@ func _on_collect() -> void:
 	_update_bucket_ui()
 
 func _animate_liquid(v: float) -> void:
-	var bh: float = bottle_clip.size.y * v
-	liquid.size.y = maxf(bh, 0.0)
+	_set_liquid_fill(v)
 
 func _spawn_coins(count: int) -> void:
 	var start: Vector2 = bottle_body.global_position + bottle_body.size * Vector2(0.5, 0.0)

@@ -61,12 +61,8 @@ mouse_filter = 2
 
 [node name="Liquid" type="ColorRect" parent="VBoxMain/HBoxMain/BottleSide/BottleBody/BottleClip"]
 layout_mode = 0
-anchor_left = 0.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
 offset_left = 0
-offset_top = -180
+offset_top = 0
 offset_right = 0
 offset_bottom = 0
 color = Color(0.2, 0.7, 0.3, 1)
@@ -90,14 +86,10 @@ mouse_filter = 2
 
 [node name="NeckLiquid" type="ColorRect" parent="VBoxMain/HBoxMain/BottleSide/BottleNeck/NeckClip"]
 layout_mode = 0
-anchor_left = 0.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
 offset_left = 0
-offset_top = -22
-offset_right = 0
-offset_bottom = 0
+offset_top = 0
+offset_right = 48
+offset_bottom = 22
 color = Color(0.2, 0.7, 0.3, 1)
 
 [node name="HPCountLabel" type="Label" parent="VBoxMain/HBoxMain/BottleSide"]
