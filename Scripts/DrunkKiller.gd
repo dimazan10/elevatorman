@@ -125,18 +125,24 @@ func move_around_player() -> void:
 		return
 	var direction_to_player = to_player / distance
 	
-	var clockwise_tangent = Vector2(-direction_to_player.y, direction_to_player.x)
+	var tangent: Vector2
+	if abs(player.velocity.x) > 10.0:
+		if player.velocity.x > 0:
+			tangent = Vector2(direction_to_player.y, -direction_to_player.x)
+		else:
+			tangent = Vector2(-direction_to_player.y, direction_to_player.x)
+	else:
+		tangent = Vector2(-direction_to_player.y, direction_to_player.x)
 	var desired_velocity = Vector2.ZERO
 	
-	# Твоя базовая логика орбиты вокруг игрока
 	if distance > orbit_distance + 20:
-		var raw = clockwise_tangent + direction_to_player
-		desired_velocity = raw.normalized() if raw.is_finite() else clockwise_tangent
+		var raw = tangent + direction_to_player
+		desired_velocity = raw.normalized() if raw.is_finite() else tangent
 	elif distance < orbit_distance - 20:
-		var raw = clockwise_tangent - direction_to_player
-		desired_velocity = raw.normalized() if raw.is_finite() else clockwise_tangent
+		var raw = tangent - direction_to_player
+		desired_velocity = raw.normalized() if raw.is_finite() else tangent
 	else:
-		desired_velocity = clockwise_tangent
+		desired_velocity = tangent
 		
 	# Считаем вектор движения по орбите
 	var movement_vector = desired_velocity * speed
