@@ -110,12 +110,12 @@ func _spawn_coins(count: int) -> void:
 		coin.add_theme_font_size_override("font_size", 18)
 		coin.add_theme_constant_override("outline_size", 1)
 		coin.add_theme_color_override("font_outline_color", Color.BLACK)
-		coin.position = start + Vector2(randf_range(-20, 20), randf_range(-30, 0)) - coin_layer.global_position
 		coin_layer.add_child(coin)
 
-		var ct: Tween = create_tween().set_delay(i * 0.08)
-		ct.tween_property(coin, "position", target + Vector2(randf_range(-10, 10), randf_range(-10, 10)), 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK)
-		ct.tween_callback(coin.queue_free)
+		coin.position = start + Vector2(randf_range(-20, 20), randf_range(-30, 0)) - coin_layer.global_position
+		var ct: Tween = create_tween()
+		ct.tween_property(coin, "position", target + Vector2(randf_range(-10, 10), randf_range(-10, 10)), 0.5).set_delay(i * 0.08).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK)
+		ct.tween_callback(coin.queue_free).set_delay(i * 0.08 + 0.6)
 
 func _on_bucket_buy() -> void:
 	if GameState.currency >= 3 and not GameState.has_bucket:
