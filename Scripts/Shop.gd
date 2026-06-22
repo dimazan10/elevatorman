@@ -43,4 +43,4 @@ func _on_continue() -> void:
 		get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
 	else:
 		GameState.current_floor += 1
-		get_tree().reload_current_scene()
+		get_tree().change_scene_to_file("res://Scenes/Game/game.tscn")
