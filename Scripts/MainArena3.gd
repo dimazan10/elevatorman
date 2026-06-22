@@ -350,7 +350,6 @@ func start_restart() -> void:
 	if lift_state != LiftState.RETURNING:
 		return
 	_save_floor_state()
-	GameState.currency += maxi(0, GameState.last_floor_hp)
 	player_node.can_move = false
 	lift_state = LiftState.NONE
 	_hide_player()
