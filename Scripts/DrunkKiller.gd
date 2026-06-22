@@ -138,9 +138,6 @@ func move_around_player() -> void:
 	if distance > orbit_distance + 20:
 		var raw = tangent + direction_to_player
 		desired_velocity = raw.normalized() if raw.is_finite() else tangent
-	elif distance < orbit_distance - 20:
-		var raw = tangent - direction_to_player
-		desired_velocity = raw.normalized() if raw.is_finite() else tangent
 	else:
 		desired_velocity = tangent
 		
