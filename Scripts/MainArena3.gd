@@ -51,8 +51,7 @@ const _ZONE_PRIORITY := {
 func _ready() -> void:
 	randomize()
 	var floor_num = GameState.current_floor
-	if floor_num > 1:
-		_arena_scale_factor = 1.0 + (floor_num - 1) * 0.15
+	_arena_scale_factor = 1.0 + (MAX_FLOOR - floor_num) * 0.15
 	_setup_arena_rotation()
 	_generate_world()
 	_scale_arenas()
