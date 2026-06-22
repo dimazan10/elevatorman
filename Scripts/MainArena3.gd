@@ -78,6 +78,7 @@ func _ready() -> void:
 	$Hole/FloorElevator/TransportArea/CollisionShape.set_deferred("disabled", false)
 	_show_player()
 	_hide_floor_label()
+	_restore_bucket_state()
 	player_node.can_move = true
 	add_to_group("pausable")
 	_pause_manager.paused_state_changed.connect(_on_pause_state_changed)
@@ -298,9 +299,28 @@ func _on_combat_timeout() -> void:
 
 const MAX_FLOOR := 3
 
+func _save_bucket_state() -> void:
+	GameState.has_bucket = false
+	if not is_instance_valid(player_node):
+		return
+	if player_node.has_method("_try_bucket_hit") and player_node._bucket:
+		GameState.has_bucket = true
+		GameState.bucket_charges = player_node._bucket.charges
+
+func _restore_bucket_state() -> void:
+	if not GameState.has_bucket:
+		return
+	if not is_instance_valid(player_node):
+		return
+	if player_node.has_method("_setup_bucket"):
+		player_node._setup_bucket()
+		if player_node._bucket:
+			player_node._bucket.charges = GameState.bucket_charges
+
 func start_restart() -> void:
 	if lift_state != LiftState.RETURNING:
 		return
+	_save_bucket_state()
 	player_node.can_move = false
 	lift_state = LiftState.NONE
 	_hide_player()
@@ -310,6 +330,7 @@ func start_restart() -> void:
 	await anim.animation_finished
 	if GameState.current_floor >= MAX_FLOOR:
 		GameState.current_floor = 1
+		GameState.has_bucket = false
 		await FadeTransition.fade_out()
 		get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
 		return

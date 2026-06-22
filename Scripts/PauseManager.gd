@@ -81,6 +81,7 @@ func _on_exit() -> void:
 	_set_process_mode_all(Node.PROCESS_MODE_INHERIT)
 	paused_state_changed.emit(false)
 	GameState.current_floor = 1
+	GameState.has_bucket = false
 	get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
 
 

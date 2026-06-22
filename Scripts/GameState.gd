@@ -7,6 +7,8 @@ var master_volume: float = 0.0
 var music_volume: float = 0.0
 var effects_volume: float = 0.0
 var show_fps: bool = false
+var has_bucket: bool = false
+var bucket_charges: int = 3
 
 func _ready() -> void:
 	_load_settings()
