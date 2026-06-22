@@ -10,63 +10,181 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="VBoxMain" type="VBoxContainer" parent="."]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -200.0
-offset_right = 200.0
-offset_bottom = 200.0
+offset_left = -300.0
+offset_top = -240.0
+offset_right = 300.0
+offset_bottom = 240.0
 alignment = 1
-theme_override_constants/separation = 16
+theme_override_constants/separation = 12
 
-[node name="Title" type="Label" parent="VBox"]
+[node name="TitleLabel" type="Label" parent="VBoxMain"]
 layout_mode = 2
 text = "МЕЖДУ ЭТАЖАМИ"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 28
 
-[node name="TimeLabel" type="Label" parent="VBox"]
+[node name="HSep1" type="HSeparator" parent="VBoxMain"]
+layout_mode = 2
+
+[node name="HBoxMain" type="HBoxContainer" parent="VBoxMain"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BottleSide" type="Control" parent="VBoxMain/HBoxMain"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(200, 0)
+
+[node name="BottleBody" type="Panel" parent="VBoxMain/HBoxMain/BottleSide"]
+layout_mode = 0
+offset_left = 40
+offset_top = 30
+offset_right = 160
+offset_bottom = 210
+mouse_filter = 2
+
+[node name="BottleClip" type="Control" parent="VBoxMain/HBoxMain/BottleSide/BottleBody"]
+layout_mode = 0
+anchors_preset = 0
+offset_left = 2
+offset_top = 2
+offset_right = 118
+offset_bottom = 178
+clip_contents = true
+mouse_filter = 2
+
+[node name="Liquid" type="ColorRect" parent="VBoxMain/HBoxMain/BottleSide/BottleBody/BottleClip"]
+layout_mode = 0
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0
+offset_top = -180
+offset_right = 0
+offset_bottom = 0
+color = Color(0.2, 0.7, 0.3, 1)
+
+[node name="BottleNeck" type="Panel" parent="VBoxMain/HBoxMain/BottleSide"]
+layout_mode = 0
+offset_left = 75
+offset_top = 8
+offset_right = 125
+offset_bottom = 30
+
+[node name="NeckClip" type="Control" parent="VBoxMain/HBoxMain/BottleSide/BottleNeck"]
+layout_mode = 0
+anchors_preset = 0
+offset_left = 1
+offset_top = 0
+offset_right = 49
+offset_bottom = 22
+clip_contents = true
+mouse_filter = 2
+
+[node name="NeckLiquid" type="ColorRect" parent="VBoxMain/HBoxMain/BottleSide/BottleNeck/NeckClip"]
+layout_mode = 0
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0
+offset_top = -22
+offset_right = 0
+offset_bottom = 0
+color = Color(0.2, 0.7, 0.3, 1)
+
+[node name="HPCountLabel" type="Label" parent="VBoxMain/HBoxMain/BottleSide"]
+layout_mode = 0
+offset_left = 40
+offset_top = 90
+offset_right = 160
+offset_bottom = 150
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 48
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+
+[node name="CollectBtn" type="Button" parent="VBoxMain/HBoxMain/BottleSide"]
+layout_mode = 0
+offset_left = 30
+offset_top = 220
+offset_right = 170
+offset_bottom = 252
+text = "СОБРАТЬ МОНЕТЫ"
+
+[node name="InfoSide" type="VBoxContainer" parent="VBoxMain/HBoxMain"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+theme_override_constants/separation = 10
+
+[node name="TimeLabel" type="Label" parent="VBoxMain/HBoxMain/InfoSide"]
 layout_mode = 2
 text = "Время: 00:00"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 
-[node name="HPLabel" type="Label" parent="VBox"]
+[node name="CoinDisplay" type="HBoxContainer" parent="VBoxMain/HBoxMain/InfoSide"]
 layout_mode = 2
-text = "Сохранено HP: 0"
-horizontal_alignment = 1
+alignment = 1
 
-[node name="CurrencyLabel" type="Label" parent="VBox"]
+[node name="CoinIcon" type="Label" parent="VBoxMain/HBoxMain/InfoSide/CoinDisplay"]
 layout_mode = 2
-text = "Монет: 0"
-horizontal_alignment = 1
-theme_override_font_sizes/font_size = 24
+text = "$"
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_constants/outline_size = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 
-[node name="HSeparator" type="HSeparator" parent="VBox"]
+[node name="CurrencyLabel" type="Label" parent="VBoxMain/HBoxMain/InfoSide/CoinDisplay"]
+layout_mode = 2
+text = "0"
+theme_override_font_sizes/font_size = 28
+theme_override_constants/outline_size = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+
+[node name="HSep2" type="HSeparator" parent="VBoxMain/HBoxMain/InfoSide"]
 layout_mode = 2
 
-[node name="ShopTitle" type="Label" parent="VBox"]
+[node name="ShopLabel" type="Label" parent="VBoxMain/HBoxMain/InfoSide"]
 layout_mode = 2
 text = "МАГАЗИН"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 20
 
-[node name="BucketBuy" type="Button" parent="VBox"]
+[node name="BucketBuy" type="Button" parent="VBoxMain/HBoxMain/InfoSide"]
 layout_mode = 2
 text = "Купить ведро (3 монеты)"
+size_flags_horizontal = 4
 
-[node name="BucketStatus" type="Label" parent="VBox"]
+[node name="BucketStatus" type="Label" parent="VBoxMain/HBoxMain/InfoSide"]
 layout_mode = 2
 text = ""
 horizontal_alignment = 1
 
-[node name="ContinueBtn" type="Button" parent="VBox"]
+[node name="ContinueBtn" type="Button" parent="VBoxMain/HBoxMain/InfoSide"]
 layout_mode = 2
 text = "Продолжить"
+size_flags_horizontal = 4
 
-[connection signal="pressed" from="VBox/BucketBuy" to="." method="_on_bucket_buy"]
-[connection signal="pressed" from="VBox/ContinueBtn" to="." method="_on_continue"]
+[node name="CoinLayer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[connection signal="pressed" from="VBoxMain/HBoxMain/BottleSide/CollectBtn" to="." method="_on_collect"]
+[connection signal="pressed" from="VBoxMain/HBoxMain/InfoSide/BucketBuy" to="." method="_on_bucket_buy"]
+[connection signal="pressed" from="VBoxMain/HBoxMain/InfoSide/ContinueBtn" to="." method="_on_continue"]

@@ -1,20 +1,65 @@
 extends Control
 
-@onready var time_label := $VBox/TimeLabel
-@onready var hp_label := $VBox/HPLabel
-@onready var currency_label := $VBox/CurrencyLabel
-@onready var bucket_btn := $VBox/BucketBuy
-@onready var continue_btn := $VBox/ContinueBtn
-@onready var bucket_status := $VBox/BucketStatus
+const MAX_HP := 5
+const COIN_COLOR := Color(1.0, 0.85, 0.2)
+
+@onready var vbox := $VBoxMain
+@onready var time_label := $VBoxMain/HBoxMain/InfoSide/TimeLabel
+@onready var currency_label := $VBoxMain/HBoxMain/InfoSide/CoinDisplay/CurrencyLabel
+@onready var bucket_btn := $VBoxMain/HBoxMain/InfoSide/BucketBuy
+@onready var continue_btn := $VBoxMain/HBoxMain/InfoSide/ContinueBtn
+@onready var bucket_status := $VBoxMain/HBoxMain/InfoSide/BucketStatus
+@onready var bottle_body := $VBoxMain/HBoxMain/BottleSide/BottleBody
+@onready var bottle_clip := $VBoxMain/HBoxMain/BottleSide/BottleBody/BottleClip
+@onready var liquid := $VBoxMain/HBoxMain/BottleSide/BottleBody/BottleClip/Liquid
+@onready var hp_count_label := $VBoxMain/HBoxMain/BottleSide/HPCountLabel
+@onready var collect_btn := $VBoxMain/HBoxMain/BottleSide/CollectBtn
+@onready var coin_layer := $CoinLayer
+@onready var neck := $VBoxMain/HBoxMain/BottleSide/BottleNeck
+@onready var neck_liquid := $VBoxMain/HBoxMain/BottleSide/BottleNeck/NeckClip/NeckLiquid
+
+var _collected := false
 
 func _ready() -> void:
+	_setup_bottle_style()
 	var t = GameState.last_floor_time
 	var m = int(t) / 60
 	var s = int(t) % 60
 	time_label.text = "Время: %02d:%02d" % [m, s]
-	hp_label.text = "Сохранено HP: %d (+%d монет)" % [GameState.last_floor_hp, GameState.last_floor_hp]
-	currency_label.text = "Монет: %d" % GameState.currency
+	hp_count_label.text = str(GameState.last_floor_hp)
+	_liquid_height()
+	currency_label.text = str(GameState.currency)
 	_update_bucket_ui()
+
+func _setup_bottle_style() -> void:
+	var sbf := StyleBoxFlat.new()
+	sbf.bg_color = Color(0.08, 0.08, 0.12)
+	sbf.border_color = Color(0.3, 0.3, 0.4)
+	sbf.border_width_left = 2
+	sbf.border_width_right = 2
+	sbf.border_width_bottom = 2
+	sbf.corner_radius_bottom_left = 20
+	sbf.corner_radius_bottom_right = 20
+	bottle_body.add_theme_stylebox_override("panel", sbf)
+
+	var sn := StyleBoxFlat.new()
+	sn.bg_color = Color(0.08, 0.08, 0.12)
+	sn.border_color = Color(0.3, 0.3, 0.4)
+	sn.border_width_left = 2
+	sn.border_width_right = 2
+	sn.border_width_top = 2
+	sn.corner_radius_top_left = 8
+	sn.corner_radius_top_right = 8
+	neck.add_theme_stylebox_override("panel", sn)
+
+	liquid.color = Color(0.2, 0.7, 0.3)
+	neck_liquid.color = Color(0.2, 0.7, 0.3)
+
+func _liquid_height() -> void:
+	var ratio := clampf(GameState.last_floor_hp / float(MAX_HP), 0.0, 1.0)
+	var bh := bottle_clip.size.y * ratio
+	liquid.size.y = max(bh, 0)
+	neck_liquid.visible = ratio >= 0.99
 
 func _update_bucket_ui() -> void:
 	if GameState.has_bucket:
@@ -22,16 +67,61 @@ func _update_bucket_ui() -> void:
 		bucket_btn.text = "Куплено"
 		bucket_status.text = "Ведро (%d зар." % GameState.bucket_charges + ")"
 	else:
-		bucket_btn.disabled = GameState.currency < 3
+		bucket_btn.disabled = GameState.currency < 3 or not _collected
 		bucket_btn.text = "Купить ведро (3 монеты)"
 		bucket_status.text = ""
+
+func _on_collect() -> void:
+	if _collected:
+		return
+	_collected = true
+	collect_btn.disabled = true
+
+	var tween := create_tween().set_parallel(false)
+	var hp := GameState.last_floor_hp
+	var ratio := clampf(hp / float(MAX_HP), 0.0, 1.0)
+
+	tween.tween_method(_animate_liquid, ratio, 0.0, 0.6).set_ease(Tween.EASE_IN)
+	tween.parallel().tween_property(neck_liquid, "visible", false, 0.3)
+
+	GameState.currency += hp
+	_spawn_coins(hp)
+	await tween.finished
+
+	var bounce := create_tween().set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	bounce.tween_property($VBoxMain/HBoxMain/InfoSide/CoinDisplay/CoinIcon, "scale", Vector2(1.5, 1.5), 0.2)
+	bounce.tween_property($VBoxMain/HBoxMain/InfoSide/CoinDisplay/CoinIcon, "scale", Vector2(1.0, 1.0), 0.3)
+	currency_label.text = str(GameState.currency)
+	_update_bucket_ui()
+
+func _animate_liquid(v: float) -> void:
+	var bh := bottle_clip.size.y * v
+	liquid.size.y = max(bh, 0)
+
+func _spawn_coins(count: int) -> void:
+	var start := bottle_body.global_position + bottle_body.size * Vector2(0.5, 0.0)
+	var target := coin_layer.to_local($VBoxMain/HBoxMain/InfoSide/CoinDisplay/CoinIcon.global_position + Vector2(8, 8))
+
+	for i in range(min(count, 10)):
+		var coin := Label.new()
+		coin.text = "+1"
+		coin.add_theme_color_override("font_color", COIN_COLOR)
+		coin.add_theme_font_size_override("font_size", 18)
+		coin.add_theme_constant_override("outline_size", 1)
+		coin.add_theme_color_override("font_outline_color", Color.BLACK)
+		coin.position = start + Vector2(randf_range(-20, 20), randf_range(-30, 0)) - coin_layer.global_position
+		coin_layer.add_child(coin)
+
+		var ct := create_tween().set_delay(i * 0.08)
+		ct.tween_property(coin, "position", target + Vector2(randf_range(-10, 10), randf_range(-10, 10)), 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK)
+		ct.tween_callback(coin.queue_free)
 
 func _on_bucket_buy() -> void:
 	if GameState.currency >= 3 and not GameState.has_bucket:
 		GameState.currency -= 3
 		GameState.has_bucket = true
 		GameState.bucket_charges = 3
-		currency_label.text = "Монет: %d" % GameState.currency
+		currency_label.text = str(GameState.currency)
 		_update_bucket_ui()
 
 func _on_continue() -> void:
