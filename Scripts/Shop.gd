@@ -14,6 +14,7 @@ const COIN_COLOR := Color(1.0, 0.85, 0.2)
 @onready var liquid: ColorRect = $VBoxMain/HBoxMain/BottleSide/BottleBody/BottleClip/Liquid
 @onready var hp_count_label: Label = $VBoxMain/HBoxMain/BottleSide/HPCountLabel
 @onready var collect_btn: Button = $VBoxMain/HBoxMain/BottleSide/CollectBtn
+@onready var coin_icon: Label = $VBoxMain/HBoxMain/InfoSide/CoinDisplay/CoinIcon
 @onready var coin_layer: Control = $CoinLayer
 @onready var neck: Panel = $VBoxMain/HBoxMain/BottleSide/BottleNeck
 @onready var neck_liquid: ColorRect = $VBoxMain/HBoxMain/BottleSide/BottleNeck/NeckClip/NeckLiquid
@@ -89,8 +90,8 @@ func _on_collect() -> void:
 	await tween.finished
 
 	var bounce := create_tween().set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
-	bounce.tween_property($VBoxMain/HBoxMain/InfoSide/CoinDisplay/CoinIcon, "scale", Vector2(1.5, 1.5), 0.2)
-	bounce.tween_property($VBoxMain/HBoxMain/InfoSide/CoinDisplay/CoinIcon, "scale", Vector2(1.0, 1.0), 0.3)
+	bounce.tween_property(coin_icon, "scale", Vector2(1.5, 1.5), 0.2)
+	bounce.tween_property(coin_icon, "scale", Vector2(1.0, 1.0), 0.3)
 	currency_label.text = str(GameState.currency)
 	_update_bucket_ui()
 
@@ -99,8 +100,8 @@ func _animate_liquid(v: float) -> void:
 	liquid.size.y = maxf(bh, 0.0)
 
 func _spawn_coins(count: int) -> void:
-	var start := bottle_body.global_position + bottle_body.size * Vector2(0.5, 0.0)
-	var target := coin_layer.to_local($VBoxMain/HBoxMain/InfoSide/CoinDisplay/CoinIcon.global_position + Vector2(8, 8))
+	var start: Vector2 = bottle_body.global_position + bottle_body.size * Vector2(0.5, 0.0)
+	var target: Vector2 = coin_layer.to_local(coin_icon.global_position + Vector2(8, 8))
 
 	for i in range(min(count, 10)):
 		var coin := Label.new()
