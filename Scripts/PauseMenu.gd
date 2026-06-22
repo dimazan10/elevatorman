@@ -4,9 +4,14 @@ signal resume_pressed
 signal exit_pressed
 
 var _settings_panel: Control = null
+var _click: AudioStreamPlayer
 
 
 func _ready() -> void:
+	_click = AudioStreamPlayer.new()
+	_click.stream = load("res://Assets/Sounds/Effects/Click_Button.mp3")
+	add_child(_click)
+
 	anchor_right = 1.0
 	anchor_bottom = 1.0
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -59,6 +64,7 @@ func _ready() -> void:
 
 
 func _on_settings() -> void:
+	_click.play()
 	_settings_panel = preload("res://Scenes/Settings/Settings.tscn").instantiate()
 	_settings_panel.return_to_game = true
 	_settings_panel.back_pressed.connect(_close_settings)
@@ -74,7 +80,9 @@ func _close_settings() -> void:
 
 
 func _on_resume() -> void:
+	_click.play()
 	resume_pressed.emit()
 
 func _on_exit() -> void:
+	_click.play()
 	exit_pressed.emit()

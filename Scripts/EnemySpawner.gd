@@ -9,6 +9,19 @@ func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_na
 	if points.is_empty():
 		return []
 
+	var gate_triggers := get_tree().get_nodes_in_group("gate_trigger")
+	var safe_points := []
+	for pt in points:
+		var too_close := false
+		for gt in gate_triggers:
+			if pt.global_position.distance_to(gt.global_position) < 250.0:
+				too_close = true
+				break
+		if not too_close:
+			safe_points.append(pt)
+
+	var use_points := safe_points if not safe_points.is_empty() else points
+
 	var total = 3 + level + randi() % 3
 	var types: Array[String] = ["angry_ball", "DrunkKiller", "Spider"]
 
@@ -19,11 +32,11 @@ func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_na
 	types.shuffle()
 
 	for t in types:
-		if points.is_empty():
+		if use_points.is_empty():
 			break
-		var idx = randi() % points.size()
-		var pt = points[idx]
-		points.remove_at(idx)
+		var idx = randi() % use_points.size()
+		var pt = use_points[idx]
+		use_points.remove_at(idx)
 		var scene = load("res://Objects/Summons/" + t + ".tscn")
 		var inst = scene.instantiate()
 		inst.global_position = pt.global_position

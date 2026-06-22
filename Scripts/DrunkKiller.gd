@@ -11,6 +11,9 @@ const BULLET_SCENE = preload("res://Objects/Summons/Bullet.tscn")
 # Настройки расталкивания врагов между собой
 @export var separation_force: float = 80.0 # Сила расталкивания (чем выше, тем жестче держат дистанцию)
 
+var _enraged := false
+var _speed_multiplier := 1.0
+
 # Ссылки на узлы
 @onready var enemy_sprite := $AnimatedSprite2D
 @onready var weapon_anchor := $WeaponAnchor
@@ -125,6 +128,18 @@ func move_around_player() -> void:
 		return
 	var direction_to_player = to_player / distance
 	
+	# Enraged: surround AI (ours)
+	if _enraged:
+		var surround_target = _get_surround_target()
+		var to_target = surround_target - global_position
+		if to_target.length() > 5.0:
+			velocity = to_target.normalized() * speed * _speed_multiplier
+			if not velocity.is_finite():
+				velocity = Vector2.ZERO
+			move_and_slide()
+			return
+	
+	# Smart orbit based on player velocity direction (from remote)
 	var tangent: Vector2
 	if abs(player.velocity.x) > 10.0:
 		if player.velocity.x > 0:
@@ -142,7 +157,7 @@ func move_around_player() -> void:
 		desired_velocity = tangent
 		
 	# Считаем вектор движения по орбите
-	var movement_vector = desired_velocity * speed
+	var movement_vector = desired_velocity * speed * _speed_multiplier
 	
 	# ДОБАВЛЯЕМ СИЛУ РАСТАЛКИВАНИЯ ОТ ДРУГИХ ВРАГОВ
 	var separation_vector = calculate_separation_vector()
@@ -168,7 +183,10 @@ func calculate_separation_vector() -> Vector2:
 	return separation.normalized() if separation.length_squared() > 0 else Vector2.ZERO
 
 func set_random_burst_pause() -> void:
-	burst_timer.wait_time = randf_range(1.0, 2.0)
+	if _enraged:
+		burst_timer.wait_time = randf_range(0.8, 1.5)
+	else:
+		burst_timer.wait_time = randf_range(1.0, 2.0)
 	burst_timer.start()
 
 func _on_burst_timer_timeout() -> void:
@@ -243,3 +261,35 @@ func take_damage(amount: int) -> void:
 	health -= amount
 	if health <= 0:
 		queue_free()
+
+func set_enraged(enraged: bool) -> void:
+	_enraged = enraged
+	if enraged:
+		modulate = Color(1.8, 0.7, 0.7)
+	else:
+		modulate = Color.WHITE
+
+func _get_surround_target() -> Vector2:
+	var player_pos = player.global_position
+	var my_angle = (player_pos - global_position).angle()
+	var occupied = [my_angle]
+
+	for body in separation_zone.get_overlapping_bodies():
+		if body != self and body is CharacterBody2D and body.has_method("_get_surround_target"):
+			var a = (player_pos - body.global_position).angle()
+			occupied.append(a)
+
+	occupied.sort()
+	var best_gap = 0.0
+	var best_angle = my_angle
+	for i in occupied.size():
+		var gap = occupied[(i + 1) % occupied.size()] - occupied[i]
+		if gap < 0:
+			gap += TAU
+		if gap > best_gap:
+			best_gap = gap
+			best_angle = (occupied[i] + occupied[(i + 1) % occupied.size()]) * 0.5
+			if best_angle > PI:
+				best_angle -= TAU
+
+	return player_pos + Vector2(cos(best_angle), sin(best_angle)) * orbit_distance

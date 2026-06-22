@@ -5,6 +5,8 @@ extends RigidBody2D
 
 var _direction: Vector2
 var _bounce_audio: AudioStreamPlayer2D
+var _enraged := false
+var _speed_multiplier := 1.0
 
 func _ready():
 	if linear_velocity == Vector2.ZERO:
@@ -19,7 +21,7 @@ func _ready():
 				_direction = Vector2.RIGHT
 		else:
 			_direction = Vector2.RIGHT
-			linear_velocity = _direction * CONSTANT_SPEED
+	linear_velocity = _direction * CONSTANT_SPEED * _speed_multiplier
 	_bounce_audio = AudioStreamPlayer2D.new()
 	_bounce_audio.name = "BounceAudio"
 	_bounce_audio.stream = preload("res://Assets/Sounds/Effects/AngryBallHit.mp3")
@@ -43,3 +45,10 @@ func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("player"):
 		if body.has_method("take_damage"):
 			body.take_damage(1)
+
+func set_enraged(enraged: bool) -> void:
+	_enraged = enraged
+	if enraged:
+		modulate = Color(1.8, 0.7, 0.7)
+	else:
+		modulate = Color.WHITE

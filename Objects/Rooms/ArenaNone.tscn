@@ -141,6 +141,15 @@ polygon = PackedVector2Array(-307.5, -10, 307.5, -10, 307.5, 10, -307.5, 10)
 
 [node name="EnemySpawner" parent="Pivot" unique_id=2077439795 instance=ExtResource("12_vms8c")]
 
+[node name="SwitchPoint1" type="Marker2D" parent="Pivot" groups=["switch_point_none"]]
+position = Vector2(-340, 0)
+
+[node name="SwitchPoint2" type="Marker2D" parent="Pivot" groups=["switch_point_none"]]
+position = Vector2(170, -380)
+
+[node name="SwitchPoint3" type="Marker2D" parent="Pivot" groups=["switch_point_none"]]
+position = Vector2(170, 380)
+
 [node name="SpawnPoint1" type="Marker2D" parent="." unique_id=2124699469 groups=["spawn_point_none"]]
 position = Vector2(651, 116)
 

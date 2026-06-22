@@ -17,6 +17,8 @@ var _is_waiting: bool = false
 var _melee_cooldown := false
 var _knockback := Vector2.ZERO
 var _run_audio_playing := false
+var _enraged := false
+var _speed_multiplier := 1.0
 
 @onready var animated_sprite := $AnimatedSprite2D
 @onready var shoot_timer := $ShootTimer
@@ -112,6 +114,15 @@ func _check_zone_teleport() -> bool:
 			animated_sprite.play("walk")
 	return false
 
+func set_enraged(enraged: bool) -> void:
+	_enraged = enraged
+	if enraged:
+		modulate = Color(1.8, 0.7, 0.7)
+		shoot_timer.wait_time = randf_range(6.0, 9.0)
+	else:
+		modulate = Color.WHITE
+		shoot_timer.wait_time = randf_range(8.0, 12.0)
+
 func _physics_process(delta: float) -> void:
 	if not player:
 		_stop_run_audio()
@@ -138,7 +149,7 @@ func _physics_process(delta: float) -> void:
 		run_audio.play()
 		_run_audio_playing = true
 	var direction = to_player / dist
-	var current_speed = speed * (web_boost_multiplier if _web_boost else 1.0)
+	var current_speed = speed * (web_boost_multiplier if _web_boost else 1.0) * _speed_multiplier
 
 	var separation = _get_separation_vector()
 	velocity = direction * current_speed + separation * separation_force

@@ -6,14 +6,20 @@ const WALL_PUSHER_SCRIPT = preload("res://Scripts/WallPusher.gd")
 signal player_zone_changed(zone_name: String)
 
 enum LiftState { NONE, START, EXITING, WAITING, COMBAT, RETURNING }
+enum QuestMode { CLASSIC, TIME_ATTACK }
 var lift_state := LiftState.NONE
+var _quest_mode := QuestMode.CLASSIC
 
 var combat_timer: Timer
+var rage_timer: Timer
 var time_label: Label
 var floor_label: Label
+var quest_label: Label
 var _fps_label: Label
 var _switch_count := 0
 var _activated_switch_count := 0
+var _first_switch_activated := false
+var _first_switch_ref: Node = null
 var _arena_rotator: Node2D
 var _secondary_arenas: Array[Node2D] = []
 var _arena_none: Node2D
@@ -51,6 +57,7 @@ const _ZONE_PRIORITY := {
 
 func _ready() -> void:
 	randomize()
+	_quest_mode = QuestMode.CLASSIC if randi() % 2 == 0 else QuestMode.TIME_ATTACK
 	var floor_num = GameState.current_floor
 	_arena_scale_factor = 1.0 + (MAX_FLOOR - floor_num) * 0.15
 	_setup_arena_rotation()
@@ -213,6 +220,18 @@ func _setup_ui() -> void:
 	floor_label.text = "Этаж " + str(GameState.current_floor)
 	ui.add_child(floor_label)
 
+	quest_label = Label.new()
+	quest_label.name = "QuestLabel"
+	quest_label.add_theme_font_size_override("font_size", 24)
+	quest_label.add_theme_color_override("font_color", Color.GOLD)
+	quest_label.add_theme_constant_override("outline_size", 3)
+	quest_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	quest_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	quest_label.position = Vector2(220, 80)
+	quest_label.size = Vector2(800, 40)
+	quest_label.text = "Активировать 3 рычага" if _quest_mode == QuestMode.CLASSIC else "Активировать 2 рычага"
+	ui.add_child(quest_label)
+
 	var music = AudioStreamPlayer.new()
 	music.name = "MusicPlayer"
 	music.stream = load("res://Assets/Sounds/music/neon-pulse_93545.mp3")
@@ -297,17 +316,97 @@ func _connect_switch() -> void:
 
 	_switch_count = switches.size()
 	_activated_switch_count = 0
+	_first_switch_activated = false
+	_first_switch_ref = null
 	for s in switches:
 		if s.has_signal("activated"):
-			s.activated.connect(_on_switch_activated)
+			s.activated.connect(_on_switch_activated.bind(s))
 
-func _on_switch_activated() -> void:
+func _on_switch_activated(switch: Node) -> void:
 	if lift_state != LiftState.WAITING:
 		return
-	_activated_switch_count += 1
-	if _activated_switch_count >= _switch_count:
-		_start_combat_timer()
-		lift_state = LiftState.COMBAT
+
+	if _quest_mode == QuestMode.CLASSIC:
+		_activated_switch_count += 1
+		if _activated_switch_count >= _switch_count:
+			_start_combat_timer()
+			lift_state = LiftState.COMBAT
+			_update_quest_text("done")
+	elif _quest_mode == QuestMode.TIME_ATTACK:
+		if not _first_switch_activated:
+			_first_switch_activated = true
+			_first_switch_ref = switch
+			_activated_switch_count = 1
+			_enrage_enemies()
+			_start_rage_timer(30.0)
+			_update_quest_text("first_switch")
+		else:
+			_activated_switch_count = 2
+			_unlock_elevator()
+
+func _start_rage_timer(duration: float) -> void:
+	rage_timer = Timer.new()
+	rage_timer.name = "RageTimer"
+	rage_timer.wait_time = duration
+	rage_timer.one_shot = true
+	rage_timer.timeout.connect(_on_rage_timeout)
+	add_child(rage_timer)
+	rage_timer.start()
+
+func _on_rage_timeout() -> void:
+	if is_instance_valid(_first_switch_ref) and _first_switch_ref.has_method("deactivate"):
+		_first_switch_ref.deactivate()
+	_first_switch_activated = false
+	_first_switch_ref = null
+	_activated_switch_count = 0
+	_disband_enemies()
+	_update_quest_text("reset")
+
+func _enrage_enemies() -> void:
+	for e in get_tree().get_nodes_in_group("enemy"):
+		if e.has_method("set_enraged"):
+			e.set_enraged(true)
+
+func _disband_enemies() -> void:
+	for e in get_tree().get_nodes_in_group("enemy"):
+		if e.has_method("set_enraged"):
+			e.set_enraged(false)
+
+func _unlock_elevator() -> void:
+	if rage_timer:
+		rage_timer.stop()
+		rage_timer.queue_free()
+		rage_timer = null
+	for s in get_tree().get_nodes_in_group("switch"):
+		if s.has_method("play_ready"):
+			s.play_ready()
+	_set_shaft_collision(true)
+	lift_state = LiftState.RETURNING
+	_update_quest_text("done")
+	anim.play("DownUp")
+	await anim.animation_finished
+	anim.play("Open")
+	await anim.animation_finished
+	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 1)
+
+func _update_quest_text(state: String) -> void:
+	match _quest_mode:
+		QuestMode.CLASSIC:
+			match state:
+				"done":
+					quest_label.text = "Идти к лифту"
+				_:
+					quest_label.text = "Активировать 3 рычага"
+		QuestMode.TIME_ATTACK:
+			match state:
+				"first_switch":
+					quest_label.text = "Найди второй рычаг"
+				"done":
+					quest_label.text = "Идти к лифту"
+				"reset":
+					quest_label.text = "Активировать 2 рычага"
+				_:
+					quest_label.text = "Активировать 2 рычага"
 
 func _on_combat_timeout() -> void:
 	if lift_state != LiftState.COMBAT:
@@ -508,7 +607,7 @@ func _scale_arenas() -> void:
 			pivot.scale = Vector2(_arena_scale_factor, _arena_scale_factor)
 
 func _spawn_switches(level: int) -> void:
-	_switch_spawner.spawn(level, self)
+	_switch_spawner.spawn(level, self, _quest_mode)
 
 func _show_floor_label() -> void:
 	if not floor_label:
@@ -609,6 +708,11 @@ func _process(delta: float) -> void:
 		_fps_label.text = "FPS: " + str(Engine.get_frames_per_second())
 	if combat_timer and not combat_timer.is_stopped():
 		var remaining: float = ceil(combat_timer.time_left)
+		var m := int(remaining / 60.0)
+		var s := int(remaining) % 60
+		time_label.text = "%02d:%02d" % [m, s]
+	elif rage_timer and not rage_timer.is_stopped():
+		var remaining: float = ceil(rage_timer.time_left)
 		var m := int(remaining / 60.0)
 		var s := int(remaining) % 60
 		time_label.text = "%02d:%02d" % [m, s]
