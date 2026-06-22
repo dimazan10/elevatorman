@@ -101,7 +101,7 @@ func _animate_liquid(v: float) -> void:
 
 func _spawn_coins(count: int) -> void:
 	var start: Vector2 = bottle_body.global_position + bottle_body.size * Vector2(0.5, 0.0)
-	var target: Vector2 = coin_layer.to_local(coin_icon.global_position + Vector2(8, 8))
+	var target: Vector2 = coin_icon.global_position + Vector2(8, 8) - coin_layer.global_position
 
 	for i in range(min(count, 10)):
 		var coin := Label.new()
