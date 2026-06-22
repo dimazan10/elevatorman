@@ -26,6 +26,7 @@ var _current_player_zone: String = ""
 var _paused_saved_zone: String = ""
 var _gate_audio: AudioStreamPlayer2D
 var _arena_scale_factor := 1.0
+var _floor_start_time: float = 0.0
 const _ZONE_PRIORITY := {
 	"main_arena": 1,
 	"arena_none": 1,
@@ -80,6 +81,7 @@ func _ready() -> void:
 	_hide_floor_label()
 	_restore_bucket_state()
 	player_node.can_move = true
+	_floor_start_time = Time.get_ticks_msec() / 1000.0
 	add_to_group("pausable")
 	_pause_manager.paused_state_changed.connect(_on_pause_state_changed)
 
@@ -324,13 +326,15 @@ func _on_combat_timeout() -> void:
 
 const MAX_FLOOR := 3
 
-func _save_bucket_state() -> void:
+func _save_floor_state() -> void:
 	GameState.has_bucket = false
 	if not is_instance_valid(player_node):
 		return
 	if player_node.has_method("_try_bucket_hit") and player_node._bucket:
 		GameState.has_bucket = true
 		GameState.bucket_charges = player_node._bucket.charges
+	GameState.last_floor_hp = player_node.current_lives if "current_lives" in player_node else 0
+	GameState.last_floor_time = (Time.get_ticks_msec() / 1000.0) - _floor_start_time
 
 func _restore_bucket_state() -> void:
 	if not GameState.has_bucket:
@@ -345,7 +349,8 @@ func _restore_bucket_state() -> void:
 func start_restart() -> void:
 	if lift_state != LiftState.RETURNING:
 		return
-	_save_bucket_state()
+	_save_floor_state()
+	GameState.currency += maxi(0, GameState.last_floor_hp)
 	player_node.can_move = false
 	lift_state = LiftState.NONE
 	_hide_player()
@@ -353,18 +358,8 @@ func start_restart() -> void:
 	anim.stop()
 	anim.play("Close")
 	await anim.animation_finished
-	if GameState.current_floor >= MAX_FLOOR:
-		GameState.current_floor = 1
-		GameState.has_bucket = false
-		StyleManager.reset_score()
-		await FadeTransition.fade_out()
-		get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
-		return
-	GameState.current_floor += 1
-	anim.play("Up")
-	await anim.animation_finished
 	await FadeTransition.fade_out()
-	get_tree().reload_current_scene()
+	get_tree().change_scene_to_file("res://Scenes/Shop/Shop.tscn")
 
 func _hide_player() -> void:
 	player_node.process_mode = Node.PROCESS_MODE_DISABLED

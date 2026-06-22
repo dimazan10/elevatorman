@@ -9,6 +9,9 @@ var effects_volume: float = 0.0
 var show_fps: bool = false
 var has_bucket: bool = false
 var bucket_charges: int = 3
+var currency: int = 0
+var last_floor_hp: int = 0
+var last_floor_time: float = 0.0
 
 func _ready() -> void:
 	_load_settings()
