@@ -3,20 +3,20 @@ extends Control
 const MAX_HP := 5
 const COIN_COLOR := Color(1.0, 0.85, 0.2)
 
-@onready var vbox := $VBoxMain
-@onready var time_label := $VBoxMain/HBoxMain/InfoSide/TimeLabel
-@onready var currency_label := $VBoxMain/HBoxMain/InfoSide/CoinDisplay/CurrencyLabel
-@onready var bucket_btn := $VBoxMain/HBoxMain/InfoSide/BucketBuy
-@onready var continue_btn := $VBoxMain/HBoxMain/InfoSide/ContinueBtn
-@onready var bucket_status := $VBoxMain/HBoxMain/InfoSide/BucketStatus
-@onready var bottle_body := $VBoxMain/HBoxMain/BottleSide/BottleBody
-@onready var bottle_clip := $VBoxMain/HBoxMain/BottleSide/BottleBody/BottleClip
-@onready var liquid := $VBoxMain/HBoxMain/BottleSide/BottleBody/BottleClip/Liquid
-@onready var hp_count_label := $VBoxMain/HBoxMain/BottleSide/HPCountLabel
-@onready var collect_btn := $VBoxMain/HBoxMain/BottleSide/CollectBtn
-@onready var coin_layer := $CoinLayer
-@onready var neck := $VBoxMain/HBoxMain/BottleSide/BottleNeck
-@onready var neck_liquid := $VBoxMain/HBoxMain/BottleSide/BottleNeck/NeckClip/NeckLiquid
+@onready var vbox: VBoxContainer = $VBoxMain
+@onready var time_label: Label = $VBoxMain/HBoxMain/InfoSide/TimeLabel
+@onready var currency_label: Label = $VBoxMain/HBoxMain/InfoSide/CoinDisplay/CurrencyLabel
+@onready var bucket_btn: Button = $VBoxMain/HBoxMain/InfoSide/BucketBuy
+@onready var continue_btn: Button = $VBoxMain/HBoxMain/InfoSide/ContinueBtn
+@onready var bucket_status: Label = $VBoxMain/HBoxMain/InfoSide/BucketStatus
+@onready var bottle_body: Panel = $VBoxMain/HBoxMain/BottleSide/BottleBody
+@onready var bottle_clip: Control = $VBoxMain/HBoxMain/BottleSide/BottleBody/BottleClip
+@onready var liquid: ColorRect = $VBoxMain/HBoxMain/BottleSide/BottleBody/BottleClip/Liquid
+@onready var hp_count_label: Label = $VBoxMain/HBoxMain/BottleSide/HPCountLabel
+@onready var collect_btn: Button = $VBoxMain/HBoxMain/BottleSide/CollectBtn
+@onready var coin_layer: Control = $CoinLayer
+@onready var neck: Panel = $VBoxMain/HBoxMain/BottleSide/BottleNeck
+@onready var neck_liquid: ColorRect = $VBoxMain/HBoxMain/BottleSide/BottleNeck/NeckClip/NeckLiquid
 
 var _collected := false
 
@@ -56,9 +56,9 @@ func _setup_bottle_style() -> void:
 	neck_liquid.color = Color(0.2, 0.7, 0.3)
 
 func _liquid_height() -> void:
-	var ratio := clampf(GameState.last_floor_hp / float(MAX_HP), 0.0, 1.0)
-	var bh := bottle_clip.size.y * ratio
-	liquid.size.y = max(bh, 0)
+	var ratio: float = clampf(GameState.last_floor_hp / float(MAX_HP), 0.0, 1.0)
+	var bh: float = bottle_clip.size.y * ratio
+	liquid.size.y = maxf(bh, 0.0)
 	neck_liquid.visible = ratio >= 0.99
 
 func _update_bucket_ui() -> void:
