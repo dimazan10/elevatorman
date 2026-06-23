@@ -4,8 +4,10 @@ func _ready() -> void:
 	call_deferred("_apply")
 
 func _apply() -> void:
-	var f = ResourceLoader.load("res://Assets/Font/ISAACFONTDESCRIPTIONENGRUS-FILL_0.TTF") as FontFile
-	if not f:
+	var f = ResourceLoader.load("res://Assets/Font/DefaultFont.tres", "FontFile")
+	if f == null:
+		f = ResourceLoader.load("res://Assets/Font/DefaultFont.tres")
+	if f == null or not f is Font:
 		return
 	var t = Theme.new()
 	t.set_font("font", "Label", f)

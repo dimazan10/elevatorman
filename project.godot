@@ -26,6 +26,10 @@ PauseManager="*res://Scripts/PauseManager.gd"
 StyleManager="*res://Scripts/StyleManager.gd"
 DefaultFont="*res://Scripts/DefaultFont.gd"
 
+[gui]
+
+theme/custom="res://Assets/Font/DefaultTheme.theme"
+
 [display]
 
 window/size/viewport_width=1280

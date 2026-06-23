@@ -1,0 +1,19 @@
+[gd_resource type="FontFile" format=3 uid="uid://c6a5yqn5xmlto"]
+
+[resource]
+font_data = {
+"allow_system_fallback": true,
+"antialiasing": 1,
+"disable_embedded_bitmaps": true,
+"force_autohinter": false,
+"generate_mipmaps": false,
+"hinting": 3,
+"keep_rounding_remainders": true,
+"msdf_pixel_range": 8,
+"msdf_size": 48,
+"multichannel_signed_distance_field": false,
+"oversampling": 0.0,
+"path": "res://Assets/Font/ISAACFONTDESCRIPTIONENGRUS-FILL_0.TTF",
+"size_adjustment": 1.0,
+"subpixel_positioning": 4
+}
