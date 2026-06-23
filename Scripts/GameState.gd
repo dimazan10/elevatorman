@@ -16,6 +16,7 @@ var last_floor_time: float = 0.0
 
 func _ready() -> void:
 	_load_settings()
+	call_deferred("_apply_ui_scale")
 
 func _load_settings() -> void:
 	var cfg := ConfigFile.new()
@@ -31,7 +32,10 @@ func _load_settings() -> void:
 	current_floor = 1
 	show_fps = cfg.get_value("display", "show_fps", false)
 	ui_scale = cfg.get_value("display", "ui_scale", 1.0)
-	get_tree().root.content_scale_factor = ui_scale
+
+func _apply_ui_scale() -> void:
+	if get_tree() and get_tree().root:
+		get_tree().root.content_scale_factor = ui_scale
 
 func _save_settings() -> void:
 	var cfg := ConfigFile.new()
@@ -63,6 +67,6 @@ func set_show_fps(enabled: bool) -> void:
 
 func set_ui_scale(s: float) -> void:
 	ui_scale = s
-	if get_tree():
+	if get_tree() and get_tree().root:
 		get_tree().root.content_scale_factor = s
 	_save_settings()
