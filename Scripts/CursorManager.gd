@@ -10,6 +10,9 @@ func _ready() -> void:
 	_cursor_default = _load_cursor("res://Assets/MainMenu/Crossed_0.png")
 	_cursor_hover = _load_cursor("res://Assets/MainMenu/Crossed_1.png")
 	Input.set_custom_mouse_cursor(_cursor_default)
+	# Ensure the OS cursor is visible in gameplay (some systems/scenes may hide/capture it)
+	# We'll set visible here; if a scene explicitly needs capture it can override this.
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 	# Setup existing buttons in the current scene tree so cursors react everywhere
 	setup_buttons(get_tree().get_root())
