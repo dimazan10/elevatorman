@@ -14,6 +14,7 @@ var return_to_game := false
 @onready var fps_checkbox := $VBoxContainer/FPSCheckbox as CheckBox
 
 func _ready() -> void:
+	CursorManager.setup_buttons(self)
 	master_slider.value = GameState.master_volume
 	master_label.text = _db_to_pct(GameState.master_volume)
 	music_slider.value = GameState.music_volume

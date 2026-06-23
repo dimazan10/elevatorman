@@ -25,6 +25,7 @@ GameState="*res://Scripts/GameState.gd"
 PauseManager="*res://Scripts/PauseManager.gd"
 StyleManager="*res://Scripts/StyleManager.gd"
 DefaultFont="*res://Scripts/DefaultFont.gd"
+CursorManager="*res://Scripts/CursorManager.gd"
 
 [display]
 
