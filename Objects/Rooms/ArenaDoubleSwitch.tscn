@@ -1,0 +1,176 @@
+[gd_scene format=3 uid="uid://drqq3phx7xm2v"]
+
+[ext_resource type="Script" path="res://Scripts/ArenaRotating.gd" id="1_mv0v1"]
+[ext_resource type="PackedScene" uid="uid://dkax3cjeu00gs" path="res://Objects/EnemySpawner.tscn" id="12_vms8c"]
+[ext_resource type="PackedScene" uid="uid://cvl0thapds4n1" path="res://Objects/SwitchSpawner.tscn" id="13_w0nfo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(615, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_left"]
+size = Vector2(247.5, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_right"]
+size = Vector2(247.5, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gate"]
+size = Vector2(120, 20)
+
+[node name="ArenaDoubleSwitch" type="AnimatableBody2D" unique_id=418966575]
+script = ExtResource("1_mv0v1")
+
+[node name="Pivot" type="Node2D" parent="." unique_id=268876278]
+position = Vector2(640, 360)
+
+[node name="Floor" type="Polygon2D" parent="Pivot" unique_id=717875239]
+color = Color(0.12, 0.15, 0.19, 1)
+polygon = PackedVector2Array(615, 0, 307.5, 532.5, -307.5, 532.5, -615, 0, -307.5, -532.5, 307.5, -532.5)
+
+[node name="ZoneTrigger" type="Area2D" parent="Pivot/Floor"]
+priority = 1
+collision_layer = 1
+collision_mask = 1
+monitoring = true
+monitorable = false
+
+[node name="CollisionPolygon" type="CollisionPolygon2D" parent="Pivot/Floor/ZoneTrigger"]
+polygon = PackedVector2Array(615, 0, 307.5, 532.5, -307.5, 532.5, -615, 0, -307.5, -532.5, 307.5, -532.5)
+
+[node name="Walls" type="Node2D" parent="Pivot" unique_id=1366043826]
+position = Vector2(-640, -360)
+
+[node name="W0" type="StaticBody2D" parent="Pivot/Walls" unique_id=1088295963]
+position = Vector2(1101.25, 626.25)
+rotation = 2.094
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/W0" unique_id=740260606]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Visual" type="Polygon2D" parent="Pivot/Walls/W0" unique_id=633556178]
+color = Color(0.4, 0.4, 0.5, 1)
+polygon = PackedVector2Array(-307.5, -10, 307.5, -10, 307.5, 10, -307.5, 10)
+
+[node name="W1" type="StaticBody2D" parent="Pivot/Walls" unique_id=1743929040]
+position = Vector2(640, 892.5)
+rotation = 3.1416
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/W1" unique_id=2130429432]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Visual" type="Polygon2D" parent="Pivot/Walls/W1" unique_id=694142686]
+color = Color(0.4, 0.4, 0.5, 1)
+polygon = PackedVector2Array(-307.5, -10, 307.5, -10, 307.5, 10, -307.5, 10)
+
+[node name="W2" type="StaticBody2D" parent="Pivot/Walls" unique_id=1613196185]
+position = Vector2(178.75, 626.25)
+rotation = -2.094
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/W2" unique_id=452077386]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Visual" type="Polygon2D" parent="Pivot/Walls/W2" unique_id=1720521614]
+color = Color(0.4, 0.4, 0.5, 1)
+polygon = PackedVector2Array(-307.5, -10, 307.5, -10, 307.5, 10, -307.5, 10)
+
+[node name="W3" type="StaticBody2D" parent="Pivot/Walls" unique_id=300455659]
+position = Vector2(178.75, 93.75)
+rotation = -1.047
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/W3" unique_id=1261106479]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Visual" type="Polygon2D" parent="Pivot/Walls/W3" unique_id=1628811581]
+color = Color(0.4, 0.4, 0.5, 1)
+polygon = PackedVector2Array(-307.5, -10, 307.5, -10, 307.5, 10, -307.5, 10)
+
+[node name="W4" type="StaticBody2D" parent="Pivot/Walls" unique_id=1095793865]
+position = Vector2(640, -172.5)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/W4" unique_id=1052356572]
+position = Vector2(-183.75, 0)
+shape = SubResource("RectangleShape2D_wall_left")
+
+[node name="CollisionShape2" type="CollisionShape2D" parent="Pivot/Walls/W4" unique_id=227699831]
+position = Vector2(183.75, 0)
+shape = SubResource("RectangleShape2D_wall_right")
+
+[node name="Visual" type="Polygon2D" parent="Pivot/Walls/W4" unique_id=456872412]
+color = Color(0.4, 0.4, 0.5, 1)
+polygon = PackedVector2Array(-307.5, -10, 307.5, -10, 307.5, 10, -307.5, 10)
+
+[node name="Gate" type="StaticBody2D" parent="Pivot/Walls/W4" unique_id=1340653381]
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/W4/Gate" unique_id=443432922]
+shape = SubResource("RectangleShape2D_gate")
+
+[node name="Visual" type="Polygon2D" parent="Pivot/Walls/W4/Gate" unique_id=1138759953]
+position = Vector2(-0.5000267, 0)
+scale = Vector2(1.9916663, 1)
+color = Color(0.4, 0.5, 0.7, 1)
+polygon = PackedVector2Array(-60, -10, 60, -10, 60.000008, -0.3958969, 60, 10, -60, 10)
+
+[node name="W5" type="StaticBody2D" parent="Pivot/Walls" unique_id=513671974]
+position = Vector2(1101.25, 93.75)
+rotation = 1.047
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/W5" unique_id=1230815883]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Visual" type="Polygon2D" parent="Pivot/Walls/W5" unique_id=695187852]
+color = Color(0.4, 0.4, 0.5, 1)
+polygon = PackedVector2Array(-307.5, -10, 307.5, -10, 307.5, 10, -307.5, 10)
+
+[node name="EnemySpawner" parent="Pivot" unique_id=2077439795 instance=ExtResource("12_vms8c")]
+
+[node name="SwitchSpawner" parent="Pivot" unique_id=313199116 instance=ExtResource("13_w0nfo")]
+
+[node name="SwitchPoint1" type="Marker2D" parent="Pivot" unique_id=1709319868 groups=["switch_point", "switch_point_double"]]
+position = Vector2(-473, -2)
+
+[node name="SwitchPoint2" type="Marker2D" parent="Pivot" unique_id=2029902561 groups=["switch_point", "switch_point_double"]]
+position = Vector2(0, -27)
+
+[node name="SwitchPoint3" type="Marker2D" parent="Pivot" unique_id=923886427 groups=["switch_point", "switch_point_double"]]
+position = Vector2(5, -430)
+
+[node name="SwitchPoint4" type="Marker2D" parent="Pivot" unique_id=395891179 groups=["switch_point", "switch_point_double"]]
+position = Vector2(253, -393)
+
+[node name="SwitchPoint5" type="Marker2D" parent="Pivot" unique_id=253896944 groups=["switch_point", "switch_point_double"]]
+position = Vector2(-17, 400)
+
+[node name="SpawnPoint1" type="Marker2D" parent="." unique_id=2124699469 groups=["spawn_point_switch"]]
+position = Vector2(651, 116)
+
+[node name="SpawnPoint2" type="Marker2D" parent="." unique_id=1989789208 groups=["spawn_point_switch"]]
+position = Vector2(435, 517)
+
+[node name="SpawnPoint3" type="Marker2D" parent="." unique_id=909885700 groups=["spawn_point_switch"]]
+position = Vector2(854, 529)
+
+[node name="SpawnPoint4" type="Marker2D" parent="." unique_id=1501583779 groups=["spawn_point_switch"]]
+position = Vector2(424, 112)
+
+[node name="SpawnPoint5" type="Marker2D" parent="." unique_id=587129701 groups=["spawn_point_switch"]]
+position = Vector2(879, 147)
+
+[node name="SpawnPoint6" type="Marker2D" parent="." unique_id=369093571 groups=["spawn_point_switch"]]
+position = Vector2(870, 332)
+
+[node name="SpawnPoint7" type="Marker2D" parent="." unique_id=785713911 groups=["spawn_point_switch"]]
+position = Vector2(405, 314)
+
+[node name="SpawnPoint8" type="Marker2D" parent="." groups=["spawn_point_switch"]]
+position = Vector2(641, 200)
+
+[node name="SpawnPoint9" type="Marker2D" parent="." groups=["spawn_point_switch"]]
+position = Vector2(530, 430)
+
+[node name="SpawnPoint10" type="Marker2D" parent="." groups=["spawn_point_switch"]]
+position = Vector2(750, 430)
+
+[node name="SpawnPoint11" type="Marker2D" parent="." groups=["spawn_point_switch"]]
+position = Vector2(641, 480)
+
+[node name="SpawnPoint12" type="Marker2D" parent="." groups=["spawn_point_switch"]]
+position = Vector2(530, 250)

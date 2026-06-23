@@ -44,45 +44,23 @@ func _spawn_classic(config: Dictionary, parent: Node) -> Array[Node]:
 	return _spawned_switches
 
 func _spawn_time_attack(parent: Node) -> Array[Node]:
-	var points_a := get_tree().get_nodes_in_group("switch_point")
-	var points_b := get_tree().get_nodes_in_group("switch_point_none")
+	var points := get_tree().get_nodes_in_group("switch_point_double")
 	var total = 2
-	var all_points = points_a + points_b
 
-	if all_points.is_empty():
+	if points.is_empty():
 		return []
 
 	var scene = load("res://Objects/Summons/TwoSwitch.tscn")
-
-	if points_a.size() > 0 and points_b.size() > 0:
-		var idx_a = randi() % points_a.size()
-		var pt_a = points_a[idx_a]
-		var inst_a = scene.instantiate()
-		parent.add_child(inst_a)
-		inst_a.global_position = pt_a.global_position
-		if not inst_a.is_in_group("switch"):
-			inst_a.add_to_group("switch")
-		_spawned_switches.append(inst_a)
-
-		var idx_b = randi() % points_b.size()
-		var pt_b = points_b[idx_b]
-		var inst_b = scene.instantiate()
-		parent.add_child(inst_b)
-		inst_b.global_position = pt_b.global_position
-		if not inst_b.is_in_group("switch"):
-			inst_b.add_to_group("switch")
-		_spawned_switches.append(inst_b)
-	else:
-		var shuffled := all_points.duplicate()
-		shuffled.shuffle()
-		var count = mini(total, shuffled.size())
-		for i in count:
-			var inst = scene.instantiate()
-			parent.add_child(inst)
-			inst.global_position = shuffled[i].global_position
-			if not inst.is_in_group("switch"):
-				inst.add_to_group("switch")
-			_spawned_switches.append(inst)
+	var shuffled := points.duplicate()
+	shuffled.shuffle()
+	var count = mini(total, shuffled.size())
+	for i in count:
+		var inst = scene.instantiate()
+		parent.add_child(inst)
+		inst.global_position = shuffled[i].global_position
+		if not inst.is_in_group("switch"):
+			inst.add_to_group("switch")
+		_spawned_switches.append(inst)
 
 	return _spawned_switches
 
