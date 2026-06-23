@@ -7,6 +7,7 @@ var master_volume: float = 0.0
 var music_volume: float = 0.0
 var effects_volume: float = 0.0
 var show_fps: bool = false
+var ui_scale: float = 1.0
 var has_bucket: bool = false
 var bucket_charges: int = 3
 var currency: int = 0
@@ -29,6 +30,8 @@ func _load_settings() -> void:
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Effects"), effects_volume)
 	current_floor = 1
 	show_fps = cfg.get_value("display", "show_fps", false)
+	ui_scale = cfg.get_value("display", "ui_scale", 1.0)
+	get_tree().root.content_scale_factor = ui_scale
 
 func _save_settings() -> void:
 	var cfg := ConfigFile.new()
@@ -36,6 +39,7 @@ func _save_settings() -> void:
 	cfg.set_value("audio", "music_volume", music_volume)
 	cfg.set_value("audio", "effects_volume", effects_volume)
 	cfg.set_value("display", "show_fps", show_fps)
+	cfg.set_value("display", "ui_scale", ui_scale)
 	cfg.save(SAVE_PATH)
 
 func set_master_volume(db: float) -> void:
@@ -55,4 +59,10 @@ func set_effects_volume(db: float) -> void:
 
 func set_show_fps(enabled: bool) -> void:
 	show_fps = enabled
+	_save_settings()
+
+func set_ui_scale(s: float) -> void:
+	ui_scale = s
+	if get_tree():
+		get_tree().root.content_scale_factor = s
 	_save_settings()

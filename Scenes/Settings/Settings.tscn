@@ -87,6 +87,23 @@ horizontal_alignment = 1
 layout_mode = 2
 text = "Показать FPS"
 
+[node name="UIScaleLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Масштаб UI"
+horizontal_alignment = 1
+
+[node name="UIScaleSlider" type="HSlider" parent="VBoxContainer"]
+layout_mode = 2
+min_value = 0.75
+max_value = 1.5
+step = 0.05
+value = 1.0
+
+[node name="UIScalePct" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 1
+
 [node name="Back" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Назад"
@@ -95,4 +112,5 @@ text = "Назад"
 [connection signal="value_changed" from="VBoxContainer/MusicHSlider" to="." method="_on_music_slider_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/EffectsHSlider" to="." method="_on_effects_slider_value_changed"]
 [connection signal="toggled" from="VBoxContainer/FPSCheckbox" to="." method="_on_fps_checkbox_toggled"]
+[connection signal="value_changed" from="VBoxContainer/UIScaleSlider" to="." method="_on_ui_scale_slider_value_changed"]
 [connection signal="pressed" from="VBoxContainer/Back" to="." method="_on_back_pressed"]

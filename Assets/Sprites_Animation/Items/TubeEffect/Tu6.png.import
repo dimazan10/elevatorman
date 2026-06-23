@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfbp8jibjjg1s"
-path="res://.godot/imported/Tu1.png-ece6fe5da7e3737ab0ecc3b09519b61b.ctex"
+uid="uid://cxp1sglyachyf"
+path="res://.godot/imported/Tu6.png-470c9ff8223087addeb11d2874855db2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites_Animation/Items/TubeEffect/Tu1.png"
-dest_files=["res://.godot/imported/Tu1.png-ece6fe5da7e3737ab0ecc3b09519b61b.ctex"]
+source_file="res://Assets/Sprites_Animation/Items/TubeEffect/Tu6.png"
+dest_files=["res://.godot/imported/Tu6.png-470c9ff8223087addeb11d2874855db2.ctex"]
 
 [params]
 

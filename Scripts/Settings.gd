@@ -12,6 +12,8 @@ var return_to_game := false
 @onready var effects_label := $VBoxContainer/EffectsPct as Label
 
 @onready var fps_checkbox := $VBoxContainer/FPSCheckbox as CheckBox
+@onready var ui_scale_slider := $VBoxContainer/UIScaleSlider as HSlider
+@onready var ui_scale_label := $VBoxContainer/UIScalePct as Label
 
 func _ready() -> void:
 	master_slider.value = GameState.master_volume
@@ -21,6 +23,8 @@ func _ready() -> void:
 	effects_slider.value = GameState.effects_volume
 	effects_label.text = _db_to_pct(GameState.effects_volume)
 	fps_checkbox.button_pressed = GameState.show_fps
+	ui_scale_slider.value = GameState.ui_scale
+	ui_scale_label.text = _scale_to_pct(GameState.ui_scale)
 
 func _on_master_slider_value_changed(value: float) -> void:
 	GameState.set_master_volume(value)
@@ -40,6 +44,10 @@ func _on_fps_checkbox_toggled(enabled: bool) -> void:
 	if fps_label:
 		fps_label.visible = enabled
 
+func _on_ui_scale_slider_value_changed(value: float) -> void:
+	GameState.set_ui_scale(value)
+	ui_scale_label.text = _scale_to_pct(value)
+
 func _play_click() -> void:
 	var cs = get_node_or_null("ClickSound")
 	if cs:
@@ -56,3 +64,6 @@ func _on_back_pressed() -> void:
 func _db_to_pct(db: float) -> String:
 	var pct = roundi((db + 40.0) / 40.0 * 100.0)
 	return str(clampi(pct, 0, 100)) + "%"
+
+func _scale_to_pct(s: float) -> String:
+	return str(roundi(s * 100.0)) + "%"
