@@ -20,21 +20,19 @@ func setup_buttons(root: Node) -> void:
 	if not root:
 		return
 	# check the root itself
-	if root is BaseButton:
+	if _is_interactive(root):
 		_setup_hover(root)
 	for c in root.get_children():
 		if c is Node:
 			setup_buttons(c)
 
 func _on_node_added(node: Node) -> void:
-	# When nodes are added at runtime, ensure any BaseButton gets the hover setup
-	if node is BaseButton:
+	# When nodes are added at runtime, ensure interactive controls get the hover setup
+	if _is_interactive(node):
 		_setup_hover(node)
-	# Also handle any BaseButton children that may come with the node
+	# Also handle any interactive children that may come with the node
 	for c in node.get_children():
-		if c is BaseButton:
-			_setup_hover(c)
-		elif c is Node:
+		if c is Node:
 			_on_node_added(c)
 
 func _load_cursor(path: String) -> Texture2D:
@@ -86,3 +84,12 @@ func _should_scale(b: BaseButton) -> bool:
 	if name == "MainMenu" or name == "Settings":
 		return false
 	return true
+
+func _is_interactive(node: Node) -> bool:
+	# Recognize interactive UI elements: BaseButton and Range (HSlider/VSlider)
+	if node is BaseButton:
+		return true
+	if node is Range:
+		# Range covers HSlider/VSlider and others that receive mouse_entered/exited
+		return true
+	return false
