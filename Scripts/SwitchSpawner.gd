@@ -45,19 +45,27 @@ func _spawn_classic(config: Dictionary, parent: Node) -> Array[Node]:
 
 func _spawn_time_attack(parent: Node) -> Array[Node]:
 	var points := get_tree().get_nodes_in_group("switch_point_double")
-	var total = 2
 
 	if points.is_empty():
 		return []
 
+	var arena_groups: Dictionary = {}
+	for pt in points:
+		var arena = pt.get_parent()
+		while arena and not (arena is AnimatableBody2D):
+			arena = arena.get_parent()
+		if not arena:
+			continue
+		if not arena_groups.has(arena):
+			arena_groups[arena] = []
+		arena_groups[arena].append(pt)
+
 	var scene = load("res://Objects/Summons/TwoSwitch.tscn")
-	var shuffled := points.duplicate()
-	shuffled.shuffle()
-	var count = mini(total, shuffled.size())
-	for i in count:
+	for arena_pts in arena_groups.values():
+		var pt = arena_pts[randi() % arena_pts.size()]
 		var inst = scene.instantiate()
 		parent.add_child(inst)
-		inst.global_position = shuffled[i].global_position
+		inst.global_position = pt.global_position
 		if not inst.is_in_group("switch"):
 			inst.add_to_group("switch")
 		_spawned_switches.append(inst)
