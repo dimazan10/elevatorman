@@ -25,6 +25,7 @@ func _ready() -> void:
 	fps_checkbox.button_pressed = GameState.show_fps
 	ui_scale_slider.value = GameState.ui_scale
 	ui_scale_label.text = _scale_to_pct(GameState.ui_scale)
+	scale = Vector2(GameState.ui_scale, GameState.ui_scale)
 
 func _on_master_slider_value_changed(value: float) -> void:
 	GameState.set_master_volume(value)
@@ -47,6 +48,7 @@ func _on_fps_checkbox_toggled(enabled: bool) -> void:
 func _on_ui_scale_slider_value_changed(value: float) -> void:
 	GameState.set_ui_scale(value)
 	ui_scale_label.text = _scale_to_pct(value)
+	scale = Vector2(value, value)
 
 func _play_click() -> void:
 	var cs = get_node_or_null("ClickSound")

@@ -186,6 +186,11 @@ func _setup_ui() -> void:
 	ui.name = "TimerUI"
 	ui.layer = 128
 	add_child(ui)
+	var ui_root := Control.new()
+	ui_root.name = "UIRoot"
+	ui_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	ui_root.scale = Vector2(GameState.ui_scale, GameState.ui_scale)
+	ui.add_child(ui_root)
 	time_label = Label.new()
 	time_label.name = "TimeLabel"
 	time_label.add_theme_font_size_override("font_size", 32)
@@ -193,7 +198,7 @@ func _setup_ui() -> void:
 	time_label.add_theme_constant_override("outline_size", 4)
 	time_label.add_theme_color_override("font_outline_color", Color.BLACK)
 	time_label.position = Vector2(10, 10)
-	ui.add_child(time_label)
+	ui_root.add_child(time_label)
 
 	_fps_label = Label.new()
 	_fps_label.name = "FPSLabel"
@@ -204,7 +209,7 @@ func _setup_ui() -> void:
 	_fps_label.position = Vector2(10, 50)
 	_fps_label.visible = GameState.show_fps
 	_fps_label.add_to_group("fps_label")
-	ui.add_child(_fps_label)
+	ui_root.add_child(_fps_label)
 
 	floor_label = Label.new()
 	floor_label.name = "FloorLabel"
@@ -218,7 +223,7 @@ func _setup_ui() -> void:
 	floor_label.set_anchors_and_offsets_preset(Control.PRESET_CENTER, Control.PRESET_MODE_KEEP_SIZE)
 	floor_label.modulate = Color(1, 1, 1, 0)
 	floor_label.text = "Этаж " + str(GameState.current_floor)
-	ui.add_child(floor_label)
+	ui_root.add_child(floor_label)
 
 	quest_label = Label.new()
 	quest_label.name = "QuestLabel"
@@ -230,7 +235,7 @@ func _setup_ui() -> void:
 	quest_label.position = Vector2(220, 80)
 	quest_label.size = Vector2(800, 40)
 	quest_label.text = "Активировать 3 рычага" if _quest_mode == QuestMode.CLASSIC else "Активировать 2 рычага"
-	ui.add_child(quest_label)
+	ui_root.add_child(quest_label)
 
 	var music = AudioStreamPlayer.new()
 	music.name = "MusicPlayer"

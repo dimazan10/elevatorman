@@ -1,5 +1,7 @@
 extends Node
 
+signal ui_scale_changed(scale: float)
+
 const SAVE_PATH := "user://settings.cfg"
 
 var current_floor: int = 1
@@ -16,7 +18,6 @@ var last_floor_time: float = 0.0
 
 func _ready() -> void:
 	_load_settings()
-	call_deferred("_apply_ui_scale")
 
 func _load_settings() -> void:
 	var cfg := ConfigFile.new()
@@ -67,6 +68,5 @@ func set_show_fps(enabled: bool) -> void:
 
 func set_ui_scale(s: float) -> void:
 	ui_scale = s
-	if get_tree() and get_tree().root:
-		get_tree().root.content_scale_factor = s
 	_save_settings()
+	ui_scale_changed.emit(s)
