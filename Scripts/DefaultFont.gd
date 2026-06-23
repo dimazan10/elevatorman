@@ -2,7 +2,8 @@ extends Node
 
 func _ready() -> void:
 	var f = load("res://Assets/Font/ISAACFONTDESCRIPTIONENGRUS-FILL_0.TTF")
-	if f == null or not (f is Font):
+	if f == null:
 		return
-	get_tree().root.theme = Theme.new()
-	get_tree().root.theme.default_font = f
+	var t = Theme.new()
+	t.set_font("font", "Label", f)
+	get_tree().root.theme = t
