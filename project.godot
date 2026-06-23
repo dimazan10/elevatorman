@@ -25,6 +25,10 @@ GameState="*res://Scripts/GameState.gd"
 PauseManager="*res://Scripts/PauseManager.gd"
 StyleManager="*res://Scripts/StyleManager.gd"
 
+[gui]
+
+theme/custom="res://Assets/Font/default_theme.tres"
+
 [display]
 
 window/size/viewport_width=1280
