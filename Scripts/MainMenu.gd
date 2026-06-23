@@ -5,7 +5,6 @@ var extra := 60.0
 var max_move := 25.0
 
 func _ready() -> void:
-	scale = Vector2(GameState.ui_scale, GameState.ui_scale)
 	bg.offset_left -= extra
 	bg.offset_top -= extra
 	bg.offset_right += extra

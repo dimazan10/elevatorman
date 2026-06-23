@@ -65,7 +65,6 @@ func setup_display(parent: Node) -> void:
 	var container = Control.new()
 	container.name = "StyleContainer"
 	container.set_anchors_preset(Control.PRESET_FULL_RECT)
-	container.scale = Vector2(GameState.ui_scale, GameState.ui_scale)
 	ui.add_child(container)
 	_label = Label.new()
 	_label.name = "StyleLabel"
