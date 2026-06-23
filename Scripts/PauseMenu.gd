@@ -1,6 +1,7 @@
 extends Control
 
 signal resume_pressed
+signal restart_pressed
 signal exit_pressed
 
 var _settings_panel: Control = null
@@ -48,6 +49,13 @@ func _ready() -> void:
 	resume_btn.pressed.connect(_on_resume)
 	vbox.add_child(resume_btn)
 
+	var restart_btn := Button.new()
+	restart_btn.text = "Рестарт"
+	restart_btn.custom_minimum_size = Vector2(200, 40)
+	restart_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	restart_btn.pressed.connect(_on_restart)
+	vbox.add_child(restart_btn)
+
 	var settings_btn := Button.new()
 	settings_btn.text = "Настройки"
 	settings_btn.custom_minimum_size = Vector2(200, 40)
@@ -82,6 +90,10 @@ func _close_settings() -> void:
 func _on_resume() -> void:
 	_click.play()
 	resume_pressed.emit()
+
+func _on_restart() -> void:
+	_click.play()
+	restart_pressed.emit()
 
 func _on_exit() -> void:
 	_click.play()

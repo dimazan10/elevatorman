@@ -311,7 +311,7 @@ func take_damage(amount: int):
 	hit_blow_audio.play()
 	hit_fierce_audio.play()
 	modulate = Color(1, 0.3, 0.3)
-	await get_tree().create_timer(0.15).timeout
+	await get_tree().create_timer(0.4).timeout
 	modulate = Color.WHITE
 	can_move = true
 	_invulnerable = false
