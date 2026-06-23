@@ -13,6 +13,9 @@ const DASH_COOLDOWN = 4.0
 const DASH_SPEED = 1200.0
 const DASH_DURATION = 0.15
 
+const TUBE_SCENE = preload("res://Objects/TubeEffect.tscn")
+const CLONE_SCENE = preload("res://Objects/CloneDecoy.tscn")
+
 var dash_cooldowns: Array[float] = [0.0, 0.0, 0.0]
 var is_dashing := false
 var dash_timer := 0.0
@@ -37,6 +40,11 @@ var pull_target: Node2D = null
 var pull_offset: Vector2 = Vector2.ZERO
 var _is_dying := false
 var _invulnerable := false
+
+var _clone_node: Node2D = null
+var _clone_active := false
+var _e_held := false
+var _q_held := false
 
 func _ready() -> void:
 	current_lives = max_lives
@@ -130,6 +138,16 @@ func _process(delta: float) -> void:
 		if slow_timer <= 0:
 			slow_timer = 0.0
 			slow_factor = 1.0
+
+	var q_down := Input.is_key_pressed(KEY_Q)
+	if q_down and not _q_held:
+		_use_item(0)
+	_q_held = q_down
+
+	var e_down := Input.is_key_pressed(KEY_E)
+	if e_down and not _e_held:
+		_use_item(1)
+	_e_held = e_down
 
 func _toggle_noclip() -> void:
 	_noclip = not _noclip
@@ -320,10 +338,77 @@ func take_damage(amount: int):
 		die()
 
 func die() -> void:
+	if has_item("infinit"):
+		_infinit_revive()
+		return
 	print("Игрок погиб!")
 	var tree := get_tree()
 	if tree:
 		tree.reload_current_scene()
+
+func _infinit_revive() -> void:
+	for i in range(inventory.size()):
+		if inventory[i].id == "infinit":
+			clear_slot(i)
+			break
+	current_lives = max_lives
+	health_changed.emit(current_lives)
+	_is_dying = false
+	_invulnerable = true
+	can_move = true
+	var tw = create_tween()
+	tw.tween_property(self, "modulate", Color.WHITE, 0.1)
+	tw.tween_property(self, "modulate", Color(1, 1, 1, 0.3), 0.15)
+	tw.tween_property(self, "modulate", Color.WHITE, 0.1)
+	tw.tween_property(self, "modulate", Color(1, 1, 1, 0.3), 0.15)
+	tw.tween_property(self, "modulate", Color.WHITE, 0.1)
+	tw.tween_property(self, "modulate", Color(1, 1, 1, 0.3), 0.15)
+	tw.tween_property(self, "modulate", Color.WHITE, 0.1)
+	await tw.finished
+	_invulnerable = false
+
+func _use_item(slot: int) -> void:
+	if slot < 0 or slot >= inventory.size():
+		return
+	var item = inventory[slot]
+	if item.id == "":
+		return
+	match item.id:
+		"tube":
+			_use_tube(slot)
+		"clone":
+			_use_clone(slot)
+		"infinit":
+			pass
+
+func _use_tube(slot: int) -> void:
+	var tube = TUBE_SCENE.instantiate()
+	tube.global_position = global_position
+	get_tree().current_scene.add_child(tube)
+	clear_slot(slot)
+
+func _use_clone(slot: int) -> void:
+	if _clone_active:
+		return
+	_clone_active = true
+	var clone = CLONE_SCENE.instantiate()
+	clone.global_position = global_position + Vector2(50, 0)
+	get_tree().current_scene.add_child(clone)
+	_clone_node = clone
+	modulate = Color(1, 1, 1, 0.4)
+	clone.decoy_destroyed.connect(_on_clone_destroyed)
+	for e in get_tree().get_nodes_in_group("enemy"):
+		if e.has_method("set_target"):
+			e.set_target(clone)
+	clear_slot(slot)
+
+func _on_clone_destroyed() -> void:
+	_clone_active = false
+	_clone_node = null
+	modulate = Color.WHITE
+	for e in get_tree().get_nodes_in_group("enemy"):
+		if e.has_method("set_target"):
+			e.set_target(self)
 
 func apply_stun_and_knockback(knockback_impulse: Vector2, duration: float) -> void:
 	if is_stunned: 
@@ -354,6 +439,34 @@ func apply_pull_toward(target: Node2D, duration: float, offset: Vector2 = Vector
 	pull_offset = Vector2.ZERO
 	if is_instance_valid(target):
 		remove_collision_exception_with(target)
+
+signal inventory_changed
+
+var inventory: Array[Dictionary] = [
+	{id = "", icon = null, name = ""},
+	{id = "", icon = null, name = ""},
+]
+
+func get_inventory() -> Array[Dictionary]:
+	return inventory
+
+func set_slot(index: int, id: String, icon: Texture2D, name: String = "") -> void:
+	if index < 0 or index >= inventory.size():
+		return
+	inventory[index] = {id = id, icon = icon, name = name}
+	inventory_changed.emit()
+
+func clear_slot(index: int) -> void:
+	if index < 0 or index >= inventory.size():
+		return
+	inventory[index] = {id = "", icon = null, name = ""}
+	inventory_changed.emit()
+
+func has_item(id: String) -> bool:
+	for s in inventory:
+		if s.id == id:
+			return true
+	return false
 
 const BUCKET_SCENE = preload("res://Objects/Bucket.tscn")
 var _bucket: Node = null

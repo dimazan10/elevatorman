@@ -1,16 +1,25 @@
 extends Control
 
 @onready var bg := $TextureRect
+@onready var logo := $Logo
 var extra := 60.0
 var max_move := 25.0
 
 func _ready() -> void:
+	_animate_logo()
 	bg.offset_left -= extra
 	bg.offset_top -= extra
 	bg.offset_right += extra
 	bg.offset_bottom += extra
 	for b in get_tree().get_nodes_in_group("menu_buttons"):
 		_setup_hover(b)
+
+func _animate_logo() -> void:
+	var tw = create_tween().set_loops()
+	var start_y = logo.position.y
+	tw.tween_property(logo, "position:y", start_y + 15, 2.5).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_property(logo, "position:y", start_y, 2.5).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_interval(2.0)
 
 func _process(_delta: float) -> void:
 	var center := get_viewport_rect().size * 0.5

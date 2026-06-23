@@ -7,6 +7,7 @@ var _direction: Vector2
 var _bounce_audio: AudioStreamPlayer2D
 var _enraged := false
 var _speed_multiplier := 1.0
+var _kb_timer := 0.0
 
 func _ready():
 	if linear_velocity == Vector2.ZERO:
@@ -31,20 +32,38 @@ func _ready():
 
 	body_entered.connect(_on_body_entered)
 
-func _integrate_forces(_state: PhysicsDirectBodyState2D):
-	if linear_velocity.is_finite() and linear_velocity.length() > 0:
+func _integrate_forces(state: PhysicsDirectBodyState2D):
+	if _kb_timer > 0:
+		_kb_timer -= state.step
+	elif linear_velocity.is_finite() and linear_velocity.length() > 0:
 		_direction = linear_velocity.normalized()
-	elif not _direction.is_finite():
+	if not _direction.is_finite():
 		_direction = Vector2.RIGHT
-	linear_velocity = _direction * CONSTANT_SPEED
+	for i in state.get_contact_count():
+		var normal = state.get_contact_local_normal(i)
+		if normal.dot(_direction) > 0.1:
+			_direction = _direction.bounce(normal)
+			if not _direction.is_finite():
+				_direction = Vector2.RIGHT
+			break
+	if state.get_contact_count() == 0:
+		linear_velocity = _direction * CONSTANT_SPEED * _speed_multiplier
+	else:
+		linear_velocity = linear_velocity.move_toward(_direction * CONSTANT_SPEED * _speed_multiplier, 200.0)
 	angular_velocity = ROTATION_SPEED
 
 func _on_body_entered(body: Node) -> void:
 	if _bounce_audio:
 		_bounce_audio.play()
-	if body.is_in_group("player"):
-		if body.has_method("take_damage"):
-			body.take_damage(1)
+
+func set_target(_new_target: Node2D) -> void:
+	pass
+
+func apply_knockback(impulse: Vector2) -> void:
+	_direction = impulse.normalized()
+	if not _direction.is_finite():
+		_direction = Vector2.RIGHT
+	_kb_timer = 0.3
 
 func set_enraged(enraged: bool) -> void:
 	_enraged = enraged

@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://bwjqprnjccd5r" path="res://Scripts/ElevatorDoor.gd" id="7_elevator_door"]
 [ext_resource type="Texture2D" uid="uid://74cir4cs1tst" path="res://Assets/SpritesElevator/roof3.png" id="7_j5evx"]
 [ext_resource type="Script" uid="uid://bati0k0r2dk3i" path="res://Scripts/ElevatorTransportStart.gd" id="8_transport"]
+[ext_resource type="PackedScene" uid="uid://b8snbi67cgyle" path="res://Objects/InventoryUI.tscn" id="9_inv"]
 [ext_resource type="Script" uid="uid://cobvttk2gmcfm" path="res://Scripts/Start.gd" id="9_start"]
 
 [sub_resource type="RectangleShape2D" id="RectShape_top"]
@@ -269,6 +270,8 @@ position = Vector2(640, 778)
 
 [node name="DashUI" parent="." unique_id=498383712 instance=ExtResource("3_dash")]
 
+[node name="InventoryUI" parent="." instance=ExtResource("9_inv")]
+
 [node name="Hole" type="Sprite2D" parent="." unique_id=392200330]
 position = Vector2(640, -78)
 scale = Vector2(1.7777777, 1.0149866)
@@ -350,4 +353,3 @@ scale = Vector2(3.913425, 1.1305274)
 [node name="CollisionShape" type="CollisionShape2D" parent="Hole/FloorElevator/LeftUpper" unique_id=497758226]
 position = Vector2(-2.6588135, 51.95926)
 shape = SubResource("RectangleShape2D_j5evx")
-

@@ -25,7 +25,9 @@ var _speed_multiplier := 1.0
 @onready var melee_zone := $MeleeZone
 @onready var separation_zone := $SeparationZone # Наша новая зона личного пространства
 
-var player: Node2D = null
+var _player_ref: Node2D = null
+var target: Node2D = null
+var _knockback := Vector2.ZERO
 var _spawn_pos: Vector2 = Vector2.ZERO
 var _zone_name: String = ""
 var _is_waiting: bool = false
@@ -41,7 +43,8 @@ func _ready() -> void:
 		_zone_name = get_meta("zone_name")
 	var players = get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
-		player = players[0]
+		_player_ref = players[0]
+		target = _player_ref
 	
 	burst_timer.one_shot = true
 	burst_timer.timeout.connect(_on_burst_timer_timeout)
@@ -82,23 +85,31 @@ func _check_zone_teleport() -> bool:
 	return false
 
 func _physics_process(_delta: float) -> void:
-	if not player:
+	if not target or not is_instance_valid(target):
+		target = _player_ref
+	if not target:
 		return
 	if _check_zone_teleport():
-		weapon_anchor.look_at(player.global_position)
-		if player.global_position.x < global_position.x:
+		weapon_anchor.look_at(target.global_position)
+		if target.global_position.x < global_position.x:
 			enemy_sprite.flip_h = true
 			weapon_anchor.scale.y = -1
 		else:
 			enemy_sprite.flip_h = false
 			weapon_anchor.scale.y = 1
 		return
+
+	if _knockback.length_squared() > 0:
+		velocity = _knockback
+		_knockback = _knockback.move_toward(Vector2.ZERO, 2000.0 * _delta)
+		move_and_slide()
+		return
 		
 	# 1. ПЛАВНОЕ ВРАЩЕНИЕ ОРУЖИЯ ЗА ИГРОКОМ
-	weapon_anchor.look_at(player.global_position)
+	weapon_anchor.look_at(target.global_position)
 	
 	# 2. МЕХАНИКА ОТЗЕРКАЛИВАНИЯ
-	if player.global_position.x < global_position.x:
+	if target.global_position.x < global_position.x:
 		enemy_sprite.flip_h = true 
 		weapon_anchor.scale.y = -1 
 	else:
@@ -122,36 +133,38 @@ func _physics_process(_delta: float) -> void:
 			enemy_sprite.frame = 0
 
 func move_around_player() -> void:
-	var to_player = player.global_position - global_position
-	var distance = to_player.length()
+	if not target or not is_instance_valid(target):
+		return
+	var to_target = target.global_position - global_position
+	var distance = to_target.length()
 	if distance < 0.001:
 		return
-	var direction_to_player = to_player / distance
+	var direction_to_target = to_target / distance
 	
 	# Enraged: surround AI (ours)
 	if _enraged:
 		var surround_target = _get_surround_target()
-		var to_target = surround_target - global_position
-		if to_target.length() > 5.0:
-			velocity = to_target.normalized() * speed * _speed_multiplier
+		var surround_vec = surround_target - global_position
+		if surround_vec.length() > 5.0:
+			velocity = surround_vec.normalized() * speed * _speed_multiplier
 			if not velocity.is_finite():
 				velocity = Vector2.ZERO
 			move_and_slide()
 			return
 	
-	# Smart orbit based on player velocity direction (from remote)
+	# Smart orbit based on target velocity direction
 	var tangent: Vector2
-	if abs(player.velocity.x) > 10.0:
-		if player.velocity.x > 0:
-			tangent = Vector2(direction_to_player.y, -direction_to_player.x)
+	if target and is_instance_valid(target) and abs(target.velocity.x) > 10.0:
+		if target.velocity.x > 0:
+			tangent = Vector2(direction_to_target.y, -direction_to_target.x)
 		else:
-			tangent = Vector2(-direction_to_player.y, direction_to_player.x)
+			tangent = Vector2(-direction_to_target.y, direction_to_target.x)
 	else:
-		tangent = Vector2(-direction_to_player.y, direction_to_player.x)
+		tangent = Vector2(-direction_to_target.y, direction_to_target.x)
 	var desired_velocity = Vector2.ZERO
 	
 	if distance > orbit_distance + 20:
-		var raw = tangent + direction_to_player
+		var raw = tangent + direction_to_target
 		desired_velocity = raw.normalized() if raw.is_finite() else tangent
 	else:
 		desired_velocity = tangent
@@ -174,7 +187,7 @@ func calculate_separation_vector() -> Vector2:
 	
 	for body in overlapping_bodies:
 		# Нас интересуют только другие враги DrunkKiller (но не мы сами и не игрок)
-		if body != self and body.is_in_group("enemy") or body is CharacterBody2D and body != player and body != self:
+		if body != self and body.is_in_group("enemy") or body is CharacterBody2D and body != _player_ref and body != self:
 			var diff = global_position - body.global_position
 			# Чем ближе к нам чужой враг, тем сильнее мы от него толкаемся
 			if diff.length() > 0.001 and diff.is_finite():
@@ -269,8 +282,16 @@ func set_enraged(enraged: bool) -> void:
 	else:
 		modulate = Color.WHITE
 
+func set_target(new_target: Node2D) -> void:
+	target = new_target
+
+func apply_knockback(impulse: Vector2) -> void:
+	_knockback = impulse
+
 func _get_surround_target() -> Vector2:
-	var player_pos = player.global_position
+	if not _player_ref or not is_instance_valid(_player_ref):
+		return global_position
+	var player_pos = _player_ref.global_position
 	var my_angle = (player_pos - global_position).angle()
 	var occupied = [my_angle]
 

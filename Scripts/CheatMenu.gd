@@ -5,7 +5,7 @@ var _error_label: Label
 
 func _ready() -> void:
 	var panel = Panel.new()
-	panel.size = Vector2(400, 280)
+	panel.size = Vector2(400, 310)
 	panel.position = Vector2(440, 200)
 	add_child(panel)
 
@@ -51,9 +51,33 @@ func _ready() -> void:
 	bucket_btn.add_theme_color_override("font_color", Color.GOLD)
 	panel.add_child(bucket_btn)
 
+	var infinit_btn = Button.new()
+	infinit_btn.text = "+ Infinit"
+	infinit_btn.position = Vector2(200, 120)
+	infinit_btn.size = Vector2(170, 30)
+	infinit_btn.pressed.connect(_add_infinit)
+	infinit_btn.add_theme_color_override("font_color", Color.WHITE)
+	panel.add_child(infinit_btn)
+
+	var tube_btn = Button.new()
+	tube_btn.text = "+ Tube"
+	tube_btn.position = Vector2(30, 155)
+	tube_btn.size = Vector2(150, 30)
+	tube_btn.pressed.connect(_add_tube)
+	tube_btn.add_theme_color_override("font_color", Color.WHITE)
+	panel.add_child(tube_btn)
+
+	var clone_btn = Button.new()
+	clone_btn.text = "+ Clone"
+	clone_btn.position = Vector2(200, 155)
+	clone_btn.size = Vector2(170, 30)
+	clone_btn.pressed.connect(_add_clone)
+	clone_btn.add_theme_color_override("font_color", Color.WHITE)
+	panel.add_child(clone_btn)
+
 	var return_btn = Button.new()
 	return_btn.text = "Следующий этаж"
-	return_btn.position = Vector2(200, 120)
+	return_btn.position = Vector2(30, 190)
 	return_btn.size = Vector2(170, 30)
 	return_btn.pressed.connect(_return_elevator)
 	return_btn.add_theme_color_override("font_color", Color.CORNFLOWER_BLUE)
@@ -110,6 +134,42 @@ func _add_bucket() -> void:
 	player.add_child(bucket)
 	player._bucket = bucket
 	_error_label.text = ""
+
+func _add_infinit() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if not player or not player.has_method("set_slot"):
+		_error_label.text = "Игрок не найден"
+		return
+	for i in range(player.inventory.size()):
+		if player.inventory[i].id == "":
+			player.set_slot(i, "infinit", preload("res://Assets/Inventory/Infinit.png"), "Infinit")
+			_error_label.text = ""
+			return
+	_error_label.text = "Нет свободных слотов"
+
+func _add_tube() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if not player or not player.has_method("set_slot"):
+		_error_label.text = "Игрок не найден"
+		return
+	for i in range(player.inventory.size()):
+		if player.inventory[i].id == "":
+			player.set_slot(i, "tube", preload("res://Assets/Inventory/Tube.png"), "Tube")
+			_error_label.text = ""
+			return
+	_error_label.text = "Нет свободных слотов"
+
+func _add_clone() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if not player or not player.has_method("set_slot"):
+		_error_label.text = "Игрок не найден"
+		return
+	for i in range(player.inventory.size()):
+		if player.inventory[i].id == "":
+			player.set_slot(i, "clone", preload("res://Assets/Inventory/Clone.png"), "Clone")
+			_error_label.text = ""
+			return
+	_error_label.text = "Нет свободных слотов"
 
 func _return_elevator() -> void:
 	var arena = get_tree().current_scene.get_node_or_null("MainArena3")

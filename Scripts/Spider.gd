@@ -9,7 +9,8 @@ const WEB_SCENE = preload("res://Objects/Web.tscn")
 @export var melee_damage: int = 1
 @export var health: int = 80
 
-var player: Node2D = null
+var _player_ref: Node2D = null
+var target: Node2D = null
 var _web_boost := false
 var _spawn_pos: Vector2 = Vector2.ZERO
 var _zone_name: String = ""
@@ -37,8 +38,9 @@ func _ready() -> void:
 		_zone_name = get_meta("zone_name")
 	var players = get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
-		player = players[0]
-		add_collision_exception_with(player)
+		_player_ref = players[0]
+		target = _player_ref
+		add_collision_exception_with(_player_ref)
 		spawn_web_audio = AudioStreamPlayer2D.new()
 		spawn_web_audio.name = "SpawnWebAudio"
 		spawn_web_audio.stream = preload("res://Assets/Sounds/Effects/SpawnWeb.mp3")
@@ -78,7 +80,7 @@ func _stop_run_audio() -> void:
 func _get_separation_vector() -> Vector2:
 	var sep := Vector2.ZERO
 	for body in separation_zone.get_overlapping_bodies():
-		if body == self or body == player:
+		if body == self or body == _player_ref:
 			continue
 		if body is CharacterBody2D or body.is_in_group("enemy"):
 			var diff = global_position - body.global_position
@@ -124,11 +126,13 @@ func set_enraged(enraged: bool) -> void:
 		shoot_timer.wait_time = randf_range(8.0, 12.0)
 
 func _physics_process(delta: float) -> void:
-	if not player:
+	if not target or not is_instance_valid(target):
+		target = _player_ref
+	if not target:
 		_stop_run_audio()
 		return
 	if _check_zone_teleport():
-		animated_sprite.flip_h = player.global_position.x < global_position.x
+		animated_sprite.flip_h = target.global_position.x < global_position.x
 		_stop_run_audio()
 		return
 
@@ -139,8 +143,8 @@ func _physics_process(delta: float) -> void:
 		_stop_run_audio()
 		return
 
-	var to_player = player.global_position - global_position
-	var dist = to_player.length()
+	var to_target = target.global_position - global_position
+	var dist = to_target.length()
 	if dist < 0.001:
 		_stop_run_audio()
 		return
@@ -148,7 +152,7 @@ func _physics_process(delta: float) -> void:
 	if not _run_audio_playing and run_audio:
 		run_audio.play()
 		_run_audio_playing = true
-	var direction = to_player / dist
+	var direction = to_target / dist
 	var current_speed = speed * (web_boost_multiplier if _web_boost else 1.0) * _speed_multiplier
 
 	var separation = _get_separation_vector()
@@ -163,7 +167,7 @@ func _physics_process(delta: float) -> void:
 		animated_sprite.flip_h = true
 
 func _on_shoot_timer_timeout() -> void:
-	if _is_waiting or not player:
+	if _is_waiting or not target or not is_instance_valid(target):
 		return
 
 	var web = WEB_SCENE.instantiate()
@@ -204,3 +208,9 @@ func take_damage(amount: int) -> void:
 	if health <= 0:
 		_stop_run_audio()
 		queue_free()
+
+func set_target(new_target: Node2D) -> void:
+	target = new_target
+
+func apply_knockback(impulse: Vector2) -> void:
+	_knockback = impulse

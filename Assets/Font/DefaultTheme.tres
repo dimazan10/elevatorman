@@ -1,6 +1,6 @@
-[gd_resource type="Theme" format=3]
+[gd_resource type="Theme" format=3 uid="uid://cba5oet03pbfb"]
 
-[ext_resource type="FontFile" path="res://Assets/Font/ISAACFONTDESCRIPTIONENGRUS-FILL_0.TTF" id="1"]
+[ext_resource type="FontFile" uid="uid://cp3aluh4astdf" path="res://Assets/Font/ISAACFONTDESCRIPTIONENGRUS-FILL_0.TTF" id="1"]
 
 [resource]
 default_font = ExtResource("1")

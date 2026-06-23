@@ -87,6 +87,7 @@ func _ready() -> void:
 	_show_player()
 	_hide_floor_label()
 	_restore_bucket_state()
+	_restore_inventory_state()
 	player_node.can_move = true
 	_floor_start_time = Time.get_ticks_msec() / 1000.0
 	add_to_group("pausable")
@@ -432,6 +433,8 @@ func _save_floor_state() -> void:
 	if player_node.has_method("_try_bucket_hit") and player_node._bucket:
 		GameState.has_bucket = true
 		GameState.bucket_charges = player_node._bucket.charges
+	if player_node.has_method("get_inventory"):
+		GameState.inventory = player_node.get_inventory().duplicate(true)
 	GameState.last_floor_hp = player_node.current_lives if "current_lives" in player_node else 0
 	GameState.last_floor_time = (Time.get_ticks_msec() / 1000.0) - _floor_start_time
 
@@ -444,6 +447,16 @@ func _restore_bucket_state() -> void:
 		player_node._setup_bucket()
 		if player_node._bucket:
 			player_node._bucket.charges = GameState.bucket_charges
+
+func _restore_inventory_state() -> void:
+	if not is_instance_valid(player_node):
+		return
+	if not player_node.has_method("set_slot"):
+		return
+	for i in range(GameState.inventory.size()):
+		var slot = GameState.inventory[i]
+		if slot.id != "":
+			player_node.set_slot(i, slot.id, slot.icon, slot.name)
 
 func start_restart() -> void:
 	if lift_state != LiftState.RETURNING:

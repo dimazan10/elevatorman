@@ -5,6 +5,8 @@ static var show_debug := false
 
 @export var radius: float = 250.0
 
+var _player_count: int = 0
+
 func _ready() -> void:
 	add_to_group("danger_zone")
 	var cs = $CollisionShape2D
@@ -32,12 +34,17 @@ func _draw() -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		var sm = get_tree().get_first_node_in_group("style_manager")
-		if sm and sm.has_method("add_danger"):
-			sm.add_danger()
+		_player_count += 1
+		if _player_count == 1:
+			var sm = get_tree().get_first_node_in_group("style_manager")
+			if sm and sm.has_method("add_danger"):
+				sm.add_danger()
 
 func _on_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		var sm = get_tree().get_first_node_in_group("style_manager")
-		if sm and sm.has_method("remove_danger"):
-			sm.remove_danger()
+		_player_count -= 1
+		if _player_count <= 0:
+			_player_count = 0
+			var sm = get_tree().get_first_node_in_group("style_manager")
+			if sm and sm.has_method("remove_danger"):
+				sm.remove_danger()

@@ -26,15 +26,15 @@ PauseManager="*res://Scripts/PauseManager.gd"
 StyleManager="*res://Scripts/StyleManager.gd"
 DefaultFont="*res://Scripts/DefaultFont.gd"
 
-[gui]
-
-theme/custom="res://Assets/Font/DefaultTheme.tres"
-
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/size/mode=4
+
+[gui]
+
+theme/custom="res://Assets/Font/DefaultTheme.tres"
 
 [physics]
 

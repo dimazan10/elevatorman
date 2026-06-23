@@ -12,6 +12,10 @@ var bucket_charges: int = 3
 var currency: int = 0
 var last_floor_hp: int = 0
 var last_floor_time: float = 0.0
+var inventory: Array[Dictionary] = [
+	{id = "", icon = null, name = ""},
+	{id = "", icon = null, name = ""},
+]
 
 func _ready() -> void:
 	_load_settings()

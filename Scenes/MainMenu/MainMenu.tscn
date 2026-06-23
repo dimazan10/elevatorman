@@ -6,7 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://bmgioa6x7knpu" path="res://Assets/buttonSettings.png" id="4_vapy7"]
 [ext_resource type="Script" uid="uid://duvm74ksi552c" path="res://Scripts/ButtonQuit.gd" id="5_ua038"]
 [ext_resource type="Script" uid="uid://bjfteco1ew5lh" path="res://Scripts/MainMenu.gd" id="6_75e0l"]
-[ext_resource type="AudioStream" path="res://Assets/Sounds/Effects/Click_Button.mp3" id="click_sound"]
+[ext_resource type="Texture2D" uid="uid://bryvarg5ckwya" path="res://Assets/MainMenu/Picsart_26-06-23_17-52-38-741.png" id="8_0hjx5"]
+[ext_resource type="AudioStream" uid="uid://g7lsuis7yl21" path="res://Assets/Sounds/Effects/Click_Button.mp3" id="click_sound"]
 
 [node name="MainMenu" type="Control" unique_id=1026156905]
 layout_mode = 3
@@ -18,7 +19,7 @@ grow_vertical = 2
 script = ExtResource("6_75e0l")
 metadata/_edit_use_anchors_ = true
 
-[node name="ClickSound" type="AudioStreamPlayer" parent="."]
+[node name="ClickSound" type="AudioStreamPlayer" parent="." unique_id=811523737]
 stream = ExtResource("click_sound")
 bus = &"Effects"
 
@@ -39,11 +40,15 @@ stretch_mode = 6
 metadata/_edit_use_anchors_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=599235801]
-layout_mode = 0
-offset_left = 38.0
-offset_top = 531.0
-offset_right = 134.0
-offset_bottom = 659.0
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 120.0
+offset_top = 124.0
+offset_right = 247.0
+offset_bottom = 252.0
+grow_vertical = 2
 theme_override_constants/separation = 16
 
 [node name="ButtonPlay" type="TextureButton" parent="VBoxContainer" unique_id=268296133]
@@ -61,6 +66,19 @@ layout_mode = 2
 texture_normal = ExtResource("2_kpx3y")
 stretch_mode = 6
 script = ExtResource("5_ua038")
+
+[node name="Logo" type="TextureRect" parent="." unique_id=294415747]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 38.0
+offset_top = -196.0
+offset_right = 334.0
+offset_bottom = 64.0
+grow_vertical = 2
+texture = ExtResource("8_0hjx5")
+expand_mode = 1
 
 [connection signal="pressed" from="VBoxContainer/ButtonPlay" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonSettings" to="." method="_on_settings_pressed"]

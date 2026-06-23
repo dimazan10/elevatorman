@@ -3,12 +3,26 @@ extends Control
 const MAX_HP := 5
 const COIN_COLOR := Color(1.0, 0.85, 0.2)
 
+const INFINIT_ICON = preload("res://Assets/Inventory/Infinit.png")
+const TUBE_ICON = preload("res://Assets/Inventory/Tube.png")
+const CLONE_ICON = preload("res://Assets/Inventory/Clone.png")
+
+const PRICE_INFINIT := 9
+const PRICE_TUBE := 4
+const PRICE_CLONE := 6
+
 @onready var vbox: VBoxContainer = $VBoxMain
 @onready var time_label: Label = $VBoxMain/HBoxMain/InfoSide/TimeLabel
 @onready var currency_label: Label = $VBoxMain/HBoxMain/InfoSide/CoinDisplay/CurrencyLabel
 @onready var bucket_btn: Button = $VBoxMain/HBoxMain/InfoSide/BucketBuy
 @onready var continue_btn: Button = $VBoxMain/HBoxMain/InfoSide/ContinueBtn
 @onready var bucket_status: Label = $VBoxMain/HBoxMain/InfoSide/BucketStatus
+@onready var infinit_btn: Button = $VBoxMain/HBoxMain/InfoSide/InfinitBtn
+@onready var infinit_status: Label = $VBoxMain/HBoxMain/InfoSide/InfinitStatus
+@onready var tube_btn: Button = $VBoxMain/HBoxMain/InfoSide/TubeBtn
+@onready var tube_status: Label = $VBoxMain/HBoxMain/InfoSide/TubeStatus
+@onready var clone_btn: Button = $VBoxMain/HBoxMain/InfoSide/CloneBtn
+@onready var clone_status: Label = $VBoxMain/HBoxMain/InfoSide/CloneStatus
 @onready var bottle_body: Panel = $VBoxMain/HBoxMain/BottleSide/BottleBody
 @onready var bottle_clip: Control = $VBoxMain/HBoxMain/BottleSide/BottleBody/BottleClip
 @onready var liquid: ColorRect = $VBoxMain/HBoxMain/BottleSide/BottleBody/BottleClip/Liquid
@@ -64,6 +78,45 @@ func _set_liquid_fill(ratio: float) -> void:
 	liquid.size.y = ch * ratio
 	neck_liquid.visible = ratio >= 0.99
 
+func _item_slot_free() -> int:
+	for i in range(GameState.inventory.size()):
+		if GameState.inventory[i].id == "":
+			return i
+	return -1
+
+func _update_item_ui() -> void:
+	_update_item_button("infinit", infinit_btn, infinit_status, PRICE_INFINIT)
+	_update_item_button("tube", tube_btn, tube_status, PRICE_TUBE)
+	_update_item_button("clone", clone_btn, clone_status, PRICE_CLONE)
+
+func _update_item_button(id: String, btn: Button, status: Label, price: int) -> void:
+	var owned := false
+	var slot = -1
+	for i in range(GameState.inventory.size()):
+		if GameState.inventory[i].id == id:
+			owned = true
+			slot = i
+			break
+	if owned:
+		btn.disabled = true
+		btn.text = "Куплено"
+		status.text = "Слот " + str(slot + 1)
+	else:
+		btn.disabled = GameState.currency < price or _item_slot_free() == -1
+		btn.text = "Купить " + id.capitalize() + " (" + str(price) + " монет)"
+		status.text = ""
+
+func _buy_item(id: String, icon: Texture2D, price: int) -> void:
+	if GameState.currency < price:
+		return
+	var slot = _item_slot_free()
+	if slot == -1:
+		return
+	GameState.currency -= price
+	GameState.inventory[slot] = {id = id, icon = icon, name = id.capitalize()}
+	currency_label.text = str(GameState.currency)
+	_update_item_ui()
+
 func _update_bucket_ui() -> void:
 	if GameState.has_bucket:
 		bucket_btn.disabled = true
@@ -96,6 +149,7 @@ func _on_collect() -> void:
 	bounce.tween_property(coin_icon, "scale", Vector2(1.0, 1.0), 0.3)
 	currency_label.text = str(GameState.currency)
 	_update_bucket_ui()
+	_update_item_ui()
 
 func _animate_liquid(v: float) -> void:
 	_set_liquid_fill(v)
@@ -123,8 +177,18 @@ func _on_bucket_buy() -> void:
 		GameState.currency -= 3
 		GameState.has_bucket = true
 		GameState.bucket_charges = 3
-		currency_label.text = str(GameState.currency)
-		_update_bucket_ui()
+	currency_label.text = str(GameState.currency)
+	_update_bucket_ui()
+	_update_item_ui()
+
+func _on_infinit_buy() -> void:
+	_buy_item("infinit", INFINIT_ICON, PRICE_INFINIT)
+
+func _on_tube_buy() -> void:
+	_buy_item("tube", TUBE_ICON, PRICE_TUBE)
+
+func _on_clone_buy() -> void:
+	_buy_item("clone", CLONE_ICON, PRICE_CLONE)
 
 func _on_continue() -> void:
 	if GameState.current_floor >= 3:

@@ -1,0 +1,132 @@
+[gd_scene format=3 uid="uid://b8snbi67cgyle"]
+
+[ext_resource type="Texture2D" uid="uid://b6nahey8m886t" path="res://Assets/Inventory/Wind.png" id="1_wind"]
+[ext_resource type="Script" uid="uid://dk18bspkddtpt" path="res://Scripts/InventoryUI.gd" id="2_script"]
+
+[node name="InventoryUI" type="CanvasLayer" unique_id=977704627]
+layer = 128
+script = ExtResource("2_script")
+
+[node name="Panel" type="Control" parent="." unique_id=1482071417]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="BgWind" type="HBoxContainer" parent="Panel" unique_id=979601283]
+modulate = Color(1, 1, 1, 0.7254902)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -211.0
+offset_top = -111.0
+offset_right = 845.00415
+offset_bottom = 389.0005
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.14, 0.14)
+mouse_filter = 2
+
+[node name="Slot0" type="Control" parent="Panel/BgWind" unique_id=297730549]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="WindBg" type="TextureRect" parent="Panel/BgWind/Slot0" unique_id=1271320126]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("1_wind")
+stretch_mode = 6
+
+[node name="Icon" type="TextureRect" parent="Panel/BgWind/Slot0" unique_id=1767789411]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = 60.0
+offset_right = -60.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ReferenceRect" type="ReferenceRect" parent="Panel/BgWind" unique_id=390456038]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+border_color = Color(1, 0, 0, 0)
+border_width = 1.4
+
+[node name="Slot1" type="Control" parent="Panel/BgWind" unique_id=1629971562]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="WindBg" type="TextureRect" parent="Panel/BgWind/Slot1" unique_id=1161606407]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("1_wind")
+stretch_mode = 6
+
+[node name="Icon" type="TextureRect" parent="Panel/BgWind/Slot1" unique_id=1151504119]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = 60.0
+offset_right = -60.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Panel" unique_id=1380342541]
+modulate = Color(1, 1, 1, 0.78431374)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -230.0
+offset_top = -128.0
+offset_right = -208.0
+offset_bottom = -97.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 20
+text = "Q"
+
+[node name="Label2" type="Label" parent="Panel" unique_id=531536962]
+modulate = Color(1, 1, 1, 0.78431374)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -135.0
+offset_top = -128.0
+offset_right = -113.0
+offset_bottom = -97.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 20
+text = "E"

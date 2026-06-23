@@ -163,6 +163,36 @@ layout_mode = 2
 text = ""
 horizontal_alignment = 1
 
+[node name="InfinitBtn" type="Button" parent="VBoxMain/HBoxMain/InfoSide"]
+layout_mode = 2
+text = "Infinit (9 монет)"
+size_flags_horizontal = 4
+
+[node name="InfinitStatus" type="Label" parent="VBoxMain/HBoxMain/InfoSide"]
+layout_mode = 2
+text = ""
+horizontal_alignment = 1
+
+[node name="TubeBtn" type="Button" parent="VBoxMain/HBoxMain/InfoSide"]
+layout_mode = 2
+text = "Tube (4 монеты)"
+size_flags_horizontal = 4
+
+[node name="TubeStatus" type="Label" parent="VBoxMain/HBoxMain/InfoSide"]
+layout_mode = 2
+text = ""
+horizontal_alignment = 1
+
+[node name="CloneBtn" type="Button" parent="VBoxMain/HBoxMain/InfoSide"]
+layout_mode = 2
+text = "Clone (6 монет)"
+size_flags_horizontal = 4
+
+[node name="CloneStatus" type="Label" parent="VBoxMain/HBoxMain/InfoSide"]
+layout_mode = 2
+text = ""
+horizontal_alignment = 1
+
 [node name="ContinueBtn" type="Button" parent="VBoxMain/HBoxMain/InfoSide"]
 layout_mode = 2
 text = "Продолжить"
@@ -179,4 +209,7 @@ mouse_filter = 2
 
 [connection signal="pressed" from="VBoxMain/HBoxMain/BottleSide/CollectBtn" to="." method="_on_collect"]
 [connection signal="pressed" from="VBoxMain/HBoxMain/InfoSide/BucketBuy" to="." method="_on_bucket_buy"]
+[connection signal="pressed" from="VBoxMain/HBoxMain/InfoSide/InfinitBtn" to="." method="_on_infinit_buy"]
+[connection signal="pressed" from="VBoxMain/HBoxMain/InfoSide/TubeBtn" to="." method="_on_tube_buy"]
+[connection signal="pressed" from="VBoxMain/HBoxMain/InfoSide/CloneBtn" to="." method="_on_clone_buy"]
 [connection signal="pressed" from="VBoxMain/HBoxMain/InfoSide/ContinueBtn" to="." method="_on_continue"]
