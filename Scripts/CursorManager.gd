@@ -44,7 +44,7 @@ func _load_cursor(path: String) -> Texture2D:
 	img.resize(max(1, int(img.get_width() * scale)), max(1, int(img.get_height() * scale)), Image.INTERPOLATE_LANCZOS)
 	return ImageTexture.create_from_image(img)
 
-func _setup_hover(b: BaseButton) -> void:
+func _setup_hover(b: Control) -> void:
 	# Avoid connecting the same button multiple times
 	if b.is_in_group(GROUP_MANAGED):
 		return
@@ -75,7 +75,7 @@ func _get_scene_root(node: Node) -> Node:
 		p = p.get_parent()
 	return p
 
-func _should_scale(b: BaseButton) -> bool:
+func _should_scale(b: Control) -> bool:
 	var scene_root := _get_scene_root(b)
 	if not scene_root:
 		return true
