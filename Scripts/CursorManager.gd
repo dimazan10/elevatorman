@@ -2,6 +2,7 @@
 extends Node
 
 const GROUP_MANAGED := "cursor_managed"
+const VISIBLE_SCENES := ["MainMenu", "Settings", "Shop"]
 
 var _cursor_default: Texture2D
 var _cursor_hover: Texture2D
@@ -16,8 +17,12 @@ func _ready() -> void:
 
 	# Setup existing buttons in the current scene tree so cursors react everywhere
 	setup_buttons(get_tree().get_root())
-	# Watch for future buttons added at runtime
+	# Watch for future buttons added/removed at runtime
 	get_tree().connect("node_added", Callable(self, "_on_node_added"))
+	get_tree().connect("node_removed", Callable(self, "_on_node_removed"))
+
+	# Set initial mouse visibility according to current scenes
+	_update_mouse_visibility()
 
 func setup_buttons(root: Node) -> void:
 	if not root:
@@ -37,6 +42,31 @@ func _on_node_added(node: Node) -> void:
 	for c in node.get_children():
 		if c is Node:
 			_on_node_added(c)
+
+	# Update mouse visibility when scenes/nodes change
+	_update_mouse_visibility()
+
+func _on_node_removed(node: Node) -> void:
+	# Update visibility when nodes are removed
+	_update_mouse_visibility()
+
+func _update_mouse_visibility() -> void:
+	var root := get_tree().get_root()
+	if _has_allowed_scene(root):
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+
+func _has_allowed_scene(node: Node) -> bool:
+	if not node:
+		return false
+	# If the node itself matches an allowed scene name
+	if node.name in VISIBLE_SCENES:
+		return true
+	for c in node.get_children():
+		if c is Node and _has_allowed_scene(c):
+			return true
+	return false
 
 func _load_cursor(path: String) -> Texture2D:
 	var tex = load(path) as Texture2D
