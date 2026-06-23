@@ -71,9 +71,19 @@ func _ready() -> void:
 	FadeTransition.fade_in()
 
 	lift_state = LiftState.START
+	$Hole/FloorElevator/TransportArea/CollisionShape.set_deferred("disabled", true)
+	anim.play("RESET")
+	anim.seek(0, true)
+	anim.stop()
+	_show_floor_label()
+	anim.play("DownUp")
+	await anim.animation_finished
+	anim.play("Open")
+	if _gate_audio:
+		_gate_audio.play()
+	await anim.animation_finished
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 1)
 	$Hole/FloorElevator/TransportArea/CollisionShape.set_deferred("disabled", false)
-	_show_floor_label()
 	_show_player()
 	_hide_floor_label()
 	_restore_bucket_state()
@@ -244,12 +254,20 @@ func start_exit_sequence() -> void:
 	if lift_state != LiftState.START:
 		return
 	lift_state = LiftState.EXITING
+	player_node.can_move = false
+	anim.stop()
+	anim.play("Close")
+	await anim.animation_finished
+	_shake_camera()
 	_set_shaft_collision(false)
+	anim.play("DownClose")
+	await anim.animation_finished
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 0)
 	_spawn_secondary_enemies(GameState.current_floor)
 	_spawn_switches(GameState.current_floor)
 	_show_enemies()
 	lift_state = LiftState.WAITING
+	player_node.can_move = true
 	_connect_switch()
 
 func _spawn_secondary_enemies(level: int) -> void:
