@@ -73,19 +73,6 @@ func _on_resume() -> void:
 	paused_state_changed.emit(false)
 
 
-func _on_restart() -> void:
-	_clear_pause_ui()
-	_paused = false
-	Engine.time_scale = 1.0
-	_world_env.environment = null
-	_set_process_mode_all(Node.PROCESS_MODE_INHERIT)
-	paused_state_changed.emit(false)
-	GameState.current_floor = 1
-	GameState.has_bucket = false
-	GameState.currency = 0
-	StyleManager.reset_score()
-	get_tree().reload_current_scene()
-
 func _on_exit() -> void:
 	_clear_pause_ui()
 	_paused = false
@@ -102,7 +89,6 @@ func _on_exit() -> void:
 func _show_pause_menu() -> void:
 	var menu = preload("res://Scripts/PauseMenu.gd").new()
 	menu.resume_pressed.connect(_on_resume)
-	menu.restart_pressed.connect(_on_restart)
 	menu.exit_pressed.connect(_on_exit)
 	_pause_layer.add_child(menu)
 	_pause_layer.visible = true

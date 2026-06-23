@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dkl21j21cli26"
-path="res://.godot/imported/uvKits.ttf-f4971f7c49f57c7c09d606cb8a735a9f.fontdata"
+uid="uid://cp3aluh4astdf"
+path="res://.godot/imported/ISAACFONTDESCRIPTIONENGRUS-FILL_0.TTF-87a6fe7174cb216e8d071204a40559d3.fontdata"
 
 [deps]
 
-source_file="res://Assets/Font/uvKits.ttf"
-dest_files=["res://.godot/imported/uvKits.ttf-f4971f7c49f57c7c09d606cb8a735a9f.fontdata"]
+source_file="res://Assets/Font/ISAACFONTDESCRIPTIONENGRUS-FILL_0.TTF"
+dest_files=["res://.godot/imported/ISAACFONTDESCRIPTIONENGRUS-FILL_0.TTF-87a6fe7174cb216e8d071204a40559d3.fontdata"]
 
 [params]
 

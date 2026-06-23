@@ -251,7 +251,7 @@ func _spawn_ghost() -> void:
 	tw.tween_callback(ghost.queue_free)
 
 func perform_dash() -> void:
-	if is_dashing or is_stunned:
+	if is_dashing:
 		return
 
 	var charge_idx := -1
@@ -311,7 +311,7 @@ func take_damage(amount: int):
 	hit_blow_audio.play()
 	hit_fierce_audio.play()
 	modulate = Color(1, 0.3, 0.3)
-	await get_tree().create_timer(0.4).timeout
+	await get_tree().create_timer(0.15).timeout
 	modulate = Color.WHITE
 	can_move = true
 	_invulnerable = false

@@ -22,7 +22,7 @@ func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_na
 
 	var use_points := safe_points if not safe_points.is_empty() else points
 
-	var total = 4 + randi() % 3 + level
+	var total = 3 + level + randi() % 3
 	var types: Array[String] = ["angry_ball", "DrunkKiller", "Spider"]
 
 	var remaining = total - types.size()
