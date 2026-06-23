@@ -251,7 +251,7 @@ func _spawn_ghost() -> void:
 	tw.tween_callback(ghost.queue_free)
 
 func perform_dash() -> void:
-	if is_dashing:
+	if is_dashing or is_stunned:
 		return
 
 	var charge_idx := -1
