@@ -2,18 +2,18 @@
 extends Node
 
 const GROUP_MANAGED := "cursor_managed"
+const GROUP_MANAGER := "cursor_manager"
 const VISIBLE_SCENES := ["MainMenu", "Settings", "Shop", "PauseLayer"]
 
 var _cursor_default: Texture2D
 var _cursor_hover: Texture2D
 
 func _ready() -> void:
+	add_to_group(GROUP_MANAGER)
 	_cursor_default = _load_cursor("res://Assets/MainMenu/Crossed_0.png")
 	_cursor_hover = _load_cursor("res://Assets/MainMenu/Crossed_1.png")
 	Input.set_custom_mouse_cursor(_cursor_default)
-	# Ensure the OS cursor is visible in gameplay (some systems/scenes may hide/capture it)
-	# We'll set visible here; if a scene explicitly needs capture it can override this.
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
 	# Setup existing buttons in the current scene tree so cursors react everywhere
 	setup_buttons(get_tree().get_root())
@@ -51,23 +51,25 @@ func _on_node_removed(node: Node) -> void:
 	_update_mouse_visibility()
 
 func _update_mouse_visibility() -> void:
-    var tr := get_tree()
-    if not tr:
-        # SceneTree not available (engine shutting down or callback during teardown)
-        return
-    var root := tr.get_root()
-    if not root:
-        return
-    if _has_allowed_scene(root):
-        Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-    else:
-        Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	var tr := get_tree()
+	if not tr:
+		return
+	var root := tr.get_root()
+	if not root:
+		return
+	if _has_allowed_scene(root):
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
 func _has_allowed_scene(node: Node) -> bool:
 	if not node:
 		return false
-	# If the node itself matches an allowed scene name
 	if node.name in VISIBLE_SCENES:
+		if node is CanvasItem and not (node as CanvasItem).visible:
+			return false
+		if node is CanvasLayer and not (node as CanvasLayer).visible:
+			return false
 		return true
 	for c in node.get_children():
 		if c is Node and _has_allowed_scene(c):

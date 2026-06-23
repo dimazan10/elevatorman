@@ -39,8 +39,11 @@ func _unhandled_input(event: InputEvent) -> void:
 				_pause_layer.visible = false
 		else:
 			_cheat_menu = preload("res://Scripts/CheatMenu.gd").new()
+			_cheat_menu.name = "CheatMenu"
+			_cheat_menu.tree_exited.connect(_on_cheat_menu_closed)
 			_pause_layer.add_child(_cheat_menu)
 			_pause_layer.visible = true
+		_update_cursor_visibility()
 		get_viewport().set_input_as_handled()
 
 
@@ -92,6 +95,8 @@ func _show_pause_menu() -> void:
 	menu.exit_pressed.connect(_on_exit)
 	_pause_layer.add_child(menu)
 	_pause_layer.visible = true
+	# Force update cursor visibility when pause menu is shown
+	_update_cursor_visibility()
 
 
 func _clear_pause_ui() -> void:
@@ -99,6 +104,18 @@ func _clear_pause_ui() -> void:
 	_cheat_menu = null
 	for c in _pause_layer.get_children():
 		c.queue_free()
+	_update_cursor_visibility()
+
+
+func _on_cheat_menu_closed() -> void:
+	_cheat_menu = null
+	if not _paused:
+		_pause_layer.visible = false
+	_update_cursor_visibility()
+
+
+func _update_cursor_visibility() -> void:
+	get_tree().call_group("cursor_manager", "_update_mouse_visibility")
 
 
 func _set_process_mode_all(mode: Node.ProcessMode) -> void:
