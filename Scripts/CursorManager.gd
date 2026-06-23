@@ -2,7 +2,7 @@
 extends Node
 
 const GROUP_MANAGED := "cursor_managed"
-const VISIBLE_SCENES := ["MainMenu", "Settings", "Shop"]
+const VISIBLE_SCENES := ["MainMenu", "Settings", "Shop", "PauseLayer"]
 
 var _cursor_default: Texture2D
 var _cursor_hover: Texture2D
@@ -51,11 +51,17 @@ func _on_node_removed(node: Node) -> void:
 	_update_mouse_visibility()
 
 func _update_mouse_visibility() -> void:
-	var root := get_tree().get_root()
-	if _has_allowed_scene(root):
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	else:
-		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+    var tr := get_tree()
+    if not tr:
+        # SceneTree not available (engine shutting down or callback during teardown)
+        return
+    var root := tr.get_root()
+    if not root:
+        return
+    if _has_allowed_scene(root):
+        Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+    else:
+        Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
 func _has_allowed_scene(node: Node) -> bool:
 	if not node:
