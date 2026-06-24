@@ -50,11 +50,16 @@ func _integrate_forces(state: PhysicsDirectBodyState2D):
 		linear_velocity = _direction * CONSTANT_SPEED * _speed_multiplier
 	else:
 		linear_velocity = linear_velocity.move_toward(_direction * CONSTANT_SPEED * _speed_multiplier, 200.0)
+	linear_velocity = linear_velocity.limit_length(CONSTANT_SPEED * _speed_multiplier * 1.5)
+	if not linear_velocity.is_finite():
+		linear_velocity = _direction * CONSTANT_SPEED * _speed_multiplier
 	angular_velocity = ROTATION_SPEED
 
 func _on_body_entered(body: Node) -> void:
 	if _bounce_audio:
 		_bounce_audio.play()
+	if body.is_in_group("player") and body.has_method("take_damage"):
+		body.take_damage(1)
 
 func set_target(_new_target: Node2D) -> void:
 	pass

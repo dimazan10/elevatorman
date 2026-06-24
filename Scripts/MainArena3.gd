@@ -24,6 +24,7 @@ var _arena_rotator: Node2D
 var _secondary_arenas: Array[Node2D] = []
 var _arena_none: Node2D
 var _arena_switch: Node2D
+var _arena_switches: Array[Node2D] = []
 var _none_pushers: Array[Node] = []
 var _switch_pushers: Array[Node] = []
 var _main_pushers: Array[Node] = []
@@ -275,11 +276,11 @@ func _spawn_secondary_enemies(level: int) -> void:
 	if _arena_none:
 		var none_spawner = _arena_none.get_node_or_null("Pivot/EnemySpawner")
 		if none_spawner:
-			none_spawner.spawn(level, self, "spawn_point_none", "arena_none")
-	if _arena_switch:
-		var switch_spawner = _arena_switch.get_node_or_null("Pivot/EnemySpawner")
+			none_spawner.spawn(level, self, "spawn_point_none", "arena_none", _arena_none)
+	for sw in _arena_switches:
+		var switch_spawner = sw.get_node_or_null("Pivot/EnemySpawner")
 		if switch_spawner:
-			switch_spawner.spawn(level, self, "spawn_point_switch", "arena_switch")
+			switch_spawner.spawn(level, self, "spawn_point_switch", "arena_switch", sw)
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		enemy.collision_mask |= 2
 
@@ -537,6 +538,7 @@ func _enable_collision_shapes(node: Node) -> void:
 		_enable_collision_shapes(child)
 
 func _generate_world() -> void:
+	_arena_switches.clear()
 	var floor_rect = preload("res://Objects/Rooms/Floor_Rectangle.tscn")
 	var arena_none_scene = preload("res://Objects/Rooms/ArenaNone.tscn")
 	var arena_switch_scene = preload("res://Objects/Rooms/ArenaSwitch.tscn")
@@ -577,31 +579,62 @@ func _generate_world() -> void:
 	for i in 6:
 		if i != main_idx and i != (main_idx + 3) % 6:
 			second_indices.append(i)
-	var second_chosen = hex_angles[second_indices[randi() % second_indices.size()]]
-	var second_rad = deg_to_rad(second_chosen)
-	var second_dir = Vector2(cos(second_rad), sin(second_rad))
+	second_indices.shuffle()
 	var arena_none_pivot = corridor_end + dir * arena_radius
-	var second_inst = floor_rect.instantiate()
-	second_inst.rotation = second_rad
-	second_inst.position = arena_none_pivot + second_dir * corridor_dist - door_offset.rotated(second_rad)
-	add_child(second_inst)
-	for child in second_inst.get_children():
-		if child is Area2D and child.script and child.script.resource_path == "res://Scripts/DoorTrigger.gd":
-			child.add_to_group("gate_trigger")
-	var second_corridor_end = arena_none_pivot + second_dir * corridor_dist + Vector2(2043, 0).rotated(second_rad) - door_offset.rotated(second_rad)
-	var arena_switch = arena_switch_scene.instantiate()
-	arena_switch.name = "ArenaSwitch"
-	add_child(arena_switch)
-	arena_switch.position = second_corridor_end + second_dir * arena_radius - Vector2(640, 360)
-	_secondary_arenas.append(arena_switch)
 
-	_arena_switch = arena_switch
-	var switch_walls = arena_switch.get_node_or_null("Pivot/Walls")
-	if switch_walls:
-		for wall in switch_walls.get_children():
-			var p = _add_pusher_to_wall(wall)
-			if p:
-				_switch_pushers.append(p)
+	if _quest_mode == QuestMode.TIME_ATTACK:
+		for j in range(2):
+			var s_angle = hex_angles[second_indices[j]]
+			var s_rad = deg_to_rad(s_angle)
+			var s_dir = Vector2(cos(s_rad), sin(s_rad))
+			var s_inst = floor_rect.instantiate()
+			s_inst.rotation = s_rad
+			s_inst.position = arena_none_pivot + s_dir * corridor_dist - door_offset.rotated(s_rad)
+			add_child(s_inst)
+			for child in s_inst.get_children():
+				if child is Area2D and child.script and child.script.resource_path == "res://Scripts/DoorTrigger.gd":
+					child.add_to_group("gate_trigger")
+			var s_corridor_end = arena_none_pivot + s_dir * corridor_dist + Vector2(2043, 0).rotated(s_rad) - door_offset.rotated(s_rad)
+			var arena_switch = arena_switch_scene.instantiate()
+			arena_switch.name = "ArenaSwitch" + str(j + 1)
+			add_child(arena_switch)
+			arena_switch.position = s_corridor_end + s_dir * arena_radius - Vector2(640, 360)
+			_secondary_arenas.append(arena_switch)
+			_arena_switches.append(arena_switch)
+			if j == 0:
+				_arena_switch = arena_switch
+			var switch_walls = arena_switch.get_node_or_null("Pivot/Walls")
+			if switch_walls:
+				for wall in switch_walls.get_children():
+					var p = _add_pusher_to_wall(wall)
+					if p:
+						_switch_pushers.append(p)
+	else:
+		var second_chosen = hex_angles[second_indices[0]]
+		var second_rad = deg_to_rad(second_chosen)
+		var second_dir = Vector2(cos(second_rad), sin(second_rad))
+		var second_inst = floor_rect.instantiate()
+		second_inst.rotation = second_rad
+		second_inst.position = arena_none_pivot + second_dir * corridor_dist - door_offset.rotated(second_rad)
+		add_child(second_inst)
+		for child in second_inst.get_children():
+			if child is Area2D and child.script and child.script.resource_path == "res://Scripts/DoorTrigger.gd":
+				child.add_to_group("gate_trigger")
+		var second_corridor_end = arena_none_pivot + second_dir * corridor_dist + Vector2(2043, 0).rotated(second_rad) - door_offset.rotated(second_rad)
+		var arena_switch = arena_switch_scene.instantiate()
+		arena_switch.name = "ArenaSwitch"
+		add_child(arena_switch)
+		arena_switch.position = second_corridor_end + second_dir * arena_radius - Vector2(640, 360)
+		_secondary_arenas.append(arena_switch)
+		_arena_switches.append(arena_switch)
+
+		_arena_switch = arena_switch
+		var switch_walls = arena_switch.get_node_or_null("Pivot/Walls")
+		if switch_walls:
+			for wall in switch_walls.get_children():
+				var p = _add_pusher_to_wall(wall)
+				if p:
+					_switch_pushers.append(p)
 
 func get_player_zone() -> String:
 	if _pause_manager and _pause_manager.is_paused():

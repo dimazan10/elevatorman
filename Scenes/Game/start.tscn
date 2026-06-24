@@ -288,28 +288,28 @@ libraries/ = SubResource("AnimationLibrary_sttla")
 [node name="Door2" type="Sprite2D" parent="Hole/FloorElevator" unique_id=1524022333]
 light_mask = 2
 visibility_layer = 2
-z_index = 2
+z_index = 3
 scale = Vector2(1, 0.9999999)
 texture = ExtResource("6_e5qfr")
 
 [node name="Door1" type="Sprite2D" parent="Hole/FloorElevator" unique_id=2017303116]
 light_mask = 2
 visibility_layer = 2
-z_index = 2
+z_index = 3
 scale = Vector2(1, 0.9999999)
 texture = ExtResource("5_sttla")
 
 [node name="RoofElevator" type="Sprite2D" parent="Hole/FloorElevator" unique_id=1895481883]
 light_mask = 4
 visibility_layer = 4
-z_index = 2
+z_index = 3
 scale = Vector2(1, 0.99999994)
 texture = SubResource("CompressedTexture2D_it17a")
 
 [node name="RoofElevator2" type="Sprite2D" parent="Hole/FloorElevator" unique_id=1143750395]
 light_mask = 4
 visibility_layer = 4
-z_index = 2
+z_index = 3
 scale = Vector2(1, 0.99999994)
 texture = ExtResource("7_j5evx")
 

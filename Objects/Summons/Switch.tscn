@@ -77,12 +77,14 @@ position = Vector2(19, 21)
 shape = SubResource("RectangleShape2D_im362")
 
 [node name="Switch" type="AnimatedSprite2D" parent="." unique_id=125194493]
+z_index = 3
 texture_filter = 1
 position = Vector2(19, 2)
 sprite_frames = SubResource("SpriteFrames_ohhd8")
 frame = 0
 
 [node name="Lag" type="AnimatedSprite2D" parent="." unique_id=1430538417]
+z_index = 3
 texture_filter = 1
 position = Vector2(19, 38)
 sprite_frames = SubResource("SpriteFrames_oqy18")

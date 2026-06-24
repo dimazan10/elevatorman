@@ -248,6 +248,23 @@ func _physics_process(delta: float) -> void:
 		animated_sprite.play("idle")
 		animated_sprite.speed_scale = 0.0
 		footstep_timer = 0.0
+	
+	_push_enemies_out()
+
+func _push_enemies_out() -> void:
+	var push_radius := 30.0
+	for e in get_tree().get_nodes_in_group("enemy"):
+		if not is_instance_valid(e):
+			continue
+		var diff: Vector2 = e.global_position - global_position
+		var dist := diff.length()
+		if dist < push_radius and dist > 0.001:
+			var push_dir := diff / dist
+			var push_force := (push_radius - dist) * 8.0
+			if e is RigidBody2D:
+				e.apply_central_impulse(push_dir * push_force)
+			elif e is CharacterBody2D:
+				e.position += push_dir * push_force * get_physics_process_delta_time()
 
 func _spawn_ghost() -> void:
 	if not animated_sprite or not animated_sprite.sprite_frames:
@@ -324,14 +341,17 @@ func take_damage(amount: int):
 	if my_camera and my_camera.has_method("apply_shake"):
 		my_camera.apply_shake(20.0)
 		
-	can_move = false
-	velocity = Vector2.ZERO
 	hit_blow_audio.play()
 	hit_fierce_audio.play()
-	modulate = Color(1, 0.3, 0.3)
-	await get_tree().create_timer(0.15).timeout
-	modulate = Color.WHITE
-	can_move = true
+	
+	var flicker_tween := create_tween()
+	for i in 4:
+		flicker_tween.tween_property(self, "modulate", Color(1, 0.3, 0.3), 0.05)
+		flicker_tween.tween_property(self, "modulate", Color.WHITE, 0.05)
+	flicker_tween.tween_property(self, "modulate", Color.WHITE, 0.1)
+	await flicker_tween.finished
+	
+	await get_tree().create_timer(0.4).timeout
 	_invulnerable = false
 	
 	if current_lives <= 0:

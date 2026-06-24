@@ -52,6 +52,7 @@ script = ExtResource("3_tp1qj")
 shape = SubResource("RectangleShape2D_bucket_pickup")
 
 [node name="Sprite" type="Sprite2D" parent="BucketPickup"]
+z_index = 3
 texture = ExtResource("2_k0mef")
 scale = Vector2(0.08, 0.08)
 

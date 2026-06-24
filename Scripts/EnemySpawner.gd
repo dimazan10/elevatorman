@@ -4,8 +4,12 @@ var _spawned_enemies: Array[Node] = []
 
 var _pool := ["angry_ball", "DrunkKiller", "Spider"]
 
-func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_name: String = "") -> Array[Node]:
-	var points := get_tree().get_nodes_in_group(group_name)
+func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_name: String = "", arena: Node = null) -> Array[Node]:
+	var all_points := get_tree().get_nodes_in_group(group_name)
+	var points := []
+	for pt in all_points:
+		if arena == null or arena.is_ancestor_of(pt):
+			points.append(pt)
 	if points.is_empty():
 		return []
 

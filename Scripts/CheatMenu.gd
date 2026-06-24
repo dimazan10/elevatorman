@@ -1,13 +1,18 @@
 extends Control
 
-var _input: LineEdit
+var _hp_input: LineEdit
 var _error_label: Label
+var _panel: Panel
+var _dragging := false
+var _drag_offset := Vector2.ZERO
 
 func _ready() -> void:
-	var panel = Panel.new()
-	panel.size = Vector2(400, 310)
-	panel.position = Vector2(440, 200)
-	add_child(panel)
+	_panel = Panel.new()
+	_panel.size = Vector2(400, 360)
+	_panel.position = Vector2(10, 10)
+	_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	_panel.gui_input.connect(_on_panel_gui_input)
+	add_child(_panel)
 
 	var label = Label.new()
 	label.text = "ЧИТЫ"
@@ -15,33 +20,33 @@ func _ready() -> void:
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.position = Vector2(0, 20)
 	label.size = Vector2(400, 40)
-	panel.add_child(label)
+	_panel.add_child(label)
 
 	var hp_label = Label.new()
 	hp_label.text = "HP:"
 	hp_label.position = Vector2(30, 80)
 	hp_label.size = Vector2(50, 30)
-	panel.add_child(hp_label)
+	_panel.add_child(hp_label)
 
-	_input = LineEdit.new()
-	_input.position = Vector2(80, 75)
-	_input.size = Vector2(150, 35)
-	_input.placeholder_text = "кол-во HP"
-	_input.text_changed.connect(_on_text_changed)
-	panel.add_child(_input)
+	_hp_input = LineEdit.new()
+	_hp_input.position = Vector2(80, 75)
+	_hp_input.size = Vector2(150, 35)
+	_hp_input.placeholder_text = "кол-во HP"
+	_hp_input.text_changed.connect(_on_text_changed)
+	_panel.add_child(_hp_input)
 
 	var btn = Button.new()
 	btn.text = "Применить"
 	btn.position = Vector2(250, 75)
 	btn.size = Vector2(120, 35)
 	btn.pressed.connect(_apply_hp)
-	panel.add_child(btn)
+	_panel.add_child(btn)
 
 	_error_label = Label.new()
-	_error_label.position = Vector2(30, 195)
+	_error_label.position = Vector2(30, 295)
 	_error_label.size = Vector2(340, 30)
 	_error_label.add_theme_color_override("font_color", Color.RED)
-	panel.add_child(_error_label)
+	_panel.add_child(_error_label)
 
 	var bucket_btn = Button.new()
 	bucket_btn.text = "+ Ведро"
@@ -49,7 +54,7 @@ func _ready() -> void:
 	bucket_btn.size = Vector2(150, 30)
 	bucket_btn.pressed.connect(_add_bucket)
 	bucket_btn.add_theme_color_override("font_color", Color.GOLD)
-	panel.add_child(bucket_btn)
+	_panel.add_child(bucket_btn)
 
 	var infinit_btn = Button.new()
 	infinit_btn.text = "+ Infinit"
@@ -57,7 +62,7 @@ func _ready() -> void:
 	infinit_btn.size = Vector2(170, 30)
 	infinit_btn.pressed.connect(_add_infinit)
 	infinit_btn.add_theme_color_override("font_color", Color.WHITE)
-	panel.add_child(infinit_btn)
+	_panel.add_child(infinit_btn)
 
 	var tube_btn = Button.new()
 	tube_btn.text = "+ Tube"
@@ -65,7 +70,7 @@ func _ready() -> void:
 	tube_btn.size = Vector2(150, 30)
 	tube_btn.pressed.connect(_add_tube)
 	tube_btn.add_theme_color_override("font_color", Color.WHITE)
-	panel.add_child(tube_btn)
+	_panel.add_child(tube_btn)
 
 	var clone_btn = Button.new()
 	clone_btn.text = "+ Clone"
@@ -73,24 +78,56 @@ func _ready() -> void:
 	clone_btn.size = Vector2(170, 30)
 	clone_btn.pressed.connect(_add_clone)
 	clone_btn.add_theme_color_override("font_color", Color.WHITE)
-	panel.add_child(clone_btn)
+	_panel.add_child(clone_btn)
+
+	var spawn_label = Label.new()
+	spawn_label.text = "Призвать:"
+	spawn_label.position = Vector2(30, 195)
+	spawn_label.size = Vector2(340, 25)
+	spawn_label.add_theme_font_size_override("font_size", 14)
+	spawn_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
+	_panel.add_child(spawn_label)
+
+	var spawn_angry = Button.new()
+	spawn_angry.text = "AngryBall"
+	spawn_angry.position = Vector2(30, 220)
+	spawn_angry.size = Vector2(105, 30)
+	spawn_angry.pressed.connect(_spawn_creature.bind("res://Objects/Summons/angry_ball.tscn"))
+	spawn_angry.add_theme_color_override("font_color", Color(1, 0.5, 0.3))
+	_panel.add_child(spawn_angry)
+
+	var spawn_drunk = Button.new()
+	spawn_drunk.text = "DrunkKiller"
+	spawn_drunk.position = Vector2(145, 220)
+	spawn_drunk.size = Vector2(105, 30)
+	spawn_drunk.pressed.connect(_spawn_creature.bind("res://Objects/Summons/DrunkKiller.tscn"))
+	spawn_drunk.add_theme_color_override("font_color", Color(0.8, 0.3, 0.3))
+	_panel.add_child(spawn_drunk)
+
+	var spawn_spider = Button.new()
+	spawn_spider.text = "Spider"
+	spawn_spider.position = Vector2(260, 220)
+	spawn_spider.size = Vector2(105, 30)
+	spawn_spider.pressed.connect(_spawn_creature.bind("res://Objects/Summons/Spider.tscn"))
+	spawn_spider.add_theme_color_override("font_color", Color(0.5, 0.8, 0.3))
+	_panel.add_child(spawn_spider)
 
 	var return_btn = Button.new()
 	return_btn.text = "Следующий этаж"
-	return_btn.position = Vector2(30, 190)
+	return_btn.position = Vector2(30, 260)
 	return_btn.size = Vector2(170, 30)
 	return_btn.pressed.connect(_return_elevator)
 	return_btn.add_theme_color_override("font_color", Color.CORNFLOWER_BLUE)
-	panel.add_child(return_btn)
+	_panel.add_child(return_btn)
 
 	var close_btn = Button.new()
 	close_btn.text = "Закрыть"
-	close_btn.position = Vector2(140, 235)
+	close_btn.position = Vector2(140, 320)
 	close_btn.size = Vector2(120, 30)
 	close_btn.pressed.connect(_close)
-	panel.add_child(close_btn)
+	_panel.add_child(close_btn)
 
-	_input.grab_focus()
+	_hp_input.grab_focus()
 
 func _on_text_changed(new_text: String) -> void:
 	var filtered = ""
@@ -98,11 +135,11 @@ func _on_text_changed(new_text: String) -> void:
 		if c >= "0" and c <= "9":
 			filtered += c
 	if filtered != new_text:
-		_input.text = filtered
-		_input.caret_column = filtered.length()
+		_hp_input.text = filtered
+		_hp_input.caret_column = filtered.length()
 
 func _apply_hp() -> void:
-	var val = _input.text.strip_edges().to_int()
+	var val = _hp_input.text.strip_edges().to_int()
 	if val < 1:
 		_error_label.text = "HP должно быть >= 1"
 		return
@@ -116,7 +153,7 @@ func _apply_hp() -> void:
 	player.current_lives = val
 	player.max_lives = val
 	player.health_changed.emit(val)
-	_input.text = ""
+	_hp_input.text = ""
 	_error_label.text = ""
 
 func _add_bucket() -> void:
@@ -180,5 +217,31 @@ func _return_elevator() -> void:
 		arena.lift_state = 5
 		arena.start_restart()
 
+func _spawn_creature(scene_path: String) -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if not player:
+		_error_label.text = "Игрок не найден"
+		return
+	var scene = load(scene_path)
+	if not scene:
+		_error_label.text = "Сцена не найдена"
+		return
+	var inst = scene.instantiate()
+	var offset = Vector2(randf_range(-80, 80), randf_range(-80, 80))
+	inst.global_position = player.global_position + offset
+	get_tree().current_scene.add_child(inst)
+	_error_label.text = ""
+
 func _close() -> void:
 	queue_free()
+
+func _on_panel_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			_dragging = event.pressed
+			if _dragging:
+				_drag_offset = _panel.global_position - event.global_position
+
+func _input(event: InputEvent) -> void:
+	if _dragging and event is InputEventMouseMotion:
+		_panel.global_position = event.global_position + _drag_offset
