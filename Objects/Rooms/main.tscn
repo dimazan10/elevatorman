@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://81f6ijw81d6p" path="res://Scripts/ElevatorTransport.gd" id="10_tprsa"]
 [ext_resource type="PackedScene" uid="uid://dkax3cjeu00gs" path="res://Objects/EnemySpawner.tscn" id="11_wr286"]
 [ext_resource type="PackedScene" uid="uid://b8snbi67cgyle" path="res://Objects/InventoryUI.tscn" id="13_inv"]
+[ext_resource type="PackedScene" uid="uid://cvl0thapds4n1" path="res://Objects/SwitchSpawner.tscn" id="12_uf2av"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
 size = Vector2(615, 20)
@@ -699,5 +700,7 @@ position = Vector2(640, 720)
 
 [node name="SpawnPoint12" type="Marker2D" parent="." unique_id=722402809 groups=["spawn_point_main"]]
 position = Vector2(340, 110)
+
+[node name="SwitchSpawner" parent="." instance=ExtResource("12_uf2av")]
 
 
