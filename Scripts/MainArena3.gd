@@ -697,7 +697,9 @@ func _hide_floor_label() -> void:
 	tw.tween_property(floor_label, "modulate:a", 0.0, 0.5)
 
 func _shake_camera(intensity: float = 8.0, duration: float = 0.4) -> void:
-	var camera := player_node.get_node("PlayerCamera") as Camera2D
+	var camera := get_node_or_null("/root/MainArena3/PlayerCamera") as Camera2D
+	if not camera:
+		camera = get_tree().current_scene.get_node_or_null("PlayerCamera") as Camera2D
 	if not camera:
 		return
 	var original := camera.offset
