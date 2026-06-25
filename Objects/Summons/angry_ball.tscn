@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dat4ixuir5ckq"]
 
-[ext_resource type="Script" uid="uid://3vp0ijjnam0n" path="res://Scripts/AngryBall.gd" id="1_5kt4o"]
+[ext_resource type="Script" uid="uid://3vp0ijjnam0n" path="res://Scripts/Creatures/AngryBall.gd" id="1_5kt4o"]
 [ext_resource type="Texture2D" uid="uid://chhc7m7lkhcne" path="res://Assets/AngryBall.png" id="1_uhfjk"]
 [ext_resource type="Script" uid="uid://dhvjfjjaltco1" path="res://Scripts/DangerZone.gd" id="2_danger_script"]
 
