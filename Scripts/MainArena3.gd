@@ -415,7 +415,9 @@ func _on_combat_timeout() -> void:
 	_rotation_speed = 0.5
 	for sa in _secondary_arenas:
 		sa.rotation_speed = 0.5
-	_switch_spawner.clear_spawned()
+	for s in get_tree().get_nodes_in_group("switch"):
+		if is_instance_valid(s):
+			s.queue_free()
 	_set_shaft_collision(true)
 	lift_state = LiftState.RETURNING
 	anim.play("DownUp")
