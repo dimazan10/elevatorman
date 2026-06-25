@@ -45,7 +45,6 @@ var _clone_node: Node2D = null
 var _clone_active := false
 var _e_held := false
 var _q_held := false
-var _camera: Camera2D
 
 func _ready() -> void:
 	current_lives = max_lives
@@ -106,13 +105,6 @@ func _ready() -> void:
 		var stream = load("res://Assets/Sounds/FootStepsSound/FootStep_" + str(i) + ".wav")
 		if stream:
 			footstep_sounds.append(stream)
-
-	_camera = Camera2D.new()
-	_camera.name = "PlayerCamera"
-	_camera.zoom = Vector2(1.4, 1.4)
-	_camera.unique_name_in_owner = true
-	get_tree().current_scene.add_child(_camera)
-	_camera.make_current()
 	
 var _shift_held := false
 var _ghost_timer := 0.0
@@ -261,9 +253,6 @@ func _physics_process(delta: float) -> void:
 	
 	_push_enemies_out()
 
-	if _camera and _camera.is_inside_tree():
-		_camera.global_position = _camera.global_position.lerp(global_position, 12.0 * delta)
-
 func _push_enemies_out() -> void:
 	var push_radius := 30.0
 	for e in get_tree().get_nodes_in_group("enemy"):
@@ -349,7 +338,7 @@ func take_damage(amount: int):
 	if current_lives <= 0:
 		_is_dying = true
 	
-	var my_camera = _camera
+	var my_camera = %PlayerCamera
 		
 	if my_camera and my_camera.has_method("apply_shake"):
 		my_camera.apply_shake(20.0)
