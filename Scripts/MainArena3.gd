@@ -46,7 +46,6 @@ const _ZONE_PRIORITY := {
 @onready var player_node := get_tree().get_first_node_in_group("player") as Node2D
 @onready var _spawner := $EnemySpawner
 @onready var _arena_spawner := $ArenaSpawner
-@onready var _switch_spawner := $SwitchSpawner
 
 @onready var shaft_colliders := [
 	$Hole/FloorElevator/Top/CollisionShape,
@@ -653,7 +652,9 @@ func _scale_arenas() -> void:
 			pivot.scale = Vector2(_arena_scale_factor, _arena_scale_factor)
 
 func _spawn_switches(level: int) -> void:
-	_switch_spawner.spawn(level, self, _quest_mode)
+	var spawner = preload("res://Objects/SwitchSpawner.tscn").instantiate()
+	add_child(spawner)
+	spawner.spawn(level, self, _quest_mode)
 
 func _show_floor_label() -> void:
 	if not floor_label:
