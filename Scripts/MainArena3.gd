@@ -77,6 +77,7 @@ func _ready() -> void:
 	anim.seek(0, true)
 	anim.stop()
 	_show_floor_label()
+	$Hole/FloorElevator/RoofElevator2.z_index = 3
 	anim.play("DownUp")
 	await anim.animation_finished
 	anim.play("Open")
@@ -262,6 +263,7 @@ func start_exit_sequence() -> void:
 	await anim.animation_finished
 	_shake_camera()
 	_set_shaft_collision(false)
+	$Hole/FloorElevator/RoofElevator2.z_index = -1
 	anim.play("DownClose")
 	await anim.animation_finished
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 0)
@@ -385,6 +387,7 @@ func _unlock_elevator() -> void:
 	_set_shaft_collision(true)
 	lift_state = LiftState.RETURNING
 	_update_quest_text("done")
+	$Hole/FloorElevator/RoofElevator2.z_index = 3
 	anim.play("DownUp")
 	await anim.animation_finished
 	anim.play("Open")
@@ -421,6 +424,7 @@ func _on_combat_timeout() -> void:
 			s.queue_free()
 	_set_shaft_collision(true)
 	lift_state = LiftState.RETURNING
+	$Hole/FloorElevator/RoofElevator2.z_index = 3
 	anim.play("DownUp")
 	await anim.animation_finished
 	anim.play("Open")
