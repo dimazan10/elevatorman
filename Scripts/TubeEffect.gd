@@ -1,10 +1,11 @@
 extends Area2D
 
-@export var push_force: float = 800.0
+@export var push_force: float = 2000.0
 
 var _pushed: Array[Node] = []
 
 func _ready() -> void:
+	collision_mask = 7
 	$DestroyTimer.start()
 	_push_nearby_enemies()
 
@@ -20,10 +21,15 @@ func _push_nearby_enemies() -> void:
 			var impulse = dir * push_force
 			if body.has_method("apply_knockback"):
 				body.apply_knockback(impulse)
+			elif body is RigidBody2D:
+				body.apply_central_impulse(impulse)
 			else:
 				body.linear_velocity = impulse
 
 func _on_body_entered(body: Node2D) -> void:
+	if body.is_in_group("bullet"):
+		body.queue_free()
+		return
 	if body in _pushed:
 		return
 	if not body.is_in_group("enemy"):
@@ -37,8 +43,14 @@ func _on_body_entered(body: Node2D) -> void:
 	var impulse = dir * push_force
 	if body.has_method("apply_knockback"):
 		body.apply_knockback(impulse)
+	elif body is RigidBody2D:
+		body.apply_central_impulse(impulse)
 	else:
 		body.linear_velocity = impulse
+
+func _on_area_entered(area: Area2D) -> void:
+	if area.is_in_group("bullet"):
+		area.queue_free()
 
 func _on_destroy_timeout() -> void:
 	queue_free()

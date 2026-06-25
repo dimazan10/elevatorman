@@ -53,10 +53,13 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tube"]
-radius = 300.0
+radius = 500.0
 
 [node name="TubeEffect" type="Area2D"]
 collision_layer = 0
+collision_mask = 7
+monitoring = true
+monitorable = false
 script = ExtResource("1_tube")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
@@ -76,4 +79,5 @@ one_shot = true
 autostart = true
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="timeout" from="DestroyTimer" to="." method="_on_destroy_timeout"]

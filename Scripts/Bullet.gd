@@ -4,7 +4,7 @@ extends Area2D
 var direction: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
-	# Подключаем сигнал столкновения
+	add_to_group("bullet")
 	body_entered.connect(_on_body_entered)
 
 func _physics_process(delta: float) -> void:
