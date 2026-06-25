@@ -4,11 +4,14 @@ signal activated
 
 var _activated := false
 var _chasing := false
+var _waiting := false
 
 var _move_speed := 350.0
 var _move_direction := Vector2.ZERO
 var _change_dir_interval := 0.0
 var _change_dir_timer := 0.0
+var _reset_timer: float = 0.0
+const RESET_TIME := 50.0
 
 func _ready() -> void:
 	add_to_group("switch")
@@ -43,6 +46,13 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
+
+	if _reset_timer > 0.0 and _waiting:
+		_reset_timer -= delta
+		if _reset_timer <= 0.0:
+			_reset_timer = 0.0
+			deactivate()
+			return
 
 	var player := get_tree().get_first_node_in_group("player") as Node2D
 	if not player:
@@ -79,6 +89,8 @@ func _physics_process(delta: float) -> void:
 func _activate() -> void:
 	_activated = true
 	_chasing = false
+	_waiting = false
+	_reset_timer = 0.0
 	velocity = Vector2.ZERO
 	$Switch.play("On_1")
 	await $Switch.animation_finished
@@ -87,10 +99,14 @@ func _activate() -> void:
 
 func play_ready() -> void:
 	$Switch.play("OnTwoReady")
+	_waiting = true
+	_reset_timer = RESET_TIME
 
 func deactivate() -> void:
 	_activated = false
 	_chasing = true
+	_waiting = false
+	_reset_timer = 0.0
 	$Switch.play("Off")
 	await $Switch.animation_finished
 	$Lag.show()
