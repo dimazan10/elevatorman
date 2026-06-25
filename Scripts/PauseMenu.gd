@@ -64,7 +64,7 @@ func _ready() -> void:
 	vbox.add_child(settings_btn)
 
 	var exit_btn := Button.new()
-	exit_btn.text = "Выход в главное меню"
+	exit_btn.text = "Главное меню"
 	exit_btn.custom_minimum_size = Vector2(200, 40)
 	exit_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	exit_btn.pressed.connect(_on_exit)
