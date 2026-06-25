@@ -166,8 +166,6 @@ func _toggle_noclip() -> void:
 		modulate = Color(1, 1, 1, 1)
 
 func _physics_process(delta: float) -> void:
-	_update_camera(delta)
-
 	var f1_down := Input.is_key_pressed(KEY_F1)
 	if f1_down and not _f1_held:
 		_toggle_noclip()
@@ -263,7 +261,6 @@ func _physics_process(delta: float) -> void:
 	
 	_push_enemies_out()
 
-func _update_camera(delta: float) -> void:
 	if _camera and _camera.is_inside_tree():
 		_camera.global_position = _camera.global_position.lerp(global_position, 12.0 * delta)
 
