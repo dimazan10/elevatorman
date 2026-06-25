@@ -266,6 +266,7 @@ func start_exit_sequence() -> void:
 	await anim.animation_finished
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 0)
 	_spawn_secondary_enemies(GameState.current_floor)
+	_spawner.spawn(GameState.current_floor, self, "spawn_point_main", "main_arena", null, 2)
 	_spawn_switches(GameState.current_floor)
 	_show_enemies()
 	lift_state = LiftState.WAITING
@@ -285,7 +286,6 @@ func _spawn_secondary_enemies(level: int) -> void:
 		enemy.collision_mask |= 2
 
 func _start_combat_timer() -> void:
-	_spawner.spawn(GameState.current_floor, self, "spawn_point_main", "main_arena", null, 2)
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		enemy.show()
 		enemy.z_index = 6
