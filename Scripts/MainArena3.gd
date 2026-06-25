@@ -28,6 +28,7 @@ var _arena_switches: Array[Node2D] = []
 var _none_pushers: Array[Node] = []
 var _switch_pushers: Array[Node] = []
 var _main_pushers: Array[Node] = []
+var _arena_pushers: Dictionary = {}
 var _player_zones: Array[String] = []
 var _current_player_zone: String = ""
 var _paused_saved_zone: String = ""
@@ -176,8 +177,8 @@ func _setup_zone_triggers() -> void:
 		if none_zone:
 			none_zone.body_entered.connect(_on_zone_entered.bind("arena_none"))
 			none_zone.body_exited.connect(_on_zone_exited.bind("arena_none"))
-	if _arena_switch:
-		var switch_zone = _arena_switch.get_node_or_null("Pivot/Floor/ZoneTrigger") as Area2D
+	for sw in _arena_switches:
+		var switch_zone = sw.get_node_or_null("Pivot/Floor/ZoneTrigger") as Area2D
 		if switch_zone:
 			switch_zone.body_entered.connect(_on_zone_entered.bind("arena_switch"))
 			switch_zone.body_exited.connect(_on_zone_exited.bind("arena_switch"))
@@ -540,6 +541,7 @@ func _enable_collision_shapes(node: Node) -> void:
 
 func _generate_world() -> void:
 	_arena_switches.clear()
+	_arena_pushers.clear()
 	var floor_rect = preload("res://Objects/Rooms/Floor_Rectangle.tscn")
 	var arena_none_scene = preload("res://Objects/Rooms/ArenaNone.tscn")
 	var arena_switch_scene = preload("res://Objects/Rooms/ArenaSwitch.tscn")
@@ -571,6 +573,9 @@ func _generate_world() -> void:
 			var p = _add_pusher_to_wall(wall)
 			if p:
 				_none_pushers.append(p)
+				if not _arena_pushers.has(arena):
+					_arena_pushers[arena] = []
+				_arena_pushers[arena].append(p)
 
 	_arena_none = arena
 
@@ -610,6 +615,9 @@ func _generate_world() -> void:
 					var p = _add_pusher_to_wall(wall)
 					if p:
 						_switch_pushers.append(p)
+						if not _arena_pushers.has(arena_switch):
+							_arena_pushers[arena_switch] = []
+						_arena_pushers[arena_switch].append(p)
 	else:
 		var second_chosen = hex_angles[second_indices[0]]
 		var second_rad = deg_to_rad(second_chosen)
@@ -636,6 +644,9 @@ func _generate_world() -> void:
 				var p = _add_pusher_to_wall(wall)
 				if p:
 					_switch_pushers.append(p)
+					if not _arena_pushers.has(arena_switch):
+						_arena_pushers[arena_switch] = []
+					_arena_pushers[arena_switch].append(p)
 
 func get_player_zone() -> String:
 	if _pause_manager and _pause_manager.is_paused():
@@ -718,8 +729,12 @@ func _update_gate() -> void:
 		gate.collision_layer = 2 if is_near else 3
 		gate.get_node("Visual").modulate = Color(1, 1, 1, 0.3 if is_near else 1.0)
 		if is_near and lift_state != LiftState.COMBAT:
-			var sa_owner = _arena_none if _arena_none and _arena_none.is_ancestor_of(gate) else \
-				_arena_switch if _arena_switch and _arena_switch.is_ancestor_of(gate) else null
+			var sa_owner = _arena_none if _arena_none and _arena_none.is_ancestor_of(gate) else null
+			if not sa_owner:
+				for sw in _arena_switches:
+					if sw.is_ancestor_of(gate):
+						sa_owner = sw
+						break
 			if sa_owner:
 				sa_owner.rotation_speed = 0.05
 			else:
@@ -739,14 +754,14 @@ func _physics_process(delta: float) -> void:
 			p.angular_velocity = _rotation_speed
 			p.rotation_center = main_center
 
-	for sa in [_arena_none, _arena_switch]:
+	for sa in _secondary_arenas:
 		if not is_instance_valid(sa):
 			continue
 		var pivot = sa.get_node_or_null("Pivot")
 		if not pivot:
 			continue
 		var center = pivot.global_position
-		var pushers = _none_pushers if sa == _arena_none else _switch_pushers
+		var pushers = _arena_pushers.get(sa, [])
 		for p in pushers:
 			if is_instance_valid(p):
 				p.angular_velocity = sa.rotation_speed
