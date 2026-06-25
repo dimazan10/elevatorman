@@ -4,7 +4,7 @@ var _spawned_enemies: Array[Node] = []
 
 var _pool := ["angry_ball", "DrunkKiller", "Spider"]
 
-func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_name: String = "", arena: Node = null) -> Array[Node]:
+func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_name: String = "", arena: Node = null, bonus: int = 0) -> Array[Node]:
 	var all_points := get_tree().get_nodes_in_group(group_name)
 	var points := []
 	for pt in all_points:
@@ -26,7 +26,7 @@ func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_na
 
 	var use_points := safe_points if not safe_points.is_empty() else points
 
-	var total = 3 + level + randi() % 3
+	var total = 3 + level + randi() % 3 + bonus
 	var types: Array[String] = ["angry_ball", "DrunkKiller", "Spider"]
 
 	var remaining = total - types.size()

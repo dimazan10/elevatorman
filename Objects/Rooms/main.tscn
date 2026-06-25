@@ -539,6 +539,7 @@ polygon = PackedVector2Array(-307.5, -10, 307.5, -10, 307.5, 10, -307.5, 10)
 [node name="Gate" type="StaticBody2D" parent="Walls/W4" unique_id=1318955178]
 
 [node name="CollisionShape" type="CollisionShape2D" parent="Walls/W4/Gate" unique_id=240293920]
+scale = Vector2(1.9916663, 1)
 shape = SubResource("RectangleShape2D_gate")
 
 [node name="Visual" type="Polygon2D" parent="Walls/W4/Gate" unique_id=1879042034]

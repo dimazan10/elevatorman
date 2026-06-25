@@ -285,7 +285,7 @@ func _spawn_secondary_enemies(level: int) -> void:
 		enemy.collision_mask |= 2
 
 func _start_combat_timer() -> void:
-	_spawner.spawn(GameState.current_floor, self, "spawn_point_main", "main_arena")
+	_spawner.spawn(GameState.current_floor, self, "spawn_point_main", "main_arena", null, 2)
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		enemy.show()
 		enemy.z_index = 6
