@@ -78,6 +78,8 @@ func _ready() -> void:
 	anim.stop()
 	_show_floor_label()
 	$Hole/FloorElevator/RoofElevator2.z_index = 3
+	$Hole/FloorElevator/Door1.visible = true
+	$Hole/FloorElevator/Door2.visible = true
 	anim.play("DownUp")
 	await anim.animation_finished
 	anim.play("Open")
@@ -263,9 +265,11 @@ func start_exit_sequence() -> void:
 	await anim.animation_finished
 	_shake_camera()
 	_set_shaft_collision(false)
-	$Hole/FloorElevator/RoofElevator2.z_index = -1
 	anim.play("DownClose")
 	await anim.animation_finished
+	$Hole/FloorElevator/RoofElevator2.z_index = 0
+	$Hole/FloorElevator/Door1.visible = false
+	$Hole/FloorElevator/Door2.visible = false
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 0)
 	_spawn_secondary_enemies(GameState.current_floor)
 	_spawner.spawn(GameState.current_floor, self, "spawn_point_main", "main_arena")
@@ -388,6 +392,8 @@ func _unlock_elevator() -> void:
 	lift_state = LiftState.RETURNING
 	_update_quest_text("done")
 	$Hole/FloorElevator/RoofElevator2.z_index = 3
+	$Hole/FloorElevator/Door1.visible = true
+	$Hole/FloorElevator/Door2.visible = true
 	anim.play("DownUp")
 	await anim.animation_finished
 	anim.play("Open")
@@ -425,6 +431,8 @@ func _on_combat_timeout() -> void:
 	_set_shaft_collision(true)
 	lift_state = LiftState.RETURNING
 	$Hole/FloorElevator/RoofElevator2.z_index = 3
+	$Hole/FloorElevator/Door1.visible = true
+	$Hole/FloorElevator/Door2.visible = true
 	anim.play("DownUp")
 	await anim.animation_finished
 	anim.play("Open")
