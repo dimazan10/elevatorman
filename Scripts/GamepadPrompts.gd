@@ -44,7 +44,7 @@ func _update_prompts(force := false) -> void:
 		return
 
 	if mode == "gameplay":
-		_add_hint("res://Assets/Gamepad/A.png", "Dash")
+		_add_hint_text_only("Dash")
 		_add_hint("res://Assets/Gamepad/LB.png", "Item 1")
 		_add_hint("res://Assets/Gamepad/RB.png", "Item 2")
 		_add_hint("res://Assets/Gamepad/START.png", "Pause")
@@ -95,6 +95,16 @@ func _add_hint(icon_path: String, text: String) -> void:
 	label.add_theme_color_override("font_outline_color", Color.BLACK)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hint.add_child(label)
+
+func _add_hint_text_only(text: String) -> void:
+	var label := Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", 14)
+	label.add_theme_color_override("font_color", Color.WHITE)
+	label.add_theme_constant_override("outline_size", 2)
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_bar.add_child(label)
 
 func _is_pause_layer_visible() -> bool:
 	var pause_layer := get_node_or_null("/root/PauseManager/PauseLayer") as CanvasLayer
