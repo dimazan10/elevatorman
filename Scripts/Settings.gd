@@ -41,6 +41,10 @@ func _on_fps_checkbox_toggled(enabled: bool) -> void:
 	if fps_label:
 		fps_label.visible = enabled
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		_on_back_pressed()
+
 func _play_click() -> void:
 	var cs = get_node_or_null("ClickSound")
 	if cs:

@@ -43,8 +43,6 @@ var _invulnerable := false
 
 var _clone_node: Node2D = null
 var _clone_active := false
-var _e_held := false
-var _q_held := false
 
 func _ready() -> void:
 	current_lives = max_lives
@@ -106,7 +104,6 @@ func _ready() -> void:
 		if stream:
 			footstep_sounds.append(stream)
 	
-var _shift_held := false
 var _ghost_timer := 0.0
 var _noclip := false
 var _f1_held := false
@@ -128,10 +125,8 @@ func _process(delta: float) -> void:
 			_ghost_timer = 0.0
 			_spawn_ghost()
 
-	var shift_down := Input.is_key_pressed(KEY_SHIFT)
-	if shift_down and not _shift_held:
+	if Input.is_action_just_pressed("dash"):
 		perform_dash()
-	_shift_held = shift_down
 
 	if slow_timer > 0:
 		slow_timer -= delta
@@ -139,15 +134,11 @@ func _process(delta: float) -> void:
 			slow_timer = 0.0
 			slow_factor = 1.0
 
-	var q_down := Input.is_key_pressed(KEY_Q)
-	if q_down and not _q_held:
+	if Input.is_action_just_pressed("use_item_1"):
 		_use_item(0)
-	_q_held = q_down
 
-	var e_down := Input.is_key_pressed(KEY_E)
-	if e_down and not _e_held:
+	if Input.is_action_just_pressed("use_item_2"):
 		_use_item(1)
-	_e_held = e_down
 
 func _toggle_noclip() -> void:
 	_noclip = not _noclip
@@ -190,30 +181,13 @@ func _physics_process(delta: float) -> void:
 		return
 
 	if _noclip:
-		var dir := Vector2.ZERO
-		if Input.is_key_pressed(KEY_RIGHT) or Input.is_key_pressed(KEY_D):
-			dir.x += 1
-		if Input.is_key_pressed(KEY_LEFT) or Input.is_key_pressed(KEY_A):
-			dir.x -= 1
-		if Input.is_key_pressed(KEY_DOWN) or Input.is_key_pressed(KEY_S):
-			dir.y += 1
-		if Input.is_key_pressed(KEY_UP) or Input.is_key_pressed(KEY_W):
-			dir.y -= 1
+		var dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		if dir.length() > 0:
 			dir = dir.normalized()
 			global_position += dir * SPEED * delta
 		return
 
-	var direction := Vector2.ZERO
-
-	if Input.is_key_pressed(KEY_RIGHT) or Input.is_key_pressed(KEY_D):
-		direction.x += 1
-	if Input.is_key_pressed(KEY_LEFT) or Input.is_key_pressed(KEY_A):
-		direction.x -= 1
-	if Input.is_key_pressed(KEY_DOWN) or Input.is_key_pressed(KEY_S):
-		direction.y += 1
-	if Input.is_key_pressed(KEY_UP) or Input.is_key_pressed(KEY_W):
-		direction.y -= 1
+	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 
 	var moving = direction.length() > 0
 
@@ -305,21 +279,12 @@ func perform_dash() -> void:
 	if dash_audio:
 		dash_audio.play()
 
-	var dir := Vector2.ZERO
-	if Input.is_key_pressed(KEY_RIGHT) or Input.is_key_pressed(KEY_D):
-		dir.x += 1
-	if Input.is_key_pressed(KEY_LEFT) or Input.is_key_pressed(KEY_A):
-		dir.x -= 1
-	if Input.is_key_pressed(KEY_DOWN) or Input.is_key_pressed(KEY_S):
-		dir.y += 1
-	if Input.is_key_pressed(KEY_UP) or Input.is_key_pressed(KEY_W):
-		dir.y -= 1
-
-	if dir == Vector2.ZERO:
-		dir = last_move_dir
-	else:
+	var dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	if dir.length_squared() > 0.001:
 		dir = dir.normalized()
 		last_move_dir = dir
+	else:
+		dir = last_move_dir
 
 	velocity = dir * DASH_SPEED
 

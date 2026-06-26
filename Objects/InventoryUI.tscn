@@ -97,7 +97,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="Panel" unique_id=1380342541]
+[node name="LeftInterection" type="Label" parent="Panel" unique_id=1380342541]
 modulate = Color(1, 1, 1, 0.78431374)
 layout_mode = 1
 anchors_preset = 3
@@ -114,7 +114,7 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 20
 text = "Q"
 
-[node name="Label2" type="Label" parent="Panel" unique_id=531536962]
+[node name="RightInterection" type="Label" parent="Panel" unique_id=531536962]
 modulate = Color(1, 1, 1, 0.78431374)
 layout_mode = 1
 anchors_preset = 3

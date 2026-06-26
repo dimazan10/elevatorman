@@ -21,12 +21,14 @@ audio/buses/default_bus_layout="res://default_bus_layout.tres"
 
 [autoload]
 
+InputSetup="*res://Scripts/InputSetup.gd"
 GameState="*res://Scripts/GameState.gd"
 PauseManager="*res://Scripts/PauseManager.gd"
 StyleManager="*res://Scripts/StyleManager.gd"
 DefaultFont="*res://Scripts/DefaultFont.gd"
 CursorManager="*res://Scripts/CursorManager.gd"
 DebugCollisions="*res://Scripts/DebugCollisions.gd"
+GamepadPrompts="*res://Scripts/GamepadPrompts.gd"
 
 [display]
 

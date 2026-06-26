@@ -6,6 +6,7 @@ signal restart_pressed
 
 var _settings_panel: Control = null
 var _click: AudioStreamPlayer
+var _resume_btn: Button
 
 
 func _ready() -> void:
@@ -48,6 +49,8 @@ func _ready() -> void:
 	resume_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	resume_btn.pressed.connect(_on_resume)
 	vbox.add_child(resume_btn)
+	_resume_btn = resume_btn
+	resume_btn.grab_focus.call_deferred()
 
 	var restart_btn := Button.new()
 	restart_btn.text = "Рестарт"
@@ -86,6 +89,13 @@ func _close_settings() -> void:
 		_settings_panel = null
 	$VBox.visible = true
 
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		if _settings_panel:
+			_close_settings()
+		else:
+			_on_resume()
 
 func _on_resume() -> void:
 	_click.play()

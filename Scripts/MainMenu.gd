@@ -2,6 +2,10 @@ extends Control
 
 @onready var bg := $TextureRect
 @onready var logo := $Logo
+@onready var play_btn := $VBoxContainer/ButtonPlay as TextureButton
+@onready var settings_btn := $VBoxContainer/ButtonSettings as TextureButton
+@onready var quit_btn := $VBoxContainer/ButtonQuit as TextureButton
+
 var extra := 60.0
 var max_move := 25.0
 
@@ -12,6 +16,7 @@ func _ready() -> void:
 	bg.offset_top -= extra
 	bg.offset_right += extra
 	bg.offset_bottom += extra
+	play_btn.grab_focus.call_deferred()
 
 func _animate_logo() -> void:
 	var tw = create_tween().set_loops()
@@ -31,6 +36,10 @@ func _process(_delta: float) -> void:
 	bg.offset_top = -extra + dy
 	bg.offset_right = extra + dx
 	bg.offset_bottom = extra + dy
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		get_tree().quit()
 
 func _play_click() -> void:
 	var cs = get_node_or_null("ClickSound")
