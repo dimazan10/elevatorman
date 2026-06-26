@@ -484,6 +484,12 @@ func start_restart() -> void:
 	anim.stop()
 	anim.play("Close")
 	await anim.animation_finished
+	anim.play("Up")
+	await anim.animation_finished
+	_set_shaft_collision(false)
+	$Hole/FloorElevator/Door1.visible = false
+	$Hole/FloorElevator/Door2.visible = false
+	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 0)
 	await FadeTransition.fade_out()
 	get_tree().change_scene_to_file("res://Scenes/Shop/Shop.tscn")
 
