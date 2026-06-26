@@ -9,7 +9,7 @@ size = Vector2(1833.9203, 20)
 size = Vector2(120, 80)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
-size = Vector2(120, 120)
+size = Vector2(10, 620)
 
 [node name="Floor_Rectangle" type="Node2D" unique_id=1003405898]
 z_index = -1
@@ -66,7 +66,7 @@ position = Vector2(1090, 0)
 position = Vector2(2047, 0)
 
 [node name="DoorWall0" type="StaticBody2D" parent="." unique_id=1700010001]
-collision_layer = 3
+collision_layer = 2
 collision_mask = 0
 position = Vector2(1090, 0)
 
@@ -74,7 +74,7 @@ position = Vector2(1090, 0)
 shape = SubResource("RectangleShape2D_door")
 
 [node name="DoorWall1" type="StaticBody2D" parent="." unique_id=1700010002]
-collision_layer = 3
+collision_layer = 2
 collision_mask = 0
 position = Vector2(2047, 0)
 
