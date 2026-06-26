@@ -34,6 +34,7 @@ func _ready() -> void:
 	
 	raycast = RayCast2D.new()
 	raycast.target_position = Vector2(laser_range, 0)
+	raycast.collision_mask = 3
 	raycast.enabled = false
 	muzzle.add_child(raycast)
 	
@@ -78,9 +79,20 @@ func _process(delta: float) -> void:
 			
 			line.set_point_position(1, cast_point)
 
+func _has_line_of_sight() -> bool:
+	var space_state = get_world_2d().direct_space_state
+	var from = muzzle.global_position if muzzle else global_position
+	var query = PhysicsRayQueryParameters2D.create(from, player.global_position)
+	query.exclude = [self.get_rid()]
+	var result = space_state.intersect_ray(query)
+	if result.is_empty():
+		return false
+	return result.collider == player
+
 func _on_cooldown_timeout() -> void:
 	if is_instance_valid(player) and current_state == TurretState.TRACKING:
-		start_attack_sequence()
+		if _has_line_of_sight():
+			start_attack_sequence()
 
 func start_attack_sequence() -> void:
 	cooldown_timer.stop()
