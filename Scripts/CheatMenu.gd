@@ -40,57 +40,65 @@ func _ready() -> void:
 	var hp_label = Label.new()
 	hp_label.text = "HP:"
 	hp_label.position = Vector2(20, y)
-	hp_label.size = Vector2(40, 28)
+	hp_label.size = Vector2(55, 28)
 	_panel.add_child(hp_label)
 
 	_hp_input = LineEdit.new()
-	_hp_input.position = Vector2(65, y - 2)
-	_hp_input.size = Vector2(130, 30)
+	_hp_input.position = Vector2(80, y - 2)
+	_hp_input.size = Vector2(140, 30)
 	_hp_input.placeholder_text = "кол-во HP"
 	_hp_input.text_changed.connect(_on_hp_text_changed)
 	_panel.add_child(_hp_input)
 
 	var hp_btn = Button.new()
 	hp_btn.text = "OK"
-	hp_btn.position = Vector2(200, y - 2)
+	hp_btn.position = Vector2(225, y - 2)
 	hp_btn.size = Vector2(50, 30)
 	hp_btn.pressed.connect(_apply_hp)
 	_panel.add_child(hp_btn)
+	y += 36
 
 	var currency_label = Label.new()
 	currency_label.text = "Монеты:"
-	currency_label.position = Vector2(260, y)
-	currency_label.size = Vector2(60, 28)
+	currency_label.position = Vector2(20, y)
+	currency_label.size = Vector2(55, 28)
 	_panel.add_child(currency_label)
 
 	_currency_input = LineEdit.new()
-	_currency_input.position = Vector2(325, y - 2)
-	_currency_input.size = Vector2(55, 30)
-	_currency_input.placeholder_text = "0"
+	_currency_input.position = Vector2(80, y - 2)
+	_currency_input.size = Vector2(140, 30)
+	_currency_input.placeholder_text = "кол-во монет"
 	_currency_input.text_changed.connect(_on_currency_text_changed)
 	_panel.add_child(_currency_input)
-	y += 38
+
+	var currency_btn = Button.new()
+	currency_btn.text = "OK"
+	currency_btn.position = Vector2(225, y - 2)
+	currency_btn.size = Vector2(50, 30)
+	currency_btn.pressed.connect(_apply_currency)
+	_panel.add_child(currency_btn)
+	y += 36
 
 	var speed_label = Label.new()
 	speed_label.text = "Скорость:"
 	speed_label.position = Vector2(20, y)
-	speed_label.size = Vector2(70, 28)
+	speed_label.size = Vector2(55, 28)
 	_panel.add_child(speed_label)
 
 	_speed_input = LineEdit.new()
-	_speed_input.position = Vector2(95, y - 2)
-	_speed_input.size = Vector2(100, 30)
+	_speed_input.position = Vector2(80, y - 2)
+	_speed_input.size = Vector2(140, 30)
 	_speed_input.placeholder_text = "550"
 	_speed_input.text_changed.connect(_on_speed_text_changed)
 	_panel.add_child(_speed_input)
 
 	var speed_btn = Button.new()
 	speed_btn.text = "OK"
-	speed_btn.position = Vector2(200, y - 2)
+	speed_btn.position = Vector2(225, y - 2)
 	speed_btn.size = Vector2(50, 30)
 	speed_btn.pressed.connect(_apply_speed)
 	_panel.add_child(speed_btn)
-	y += 42
+	y += 40
 
 	var section2 = Label.new()
 	section2.text = "── Предметы ──"
