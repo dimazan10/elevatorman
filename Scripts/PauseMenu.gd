@@ -88,6 +88,8 @@ func _close_settings() -> void:
 		_settings_panel.queue_free()
 		_settings_panel = null
 	$VBox.visible = true
+	if _resume_btn:
+		_resume_btn.grab_focus.call_deferred()
 
 
 func _unhandled_input(event: InputEvent) -> void:

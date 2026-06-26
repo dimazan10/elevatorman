@@ -127,7 +127,10 @@ func _ready() -> void:
 	close_btn.pressed.connect(_close)
 	_panel.add_child(close_btn)
 
-	_hp_input.grab_focus()
+	if Input.get_connected_joypads().is_empty():
+		_hp_input.grab_focus()
+	else:
+		btn.grab_focus()
 
 func _on_text_changed(new_text: String) -> void:
 	var filtered = ""

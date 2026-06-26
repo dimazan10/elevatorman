@@ -27,11 +27,11 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel"):
+	if event.is_action_pressed("pause_game"):
 		if not get_tree().get_nodes_in_group("pausable").is_empty():
 			toggle_pause()
 			get_viewport().set_input_as_handled()
-	if event is InputEventKey and event.keycode == KEY_F2 and event.pressed and not event.echo:
+	if event.is_action_pressed("cheat_menu"):
 		if _cheat_menu and is_instance_valid(_cheat_menu):
 			_cheat_menu.queue_free()
 			_cheat_menu = null

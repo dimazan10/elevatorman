@@ -22,6 +22,7 @@ func _ready() -> void:
 	effects_slider.value = GameState.effects_volume
 	effects_label.text = _db_to_pct(GameState.effects_volume)
 	fps_checkbox.button_pressed = GameState.show_fps
+	master_slider.grab_focus.call_deferred()
 
 func _on_master_slider_value_changed(value: float) -> void:
 	GameState.set_master_volume(value)

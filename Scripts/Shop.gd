@@ -36,6 +36,7 @@ const PRICE_CLONE := 6
 var _collected := false
 
 func _ready() -> void:
+	CursorManager.setup_buttons(self)
 	_setup_bottle_style()
 	var t = GameState.last_floor_time
 	var m = int(t) / 60
@@ -45,6 +46,8 @@ func _ready() -> void:
 	_set_liquid_fill(clampf(GameState.last_floor_hp / float(MAX_HP), 0.0, 1.0))
 	currency_label.text = str(GameState.currency)
 	_update_bucket_ui()
+	_update_item_ui()
+	collect_btn.grab_focus.call_deferred()
 
 func _setup_bottle_style() -> void:
 	var sbf := StyleBoxFlat.new()
