@@ -8,6 +8,9 @@ size = Vector2(1833.9203, 20)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vhfxq"]
 size = Vector2(120, 80)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
+size = Vector2(120, 120)
+
 [node name="Floor_Rectangle" type="Node2D" unique_id=1003405898]
 z_index = -1
 
@@ -46,13 +49,13 @@ shape = SubResource("RectangleShape2D_wall_h")
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=1522809266]
 position = Vector2(1568, 0)
 
-[node name="SpawnPoint2" type="Marker2D" parent="." unique_id=730103772 groups=["spawn_point_corridor"]]
+[node name="SpawnPoint2" type="Marker2D" parent="." groups=["spawn_point_corridor"] unique_id=731040372]
 position = Vector2(950, 0)
 
-[node name="SpawnPoint3" type="Marker2D" parent="." unique_id=2143430383 groups=["spawn_point_corridor"]]
+[node name="SpawnPoint3" type="Marker2D" parent="." groups=["spawn_point_corridor"] unique_id=2143430383]
 position = Vector2(2400, 0)
 
-[node name="SpawnPoint4" type="Marker2D" parent="." unique_id=2059517504 groups=["spawn_point_corridor"]]
+[node name="SpawnPoint4" type="Marker2D" parent="." groups=["spawn_point_corridor"] unique_id=2059517504]
 position = Vector2(3000, 0)
 scale = Vector2(1, 0.20000029)
 
@@ -61,6 +64,22 @@ position = Vector2(1090, 0)
 
 [node name="DoorPoint_1" type="Marker2D" parent="." unique_id=151345083]
 position = Vector2(2047, 0)
+
+[node name="DoorWall0" type="StaticBody2D" parent="." unique_id=1700010001]
+collision_layer = 2
+collision_mask = 0
+position = Vector2(1090, 0)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="DoorWall0"]
+shape = SubResource("RectangleShape2D_door")
+
+[node name="DoorWall1" type="StaticBody2D" parent="." unique_id=1700010002]
+collision_layer = 2
+collision_mask = 0
+position = Vector2(2047, 0)
+
+[node name="CollisionShape" type="CollisionShape2D" parent="DoorWall1"]
+shape = SubResource("RectangleShape2D_door")
 
 [node name="DoorTrigger" type="Area2D" parent="." unique_id=681062249]
 position = Vector2(1090.0001, -1.0000005)
@@ -86,6 +105,6 @@ script = ExtResource("1_huqpp")
 scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_vhfxq")
 
-[node name="Visual" type="Polygon2D" parent="DoorTrigger2" unique_id=277678029]
+[node name="Visual" type="Polygon2D" parent="DoorTrigger2" unique_id=277678022]
 color = Color(0, 1, 0, 0.3)
 polygon = PackedVector2Array(-120, -80, 120, -80, 120, 80, -120, 80)

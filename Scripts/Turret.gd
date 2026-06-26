@@ -72,31 +72,15 @@ func _process(delta: float) -> void:
 				
 				if current_state == TurretState.FIRING:
 					var collider = raycast.get_collider()
-					if collider == player and collider.has_method("take_damage"):
+					if collider and collider.has_method("take_damage"):
 						collider.take_damage(damage_per_second * delta)
 			
 			
 			line.set_point_position(1, cast_point)
 
-func _has_line_of_sight() -> bool:
-	var space_state = get_world_2d().direct_space_state
-	var from = muzzle.global_position if muzzle else global_position
-	var query = PhysicsRayQueryParameters2D.create(
-		from,
-		player.global_position,
-		0b11111111,
-		[self.get_rid()]
-	)
-	query.collide_with_areas = true
-	var result = space_state.intersect_ray(query)
-	if result.is_empty():
-		return false
-	return result.collider == player
-
 func _on_cooldown_timeout() -> void:
 	if is_instance_valid(player) and current_state == TurretState.TRACKING:
-		if _has_line_of_sight():
-			start_attack_sequence()
+		start_attack_sequence()
 
 func start_attack_sequence() -> void:
 	cooldown_timer.stop()
