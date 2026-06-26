@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-const ICON_SCALE := 0.05
+const ICON_SCALE := 0.025
 const GAMEPLAY_SCENES := ["Start", "MainArena"]
 const UI_SCENES := ["MainMenu", "Settings", "Shop"]
 
