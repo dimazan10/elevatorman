@@ -7,7 +7,7 @@ signal dash_recharged(index: int)
 @export var max_lives: int = 5
 var current_lives: int = max_lives
 
-const SPEED = 550.0
+var speed: float = 550.0
 const MAX_DASH_CHARGES = 3
 const DASH_COOLDOWN = 4.0
 const DASH_SPEED = 1200.0
@@ -184,7 +184,7 @@ func _physics_process(delta: float) -> void:
 		var dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		if dir.length() > 0:
 			dir = dir.normalized()
-			global_position += dir * SPEED * delta
+			global_position += dir * speed * delta
 		return
 
 	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -195,7 +195,7 @@ func _physics_process(delta: float) -> void:
 		direction = direction.normalized()
 		last_move_dir = direction
 
-		velocity = direction * SPEED * slow_factor
+		velocity = direction * speed * slow_factor
 		if not velocity.is_finite():
 			velocity = Vector2.ZERO
 		move_and_slide()

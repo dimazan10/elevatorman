@@ -1,6 +1,8 @@
 extends Control
 
 var _hp_input: LineEdit
+var _currency_input: LineEdit
+var _speed_input: LineEdit
 var _error_label: Label
 var _panel: Panel
 var _dragging := false
@@ -8,7 +10,7 @@ var _drag_offset := Vector2.ZERO
 
 func _ready() -> void:
 	_panel = Panel.new()
-	_panel.size = Vector2(400, 360)
+	_panel.size = Vector2(400, 480)
 	_panel.position = Vector2(10, 10)
 	_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	_panel.gui_input.connect(_on_panel_gui_input)
@@ -42,12 +44,6 @@ func _ready() -> void:
 	btn.pressed.connect(_apply_hp)
 	_panel.add_child(btn)
 
-	_error_label = Label.new()
-	_error_label.position = Vector2(30, 295)
-	_error_label.size = Vector2(340, 30)
-	_error_label.add_theme_color_override("font_color", Color.RED)
-	_panel.add_child(_error_label)
-
 	var bucket_btn = Button.new()
 	bucket_btn.text = "+ Ведро"
 	bucket_btn.position = Vector2(30, 120)
@@ -80,9 +76,49 @@ func _ready() -> void:
 	clone_btn.add_theme_color_override("font_color", Color.WHITE)
 	_panel.add_child(clone_btn)
 
+	var currency_label = Label.new()
+	currency_label.text = "Валюта:"
+	currency_label.position = Vector2(30, 200)
+	currency_label.size = Vector2(70, 30)
+	_panel.add_child(currency_label)
+
+	_currency_input = LineEdit.new()
+	_currency_input.position = Vector2(100, 195)
+	_currency_input.size = Vector2(150, 35)
+	_currency_input.placeholder_text = "кол-во монет"
+	_currency_input.text_changed.connect(_on_currency_text_changed)
+	_panel.add_child(_currency_input)
+
+	var currency_btn = Button.new()
+	currency_btn.text = "Применить"
+	currency_btn.position = Vector2(260, 195)
+	currency_btn.size = Vector2(110, 35)
+	currency_btn.pressed.connect(_apply_currency)
+	_panel.add_child(currency_btn)
+
+	var speed_label = Label.new()
+	speed_label.text = "Скорость:"
+	speed_label.position = Vector2(30, 245)
+	speed_label.size = Vector2(80, 30)
+	_panel.add_child(speed_label)
+
+	_speed_input = LineEdit.new()
+	_speed_input.position = Vector2(110, 240)
+	_speed_input.size = Vector2(140, 35)
+	_speed_input.placeholder_text = "значение (550)"
+	_speed_input.text_changed.connect(_on_speed_text_changed)
+	_panel.add_child(_speed_input)
+
+	var speed_btn = Button.new()
+	speed_btn.text = "Применить"
+	speed_btn.position = Vector2(260, 240)
+	speed_btn.size = Vector2(110, 35)
+	speed_btn.pressed.connect(_apply_speed)
+	_panel.add_child(speed_btn)
+
 	var spawn_label = Label.new()
 	spawn_label.text = "Призвать:"
-	spawn_label.position = Vector2(30, 195)
+	spawn_label.position = Vector2(30, 290)
 	spawn_label.size = Vector2(340, 25)
 	spawn_label.add_theme_font_size_override("font_size", 14)
 	spawn_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
@@ -90,39 +126,53 @@ func _ready() -> void:
 
 	var spawn_angry = Button.new()
 	spawn_angry.text = "AngryBall"
-	spawn_angry.position = Vector2(30, 220)
-	spawn_angry.size = Vector2(105, 30)
+	spawn_angry.position = Vector2(30, 315)
+	spawn_angry.size = Vector2(85, 30)
 	spawn_angry.pressed.connect(_spawn_creature.bind("res://Objects/Summons/angry_ball.tscn"))
 	spawn_angry.add_theme_color_override("font_color", Color(1, 0.5, 0.3))
 	_panel.add_child(spawn_angry)
 
 	var spawn_drunk = Button.new()
 	spawn_drunk.text = "DrunkKiller"
-	spawn_drunk.position = Vector2(145, 220)
-	spawn_drunk.size = Vector2(105, 30)
+	spawn_drunk.position = Vector2(120, 315)
+	spawn_drunk.size = Vector2(85, 30)
 	spawn_drunk.pressed.connect(_spawn_creature.bind("res://Objects/Summons/DrunkKiller.tscn"))
 	spawn_drunk.add_theme_color_override("font_color", Color(0.8, 0.3, 0.3))
 	_panel.add_child(spawn_drunk)
 
 	var spawn_spider = Button.new()
 	spawn_spider.text = "Spider"
-	spawn_spider.position = Vector2(260, 220)
-	spawn_spider.size = Vector2(105, 30)
+	spawn_spider.position = Vector2(210, 315)
+	spawn_spider.size = Vector2(85, 30)
 	spawn_spider.pressed.connect(_spawn_creature.bind("res://Objects/Summons/Spider.tscn"))
 	spawn_spider.add_theme_color_override("font_color", Color(0.5, 0.8, 0.3))
 	_panel.add_child(spawn_spider)
 
+	var spawn_turret = Button.new()
+	spawn_turret.text = "Turret"
+	spawn_turret.position = Vector2(300, 315)
+	spawn_turret.size = Vector2(70, 30)
+	spawn_turret.pressed.connect(_spawn_creature.bind("res://Objects/Summons/Turret.tscn"))
+	spawn_turret.add_theme_color_override("font_color", Color(0.3, 0.7, 1.0))
+	_panel.add_child(spawn_turret)
+
 	var return_btn = Button.new()
 	return_btn.text = "Следующий этаж"
-	return_btn.position = Vector2(30, 260)
+	return_btn.position = Vector2(30, 360)
 	return_btn.size = Vector2(170, 30)
 	return_btn.pressed.connect(_return_elevator)
 	return_btn.add_theme_color_override("font_color", Color.CORNFLOWER_BLUE)
 	_panel.add_child(return_btn)
 
+	_error_label = Label.new()
+	_error_label.position = Vector2(30, 400)
+	_error_label.size = Vector2(340, 30)
+	_error_label.add_theme_color_override("font_color", Color.RED)
+	_panel.add_child(_error_label)
+
 	var close_btn = Button.new()
 	close_btn.text = "Закрыть"
-	close_btn.position = Vector2(140, 320)
+	close_btn.position = Vector2(140, 440)
 	close_btn.size = Vector2(120, 30)
 	close_btn.pressed.connect(_close)
 	_panel.add_child(close_btn)
@@ -141,6 +191,24 @@ func _on_text_changed(new_text: String) -> void:
 		_hp_input.text = filtered
 		_hp_input.caret_column = filtered.length()
 
+func _on_currency_text_changed(new_text: String) -> void:
+	var filtered = ""
+	for c in new_text:
+		if c >= "0" and c <= "9":
+			filtered += c
+	if filtered != new_text:
+		_currency_input.text = filtered
+		_currency_input.caret_column = filtered.length()
+
+func _on_speed_text_changed(new_text: String) -> void:
+	var filtered = ""
+	for c in new_text:
+		if (c >= "0" and c <= "9") or c == ".":
+			filtered += c
+	if filtered != new_text:
+		_speed_input.text = filtered
+		_speed_input.caret_column = filtered.length()
+
 func _apply_hp() -> void:
 	var val = _hp_input.text.strip_edges().to_int()
 	if val < 1:
@@ -158,6 +226,28 @@ func _apply_hp() -> void:
 	player.health_changed.emit(val)
 	_hp_input.text = ""
 	_error_label.text = ""
+
+func _apply_currency() -> void:
+	var val = _currency_input.text.strip_edges().to_int()
+	if val < 0:
+		_error_label.text = "Валюта не может быть отрицательной"
+		return
+	GameState.currency = val
+	_currency_input.text = ""
+	_error_label.text = "Валюта: " + str(val)
+
+func _apply_speed() -> void:
+	var val = _speed_input.text.strip_edges().to_float()
+	if val <= 0:
+		_error_label.text = "Скорость должна быть > 0"
+		return
+	var player = get_tree().get_first_node_in_group("player")
+	if not player:
+		_error_label.text = "Игрок не найден"
+		return
+	player.speed = val
+	_speed_input.text = ""
+	_error_label.text = "Скорость: " + str(val)
 
 func _add_bucket() -> void:
 	var player = get_tree().get_first_node_in_group("player")
