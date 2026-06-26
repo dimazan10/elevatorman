@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dat4ixuir5ckq"]
 
-[ext_resource type="Script" uid="uid://3vp0ijjnam0n" path="res://Scripts/Creatures/AngryBall.gd" id="1_5kt4o"]
+[ext_resource type="Script" uid="uid://c0qikf17tq8mk" path="res://Scripts/Creatures/AngryBall.gd" id="1_5kt4o"]
 [ext_resource type="Texture2D" uid="uid://chhc7m7lkhcne" path="res://Assets/AngryBall.png" id="1_uhfjk"]
 [ext_resource type="Script" uid="uid://dhvjfjjaltco1" path="res://Scripts/DangerZone.gd" id="2_danger_script"]
 
@@ -17,7 +17,7 @@ radius = 87.5
 [node name="AngryBall" type="RigidBody2D" unique_id=1051154257 groups=["enemy"]]
 collision_layer = 4
 collision_mask = 7
-mass = 0.01
+mass = 0.005
 physics_material_override = SubResource("PhysicsMaterial_f15s6")
 gravity_scale = 0.0
 continuous_cd = 2
