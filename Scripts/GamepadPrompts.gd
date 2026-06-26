@@ -44,7 +44,7 @@ func _update_prompts(force := false) -> void:
 		return
 
 	if mode == "gameplay":
-		_add_hint("res://Assets/Gamepad/RT.png", "Dash")
+		_add_hint("res://Assets/Gamepad/A.png", "Dash")
 		_add_hint("res://Assets/Gamepad/LB.png", "Item 1")
 		_add_hint("res://Assets/Gamepad/RB.png", "Item 2")
 		_add_hint("res://Assets/Gamepad/START.png", "Pause")
