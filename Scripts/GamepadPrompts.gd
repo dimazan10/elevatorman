@@ -58,7 +58,10 @@ func _ready() -> void:
 	right.add_child(b_icon)
 
 	_update_visibility()
-	Input.device_changed.connect(_update_visibility)
+	Input.joy_connection_changed.connect(_on_joy_connection_changed)
+
+func _on_joy_connection_changed(_device: int, _connected: bool) -> void:
+	_update_visibility()
 
 func _update_visibility() -> void:
 	_prompts.visible = Input.get_connected_joypads().size() > 0

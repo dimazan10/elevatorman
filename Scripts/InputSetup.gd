@@ -5,9 +5,9 @@ func _ready() -> void:
 	_ensure_action("move_left", [KEY_A, KEY_LEFT], [JOY_AXIS_LEFT_X, -1.0])
 	_ensure_action("move_up", [KEY_W, KEY_UP], [JOY_AXIS_LEFT_Y, -1.0])
 	_ensure_action("move_down", [KEY_S, KEY_DOWN], [JOY_AXIS_LEFT_Y, 1.0])
-	_ensure_action("dash", [KEY_SHIFT], null, [JOY_BUTTON_RIGHT_TRIGGER])
-	_ensure_action("use_item_1", [KEY_Q], null, [JOY_BUTTON_LEFT_SHOULDER])
-	_ensure_action("use_item_2", [KEY_E], null, [JOY_BUTTON_RIGHT_SHOULDER])
+	_ensure_action("dash", [KEY_SHIFT], [JOY_AXIS_TRIGGER_RIGHT, 1.0])
+	_ensure_action("use_item_1", [KEY_Q], [], [JOY_BUTTON_LEFT_SHOULDER])
+	_ensure_action("use_item_2", [KEY_E], [], [JOY_BUTTON_RIGHT_SHOULDER])
 
 	_add_joy("ui_up", JOY_BUTTON_DPAD_UP)
 	_add_joy("ui_down", JOY_BUTTON_DPAD_DOWN)
