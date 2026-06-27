@@ -16,6 +16,12 @@ func _ready() -> void:
 	bg.offset_top -= extra
 	bg.offset_right += extra
 	bg.offset_bottom += extra
+	
+	# Увеличиваем кнопки в 1.5 раза
+	play_btn.scale = Vector2(1.5, 1.5)
+	settings_btn.scale = Vector2(1.5, 1.5)
+	quit_btn.scale = Vector2(1.5, 1.5)
+	
 	play_btn.grab_focus.call_deferred()
 
 func _animate_logo() -> void:

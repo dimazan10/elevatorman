@@ -12,6 +12,7 @@ var return_to_game := false
 @onready var effects_label := $VBoxContainer/EffectsPct as Label
 
 @onready var fps_checkbox := $VBoxContainer/FPSCheckbox as CheckBox
+@onready var mobile_checkbox := $VBoxContainer/MobileCheckbox as CheckBox
 
 func _ready() -> void:
 	CursorManager.setup_buttons(self)
@@ -22,6 +23,18 @@ func _ready() -> void:
 	effects_slider.value = GameState.effects_volume
 	effects_label.text = _db_to_pct(GameState.effects_volume)
 	fps_checkbox.button_pressed = GameState.show_fps
+	
+	# Create mobile controls checkbox if it doesn't exist
+	mobile_checkbox = $VBoxContainer/MobileCheckbox
+	if not mobile_checkbox:
+		mobile_checkbox = CheckBox.new()
+		mobile_checkbox.name = "MobileCheckbox"
+		mobile_checkbox.text = "Мобильное управление"
+		mobile_checkbox.toggled.connect(_on_mobile_checkbox_toggled)
+		$VBoxContainer.add_child(mobile_checkbox)
+		$VBoxContainer.move_child(mobile_checkbox, $VBoxContainer.get_child_count() - 2)  # Before Back button
+	
+	mobile_checkbox.button_pressed = GameState.use_mobile_controls
 	master_slider.grab_focus.call_deferred()
 
 func _on_master_slider_value_changed(value: float) -> void:
@@ -41,6 +54,10 @@ func _on_fps_checkbox_toggled(enabled: bool) -> void:
 	var fps_label = get_tree().get_first_node_in_group("fps_label")
 	if fps_label:
 		fps_label.visible = enabled
+
+func _on_mobile_checkbox_toggled(enabled: bool) -> void:
+	GameState.use_mobile_controls = enabled
+	GameState._save_settings()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
