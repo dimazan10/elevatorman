@@ -301,6 +301,11 @@ func take_damage(amount: int):
 	if current_lives <= 0:
 		_is_dying = true
 	
+	var scene = get_tree().current_scene
+	if scene and "combat_timer" in scene and scene.combat_timer and not scene.combat_timer.is_stopped():
+		scene.combat_timer.stop()
+		scene.time_label.text = "00:00"
+	
 	var my_camera = %PlayerCamera
 		
 	if my_camera and my_camera.has_method("apply_shake"):
