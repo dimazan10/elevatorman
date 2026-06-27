@@ -272,7 +272,8 @@ func start_exit_sequence() -> void:
 	$Hole/FloorElevator/Door2.visible = false
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 0)
 	_spawn_secondary_enemies(GameState.current_floor)
-	_spawner.spawn(GameState.current_floor, _arena_rotator.get_node("ArenaScaler"), "spawn_point_main", "main_arena")
+	_spawner.spawn(GameState.current_floor, self, "spawn_point_main", "main_arena")
+	_move_turrets_to(_arena_rotator.get_node("ArenaScaler"))
 	_spawn_switches(GameState.current_floor)
 	_show_enemies()
 	lift_state = LiftState.WAITING
@@ -283,13 +284,23 @@ func _spawn_secondary_enemies(level: int) -> void:
 	if _arena_none:
 		var none_spawner = _arena_none.get_node_or_null("Pivot/EnemySpawner")
 		if none_spawner:
-			none_spawner.spawn(level, _arena_none.get_node("Pivot"), "spawn_point_none", "arena_none", _arena_none)
+			none_spawner.spawn(level, self, "spawn_point_none", "arena_none", _arena_none)
+		_move_turrets_to(_arena_none.get_node("Pivot"))
 	for sw in _arena_switches:
 		var switch_spawner = sw.get_node_or_null("Pivot/EnemySpawner")
 		if switch_spawner:
-			switch_spawner.spawn(level, sw.get_node("Pivot"), "spawn_point_switch", "arena_switch", sw)
+			switch_spawner.spawn(level, self, "spawn_point_switch", "arena_switch", sw)
+		_move_turrets_to(sw.get_node("Pivot"))
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		enemy.collision_mask |= 2
+
+func _move_turrets_to(container: Node) -> void:
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		if enemy.scene_file_path.get_file().get_basename() == "Turret":
+			var pos = enemy.global_position
+			enemy.get_parent().remove_child(enemy)
+			container.add_child(enemy)
+			enemy.global_position = pos
 
 func _start_combat_timer() -> void:
 	for enemy in get_tree().get_nodes_in_group("enemy"):
