@@ -25,15 +25,14 @@ func update_hearts(current_health: int):
 		if c is TextureRect:
 			hearts.append(c)
 
-	var visible_count = mini(current_health, MAX_HEARTS)
-	var overflow = current_health - MAX_HEARTS
+	var heart_count = mini(current_health, MAX_HEARTS)
 
-	while hearts.size() > visible_count:
+	while hearts.size() > heart_count:
 		var last = hearts.pop_back()
 		last.queue_free()
 
 	var template = _heart_tex
-	while hearts.size() < visible_count:
+	while hearts.size() < heart_count:
 		var new_heart = TextureRect.new()
 		new_heart.texture = template
 		new_heart.custom_minimum_size = Vector2(64, 64)
@@ -44,8 +43,13 @@ func update_hearts(current_health: int):
 		add_child(new_heart)
 		hearts.append(new_heart)
 
-	_overflow_label.text = str(current_health)
-	_overflow_label.visible = true
+	move_child(_overflow_label, get_child_count() - 1)
+
+	if current_health > MAX_HEARTS:
+		_overflow_label.text = str(current_health)
+		_overflow_label.visible = true
+	else:
+		_overflow_label.visible = false
 
 	if current_health == 1:
 		start_last_heart_effect()
