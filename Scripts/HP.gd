@@ -44,11 +44,8 @@ func update_hearts(current_health: int):
 		add_child(new_heart)
 		hearts.append(new_heart)
 
-	if overflow > 0:
-		_overflow_label.text = "x" + str(overflow)
-		_overflow_label.visible = true
-	else:
-		_overflow_label.visible = false
+	_overflow_label.text = str(current_health)
+	_overflow_label.visible = true
 
 	if current_health == 1:
 		start_last_heart_effect()
