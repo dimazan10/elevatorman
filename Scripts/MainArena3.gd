@@ -491,8 +491,7 @@ func start_restart() -> void:
 	$Hole/FloorElevator/Door2.visible = false
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 0)
 	await FadeTransition.fade_out()
-	if is_instance_valid(self) and get_tree():
-		get_tree().change_scene_to_file("res://Scenes/Shop/Shop.tscn")
+	get_tree().change_scene_to_file("res://Scenes/Shop/Shop.tscn")
 
 func _hide_player() -> void:
 	player_node.process_mode = Node.PROCESS_MODE_DISABLED
