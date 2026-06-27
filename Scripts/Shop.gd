@@ -8,7 +8,7 @@ const TUBE_ICON = preload("res://Assets/Inventory/Tube.png")
 const CLONE_ICON = preload("res://Assets/Inventory/Clone.png")
 
 const PRICE_INFINIT := 9
-const PRICE_TUBE := 4
+const PRICE_TUBE := 2
 const PRICE_CLONE := 6
 
 @onready var vbox: VBoxContainer = $VBoxMain
@@ -179,7 +179,7 @@ func _on_bucket_buy() -> void:
 	if GameState.currency >= 3 and not GameState.has_bucket:
 		GameState.currency -= 3
 		GameState.has_bucket = true
-		GameState.bucket_charges = 3
+		GameState.bucket_charges = 2
 	currency_label.text = str(GameState.currency)
 	_update_bucket_ui()
 	_update_item_ui()
