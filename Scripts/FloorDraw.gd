@@ -13,7 +13,12 @@ func _ready() -> void:
 func _draw() -> void:
 	if not _texture:
 		return
-	var bounds := get_polygon().get_rect()
+	var poly := get_polygon()
+	if poly.is_empty():
+		return
+	var bounds := Rect2(poly[0], Vector2.ZERO)
+	for v in poly:
+		bounds = bounds.expand(v)
 	var cols := ceili(bounds.size.x / TILE_SIZE.x) + 1
 	var rows := ceili(bounds.size.y / TILE_SIZE.y) + 1
 	for y in rows:
