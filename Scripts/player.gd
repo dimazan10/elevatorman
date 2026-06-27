@@ -315,8 +315,10 @@ func take_damage(amount: int):
 		flicker_tween.tween_property(self, "modulate", Color.WHITE, 0.05)
 	flicker_tween.tween_property(self, "modulate", Color.WHITE, 0.1)
 	await flicker_tween.finished
-	
-	await get_tree().create_timer(0.4).timeout
+
+	Engine.time_scale = 0.0
+	await get_tree().create_timer(0.2, true, false, true).timeout
+	Engine.time_scale = 1.0
 	_invulnerable = false
 	
 	if current_lives <= 0:
