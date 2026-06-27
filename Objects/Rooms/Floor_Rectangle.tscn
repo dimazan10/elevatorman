@@ -13,7 +13,7 @@ size = Vector2(120, 80)
 size = Vector2(10, 620)
 
 [node name="Floor_Rectangle" type="Node2D" unique_id=1003405898]
-z_index = -1
+z_index = -2
 
 [node name="FloorPolygon" type="Polygon2D" parent="." unique_id=1906304972]
 script = ExtResource("2_floordraw")
