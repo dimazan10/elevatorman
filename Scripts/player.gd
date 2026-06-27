@@ -301,8 +301,6 @@ func take_damage(amount: int):
 	if current_lives <= 0:
 		_is_dying = true
 	
-	Engine.time_scale = 0.0
-	
 	var my_camera = %PlayerCamera
 		
 	if my_camera and my_camera.has_method("apply_shake"):
@@ -311,13 +309,7 @@ func take_damage(amount: int):
 	hit_blow_audio.play()
 	hit_fierce_audio.play()
 	
-	var flicker_tween := create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
-	for i in 4:
-		flicker_tween.tween_property(self, "modulate", Color(1, 0.3, 0.3), 0.05)
-		flicker_tween.tween_property(self, "modulate", Color.WHITE, 0.05)
-	flicker_tween.tween_property(self, "modulate", Color.WHITE, 0.1)
-	await flicker_tween.finished
-
+	Engine.time_scale = 0.0
 	await get_tree().create_timer(0.2, true, false, true).timeout
 	Engine.time_scale = 1.0
 	_invulnerable = false
