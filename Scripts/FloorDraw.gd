@@ -62,13 +62,13 @@ func _point_in_polygon(point: Vector2, poly: PackedVector2Array) -> bool:
 func _segment_intersects_rect(a: Vector2, b: Vector2, r: Rect2) -> bool:
 	if r.has_point(a) or r.has_point(b):
 		return true
-	var corners := [
+	var corners: Array[Vector2] = [
 		r.position, Vector2(r.end.x, r.position.y),
 		r.end, Vector2(r.position.x, r.end.y),
 	]
 	for i in 4:
-		var c1 := corners[i]
-		var c2 := corners[(i + 1) % 4]
+		var c1: Vector2 = corners[i]
+		var c2: Vector2 = corners[(i + 1) % 4]
 		if _segments_intersect(a, b, c1, c2):
 			return true
 	return false
