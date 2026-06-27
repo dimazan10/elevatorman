@@ -1,19 +1,13 @@
 [gd_scene format=3 uid="uid://d30evl7gch02d"]
 
 [ext_resource type="Script" uid="uid://dirqucluw2ck4" path="res://Scripts/DoorTrigger.gd" id="1_huqpp"]
-[ext_resource type="Shader" path="res://Shaders/floor_tile.gdshader" id="2_shader"]
-[ext_resource type="Texture2D" uid="uid://2lqy6hlqunds" path="res://Assets/FloorTile.jpg" id="3_floortile"]
+[ext_resource type="Script" path="res://Scripts/FloorDraw.gd" id="2_floordraw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_h"]
 size = Vector2(1833.9203, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vhfxq"]
 size = Vector2(120, 80)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_floor"]
-shader = ExtResource("2_shader")
-shader_parameter/tile_texture = ExtResource("3_floortile")
-shader_parameter/tile_count = 4.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
 size = Vector2(10, 620)
@@ -22,7 +16,7 @@ size = Vector2(10, 620)
 z_index = -1
 
 [node name="FloorPolygon" type="Polygon2D" parent="." unique_id=1906304972]
-material = SubResource("ShaderMaterial_floor")
+script = ExtResource("2_floordraw")
 position = Vector2(1090, 0)
 scale = Vector2(0.5199988, 0.5599991)
 color = Color(1, 1, 1, 1)

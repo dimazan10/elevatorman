@@ -13,13 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://dkax3cjeu00gs" path="res://Objects/EnemySpawner.tscn" id="11_wr286"]
 [ext_resource type="PackedScene" uid="uid://cvl0thapds4n1" path="res://Objects/SwitchSpawner.tscn" id="12_uf2av"]
 [ext_resource type="PackedScene" uid="uid://b8snbi67cgyle" path="res://Objects/InventoryUI.tscn" id="13_inv"]
-[ext_resource type="Shader" uid="uid://wyfa07sgm71" path="res://Shaders/floor_tile.gdshader" id="14_shader"]
-[ext_resource type="Texture2D" uid="uid://2lqy6hlqunds" path="res://Assets/FloorTile.jpg" id="15_floortile"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_floor"]
-shader = ExtResource("14_shader")
-shader_parameter/tile_texture = ExtResource("15_floortile")
-shader_parameter/tile_count = 4.0
+[ext_resource type="Script" path="res://Scripts/FloorDraw.gd" id="14_floordraw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
 size = Vector2(615, 20)
@@ -472,7 +466,7 @@ script = ExtResource("1_dpwxk")
 
 [node name="Floor" type="Polygon2D" parent="." unique_id=1231110711]
 z_index = -1
-material = SubResource("ShaderMaterial_floor")
+script = ExtResource("14_floordraw")
 position = Vector2(640, 360)
 color = Color(1, 1, 1, 1)
 polygon = PackedVector2Array(615, 0, 307.5, 532.5, -307.5, 532.5, -615, 0, -307.5, -532.5, 307.5, -532.5)
