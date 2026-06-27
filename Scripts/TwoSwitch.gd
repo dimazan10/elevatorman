@@ -11,7 +11,7 @@ var _move_direction := Vector2.ZERO
 var _change_dir_interval := 0.0
 var _change_dir_timer := 0.0
 var _reset_timer: float = 0.0
-const RESET_TIME := 50.0
+const RESET_TIME := 55.0
 
 func _ready() -> void:
 	add_to_group("switch")

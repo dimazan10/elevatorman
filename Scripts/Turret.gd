@@ -14,6 +14,7 @@ var raycast: RayCast2D
 var line: Line2D
 var cooldown_timer: Timer
 var player: Node2D
+var _damage_accum: float = 0.0
 
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
@@ -44,7 +45,7 @@ func _ready() -> void:
 		return
 
 	raycast.target_position = Vector2(laser_range, 0)
-	raycast.collision_mask = 1
+	raycast.collision_mask = 3
 	raycast.enabled = false
 
 	line.visible = false
@@ -77,9 +78,13 @@ func _process(delta: float) -> void:
 				cast_point = muzzle.to_local(raycast.get_collision_point())
 
 				if current_state == TurretState.FIRING:
-					var collider = raycast.get_collider()
-					if collider and collider.has_method("take_damage"):
-						collider.take_damage(damage_per_second * delta)
+					_damage_accum += damage_per_second * delta
+					if _damage_accum >= 1.0:
+						var dmg := int(_damage_accum)
+						_damage_accum -= dmg
+						var collider = raycast.get_collider()
+						if collider and collider.has_method("take_damage"):
+							collider.take_damage(dmg)
 
 			line.set_point_position(1, cast_point)
 
@@ -125,6 +130,7 @@ func start_attack_sequence() -> void:
 		return
 
 	current_state = TurretState.TRACKING
+	_damage_accum = 0.0
 	line.visible = false
 	raycast.enabled = false
 	line.set_point_position(1, Vector2.ZERO)

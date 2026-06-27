@@ -370,6 +370,12 @@ func _spawn_creature(scene_path: String) -> void:
 	var offset = Vector2(randf_range(-80, 80), randf_range(-80, 80))
 	inst.global_position = player.global_position + offset
 	get_tree().current_scene.add_child(inst)
+	if not inst.is_in_group("enemy"):
+		inst.add_to_group("enemy")
+	for child in inst.get_children():
+		if child is Timer and child.has_method("start"):
+			if child.has_method("stop") and child.is_stopped():
+				child.start()
 	_error_label.text = ""
 
 func _close() -> void:

@@ -7,7 +7,7 @@ var _pool := ["angry_ball", "DrunkKiller", "Spider", "Turret"]
 func _ready() -> void:
 	pass
 
-func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_name: String = "", arena: Node = null, bonus: int = 0) -> Array[Node]:
+func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_name: String = "", arena: Node = null, base_count: int = 5) -> Array[Node]:
 	var all_points := get_tree().get_nodes_in_group(group_name)
 	var points := []
 	for pt in all_points:
@@ -29,11 +29,16 @@ func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_na
 
 	var use_points := safe_points if not safe_points.is_empty() else points
 
-	var total = 3 + level + randi() % 3 + bonus
-	var types: Array[String] = ["angry_ball", "DrunkKiller", "Spider", "Turret"]
+	var floor_bonus := maxi(0, level - 1)
+	var total := base_count + floor_bonus
 
-	var remaining = total - types.size()
-	for _i in remaining:
+	var types: Array[String] = []
+	var available := _pool.duplicate()
+	available.shuffle()
+	var min_types := mini(3, available.size())
+	for _i in min_types:
+		types.append(available.pop_back())
+	for _i in maxi(0, total - types.size()):
 		types.append(_pool[randi() % _pool.size()])
 
 	types.shuffle()
@@ -47,7 +52,7 @@ func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_na
 		var scene = load("res://Objects/Summons/" + t + ".tscn")
 		if scene == null:
 			continue
-			
+
 		var inst = scene.instantiate()
 		inst.global_position = pt.global_position
 		inst.set_meta("spawn_position", pt.global_position)

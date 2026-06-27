@@ -198,6 +198,7 @@ func _setup_ui() -> void:
 	time_label.add_theme_constant_override("outline_size", 4)
 	time_label.add_theme_color_override("font_outline_color", Color.BLACK)
 	time_label.position = Vector2(10, 10)
+	time_label.visible = false
 	ui.add_child(time_label)
 
 	_fps_label = Label.new()
@@ -232,8 +233,9 @@ func _setup_ui() -> void:
 	quest_label.add_theme_constant_override("outline_size", 3)
 	quest_label.add_theme_color_override("font_outline_color", Color.BLACK)
 	quest_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	quest_label.position = Vector2(220, 80)
-	quest_label.size = Vector2(800, 40)
+	quest_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+	quest_label.offset_top = 10
+	quest_label.offset_bottom = 50
 	quest_label.text = "Активировать 3 рычага" if _quest_mode == QuestMode.CLASSIC else "Активировать 2 рычага"
 	ui.add_child(quest_label)
 
@@ -272,8 +274,8 @@ func start_exit_sequence() -> void:
 	$Hole/FloorElevator/Door2.visible = false
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 0)
 	_spawn_secondary_enemies(GameState.current_floor)
-	_spawner.spawn(GameState.current_floor, self, "spawn_point_main", "main_arena")
-	_move_turrets_to(_arena_rotator.get_node("ArenaScaler"))
+	_spawner.spawn(GameState.current_floor, self, "spawn_point_main", "main_arena", null, 3)
+	_move_turrets_to(_arena_rotator.get_node("ArenaScaler"), "main_arena")
 	_spawn_switches(GameState.current_floor)
 	_show_enemies()
 	lift_state = LiftState.WAITING
@@ -285,18 +287,18 @@ func _spawn_secondary_enemies(level: int) -> void:
 		var none_spawner = _arena_none.get_node_or_null("Pivot/EnemySpawner")
 		if none_spawner:
 			none_spawner.spawn(level, self, "spawn_point_none", "arena_none", _arena_none)
-		_move_turrets_to(_arena_none.get_node("Pivot"))
 	for sw in _arena_switches:
 		var switch_spawner = sw.get_node_or_null("Pivot/EnemySpawner")
 		if switch_spawner:
 			switch_spawner.spawn(level, self, "spawn_point_switch", "arena_switch", sw)
-		_move_turrets_to(sw.get_node("Pivot"))
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		enemy.collision_mask |= 2
 
-func _move_turrets_to(container: Node) -> void:
+func _move_turrets_to(container: Node, zone_filter: String = "") -> void:
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		if enemy.scene_file_path.get_file().get_basename() == "Turret":
+			if zone_filter != "" and enemy.get_meta("zone_name", "") != zone_filter:
+				continue
 			var pos = enemy.global_position
 			enemy.get_parent().remove_child(enemy)
 			container.add_child(enemy)
@@ -356,8 +358,7 @@ func _on_switch_activated(switch: Node) -> void:
 			_first_switch_activated = true
 			_first_switch_ref = switch
 			_activated_switch_count = 1
-			_enrage_enemies()
-			_start_rage_timer(30.0)
+			_start_rage_timer(55.0)
 			_update_quest_text("first_switch")
 		else:
 			_activated_switch_count = 2
@@ -803,14 +804,16 @@ func _process(delta: float) -> void:
 		var remaining: float = ceil(combat_timer.time_left)
 		var m := int(remaining / 60.0)
 		var s := int(remaining) % 60
+		time_label.visible = true
 		time_label.text = "%02d:%02d" % [m, s]
 	elif rage_timer and not rage_timer.is_stopped():
 		var remaining: float = ceil(rage_timer.time_left)
 		var m := int(remaining / 60.0)
 		var s := int(remaining) % 60
+		time_label.visible = true
 		time_label.text = "%02d:%02d" % [m, s]
 	else:
-		time_label.text = "00:00"
+		time_label.visible = false
 
 
 func _on_pause_state_changed(is_paused: bool) -> void:
