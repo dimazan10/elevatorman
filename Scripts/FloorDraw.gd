@@ -13,4 +13,4 @@ func _ready() -> void:
 	for v in poly:
 		bounds = bounds.expand(v)
 	texture_scale = bounds.size / TILE_SIZE
-	color = Color.WHITE
+	color = Color(0.5, 0.55, 0.6)
