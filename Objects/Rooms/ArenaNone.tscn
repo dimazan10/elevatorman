@@ -4,7 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://c0s0tumy47yqj" path="res://Assets/Sprites_Animation/Shield/Bucket.png" id="2_k0mef"]
 [ext_resource type="Script" path="res://Scripts/BucketPickup.gd" id="3_tp1qj"]
 [ext_resource type="PackedScene" uid="uid://dkax3cjeu00gs" path="res://Objects/EnemySpawner.tscn" id="12_vms8c"]
-[ext_resource type="Script" path="res://Scripts/FloorDraw.gd" id="13_floordraw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
 size = Vector2(615, 20)
@@ -28,8 +27,7 @@ script = ExtResource("1_mv0v1")
 position = Vector2(640, 360)
 
 [node name="Floor" type="Polygon2D" parent="Pivot" unique_id=717875239]
-script = ExtResource("13_floordraw")
-color = Color(1, 1, 1, 1)
+color = Color(0.12, 0.15, 0.19, 1)
 polygon = PackedVector2Array(615, 0, 307.5, 532.5, -307.5, 532.5, -615, 0, -307.5, -532.5, 307.5, -532.5)
 
 [node name="ZoneTrigger" type="Area2D" parent="Pivot/Floor"]
