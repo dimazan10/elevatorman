@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b2ypo3l8rasxk"
-path="res://.godot/imported/switch4.png-0efdb565b16b78d253e60c72a351c765.ctex"
+uid="uid://2lqy6hlqunds"
+path="res://.godot/imported/FloorTile.jpg-67a4c306c0ebac0303e87bb581e1e7eb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/switch4.png"
-dest_files=["res://.godot/imported/switch4.png-0efdb565b16b78d253e60c72a351c765.ctex"]
+source_file="res://Assets/FloorTile.jpg"
+dest_files=["res://.godot/imported/FloorTile.jpg-67a4c306c0ebac0303e87bb581e1e7eb.ctex"]
 
 [params]
 

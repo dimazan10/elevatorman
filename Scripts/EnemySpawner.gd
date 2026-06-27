@@ -1,25 +1,11 @@
 extends Node
 
-@export var turret_scene: PackedScene
-@export var turret_spawn_position: Vector2 = Vector2(600, 350)
-
 var _spawned_enemies: Array[Node] = []
 
 var _pool := ["angry_ball", "DrunkKiller", "Spider", "Turret"]
 
 func _ready() -> void:
-	spawn_single_turret()
-
-func spawn_single_turret() -> void:
-	if not turret_scene:
-		printerr("Сцену турелі не призначено у спавнері!")
-		return
-		
-	var new_turret = turret_scene.instantiate()
-	
-	get_tree().current_scene.call_deferred("add_child", new_turret)
-	
-	new_turret.global_position = turret_spawn_position
+	pass
 
 func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_name: String = "", arena: Node = null, bonus: int = 0) -> Array[Node]:
 	var all_points := get_tree().get_nodes_in_group(group_name)
@@ -43,7 +29,7 @@ func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_na
 
 	var use_points := safe_points if not safe_points.is_empty() else points
 
-	var total = 3 + level + randi() % 3 + bonus
+	var total = 4 + level + randi() % 3 + bonus
 	var types: Array[String] = ["angry_ball", "DrunkKiller", "Spider", "Turret"]
 
 	var remaining = total - types.size()
