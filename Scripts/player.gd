@@ -312,6 +312,7 @@ func take_damage(amount: int):
 	Engine.time_scale = 0.0
 	await get_tree().create_timer(0.2, true, false, true).timeout
 	Engine.time_scale = 1.0
+	await get_tree().create_timer(0.3).timeout
 	_invulnerable = false
 	
 	if current_lives <= 0:
