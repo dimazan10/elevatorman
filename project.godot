@@ -30,6 +30,7 @@ DefaultFont="*res://Scripts/DefaultFont.gd"
 CursorManager="*res://Scripts/CursorManager.gd"
 DebugCollisions="*res://Scripts/DebugCollisions.gd"
 GamepadPrompts="*res://Scripts/GamepadPrompts.gd"
+MobileControls="*res://Scripts/MobileControls.gd"
 
 [display]
 
