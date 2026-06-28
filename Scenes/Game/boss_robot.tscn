@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://boy4be35w2syx" path="res://Scripts/FloorDraw.gd" id="1_floordraw"]
 [ext_resource type="Texture2D" uid="uid://74cir4cs1tst" path="res://Assets/SpritesElevator/roof3.png" id="2_roof"]
 [ext_resource type="PackedScene" uid="uid://mt70rvdsdeyx" path="res://Objects/Summons/player.tscn" id="3_player"]
-[ext_resource type="Script" path="res://Scripts/BossRobot.gd" id="4_boss"]
+[ext_resource type="Script" uid="uid://dd1mf0o5nw7l" path="res://Scripts/BossRobot.gd" id="4_boss"]
 
 [sub_resource type="RectangleShape2D" id="RectShape_wall_h"]
 size = Vector2(1160, 20)
@@ -11,83 +11,81 @@ size = Vector2(1160, 20)
 [sub_resource type="RectangleShape2D" id="RectShape_wall_v"]
 size = Vector2(20, 680)
 
-[node name="BossRobot" type="Node2D"]
+[node name="BossRobot" type="Node2D" unique_id=415151675]
 script = ExtResource("4_boss")
 
-[node name="Pivot" type="Node2D" parent="."]
+[node name="Pivot" type="Node2D" parent="." unique_id=478305121]
 position = Vector2(640, 360)
 
-[node name="Floor" type="Polygon2D" parent="Pivot"]
+[node name="Floor" type="Polygon2D" parent="Pivot" unique_id=645250517]
+position = Vector2(0, 331.99997)
+scale = Vector2(1.9263917, 2.0185204)
+polygon = PackedVector2Array(-580, -330, 580, -330, 580, 330, -580, 330)
 script = ExtResource("1_floordraw")
-color = Color(1, 1, 1, 1)
-polygon = PackedVector2Array(-580, -330, 580, -330, 580, 330, -580, 330)
 
-[node name="ZoneTrigger" type="Area2D" parent="Pivot/Floor"]
-priority = 1
-collision_layer = 1
-collision_mask = 1
-monitoring = true
+[node name="ZoneTrigger" type="Area2D" parent="Pivot/Floor" unique_id=314591080]
 monitorable = false
+priority = 1
 
-[node name="CollisionPolygon" type="CollisionPolygon2D" parent="Pivot/Floor/ZoneTrigger"]
+[node name="CollisionPolygon" type="CollisionPolygon2D" parent="Pivot/Floor/ZoneTrigger" unique_id=1273983575]
 polygon = PackedVector2Array(-580, -330, 580, -330, 580, 330, -580, 330)
 
-[node name="Walls" type="Node2D" parent="Pivot"]
+[node name="Walls" type="Node2D" parent="Pivot" unique_id=446166208]
 
-[node name="Top" type="StaticBody2D" parent="Pivot/Walls"]
+[node name="Top" type="StaticBody2D" parent="Pivot/Walls" unique_id=757958021]
 position = Vector2(0, -340)
+scale = Vector2(1.9199988, 1)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/Top"]
+[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/Top" unique_id=830430503]
 shape = SubResource("RectShape_wall_h")
 
-[node name="Visual" type="Polygon2D" parent="Pivot/Walls/Top"]
-texture = ExtResource("2_roof")
+[node name="Visual" type="Polygon2D" parent="Pivot/Walls/Top" unique_id=831117799]
 texture_repeat = 1
-color = Color(1, 1, 1, 1)
+texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-580, -10, 580, -10, 580, 10, -580, 10)
 uv = PackedVector2Array(0, 0, 1.865, 0, 1.865, 0.05, 0, 0.05)
 
-[node name="Bottom" type="StaticBody2D" parent="Pivot/Walls"]
-position = Vector2(0, 340)
+[node name="Bottom" type="StaticBody2D" parent="Pivot/Walls" unique_id=1321215010]
+position = Vector2(0, 1005)
+scale = Vector2(1.9200001, 1)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/Bottom"]
+[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/Bottom" unique_id=290487857]
 shape = SubResource("RectShape_wall_h")
 
-[node name="Visual" type="Polygon2D" parent="Pivot/Walls/Bottom"]
-texture = ExtResource("2_roof")
+[node name="Visual" type="Polygon2D" parent="Pivot/Walls/Bottom" unique_id=1169695017]
 texture_repeat = 1
-color = Color(1, 1, 1, 1)
+texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-580, -10, 580, -10, 580, 10, -580, 10)
 uv = PackedVector2Array(0, 0, 1.865, 0, 1.865, 0.05, 0, 0.05)
 
-[node name="Left" type="StaticBody2D" parent="Pivot/Walls"]
-position = Vector2(-590, 0)
+[node name="Left" type="StaticBody2D" parent="Pivot/Walls" unique_id=245890369]
+position = Vector2(-1114, 330)
+scale = Vector2(1, 1.9599981)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/Left"]
+[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/Left" unique_id=392305385]
 shape = SubResource("RectShape_wall_v")
 
-[node name="Visual" type="Polygon2D" parent="Pivot/Walls/Left"]
-texture = ExtResource("2_roof")
+[node name="Visual" type="Polygon2D" parent="Pivot/Walls/Left" unique_id=1287832738]
 texture_repeat = 1
-color = Color(1, 1, 1, 1)
+texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-10, -340, 10, -340, 10, 340, -10, 340)
 uv = PackedVector2Array(0, 0, 0.032, 0, 0.032, 1.696, 0, 1.696)
 
-[node name="Right" type="StaticBody2D" parent="Pivot/Walls"]
-position = Vector2(590, 0)
+[node name="Right" type="StaticBody2D" parent="Pivot/Walls" unique_id=994744013]
+position = Vector2(1114, 330)
+scale = Vector2(1, 1.9599994)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/Right"]
+[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/Right" unique_id=107964747]
 shape = SubResource("RectShape_wall_v")
 
-[node name="Visual" type="Polygon2D" parent="Pivot/Walls/Right"]
-texture = ExtResource("2_roof")
+[node name="Visual" type="Polygon2D" parent="Pivot/Walls/Right" unique_id=442086046]
 texture_repeat = 1
-color = Color(1, 1, 1, 1)
+texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-10, -340, 10, -340, 10, 340, -10, 340)
 uv = PackedVector2Array(0, 0, 0.032, 0, 0.032, 1.696, 0, 1.696)
 
-[node name="PlayerSpawn" type="Marker2D" parent="Pivot"]
+[node name="PlayerSpawn" type="Marker2D" parent="Pivot" unique_id=1822789921]
 position = Vector2(0, 280)
 
-[node name="Player" parent="." instance=ExtResource("3_player")]
+[node name="Player" parent="." unique_id=1432727825 instance=ExtResource("3_player")]
 position = Vector2(640, 640)
