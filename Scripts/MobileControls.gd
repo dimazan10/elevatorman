@@ -10,6 +10,7 @@ var _knob: Panel
 var _dragging := false
 var _direction := Vector2.ZERO
 var _prev_actions := {"move_left": false, "move_right": false, "move_up": false, "move_down": false}
+var _dash_just_pressed := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -36,6 +37,14 @@ func _process(_delta: float) -> void:
 
 	_update_knob_from_input()
 	_apply_direction()
+
+	if _dash_just_pressed:
+		var ev = InputEventAction.new()
+		ev.action = "dash"
+		ev.pressed = true
+		ev.echo = false
+		Input.parse_input_event(ev)
+		_dash_just_pressed = false
 
 func _create_ui() -> void:
 	var vp_size := get_viewport().get_visible_rect().size
@@ -81,8 +90,7 @@ func _create_ui() -> void:
 	dash_btn.offset_top = -100
 	dash_btn.modulate = Color(1, 0, 0, 0.4)
 	dash_btn.mouse_filter = Control.MOUSE_FILTER_STOP
-	dash_btn.button_down.connect(func(): Input.action_press("dash"))
-	dash_btn.button_up.connect(func(): Input.action_release("dash"))
+	dash_btn.button_down.connect(func(): _dash_just_pressed = true)
 	add_child(dash_btn)
 
 func _reset_knob() -> void:
@@ -93,7 +101,10 @@ func _reset_knob() -> void:
 func _release_all() -> void:
 	for action in _prev_actions:
 		if _prev_actions[action]:
-			Input.action_release(action)
+			var ev = InputEventAction.new()
+			ev.action = action
+			ev.pressed = false
+			Input.parse_input_event(ev)
 		_prev_actions[action] = false
 	_direction = Vector2.ZERO
 
@@ -130,8 +141,12 @@ func _apply_direction() -> void:
 		"move_down":  _direction.y > DEADZONE,
 	}
 	for action in actions:
+		var ev = InputEventAction.new()
+		ev.action = action
 		if actions[action] and not _prev_actions[action]:
-			Input.action_press(action)
+			ev.pressed = true
+			Input.parse_input_event(ev)
 		elif not actions[action] and _prev_actions[action]:
-			Input.action_release(action)
+			ev.pressed = false
+			Input.parse_input_event(ev)
 		_prev_actions[action] = actions[action]
