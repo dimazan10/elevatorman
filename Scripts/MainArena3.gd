@@ -275,6 +275,7 @@ func start_exit_sequence() -> void:
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 0)
 	_spawn_secondary_enemies(GameState.current_floor)
 	_spawner.spawn(GameState.current_floor, self, "spawn_point_main", "main_arena", null, 3)
+	_move_turrets_to(_arena_rotator.get_node("ArenaScaler"), "main_arena")
 	_spawn_switches(GameState.current_floor)
 	_show_enemies()
 	lift_state = LiftState.WAITING
@@ -286,10 +287,12 @@ func _spawn_secondary_enemies(level: int) -> void:
 		var none_spawner = _arena_none.get_node_or_null("Pivot/EnemySpawner")
 		if none_spawner:
 			none_spawner.spawn(level, self, "spawn_point_none", "arena_none", _arena_none)
+		_move_turrets_to(_arena_none.get_node("Pivot"), "arena_none")
 	for sw in _arena_switches:
 		var switch_spawner = sw.get_node_or_null("Pivot/EnemySpawner")
 		if switch_spawner:
 			switch_spawner.spawn(level, self, "spawn_point_switch", "arena_switch", sw)
+		_move_turrets_to(sw.get_node("Pivot"), "arena_switch")
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		enemy.collision_mask |= 2
 

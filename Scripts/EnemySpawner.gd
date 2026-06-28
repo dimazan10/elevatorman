@@ -54,10 +54,10 @@ func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_na
 			continue
 
 		var inst = scene.instantiate()
-		inst.global_position = pt.global_position
 		inst.set_meta("spawn_position", pt.global_position)
 		inst.set_meta("zone_name", zone_name)
 		parent.add_child(inst)
+		inst.global_position = pt.global_position
 		if not inst.is_in_group("enemy"):
 			inst.add_to_group("enemy")
 		_spawned_enemies.append(inst)
