@@ -309,23 +309,28 @@ func _register_turret_offsets() -> void:
 		elif zone == "arena_none" and _arena_none:
 			center = _arena_none.get_node("Pivot").global_position
 		elif zone == "arena_switch":
+			var best_dist := INF
 			for sw in _arena_switches:
-				center = sw.get_node("Pivot").global_position
-				break
+				var pivot = sw.get_node_or_null("Pivot")
+				if pivot:
+					var d = enemy.global_position.distance_to(pivot.global_position)
+					if d < best_dist:
+						best_dist = d
+						center = pivot.global_position
 		_turret_data.append({
 			"turret": enemy,
 			"zone": zone,
 			"offset": enemy.global_position - center,
+			"center": center,
 		})
 
 func _update_turret_positions() -> void:
 	for td in _turret_data:
 		if not is_instance_valid(td.turret):
 			continue
-		var rot := 0.0
 		var zone: String = td.zone
 		if zone == "main_arena":
-			rot = _arena_rotator.rotation
+			var rot = _arena_rotator.rotation
 			td.turret.global_position = _arena_rotator.global_position + td.offset.rotated(rot)
 		elif zone == "arena_none" and _arena_none:
 			var pivot = _arena_none.get_node_or_null("Pivot")
@@ -334,7 +339,7 @@ func _update_turret_positions() -> void:
 		elif zone == "arena_switch":
 			for sw in _arena_switches:
 				var pivot = sw.get_node_or_null("Pivot")
-				if pivot:
+				if pivot and pivot.global_position.is_equal_approx(td.center):
 					td.turret.global_position = pivot.global_position + td.offset.rotated(pivot.rotation)
 					break
 
