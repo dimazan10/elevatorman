@@ -1,6 +1,6 @@
 extends Sprite2D
 
-var charges := 3
+var charges := 2
 var active := true
 
 func hit() -> bool:
