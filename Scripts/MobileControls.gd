@@ -10,7 +10,6 @@ var _knob: Panel
 var _dragging := false
 var _direction := Vector2.ZERO
 var _prev_actions := {"move_left": false, "move_right": false, "move_up": false, "move_down": false}
-var _dash_just_pressed := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -37,14 +36,6 @@ func _process(_delta: float) -> void:
 
 	_update_knob_from_input()
 	_apply_direction()
-
-	if _dash_just_pressed:
-		var ev = InputEventAction.new()
-		ev.action = "dash"
-		ev.pressed = true
-		ev.echo = false
-		Input.parse_input_event(ev)
-		_dash_just_pressed = false
 
 func _create_ui() -> void:
 	var vp_size := get_viewport().get_visible_rect().size
@@ -90,8 +81,13 @@ func _create_ui() -> void:
 	dash_btn.offset_top = -100
 	dash_btn.modulate = Color(1, 0, 0, 0.4)
 	dash_btn.mouse_filter = Control.MOUSE_FILTER_STOP
-	dash_btn.button_down.connect(func(): _dash_just_pressed = true)
+	dash_btn.button_down.connect(_on_dash_pressed)
 	add_child(dash_btn)
+
+func _on_dash_pressed() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.has_method("perform_dash"):
+		player.perform_dash()
 
 func _reset_knob() -> void:
 	_knob.position = Vector2(JOYSTICK_RADIUS - KNOB_RADIUS, JOYSTICK_RADIUS - KNOB_RADIUS)
