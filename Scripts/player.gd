@@ -182,17 +182,17 @@ func _physics_process(delta: float) -> void:
 
 	if _noclip:
 		var dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
-		if dir.length() > 0:
+		if dir.length() > 0.1:
 			dir = dir.normalized()
 			global_position += dir * speed * delta
 		return
 
 	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
-
-	var moving = direction.length() > 0
+	var input_len := direction.length()
+	var moving = input_len > 0.1
 
 	if moving:
-		direction = direction.normalized()
+		direction /= input_len
 		last_move_dir = direction
 
 		velocity = direction * speed * slow_factor
