@@ -35,6 +35,7 @@ var _paused_saved_zone: String = ""
 var _gate_audio: AudioStreamPlayer2D
 var _arena_scale_factor := 1.0
 var _floor_start_time: float = 0.0
+var _turret_data: Array[Dictionary] = []
 const _ZONE_PRIORITY := {
 	"main_arena": 1,
 	"arena_none": 1,
@@ -275,7 +276,7 @@ func start_exit_sequence() -> void:
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 0)
 	_spawn_secondary_enemies(GameState.current_floor)
 	_spawner.spawn(GameState.current_floor, self, "spawn_point_main", "main_arena", null, 3)
-	_move_turrets_to(_arena_rotator.get_node("ArenaScaler"), "main_arena")
+	_register_turret_offsets()
 	_spawn_switches(GameState.current_floor)
 	_show_enemies()
 	lift_state = LiftState.WAITING
@@ -287,24 +288,55 @@ func _spawn_secondary_enemies(level: int) -> void:
 		var none_spawner = _arena_none.get_node_or_null("Pivot/EnemySpawner")
 		if none_spawner:
 			none_spawner.spawn(level, self, "spawn_point_none", "arena_none", _arena_none)
-		_move_turrets_to(_arena_none.get_node("Pivot"), "arena_none")
 	for sw in _arena_switches:
 		var switch_spawner = sw.get_node_or_null("Pivot/EnemySpawner")
 		if switch_spawner:
 			switch_spawner.spawn(level, self, "spawn_point_switch", "arena_switch", sw)
-		_move_turrets_to(sw.get_node("Pivot"), "arena_switch")
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		enemy.collision_mask |= 2
 
-func _move_turrets_to(container: Node, zone_filter: String = "") -> void:
+func _register_turret_offsets() -> void:
+	_turret_data.clear()
 	for enemy in get_tree().get_nodes_in_group("enemy"):
-		if enemy.scene_file_path.get_file().get_basename() == "Turret":
-			if zone_filter != "" and enemy.get_meta("zone_name", "") != zone_filter:
-				continue
-			var pos = enemy.global_position
-			enemy.get_parent().remove_child(enemy)
-			container.add_child(enemy)
-			enemy.global_position = pos
+		if not is_instance_valid(enemy):
+			continue
+		if enemy.scene_file_path.get_file().get_basename() != "Turret":
+			continue
+		var zone = enemy.get_meta("zone_name", "main_arena")
+		var center := Vector2.ZERO
+		if zone == "main_arena":
+			center = _arena_rotator.global_position
+		elif zone == "arena_none" and _arena_none:
+			center = _arena_none.get_node("Pivot").global_position
+		elif zone == "arena_switch":
+			for sw in _arena_switches:
+				center = sw.get_node("Pivot").global_position
+				break
+		_turret_data.append({
+			"turret": enemy,
+			"zone": zone,
+			"offset": enemy.global_position - center,
+		})
+
+func _update_turret_positions() -> void:
+	for td in _turret_data:
+		if not is_instance_valid(td.turret):
+			continue
+		var rot := 0.0
+		var zone: String = td.zone
+		if zone == "main_arena":
+			rot = _arena_rotator.rotation
+			td.turret.global_position = _arena_rotator.global_position + td.offset.rotated(rot)
+		elif zone == "arena_none" and _arena_none:
+			var pivot = _arena_none.get_node_or_null("Pivot")
+			if pivot:
+				td.turret.global_position = pivot.global_position + td.offset.rotated(pivot.rotation)
+		elif zone == "arena_switch":
+			for sw in _arena_switches:
+				var pivot = sw.get_node_or_null("Pivot")
+				if pivot:
+					td.turret.global_position = pivot.global_position + td.offset.rotated(pivot.rotation)
+					break
 
 func _start_combat_timer() -> void:
 	for enemy in get_tree().get_nodes_in_group("enemy"):
@@ -778,6 +810,7 @@ func _update_gate() -> void:
 
 func _physics_process(delta: float) -> void:
 	_arena_rotator.rotation += delta * _rotation_speed
+	_update_turret_positions()
 	_update_gate()
 
 	var main_center = _arena_rotator.global_position
