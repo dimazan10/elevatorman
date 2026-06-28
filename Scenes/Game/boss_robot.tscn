@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://kgjkkbbldtw3"]
 
-[ext_resource type="Script" uid="uid://dirqucluw2ck4" path="res://Scripts/FloorDraw.gd" id="1_floordraw"]
+[ext_resource type="Script" uid="uid://boy4be35w2syx" path="res://Scripts/FloorDraw.gd" id="1_floordraw"]
 [ext_resource type="Texture2D" uid="uid://74cir4cs1tst" path="res://Assets/SpritesElevator/roof3.png" id="2_roof"]
 
 [sub_resource type="RectangleShape2D" id="RectShape_wall_h"]
