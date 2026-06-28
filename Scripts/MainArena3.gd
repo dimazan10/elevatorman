@@ -36,6 +36,8 @@ var _gate_audio: AudioStreamPlayer2D
 var _arena_scale_factor := 1.0
 var _floor_start_time: float = 0.0
 var _turret_data: Array[Dictionary] = []
+var _minimap: Control = null
+var _minimap_centers: Array[Vector2] = []
 const _ZONE_PRIORITY := {
 	"main_arena": 1,
 	"arena_none": 1,
@@ -65,6 +67,7 @@ func _ready() -> void:
 	_setup_arena_rotation()
 	_generate_world()
 	_scale_arenas()
+	_setup_minimap()
 	_setup_zone_triggers()
 	_hide_enemies()
 	_hide_player()
@@ -611,6 +614,7 @@ func _enable_collision_shapes(node: Node) -> void:
 func _generate_world() -> void:
 	_arena_switches.clear()
 	_arena_pushers.clear()
+	_minimap_centers.clear()
 	var floor_rect = preload("res://Objects/Rooms/Floor_Rectangle.tscn")
 	var arena_none_scene = preload("res://Objects/Rooms/ArenaNone.tscn")
 	var arena_switch_scene = preload("res://Objects/Rooms/ArenaSwitch.tscn")
@@ -618,6 +622,7 @@ func _generate_world() -> void:
 	var corridor_dist = 570.0 * _arena_scale_factor
 	var center = Vector2(640, 360)
 	var door_offset = Vector2(1090, 0)
+	_minimap_centers.append(center)
 	var angles := [0, 60, 120, 180, 240, 300]
 	var chosen = angles[randi() % angles.size()]
 	var rad = deg_to_rad(chosen)
@@ -656,6 +661,7 @@ func _generate_world() -> void:
 			second_indices.append(i)
 	second_indices.shuffle()
 	var arena_none_pivot = corridor_end + dir * arena_radius
+	_minimap_centers.append(arena_none_pivot)
 
 	if _quest_mode == QuestMode.TIME_ATTACK:
 		for j in range(2):
@@ -674,6 +680,7 @@ func _generate_world() -> void:
 			arena_switch.name = "ArenaSwitch" + str(j + 1)
 			add_child(arena_switch)
 			arena_switch.position = s_corridor_end + s_dir * arena_radius - Vector2(640, 360)
+			_minimap_centers.append(s_corridor_end + s_dir * arena_radius)
 			_secondary_arenas.append(arena_switch)
 			_arena_switches.append(arena_switch)
 			if j == 0:
@@ -703,6 +710,7 @@ func _generate_world() -> void:
 		arena_switch.name = "ArenaSwitch"
 		add_child(arena_switch)
 		arena_switch.position = second_corridor_end + second_dir * arena_radius - Vector2(640, 360)
+		_minimap_centers.append(second_corridor_end + second_dir * arena_radius)
 		_secondary_arenas.append(arena_switch)
 		_arena_switches.append(arena_switch)
 
@@ -716,6 +724,36 @@ func _generate_world() -> void:
 					if not _arena_pushers.has(arena_switch):
 						_arena_pushers[arena_switch] = []
 					_arena_pushers[arena_switch].append(p)
+
+func _setup_minimap() -> void:
+	var cl := CanvasLayer.new()
+	cl.layer = 100
+	add_child(cl)
+	var minimap_size := Vector2(120, 120)
+	var viewport_size := get_viewport().get_visible_rect().size
+	var ctrl := Control.new()
+	ctrl.position = Vector2(viewport_size.x - minimap_size.x - 10, 10)
+	ctrl.size = minimap_size
+	ctrl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ctrl.set_script(preload("res://Scripts/Minimap.gd"))
+	cl.add_child(ctrl)
+
+	var colors: Array[Color] = []
+	colors.append(Color.WHITE)
+	for i in range(1, _minimap_centers.size()):
+		if i == 1:
+			colors.append(Color(0.5, 0.5, 0.5))
+		else:
+			colors.append(Color(0.2, 0.8, 0.2))
+
+	var conns: Array = []
+	if _minimap_centers.size() > 1:
+		conns.append([0, 1])
+	for i in range(2, _minimap_centers.size()):
+		conns.append([1, i])
+
+	ctrl.setup(_minimap_centers, colors, conns, player_node)
+	_minimap = ctrl
 
 func get_player_zone() -> String:
 	if _pause_manager and _pause_manager.is_paused():
