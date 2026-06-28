@@ -47,6 +47,7 @@ scale = Vector2(0.5200012, 1)
 shape = SubResource("RectShape_wall_h")
 
 [node name="Visual" type="Polygon2D" parent="Pivot/Walls/Top" unique_id=831117799]
+color = Color(1, 1, 1, 1)
 texture_repeat = 1
 texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-580, -10, 580, -10, 580, 10, -580, 10)
@@ -60,6 +61,7 @@ scale = Vector2(0.92000484, 1)
 shape = SubResource("RectShape_wall_h")
 
 [node name="Visual" type="Polygon2D" parent="Pivot/Walls/Top3" unique_id=1871506674]
+color = Color(1, 1, 1, 1)
 texture_repeat = 1
 texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-580, -10, 580, -10, 580, 10, -580, 10)
@@ -73,6 +75,7 @@ scale = Vector2(0.5200012, 1)
 shape = SubResource("RectShape_wall_h")
 
 [node name="Visual" type="Polygon2D" parent="Pivot/Walls/Top2" unique_id=1639217966]
+color = Color(1, 1, 1, 1)
 texture_repeat = 1
 texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-580, -10, 580, -10, 580, 10, -580, 10)
@@ -86,6 +89,7 @@ scale = Vector2(1.9200001, 1)
 shape = SubResource("RectShape_wall_h")
 
 [node name="Visual" type="Polygon2D" parent="Pivot/Walls/Bottom" unique_id=1169695017]
+color = Color(1, 1, 1, 1)
 texture_repeat = 1
 texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-580, -10, 580, -10, 580, 10, -580, 10)
@@ -99,6 +103,7 @@ scale = Vector2(1, 1.0799968)
 shape = SubResource("RectShape_wall_v")
 
 [node name="Visual" type="Polygon2D" parent="Pivot/Walls/Left" unique_id=1287832738]
+color = Color(1, 1, 1, 1)
 texture_repeat = 1
 texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-10, -340, 10, -340, 10, 340, -10, 340)
@@ -112,6 +117,7 @@ scale = Vector2(1, 1.0799968)
 shape = SubResource("RectShape_wall_v")
 
 [node name="Visual" type="Polygon2D" parent="Pivot/Walls/Left2" unique_id=1767510326]
+color = Color(1, 1, 1, 1)
 texture_repeat = 1
 texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-10, -340, 10, -340, 10, 340, -10, 340)
@@ -125,6 +131,7 @@ scale = Vector2(1, 1.080002)
 shape = SubResource("RectShape_wall_v")
 
 [node name="Visual" type="Polygon2D" parent="Pivot/Walls/Right" unique_id=442086046]
+color = Color(1, 1, 1, 1)
 texture_repeat = 1
 texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-10, -340, 10, -340, 10, 340, -10, 340)
@@ -138,6 +145,7 @@ scale = Vector2(1, 1.080002)
 shape = SubResource("RectShape_wall_v")
 
 [node name="Visual" type="Polygon2D" parent="Pivot/Walls/Right2" unique_id=1602233846]
+color = Color(1, 1, 1, 1)
 texture_repeat = 1
 texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-10, -340, 10, -340, 10, 340, -10, 340)
