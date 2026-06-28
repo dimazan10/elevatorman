@@ -3,6 +3,9 @@
 [ext_resource type="Script" uid="uid://boy4be35w2syx" path="res://Scripts/FloorDraw.gd" id="1_floordraw"]
 [ext_resource type="Texture2D" uid="uid://74cir4cs1tst" path="res://Assets/SpritesElevator/roof3.png" id="2_roof"]
 [ext_resource type="PackedScene" uid="uid://mt70rvdsdeyx" path="res://Objects/Summons/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" uid="uid://doss117q2j5gm" path="res://Objects/UI_HP.tscn" id="4_hp"]
+[ext_resource type="PackedScene" uid="uid://cury7lw1ntlld" path="res://Objects/DashUI.tscn" id="5_dash"]
+[ext_resource type="PackedScene" uid="uid://b8snbi67cgyle" path="res://Objects/InventoryUI.tscn" id="6_inv"]
 
 [sub_resource type="RectangleShape2D" id="RectShape_wall_h"]
 size = Vector2(1160, 20)
@@ -86,6 +89,12 @@ uv = PackedVector2Array(0, 0, 0.032, 0, 0.032, 1.696, 0, 1.696)
 
 [node name="PlayerSpawn" type="Marker2D" parent="Pivot"]
 position = Vector2(0, 280)
+
+[node name="HealthUI" parent="." instance=ExtResource("4_hp")]
+
+[node name="DashUI" parent="." instance=ExtResource("5_dash")]
+
+[node name="InventoryUI" parent="." instance=ExtResource("6_inv")]
 
 [node name="Player" parent="." instance=ExtResource("3_player")]
 position = Vector2(640, 640)
