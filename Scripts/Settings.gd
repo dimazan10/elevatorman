@@ -12,8 +12,6 @@ var return_to_game := false
 @onready var effects_label := $VBoxContainer/EffectsPct as Label
 
 @onready var fps_checkbox := $VBoxContainer/FPSCheckbox as CheckBox
-@onready var mobile_checkbox := $VBoxContainer/MobileCheckbox as CheckBox
-
 func _ready() -> void:
 	CursorManager.setup_buttons(self)
 	master_slider.value = GameState.master_volume
@@ -24,9 +22,9 @@ func _ready() -> void:
 	effects_label.text = _db_to_pct(GameState.effects_volume)
 	fps_checkbox.button_pressed = GameState.show_fps
 	
-	# Create mobile controls checkbox if it doesn't exist
-	mobile_checkbox = $VBoxContainer/MobileCheckbox
+	var mobile_checkbox: CheckBox = $VBoxContainer.get_node_or_null("MobileCheckbox")
 	if not mobile_checkbox:
+		mobile_checkbox = CheckBox.new()
 		mobile_checkbox = CheckBox.new()
 		mobile_checkbox.name = "MobileCheckbox"
 		mobile_checkbox.text = "Мобильное управление"
