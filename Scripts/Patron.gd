@@ -23,6 +23,7 @@ func _pickup(body: Node2D) -> void:
 	collision_layer = 0
 	collision_mask = 0
 	reparent(body)
+	name = &"Patron"
 	position = Vector2(0, -50)
 
 func is_attached() -> bool:
