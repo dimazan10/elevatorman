@@ -2,6 +2,7 @@ extends Node2D
 
 const AIM_OVERLAY := preload("res://Scripts/CannonAimOverlay.gd")
 var CANNON_BULLET: PackedScene
+const PATRON_OUT := preload("res://Assets/Boss/RobotBoss/Sprite_Gun/PatronOut.png")
 
 var _aiming := false
 var _gun = null
@@ -110,6 +111,19 @@ func _rotate_barrel() -> void:
 	desired_local = clamp(desired_local, -max_angle, max_angle)
 	pivot.rotation = lerp_angle(pivot.rotation, desired_local, get_process_delta_time() * 2.0)
 
+func _spawn_patron_out(pos: Vector2) -> void:
+	var spr := Sprite2D.new()
+	spr.texture = PATRON_OUT
+	spr.global_position = pos
+	spr.rotation = randf_range(-PI, PI)
+	get_tree().current_scene.add_child(spr)
+	var tw := create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(spr, "global_position", pos + Vector2(randf_range(-60, 60), randf_range(-60, -20)), 0.4)
+	tw.tween_property(spr, "modulate", Color.TRANSPARENT, 0.3).set_delay(0.2)
+	tw.tween_property(spr, "rotation", spr.rotation + randf_range(-8, 8), 0.4)
+	tw.finished.connect(spr.queue_free)
+
 func _on_fire() -> void:
 	if not _aiming or not _gun or not _gun.is_loaded():
 		return
@@ -126,6 +140,8 @@ func _on_fire() -> void:
 		get_tree().current_scene.add_child(bullet)
 
 	_shoot_audio.play()
+	if muzzle:
+		_spawn_patron_out(muzzle.global_position)
 	_gun.reset()
 
 	if _player_camera:
