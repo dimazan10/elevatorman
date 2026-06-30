@@ -2,7 +2,7 @@ extends Node
 
 var _spawned_enemies: Array[Node] = []
 
-var _pool := ["angry_ball", "DrunkKiller", "Spider", "Turret"]
+var _pool := ["angry_ball", "DrunkKiller", "Spider", "Turret", "Clown"]
 
 func _ready() -> void:
 	pass
