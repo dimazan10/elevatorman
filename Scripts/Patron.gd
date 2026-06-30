@@ -10,6 +10,8 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	if not body.is_in_group("player"):
 		return
+	if body.get_node_or_null("Patron"):
+		return
 	attached = true
 	_pickup.call_deferred(body)
 
