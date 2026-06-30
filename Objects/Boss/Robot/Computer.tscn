@@ -3,26 +3,24 @@
 [ext_resource type="Texture2D" uid="uid://eqwhbdfr44gb" path="res://Assets/Boss/RobotBoss/Sprite_Gun/Computer.png" id="1_sxpk0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sxpk0"]
-size = Vector2(146, 110)
+size = Vector2(146, 81)
 
-[node name="Computer" type="Node2D"]
+[node name="Computer" type="Node2D" unique_id=514770790]
 
-[node name="Body" type="StaticBody2D" parent="."]
-collision_layer = 1
+[node name="Body" type="StaticBody2D" parent="." unique_id=230420340]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Body"]
-position = Vector2(74, 50)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body" unique_id=1074998123]
+position = Vector2(74, 35.5)
 shape = SubResource("RectangleShape2D_sxpk0")
 
-[node name="InteractZone" type="Area2D" parent="."]
+[node name="InteractZone" type="Area2D" parent="." unique_id=557841295]
 collision_layer = 0
-collision_mask = 1
 
-[node name="ZoneShape" type="CollisionShape2D" parent="InteractZone"]
+[node name="ZoneShape" type="CollisionShape2D" parent="InteractZone" unique_id=1789573460]
 position = Vector2(74, 50)
 shape = SubResource("RectangleShape2D_sxpk0")
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1207252703]
 position = Vector2(74, 61)
 scale = Vector2(0.3761583, 0.31899092)
 texture = ExtResource("1_sxpk0")
