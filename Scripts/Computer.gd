@@ -4,7 +4,7 @@ const AIM_OVERLAY := preload("res://Scripts/CannonAimOverlay.gd")
 var CANNON_BULLET: PackedScene
 
 var _aiming := false
-var _gun: Node2D = null
+var _gun = null
 var _aim_overlay: CanvasLayer = null
 var _player_camera: Camera2D = null
 var _camera_zoom_orig: Vector2

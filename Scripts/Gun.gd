@@ -6,6 +6,16 @@ var loaded := false
 
 func _ready() -> void:
 	$InteractZone.body_entered.connect(_on_zone_entered)
+	_setup_loading_animation()
+
+func _setup_loading_animation() -> void:
+	var anim := Animation.new()
+	anim.length = 1.5
+	var track_idx := anim.add_track(Animation.TYPE_VALUE)
+	anim.track_set_path(track_idx, "ShellPath/ShellFollow:progress")
+	anim.track_insert_key(track_idx, 0.0, 0.0)
+	anim.track_insert_key(track_idx, 1.5, 1.0)
+	$AnimationPlayer.add_animation("load", anim)
 
 func _on_zone_entered(body: Node2D) -> void:
 	if loaded:

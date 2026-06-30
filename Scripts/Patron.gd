@@ -11,6 +11,9 @@ func _on_body_entered(body: Node2D) -> void:
 	if not body.is_in_group("player"):
 		return
 	attached = true
+	_pickup.call_deferred(body)
+
+func _pickup(body: Node2D) -> void:
 	monitoring = false
 	collision_layer = 0
 	collision_mask = 0
