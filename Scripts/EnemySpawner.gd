@@ -2,8 +2,6 @@ extends Node
 
 var _spawned_enemies: Array[Node] = []
 
-var _pool := ["angry_ball", "DrunkKiller", "Spider", "Turret", "Clown"]
-
 func _ready() -> void:
 	pass
 
@@ -32,14 +30,30 @@ func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_na
 	var floor_bonus := maxi(0, level - 1)
 	var total := base_count + floor_bonus
 
+	var pool: Array[String] = ["angry_ball", "DrunkKiller", "Spider", "Turret"]
+	if level >= 2:
+		pool.append("Clown")
+
 	var types: Array[String] = []
-	var available := _pool.duplicate()
+	var available := pool.duplicate()
 	available.shuffle()
 	var min_types := mini(3, available.size())
 	for _i in min_types:
 		types.append(available.pop_back())
 	for _i in maxi(0, total - types.size()):
-		types.append(_pool[randi() % _pool.size()])
+		types.append(pool[randi() % pool.size()])
+
+	if level >= 2:
+		var clown_count := 0
+		for t in types:
+			if t == "Clown":
+				clown_count += 1
+		while clown_count > 1:
+			for i in types.size():
+				if types[i] == "Clown":
+					types[i] = pool[randi() % pool.size()]
+					clown_count -= 1
+					break
 
 	types.shuffle()
 
