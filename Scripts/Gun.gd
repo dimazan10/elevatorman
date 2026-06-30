@@ -15,7 +15,11 @@ func _setup_loading_animation() -> void:
 	anim.track_set_path(track_idx, "ShellPath/ShellFollow:progress")
 	anim.track_insert_key(track_idx, 0.0, 0.0)
 	anim.track_insert_key(track_idx, 1.5, 1.0)
-	$AnimationPlayer.add_animation("load", anim)
+	var lib := $AnimationPlayer.get_animation_library("")
+	if not lib:
+		lib = AnimationLibrary.new()
+		$AnimationPlayer.add_animation_library("", lib)
+	lib.add_animation("load", anim)
 
 func _on_zone_entered(body: Node2D) -> void:
 	if loaded:
