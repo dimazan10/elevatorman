@@ -11,12 +11,16 @@ var _camera_zoom_orig: Vector2
 var _camera_pos_orig: Vector2
 var _crosshair_pos := Vector2.ZERO
 var _player: Node2D = null
+var _shoot_audio: AudioStreamPlayer2D = null
 
 @export var camera_zoom_target: Vector2 = Vector2(0.55, 0.55)
 @export var camera_zoom_duration: float = 1.0
 
 func _ready() -> void:
 	CANNON_BULLET = load("res://Objects/Boss/Robot/CannonBullet.tscn")
+	_shoot_audio = AudioStreamPlayer2D.new()
+	_shoot_audio.stream = load("res://Assets/Boss/RobotBoss/Sprite_Gun/Shoot.mp3")
+	add_child(_shoot_audio)
 	$InteractZone.body_entered.connect(_on_zone_entered)
 
 func _find_gun() -> Node2D:
@@ -108,6 +112,7 @@ func _on_fire() -> void:
 		bullet.target = _crosshair_pos
 		get_tree().current_scene.add_child(bullet)
 
+	_shoot_audio.play()
 	_gun.reset()
 
 	if _player_camera:
