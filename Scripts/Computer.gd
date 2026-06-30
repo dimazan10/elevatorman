@@ -67,9 +67,18 @@ func _update_crosshair() -> void:
 		input_dir = Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down")
 		if input_dir.length() > 0.2:
 			_crosshair_pos += input_dir * 400.0 * get_process_delta_time()
-	_crosshair_pos.x = clamp(_crosshair_pos.x, 0, 1280)
-	_crosshair_pos.y = clamp(_crosshair_pos.y, 0, 720)
-	_aim_overlay.set_crosshair_pos(_crosshair_pos)
+
+	var camera := get_viewport().get_camera_2d()
+	if camera:
+		var viewport := get_viewport()
+		var top_left := camera.global_position - viewport.size / (2.0 * camera.zoom)
+		var bottom_right := camera.global_position + viewport.size / (2.0 * camera.zoom)
+		_crosshair_pos.x = clamp(_crosshair_pos.x, top_left.x, bottom_right.x)
+		_crosshair_pos.y = clamp(_crosshair_pos.y, top_left.y, bottom_right.y)
+		var screen_pos := (_crosshair_pos - camera.global_position) * camera.zoom + viewport.size / 2.0
+		_aim_overlay.set_crosshair_pos(screen_pos)
+	else:
+		_aim_overlay.set_crosshair_pos(_crosshair_pos)
 	_rotate_barrel()
 
 func _rotate_barrel() -> void:
