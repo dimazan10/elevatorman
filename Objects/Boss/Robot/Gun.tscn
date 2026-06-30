@@ -96,11 +96,11 @@ texture = ExtResource("1_yjeil")
 position = Vector2(120, 54)
 
 [node name="Muzzle" type="Marker2D" parent="BarrelPivot" unique_id=100000001]
-position = Vector2(0, 30)
-rotation = 1.9862919
+position = Vector2(1, -146)
+rotation = 3.1422281
 
 [node name="EjectPoint" type="Marker2D" parent="BarrelPivot" unique_id=100000003]
-position = Vector2(20, -20)
+position = Vector2(0, 35)
 
 [node name="BarrelSprite" type="Sprite2D" parent="BarrelPivot" unique_id=1576445547]
 z_index = 2
