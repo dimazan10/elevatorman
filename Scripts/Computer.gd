@@ -112,17 +112,23 @@ func _rotate_barrel() -> void:
 	pivot.rotation = lerp_angle(pivot.rotation, desired_local, get_process_delta_time() * 2.0)
 
 func _spawn_patron_out(pos: Vector2) -> void:
+	var pivot := _gun.get_barrel_pivot() as Node2D
+	if not pivot:
+		return
+	var dir := Vector2.RIGHT.rotated(pivot.global_rotation)
+	if randf() > 0.5:
+		dir = -dir
 	var spr := Sprite2D.new()
 	spr.texture = PATRON_OUT
-	spr.global_position = pos
+	spr.global_position = pos + dir * 20
 	spr.scale = Vector2(0.05, 0.05)
-	spr.rotation = randf_range(-PI, PI)
+	spr.rotation = dir.angle()
 	get_tree().current_scene.add_child(spr)
 	var tw := create_tween()
 	tw.set_parallel(true)
-	tw.tween_property(spr, "global_position", pos + Vector2(randf_range(-60, 60), randf_range(-60, -20)), 0.4)
+	tw.tween_property(spr, "global_position", spr.global_position + dir * randf_range(40, 80) + Vector2(0, 40), 0.4)
 	tw.tween_property(spr, "modulate", Color.TRANSPARENT, 0.3).set_delay(0.2)
-	tw.tween_property(spr, "rotation", spr.rotation + randf_range(-8, 8), 0.4)
+	tw.tween_property(spr, "rotation", spr.rotation + randf_range(-4, 4), 0.4)
 	tw.finished.connect(spr.queue_free)
 
 func _on_fire() -> void:
