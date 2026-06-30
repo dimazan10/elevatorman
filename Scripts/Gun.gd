@@ -6,20 +6,6 @@ var loaded := false
 
 func _ready() -> void:
 	$InteractZone.body_entered.connect(_on_zone_entered)
-	_setup_loading_animation()
-
-func _setup_loading_animation() -> void:
-	var anim := Animation.new()
-	anim.length = 1.5
-	var track_idx := anim.add_track(Animation.TYPE_VALUE)
-	anim.track_set_path(track_idx, "ShellPath/ShellFollow:progress")
-	anim.track_insert_key(track_idx, 0.0, 0.0)
-	anim.track_insert_key(track_idx, 1.5, 1.0)
-	var lib := $AnimationPlayer.get_animation_library("")
-	if not lib:
-		lib = AnimationLibrary.new()
-		$AnimationPlayer.add_animation_library("", lib)
-	lib.add_animation("load", anim)
 
 func _on_zone_entered(body: Node2D) -> void:
 	if loaded:
@@ -35,7 +21,7 @@ func _start_loading(player: Node2D, patron: Node2D) -> void:
 	player.can_move = false
 	patron.queue_free()
 	$ShellPath/ShellFollow/ShellVisual.visible = true
-	$AnimationPlayer.play("load")
+	$AnimationPlayer.play("Line")
 	await $AnimationPlayer.animation_finished
 	$ShellPath/ShellFollow/ShellVisual.visible = false
 	loaded = true
