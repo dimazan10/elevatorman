@@ -92,7 +92,7 @@ func _process_chasing(delta: float) -> void:
 		_uncoil_progress = minf(_uncoil_progress + uncoil_speed * delta, 1.0)
 
 	var dir := global_position.direction_to(_player_ref.global_position)
-	var move_speed := speed * (_enraged ? 1.4 : 1.0)
+	var move_speed := speed * (1.4 if _enraged else 1.0)
 	velocity = dir * move_speed
 	move_and_slide()
 
