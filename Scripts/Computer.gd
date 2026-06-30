@@ -12,7 +12,7 @@ var _camera_pos_orig: Vector2
 var _crosshair_pos := Vector2.ZERO
 var _player: Node2D = null
 
-@export var camera_zoom_target: Vector2 = Vector2(0.25, 0.25)
+@export var camera_zoom_target: Vector2 = Vector2(0.55, 0.55)
 @export var camera_zoom_duration: float = 1.0
 
 func _ready() -> void:

@@ -6,11 +6,6 @@ var _crosshair_pos := Vector2(640, 360)
 
 func _ready() -> void:
 	layer = 131
-	var bg := ColorRect.new()
-	bg.name = "BG"
-	bg.color = Color(0, 0, 0, 0.6)
-	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	add_child(bg)
 
 	var ch := Node2D.new()
 	ch.name = "Crosshair"
