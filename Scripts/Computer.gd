@@ -1,7 +1,7 @@
 extends Node2D
 
 const AIM_OVERLAY := preload("res://Scripts/CannonAimOverlay.gd")
-const CANNON_BULLET := preload("res://Objects/Boss/Robot/CannonBullet.tscn")
+const CANNON_BULLET: PackedScene = preload("res://Objects/Boss/Robot/CannonBullet.tscn")
 
 var _aiming := false
 var _gun: Node2D = null
