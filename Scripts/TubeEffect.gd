@@ -7,7 +7,7 @@ var _pushed: Array[Node] = []
 func _ready() -> void:
 	collision_mask = 7
 	$DestroyTimer.start()
-	_push_nearby_enemies()
+	call_deferred("_push_nearby_enemies")
 
 func _push_nearby_enemies() -> void:
 	var center = global_position
