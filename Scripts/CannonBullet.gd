@@ -1,7 +1,7 @@
 extends Area2D
 
 var target: Vector2
-var speed: float = 1200.0
+var speed: float = 2400.0
 
 func _ready() -> void:
 	add_to_group("bullet")
