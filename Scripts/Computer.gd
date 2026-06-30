@@ -8,6 +8,7 @@ var _gun = null
 var _aim_overlay: CanvasLayer = null
 var _player_camera: Camera2D = null
 var _camera_zoom_orig: Vector2
+var _camera_pos_orig: Vector2
 var _crosshair_pos := Vector2.ZERO
 var _player: Node2D = null
 
@@ -42,6 +43,7 @@ func _start_aiming() -> void:
 	_player_camera = _player.get_node_or_null("PlayerCamera") as Camera2D
 	if _player_camera:
 		_camera_zoom_orig = _player_camera.zoom
+		_camera_pos_orig = _player_camera.position
 		var tw := create_tween()
 		tw.tween_property(_player_camera, "zoom", camera_zoom_target, camera_zoom_duration).set_ease(Tween.EASE_IN_OUT)
 		tw.parallel().tween_property(_player_camera, "global_position", Vector2(640, 360), camera_zoom_duration)
@@ -102,6 +104,7 @@ func _on_fire() -> void:
 	if _player_camera:
 		var tw := create_tween()
 		tw.tween_property(_player_camera, "zoom", _camera_zoom_orig, 0.8).set_ease(Tween.EASE_IN_OUT)
+		tw.parallel().tween_property(_player_camera, "position", _camera_pos_orig, 0.8).set_ease(Tween.EASE_IN_OUT)
 		tw.tween_callback(_end_aiming)
 
 func _end_aiming() -> void:
