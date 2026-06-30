@@ -26,6 +26,8 @@ func _ready() -> void:
 
 func _prebuffer_audio() -> void:
 	_shoot_audio.play()
+	await get_tree().process_frame
+	_shoot_audio.stop()
 	_shoot_audio.stop()
 
 func _find_gun() -> Node2D:
