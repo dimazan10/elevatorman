@@ -30,6 +30,9 @@ func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("bullet"):
 		body.queue_free()
 		return
+	if body.has_method("take_damage") and body.is_in_group("crate"):
+		body.take_damage(1)
+		return
 	if body in _pushed:
 		return
 	if not body.is_in_group("enemy"):
