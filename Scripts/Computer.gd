@@ -71,11 +71,11 @@ func _update_crosshair() -> void:
 	var camera := get_viewport().get_camera_2d()
 	if camera:
 		var viewport := get_viewport()
-		var top_left: Vector2 = camera.global_position - viewport.size / (2.0 * camera.zoom)
-		var bottom_right: Vector2 = camera.global_position + viewport.size / (2.0 * camera.zoom)
+		var top_left: Vector2 = camera.global_position - Vector2(viewport.size) / (2.0 * camera.zoom)
+		var bottom_right: Vector2 = camera.global_position + Vector2(viewport.size) / (2.0 * camera.zoom)
 		_crosshair_pos.x = clamp(_crosshair_pos.x, top_left.x, bottom_right.x)
 		_crosshair_pos.y = clamp(_crosshair_pos.y, top_left.y, bottom_right.y)
-		var screen_pos: Vector2 = (_crosshair_pos - camera.global_position) * camera.zoom + viewport.size / 2.0
+		var screen_pos: Vector2 = (_crosshair_pos - camera.global_position) * camera.zoom + Vector2(viewport.size) / 2.0
 		_aim_overlay.set_crosshair_pos(screen_pos)
 	else:
 		_aim_overlay.set_crosshair_pos(_crosshair_pos)
