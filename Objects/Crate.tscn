@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" path="res://Assets/crate.png" id="2_crate"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_crate"]
-size = Vector2(48, 48)
+size = Vector2(24, 24)
 
 [node name="Crate" type="StaticBody2D"]
 collision_layer = 1
@@ -16,7 +16,7 @@ z_index = 3
 region_enabled = true
 region_rect = Rect2(0, 0, 256, 256)
 texture = ExtResource("2_crate")
-scale = Vector2(0.3, 0.3)
+scale = Vector2(0.15, 0.15)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_crate")
