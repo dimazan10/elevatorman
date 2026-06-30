@@ -20,12 +20,10 @@ func _on_zone_entered(body: Node2D) -> void:
 func _start_loading(player: Node2D, patron: Node2D) -> void:
 	player.can_move = false
 	patron.queue_free()
-	$ShellPath/ShellFollow/ShellVisual.visible = true
-	$ShellPath/ShellFollow.progress = 0.0
-	var tw := create_tween()
-	tw.tween_property($ShellPath/ShellFollow, "progress", 1.0, 1.5)
-	await tw.finished
-	$ShellPath/ShellFollow/ShellVisual.visible = false
+	$Sprite.visible = true
+	$AnimationPlayer.play("Line")
+	await $AnimationPlayer.animation_finished
+	$Sprite.visible = false
 	loaded = true
 	loaded_changed.emit(true)
 	player.can_move = true
