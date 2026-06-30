@@ -20,10 +20,6 @@ height = 189.79082
 size = Vector2(161.5, 96)
 
 [sub_resource type="Curve2D" id="Curve2D_shell"]
-_data = {
-_uid: 0,
-points: PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-}
 
 [sub_resource type="Animation" id="Animation_load"]
 length = 1.5
