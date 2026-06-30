@@ -12,10 +12,6 @@ size = Vector2(187, 115)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yjeil"]
 size = Vector2(148, 56)
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_barrel"]
-radius = 55.0
-height = 189.79082
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_zone"]
 size = Vector2(161.5, 96)
 
@@ -100,17 +96,13 @@ texture = ExtResource("1_yjeil")
 position = Vector2(120, 54)
 
 [node name="Muzzle" type="Marker2D" parent="BarrelPivot" unique_id=100000001]
-position = Vector2(0, 1)
+position = Vector2(2, -146)
 
 [node name="BarrelSprite" type="Sprite2D" parent="BarrelPivot" unique_id=1576445547]
 z_index = 2
 scale = Vector2(0.4222387, 0.41917816)
 texture = ExtResource("2_1p7nq")
 offset = Vector2(-2.6694336, -112.85632)
-
-[node name="BarrelCollision" type="CollisionShape2D" parent="BarrelPivot" unique_id=534697165]
-position = Vector2(0, -48)
-shape = SubResource("CapsuleShape2D_barrel")
 
 [node name="AmmoLine" type="Sprite2D" parent="." unique_id=2000725147]
 position = Vector2(-35.999996, 83)

@@ -137,7 +137,7 @@ z_index = 1
 position = Vector2(640, 838)
 
 [node name="Gun" parent="." unique_id=608897434 instance=ExtResource("5_7o10g")]
-position = Vector2(509, 1458)
+position = Vector2(466, 1488)
 
 [node name="Computer" parent="." unique_id=302817343 instance=ExtResource("6_enryc")]
 position = Vector2(817, 1485)

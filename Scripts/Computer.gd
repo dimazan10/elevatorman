@@ -93,9 +93,10 @@ func _rotate_barrel() -> void:
 		return
 	var target_angle = (_crosshair_pos - pivot.global_position).angle()
 	var max_angle = _gun.get_max_angle()
-	var local_angle = target_angle - pivot.global_rotation
-	local_angle = clamp(local_angle, -max_angle, max_angle)
-	pivot.rotation = lerp_angle(pivot.rotation, local_angle, get_process_delta_time() * 2.0)
+	var parent := pivot.get_parent()
+	var desired_local = target_angle - parent.global_rotation
+	desired_local = clamp(desired_local, -max_angle, max_angle)
+	pivot.rotation = lerp_angle(pivot.rotation, desired_local, get_process_delta_time() * 2.0)
 
 func _on_fire() -> void:
 	if not _aiming or not _gun or not _gun.is_loaded():
