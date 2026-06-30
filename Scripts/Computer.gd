@@ -70,7 +70,7 @@ func _update_crosshair() -> void:
 	else:
 		input_dir = Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down")
 		if input_dir.length() > 0.2:
-			_crosshair_pos += input_dir * 1200.0 * get_process_delta_time()
+			_crosshair_pos += input_dir * 300.0 * get_process_delta_time()
 
 	var camera := get_viewport().get_camera_2d()
 	if camera:
@@ -96,7 +96,7 @@ func _rotate_barrel() -> void:
 	var parent := pivot.get_parent()
 	var desired_local = target_angle - parent.global_rotation
 	desired_local = clamp(desired_local, -max_angle, max_angle)
-	pivot.rotation = lerp_angle(pivot.rotation, desired_local, get_process_delta_time() * 10.0)
+	pivot.rotation = lerp_angle(pivot.rotation, desired_local, get_process_delta_time() * 2.0)
 
 func _on_fire() -> void:
 	if not _aiming or not _gun or not _gun.is_loaded():
