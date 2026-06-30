@@ -201,6 +201,22 @@ func _ready() -> void:
 	spawn_two.pressed.connect(_spawn_creature.bind("res://Objects/Summons/TwoSwitch.tscn"))
 	spawn_two.add_theme_color_override("font_color", Color(1.0, 0.6, 0.2))
 	_panel.add_child(spawn_two)
+
+	var spawn_crate = Button.new()
+	spawn_crate.text = "Коробка"
+	spawn_crate.position = Vector2(200, y)
+	spawn_crate.size = Vector2(85, 30)
+	spawn_crate.pressed.connect(_spawn_crate)
+	spawn_crate.add_theme_color_override("font_color", Color(0.6, 0.4, 0.2))
+	_panel.add_child(spawn_crate)
+
+	var spawn_clown = Button.new()
+	spawn_clown.text = "Clown"
+	spawn_clown.position = Vector2(290, y)
+	spawn_clown.size = Vector2(85, 30)
+	spawn_clown.pressed.connect(_spawn_creature.bind("res://Objects/Summons/Clown.tscn"))
+	spawn_clown.add_theme_color_override("font_color", Color(1.0, 0.3, 0.5))
+	_panel.add_child(spawn_clown)
 	y += 42
 
 	var return_btn = Button.new()
@@ -376,6 +392,21 @@ func _spawn_creature(scene_path: String) -> void:
 		if child is Timer and child.has_method("start"):
 			if child.has_method("stop") and child.is_stopped():
 				child.start()
+	_error_label.text = ""
+
+func _spawn_crate() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if not player:
+		_error_label.text = "Игрок не найден"
+		return
+	var crate_scene = load("res://Objects/Crate.tscn")
+	if not crate_scene:
+		_error_label.text = "Сцена коробки не найдена"
+		return
+	var inst = crate_scene.instantiate()
+	var offset = Vector2(randf_range(-80, 80), randf_range(-80, 80))
+	inst.global_position = player.global_position + offset
+	get_tree().current_scene.add_child(inst)
 	_error_label.text = ""
 
 func _close() -> void:
