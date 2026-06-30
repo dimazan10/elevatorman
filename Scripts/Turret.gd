@@ -17,6 +17,7 @@ var player: Node2D
 var _damage_accum: float = 0.0
 
 func _ready() -> void:
+	add_to_group("turret")
 	player = get_tree().get_first_node_in_group("player")
 
 	var pivot_node = get_node_or_null("Node2D")
