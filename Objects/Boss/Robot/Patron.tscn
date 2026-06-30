@@ -1,17 +1,19 @@
 [gd_scene format=3 uid="uid://cuhm13y7p8m5q"]
 
 [ext_resource type="Texture2D" uid="uid://065ue5uesi21" path="res://Assets/Boss/RobotBoss/Sprite_Gun/Patron.png" id="1_og0tr"]
+[ext_resource type="Script" uid="uid://c6tlq2lpb6o7y" path="res://Scripts/Patron.gd" id="2_patron"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pickup"]
-radius = 60.0
+radius = 25.019993
 
-[node name="Patron" type="Area2D"]
+[node name="Patron" type="Area2D" unique_id=103311701]
 collision_layer = 0
 collision_mask = 1
+script = ExtResource("2_patron")
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1934632917]
 scale = Vector2(-0.054121997, 0.045815896)
 texture = ExtResource("1_og0tr")
 
-[node name="PickupZone" type="CollisionShape2D" parent="."]
+[node name="PickupZone" type="CollisionShape2D" parent="." unique_id=396895895]
 shape = SubResource("CircleShape2D_pickup")

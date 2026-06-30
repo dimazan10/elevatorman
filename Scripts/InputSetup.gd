@@ -18,6 +18,11 @@ func _ready() -> void:
 	_ensure_action("ui_accept", [KEY_ENTER, KEY_KP_ENTER, KEY_SPACE], [], [JOY_BUTTON_A])
 	_ensure_action("ui_cancel", [KEY_ESCAPE], [], [JOY_BUTTON_B])
 
+	_ensure_action("aim_right", [], [[JOY_AXIS_RIGHT_X, 1.0]], [])
+	_ensure_action("aim_left", [], [[JOY_AXIS_RIGHT_X, -1.0]], [])
+	_ensure_action("aim_up", [], [[JOY_AXIS_RIGHT_Y, -1.0]], [])
+	_ensure_action("aim_down", [], [[JOY_AXIS_RIGHT_Y, 1.0]], [])
+
 func _ensure_action(name: String, keys: Array, joy_axes: Array = [], joy_buttons: Array = []) -> void:
 	if not InputMap.has_action(name):
 		InputMap.add_action(name, 0.5)

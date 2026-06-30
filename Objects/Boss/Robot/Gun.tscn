@@ -3,6 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://u2mfcbbr6gj2" path="res://Assets/Boss/RobotBoss/Sprite_Gun/Down.png" id="1_yjeil"]
 [ext_resource type="Texture2D" uid="uid://cyjxde4ptj053" path="res://Assets/Boss/RobotBoss/Sprite_Gun/Gun.png" id="2_1p7nq"]
 [ext_resource type="Texture2D" uid="uid://dgfukb3s1748c" path="res://Assets/Boss/RobotBoss/Sprite_Gun/AmmoLine.png" id="3_ypw4d"]
+[ext_resource type="Texture2D" uid="uid://065ue5uesi21" path="res://Assets/Boss/RobotBoss/Sprite_Gun/Patron.png" id="4_patron"]
+[ext_resource type="Script" uid="uid://dsg8m32dxu2l3" path="res://Scripts/Gun.gd" id="5_gun"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(187, 115)
@@ -18,6 +20,7 @@ height = 189.79082
 size = Vector2(161.5, 96)
 
 [node name="Gun" type="StaticBody2D" unique_id=1982603159]
+script = ExtResource("5_gun")
 
 [node name="BodyCollision" type="CollisionShape2D" parent="." unique_id=205465137]
 position = Vector2(119.5, 87.5)
@@ -35,6 +38,9 @@ texture = ExtResource("1_yjeil")
 [node name="BarrelPivot" type="Node2D" parent="." unique_id=2011203466]
 position = Vector2(120, 54)
 
+[node name="Muzzle" type="Marker2D" parent="BarrelPivot" unique_id=100000001]
+position = Vector2(0, -160)
+
 [node name="BarrelSprite" type="Sprite2D" parent="BarrelPivot" unique_id=1576445547]
 z_index = 2
 scale = Vector2(0.4222387, 0.41917816)
@@ -50,10 +56,47 @@ position = Vector2(-35.999996, 83)
 scale = Vector2(0.4589892, 0.56289124)
 texture = ExtResource("3_ypw4d")
 
+[sub_resource type="Curve2D" id="Curve2D_shell"]
+_data = {
+_uid: 0,
+points: PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+
+[sub_resource type="Animation" id="Animation_load"]
+length = 1.5
+tracks = [{
+"path": NodePath("ShellPath/ShellFollow:progress"),
+"type": 3,
+"keys": {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"values": [0.0, 1.0]
+}
+}]
+
+[node name="ShellPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_shell")
+position = Vector2(-36, 83)
+
+[node name="ShellFollow" type="PathFollow2D" parent="ShellPath"]
+position = Vector2(0, 0)
+rotates = false
+
+[node name="ShellVisual" type="Sprite2D" parent="ShellPath/ShellFollow"]
+scale = Vector2(-0.05, 0.05)
+texture = ExtResource("1_og0tr")
+visible = false
+
 [node name="InteractZone" type="Area2D" parent="." unique_id=216355006]
 position = Vector2(-37, 70)
 collision_layer = 0
+collision_mask = 1
 
 [node name="ZoneShape" type="CollisionShape2D" parent="InteractZone" unique_id=1326857187]
 position = Vector2(-7.25, 0)
 shape = SubResource("RectangleShape2D_zone")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=100000002]
+_animations = {
+"load": SubResource("Animation_load")
+}

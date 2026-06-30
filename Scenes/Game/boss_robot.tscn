@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://2v30o3wcsurj" path="res://Objects/Boss/Robot/Gun.tscn" id="5_7o10g"]
 [ext_resource type="PackedScene" uid="uid://bgq1qqvmixcdb" path="res://Objects/Boss/Robot/Computer.tscn" id="6_enryc"]
 [ext_resource type="PackedScene" uid="uid://b4syde8vbfls1" path="res://Objects/Boss/Robot/Robot.tscn" id="7_w7dnu"]
+[ext_resource type="PackedScene" uid="uid://cuhm13y7p8m5q" path="res://Objects/Boss/Robot/Patron.tscn" id="8_enryc"]
 
 [sub_resource type="RectangleShape2D" id="RectShape_wall_h"]
 size = Vector2(1160, 20)
@@ -143,3 +144,12 @@ position = Vector2(817, 1485)
 
 [node name="Robot" parent="." unique_id=637653963 instance=ExtResource("7_w7dnu")]
 position = Vector2(635, 319)
+
+[node name="Patron" parent="." unique_id=103311701 instance=ExtResource("8_enryc")]
+position = Vector2(296, 1429)
+
+[node name="Patron2" parent="." unique_id=1229587756 instance=ExtResource("8_enryc")]
+position = Vector2(295, 1367)
+
+[node name="Patron3" parent="." unique_id=455251450 instance=ExtResource("8_enryc")]
+position = Vector2(295, 1308)
