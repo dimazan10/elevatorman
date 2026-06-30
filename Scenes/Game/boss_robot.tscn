@@ -3,13 +3,10 @@
 [ext_resource type="Script" uid="uid://boy4be35w2syx" path="res://Scripts/FloorDraw.gd" id="1_floordraw"]
 [ext_resource type="Texture2D" uid="uid://74cir4cs1tst" path="res://Assets/SpritesElevator/roof3.png" id="2_roof"]
 [ext_resource type="PackedScene" uid="uid://mt70rvdsdeyx" path="res://Objects/Summons/player.tscn" id="3_player"]
-[ext_resource type="Texture2D" uid="uid://065ue5uesi21" path="res://Assets/Boss/RobotBoss/Sprite_Gun/Patron.png" id="3_yi65r"]
 [ext_resource type="Script" uid="uid://dd1mf0o5nw7l" path="res://Scripts/BossRobot.gd" id="4_boss"]
-[ext_resource type="Texture2D" uid="uid://cgq1yxr2v3ixu" path="res://Assets/Boss/RobotBoss/Sprite_Robot/Referens.png" id="5_ymkxd"]
-[ext_resource type="Texture2D" uid="uid://u2mfcbbr6gj2" path="res://Assets/Boss/RobotBoss/Sprite_Gun/Down.png" id="7_cf8pt"]
-[ext_resource type="Texture2D" uid="uid://cyjxde4ptj053" path="res://Assets/Boss/RobotBoss/Sprite_Gun/Gun.png" id="8_jt8fb"]
-[ext_resource type="Texture2D" uid="uid://eqwhbdfr44gb" path="res://Assets/Boss/RobotBoss/Sprite_Gun/Computer.png" id="9_qs7w2"]
-[ext_resource type="Texture2D" uid="uid://dgfukb3s1748c" path="res://Assets/Boss/RobotBoss/Sprite_Gun/AmmoLine.png" id="10_4vxno"]
+[ext_resource type="PackedScene" uid="uid://2v30o3wcsurj" path="res://Objects/Boss/Robot/Gun.tscn" id="5_7o10g"]
+[ext_resource type="PackedScene" uid="uid://bgq1qqvmixcdb" path="res://Objects/Boss/Robot/Computer.tscn" id="6_enryc"]
+[ext_resource type="PackedScene" uid="uid://b4syde8vbfls1" path="res://Objects/Boss/Robot/Robot.tscn" id="7_w7dnu"]
 
 [sub_resource type="RectangleShape2D" id="RectShape_wall_h"]
 size = Vector2(1160, 20)
@@ -137,35 +134,11 @@ position = Vector2(0, 280)
 [node name="Player" parent="." unique_id=1432727825 instance=ExtResource("3_player")]
 position = Vector2(640, 838)
 
-[node name="Referens" type="Sprite2D" parent="." unique_id=2046312169]
-position = Vector2(644.00006, 452)
-scale = Vector2(0.55999994, 0.5347682)
-texture = ExtResource("5_ymkxd")
+[node name="Gun" parent="." unique_id=608897434 instance=ExtResource("5_7o10g")]
+position = Vector2(509, 1458)
 
-[node name="Down" type="Sprite2D" parent="." unique_id=100324202]
-position = Vector2(630.81525, 1579.1974)
-scale = Vector2(0.32000178, 0.35999873)
-texture = ExtResource("7_cf8pt")
+[node name="Computer" parent="." unique_id=302817343 instance=ExtResource("6_enryc")]
+position = Vector2(817, 1485)
 
-[node name="Gun" type="Sprite2D" parent="." unique_id=1262401504]
-position = Vector2(630.81525, 1535.1973)
-scale = Vector2(0.4222387, 0.41917816)
-texture = ExtResource("8_jt8fb")
-offset = Vector2(-2.6694336, -112.85632)
-
-[node name="Computer" type="Sprite2D" parent="." unique_id=984013428]
-position = Vector2(895.8153, 1541.1973)
-scale = Vector2(0.3761583, 0.31899092)
-texture = ExtResource("9_qs7w2")
-
-[node name="AmmoLine" type="Sprite2D" parent="." unique_id=1824312856]
-position = Vector2(472.81525, 1564.1973)
-scale = Vector2(0.4589892, 0.56289124)
-texture = ExtResource("10_4vxno")
-
-[node name="Patron" type="Sprite2D" parent="." unique_id=1170901743]
-position = Vector2(439.81528, 1544.1973)
-rotation = 1.4756465
-scale = Vector2(0.075829595, 0.04927743)
-skew = -0.047413945
-texture = ExtResource("3_yi65r")
+[node name="Robot" parent="." unique_id=637653963 instance=ExtResource("7_w7dnu")]
+position = Vector2(635, 319)

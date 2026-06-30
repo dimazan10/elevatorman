@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bgq1qqvmixcdb"]
+
+[ext_resource type="Texture2D" uid="uid://eqwhbdfr44gb" path="res://Assets/Boss/RobotBoss/Sprite_Gun/Computer.png" id="1_sxpk0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s1fef"]
+size = Vector2(380.15912, 329.16296)
+
+[node name="Computer" type="Area2D"]
+collision_layer = 0
+collision_mask = 1
+
+[node name="Sprite" type="Sprite2D" parent="."]
+position = Vector2(74, 61.000004)
+scale = Vector2(0.3761583, 0.31899092)
+texture = ExtResource("1_sxpk0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(75.32925, 46.893005)
+shape = SubResource("RectangleShape2D_s1fef")
