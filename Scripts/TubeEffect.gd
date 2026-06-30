@@ -12,6 +12,8 @@ func _ready() -> void:
 
 func _push_nearby() -> void:
 	var center = global_position
+	var space_state = get_world_2d().direct_space_state
+
 	for crate in get_tree().get_nodes_in_group("crate"):
 		if crate in _pushed:
 			continue
@@ -22,8 +24,19 @@ func _push_nearby() -> void:
 		var dir := center.direction_to(crate.global_position)
 		if dir.length_squared() < 0.001:
 			dir = Vector2.RIGHT
+
+		var push_dist := push_force * 0.15
+		var from := crate.global_position
+		var to := from + dir * push_dist
+		var query := PhysicsRayQueryParameters2D.create(from, to, 1)
+		query.exclude = [crate.get_rid()]
+		var result := space_state.intersect_ray(query)
+		if result:
+			push_dist = from.distance_to(result.position) - 5.0
+		push_dist = maxf(push_dist, 0.0)
+
 		var tw := create_tween()
-		tw.tween_property(crate, "global_position", crate.global_position + dir * push_force * 0.15, 0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+		tw.tween_property(crate, "global_position", from + dir * push_dist, 0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 
 	for body in get_overlapping_bodies():
 		if body in _pushed:
