@@ -46,7 +46,7 @@ func _start_aiming() -> void:
 		_camera_pos_orig = _player_camera.position
 		var tw := create_tween()
 		tw.tween_property(_player_camera, "zoom", camera_zoom_target, camera_zoom_duration).set_ease(Tween.EASE_IN_OUT)
-		tw.parallel().tween_property(_player_camera, "global_position", _gun.global_position, camera_zoom_duration)
+		tw.parallel().tween_property(_player_camera, "global_position", Vector2(640, 360), camera_zoom_duration)
 
 	_aim_overlay = AIM_OVERLAY.new()
 	_aim_overlay.fire_requested.connect(_on_fire)
