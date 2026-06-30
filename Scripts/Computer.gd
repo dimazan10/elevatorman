@@ -21,7 +21,12 @@ func _ready() -> void:
 	_shoot_audio = AudioStreamPlayer2D.new()
 	_shoot_audio.stream = load("res://Assets/Boss/RobotBoss/Sprite_Gun/Shoot.mp3")
 	add_child(_shoot_audio)
+	_prebuffer_audio.call_deferred()
 	$InteractZone.body_entered.connect(_on_zone_entered)
+
+func _prebuffer_audio() -> void:
+	_shoot_audio.play()
+	_shoot_audio.stop()
 
 func _find_gun() -> Node2D:
 	for child in get_parent().get_children():
