@@ -35,7 +35,7 @@ const LAUGH_PATH := "res://Assets/Clown/SoundEffect/komik-hohochet--gromko.mp3"
 
 func _ready() -> void:
 	add_to_group("enemy")
-	_spawn_pos = global_position
+	_spawn_pos = get_meta("spawn_position", global_position)
 	_zone_name = get_meta("zone_name", "")
 	_enrage_timer = enrage_interval
 
