@@ -74,5 +74,7 @@ func set_enraged(enraged: bool) -> void:
 	_enraged = enraged
 	if enraged:
 		modulate = Color(1.8, 0.7, 0.7)
+		_speed_multiplier = 1.5
 	else:
 		modulate = Color.WHITE
+		_speed_multiplier = 1.0

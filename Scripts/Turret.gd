@@ -15,6 +15,7 @@ var line: Line2D
 var cooldown_timer: Timer
 var player: Node2D
 var _damage_accum: float = 0.0
+var _enraged: bool = false
 
 func _ready() -> void:
 	add_to_group("turret")
@@ -117,7 +118,8 @@ func start_attack_sequence() -> void:
 	line.width = 2.0
 	line.default_color = Color(1.0, 0.2, 0.2, 0.4)
 
-	await get_tree().create_timer(warning_duration).timeout
+	var warn_time := warning_duration * 0.5 if _enraged else warning_duration
+	await get_tree().create_timer(warn_time).timeout
 	if not is_instance_valid(self):
 		return
 
@@ -126,7 +128,8 @@ func start_attack_sequence() -> void:
 	line.width = 6.0
 	line.default_color = Color(1.0, 0.0, 0.0, 1.0)
 
-	await get_tree().create_timer(laser_duration).timeout
+	var fire_time := laser_duration * 1.5 if _enraged else laser_duration
+	await get_tree().create_timer(fire_time).timeout
 	if not is_instance_valid(self):
 		return
 
@@ -136,4 +139,7 @@ func start_attack_sequence() -> void:
 	raycast.enabled = false
 	line.set_point_position(1, Vector2.ZERO)
 
-	cooldown_timer.start()
+	cooldown_timer.start(cooldown * 0.5 if _enraged else cooldown)
+
+func set_enraged(enraged: bool) -> void:
+	_enraged = enraged
