@@ -6,7 +6,7 @@ const BULLET_SCENE = preload("res://Objects/Summons/Bullet.tscn")
 @export var orbit_distance: float = 250.0 
 @export var melee_range: float = 60.0    
 @export var shoot_spread_degrees: float = 15.0 
-@export var health: int = 1
+
 
 # Настройки расталкивания врагов между собой
 @export var separation_force: float = 80.0 # Сила расталкивания (чем выше, тем жестче держат дистанцию)
@@ -269,11 +269,6 @@ func _play_shot_sound() -> void:
 	var ap = _shot_audio_pool[_shot_audio_idx]
 	_shot_audio_idx = (_shot_audio_idx + 1) % _shot_audio_pool.size()
 	ap.play()
-
-func take_damage(amount: int) -> void:
-	health -= amount
-	if health <= 0:
-		queue_free()
 
 func set_enraged(enraged: bool) -> void:
 	_enraged = enraged

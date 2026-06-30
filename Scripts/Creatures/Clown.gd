@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 @export var speed: float = 300.0
-@export var health: int = 1
+
 @export var enrage_interval: float = 8.0
 @export var enrage_duration: float = 5.0
 @export var separation_force: float = 60.0
@@ -220,12 +220,6 @@ func _handle_separation(delta: float) -> void:
 			sep += diff.normalized() / diff.length()
 	if sep.length() > 0:
 		global_position += sep.normalized() * separation_force * delta
-
-func take_damage(amount: int) -> void:
-	health -= amount
-	if health <= 0:
-		_melody_player.stop()
-		queue_free()
 
 func apply_knockback(impulse: Vector2) -> void:
 	velocity = impulse * 0.5

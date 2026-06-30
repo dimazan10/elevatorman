@@ -7,7 +7,7 @@ const WEB_SCENE = preload("res://Objects/Web.tscn")
 @export var separation_force: float = 80.0
 @export var shoot_interval: float = 4.0
 @export var melee_damage: int = 1
-@export var health: int = 1
+
 
 var _player_ref: Node2D = null
 var target: Node2D = null
@@ -202,12 +202,6 @@ func _on_melee_zone_body_entered(body: Node2D) -> void:
 		_knockback = (global_position - body.global_position).normalized() * 400.0
 		await get_tree().create_timer(1.5).timeout
 		_melee_cooldown = false
-
-func take_damage(amount: int) -> void:
-	health -= amount
-	if health <= 0:
-		_stop_run_audio()
-		queue_free()
 
 func set_target(new_target: Node2D) -> void:
 	target = new_target
