@@ -16,70 +16,70 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_hitbox"]
 radius = 200.0
 
-[node name="Robot" type="CharacterBody2D" groups=["enemy"]]
+[node name="Robot" type="CharacterBody2D" unique_id=261732739 groups=["enemy"]]
 collision_mask = 3
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-2, 66)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1432046804]
+position = Vector2(-2, 110)
 shape = SubResource("CircleShape2D_hitbox")
 
-[node name="Referens" type="Sprite2D" parent="."]
+[node name="Referens" type="Sprite2D" parent="." unique_id=225696410]
 visible = false
 position = Vector2(10.999999, 112.99999)
 scale = Vector2(0.55999994, 0.5347682)
 texture = ExtResource("1_i1d4f")
 
-[node name="Waist" type="Sprite2D" parent="."]
+[node name="Waist" type="Sprite2D" parent="." unique_id=2004373800]
 position = Vector2(-1, 149)
 scale = Vector2(1.7599986, 1.4400007)
 texture = ExtResource("2_oboc7")
 
-[node name="Frame" type="Sprite2D" parent="."]
+[node name="Frame" type="Sprite2D" parent="." unique_id=1094246519]
 scale = Vector2(1.7600008, 1.4)
 texture = ExtResource("3_ipx7w")
 
-[node name="Head" type="Sprite2D" parent="."]
+[node name="Head" type="Sprite2D" parent="." unique_id=1460552304]
 position = Vector2(-3, -147.99998)
 scale = Vector2(1.3999977, 1.1200004)
 texture = ExtResource("4_kubtn")
 
-[node name="ArmLeft0" type="Sprite2D" parent="."]
+[node name="ArmLeft0" type="Sprite2D" parent="." unique_id=1450376095]
 position = Vector2(-275, 69)
 scale = Vector2(1.4000013, 1.4)
 texture = ExtResource("5_a4143")
 
-[node name="ArmLeft1" type="Sprite2D" parent="."]
+[node name="ArmLeft1" type="Sprite2D" parent="." unique_id=564056170]
 position = Vector2(-288, 205.99998)
 scale = Vector2(1.4000013, 1.4)
 texture = ExtResource("6_3fpg4")
 
-[node name="ArmLeft2" type="Sprite2D" parent="."]
+[node name="ArmLeft2" type="Sprite2D" parent="." unique_id=1551895128]
 position = Vector2(264.00003, 81)
 scale = Vector2(1.4000013, 1.4)
 texture = ExtResource("7_fkn03")
 
-[node name="ArmLeft3" type="Sprite2D" parent="."]
+[node name="ArmLeft3" type="Sprite2D" parent="." unique_id=795617459]
 position = Vector2(257, 211.99998)
 scale = Vector2(1.4000013, 1.4)
 texture = ExtResource("8_knjt5")
 
-[node name="HandLeft" type="Sprite2D" parent="."]
+[node name="HandLeft" type="Sprite2D" parent="." unique_id=204776437]
 position = Vector2(-291, 317)
 rotation = -1.5765288
 scale = Vector2(1.974175, 1.9317867)
 texture = ExtResource("9_mgadr")
 
-[node name="RightShoulder2" type="Sprite2D" parent="."]
+[node name="RightShoulder2" type="Sprite2D" parent="." unique_id=2008733329]
 position = Vector2(-275, -29.000002)
 scale = Vector2(1.6800013, 1.4)
 texture = ExtResource("10_sj1ie")
 
-[node name="RightShoulder" type="Sprite2D" parent="."]
+[node name="RightShoulder" type="Sprite2D" parent="." unique_id=66831270]
 position = Vector2(271, -30)
 scale = Vector2(1.6800013, 1.4)
 texture = ExtResource("11_cghhy")
 
-[node name="HandLeft2" type="Sprite2D" parent="."]
+[node name="HandLeft2" type="Sprite2D" parent="." unique_id=355476607]
 position = Vector2(256, 307)
 rotation = -4.712472
 scale = Vector2(1.974175, 1.9317867)

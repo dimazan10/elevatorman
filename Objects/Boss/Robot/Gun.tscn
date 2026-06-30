@@ -5,48 +5,55 @@
 [ext_resource type="Texture2D" uid="uid://dgfukb3s1748c" path="res://Assets/Boss/RobotBoss/Sprite_Gun/AmmoLine.png" id="3_ypw4d"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
-size = Vector2(578.1217, 322.2234)
+size = Vector2(187, 115)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yjeil"]
+size = Vector2(148, 56)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_barrel"]
-radius = 120.78473
-height = 443.72537
+radius = 55.0
+height = 189.79082
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_zone"]
-size = Vector2(309.37546, 94.15673)
+size = Vector2(161.5, 96)
 
-[node name="Gun" type="StaticBody2D"]
-collision_layer = 1
+[node name="Gun" type="StaticBody2D" unique_id=1982603159]
 
-[node name="BodyCollision" type="CollisionShape2D" parent="."]
-position = Vector2(120.56, 85.22)
+[node name="BodyCollision" type="CollisionShape2D" parent="." unique_id=205465137]
+position = Vector2(119.5, 87.5)
 shape = SubResource("RectangleShape2D_body")
 
-[node name="Down" type="Sprite2D" parent="."]
+[node name="BodyCollision2" type="CollisionShape2D" parent="." unique_id=559321355]
+position = Vector2(-37, 68)
+shape = SubResource("RectangleShape2D_yjeil")
+
+[node name="Down" type="Sprite2D" parent="." unique_id=370595979]
 position = Vector2(119.000015, 88)
 scale = Vector2(0.32000178, 0.35999873)
 texture = ExtResource("1_yjeil")
 
-[node name="BarrelPivot" type="Node2D" parent="."]
+[node name="BarrelPivot" type="Node2D" parent="." unique_id=2011203466]
 position = Vector2(120, 54)
 
-[node name="BarrelSprite" type="Sprite2D" parent="BarrelPivot"]
+[node name="BarrelSprite" type="Sprite2D" parent="BarrelPivot" unique_id=1576445547]
+z_index = 2
 scale = Vector2(0.4222387, 0.41917816)
 texture = ExtResource("2_1p7nq")
 offset = Vector2(-2.6694336, -112.85632)
 
-[node name="BarrelCollision" type="CollisionShape2D" parent="BarrelPivot"]
-position = Vector2(0, -116.89541)
+[node name="BarrelCollision" type="CollisionShape2D" parent="BarrelPivot" unique_id=534697165]
+position = Vector2(0, -48)
 shape = SubResource("CapsuleShape2D_barrel")
 
-[node name="AmmoLine" type="Sprite2D" parent="."]
+[node name="AmmoLine" type="Sprite2D" parent="." unique_id=2000725147]
 position = Vector2(-35.999996, 83)
 scale = Vector2(0.4589892, 0.56289124)
 texture = ExtResource("3_ypw4d")
 
-[node name="InteractZone" type="Area2D" parent="."]
+[node name="InteractZone" type="Area2D" parent="." unique_id=216355006]
+position = Vector2(-37, 70)
 collision_layer = 0
-collision_mask = 1
 
-[node name="ZoneShape" type="CollisionShape2D" parent="InteractZone"]
-position = Vector2(-38.18, 53.69)
+[node name="ZoneShape" type="CollisionShape2D" parent="InteractZone" unique_id=1326857187]
+position = Vector2(-7.25, 0)
 shape = SubResource("RectangleShape2D_zone")

@@ -132,6 +132,7 @@ uv = PackedVector2Array(0, 0, 0.032, 0, 0.032, 1.696, 0, 1.696)
 position = Vector2(0, 280)
 
 [node name="Player" parent="." unique_id=1432727825 instance=ExtResource("3_player")]
+z_index = 1
 position = Vector2(640, 838)
 
 [node name="Gun" parent="." unique_id=608897434 instance=ExtResource("5_7o10g")]
