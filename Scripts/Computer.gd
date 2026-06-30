@@ -73,7 +73,7 @@ func _update_crosshair() -> void:
 func _rotate_barrel() -> void:
 	if not _gun:
 		return
-	var pivot := _gun.get_barrel_pivot()
+	var pivot := _gun.get_barrel_pivot() as Node2D
 	if not pivot:
 		return
 	var target_angle = (_crosshair_pos - pivot.global_position).angle()
@@ -90,7 +90,7 @@ func _on_fire() -> void:
 		_aim_overlay.queue_free()
 		_aim_overlay = null
 
-	var muzzle := _gun.get_muzzle()
+	var muzzle := _gun.get_muzzle() as Marker2D
 	if muzzle and CANNON_BULLET:
 		var bullet := CANNON_BULLET.instantiate()
 		bullet.global_position = muzzle.global_position
