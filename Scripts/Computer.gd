@@ -115,6 +115,7 @@ func _spawn_patron_out(pos: Vector2) -> void:
 	var spr := Sprite2D.new()
 	spr.texture = PATRON_OUT
 	spr.global_position = pos
+	spr.scale = Vector2(0.05, 0.05)
 	spr.rotation = randf_range(-PI, PI)
 	get_tree().current_scene.add_child(spr)
 	var tw := create_tween()
