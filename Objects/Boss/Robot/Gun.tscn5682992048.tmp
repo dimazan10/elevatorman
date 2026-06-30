@@ -16,8 +16,6 @@ size = Vector2(148, 56)
 radius = 55.0
 height = 189.79082
 
-[sub_resource type="Curve2D" id="Curve2D_shell"]
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_zone"]
 size = Vector2(161.5, 96)
 
@@ -118,18 +116,6 @@ shape = SubResource("CapsuleShape2D_barrel")
 position = Vector2(-35.999996, 83)
 scale = Vector2(0.4589892, 0.56289124)
 texture = ExtResource("3_ypw4d")
-
-[node name="ShellPath" type="Path2D" parent="." unique_id=951731711]
-position = Vector2(-36, 83)
-curve = SubResource("Curve2D_shell")
-
-[node name="ShellFollow" type="PathFollow2D" parent="ShellPath" unique_id=1717466552]
-rotates = false
-
-[node name="ShellVisual" type="Sprite2D" parent="ShellPath/ShellFollow" unique_id=1963142578]
-visible = false
-scale = Vector2(-0.05, 0.05)
-texture = ExtResource("4_patron")
 
 [node name="InteractZone" type="Area2D" parent="." unique_id=216355006]
 position = Vector2(-37, 70)
