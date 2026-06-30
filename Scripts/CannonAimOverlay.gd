@@ -47,6 +47,11 @@ func _exit_tree() -> void:
 func set_crosshair_pos(pos: Vector2) -> void:
 	_crosshair_pos = pos
 
+func set_crosshair_angle(angle: float) -> void:
+	var ch := get_node_or_null("Crosshair") as Node2D
+	if ch:
+		ch.rotation = angle
+
 func _process(_delta: float) -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	var ch := get_node_or_null("Crosshair") as Node2D

@@ -85,6 +85,10 @@ func _update_crosshair() -> void:
 	else:
 		_aim_overlay.set_crosshair_pos(_crosshair_pos)
 	_rotate_barrel()
+	if _aim_overlay and _gun:
+		var pivot := _gun.get_barrel_pivot() as Node2D
+		if pivot:
+			_aim_overlay.set_crosshair_angle(pivot.rotation)
 
 func _rotate_barrel() -> void:
 	if not _gun:
