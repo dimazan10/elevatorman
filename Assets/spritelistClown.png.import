@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cmsi1i7huwaec"
-path="res://.godot/imported/snake_SWEN.png-cfb5966dd6c66ac271926cb2a46367f1.ctex"
+uid="uid://cqnjt6r1neyie"
+path="res://.godot/imported/spritelistClown.png-1499f30e1271310d1ebc3730ed217b1d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/snake_SWEN.png"
-dest_files=["res://.godot/imported/snake_SWEN.png-cfb5966dd6c66ac271926cb2a46367f1.ctex"]
+source_file="res://Assets/spritelistClown.png"
+dest_files=["res://.godot/imported/spritelistClown.png-1499f30e1271310d1ebc3730ed217b1d.ctex"]
 
 [params]
 
