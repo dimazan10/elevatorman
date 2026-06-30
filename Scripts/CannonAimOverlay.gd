@@ -21,6 +21,18 @@ func _ready() -> void:
 	v.color = Color(1, 0.3, 0.3)
 	v.position = Vector2(-2, -20)
 	ch.add_child(v)
+
+	var ring := Line2D.new()
+	ring.name = "Ring"
+	ring.width = 3.0
+	ring.default_color = Color(1, 0.3, 0.3)
+	var pts := PackedVector2Array()
+	for i in range(33):
+		var a := i * TAU / 32.0
+		pts.append(Vector2(cos(a), sin(a)) * 30)
+	ring.points = pts
+	ch.add_child(ring)
+
 	add_child(ch)
 
 func set_crosshair_pos(pos: Vector2) -> void:
