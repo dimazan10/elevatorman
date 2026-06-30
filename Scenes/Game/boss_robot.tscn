@@ -21,12 +21,13 @@ size = Vector2(20, 680)
 script = ExtResource("4_boss")
 
 [node name="Pivot" type="Node2D" parent="." unique_id=478305121]
-position = Vector2(640, 360)
+position = Vector2(639, 176)
+scale = Vector2(1.5712776, 1.538192)
 
 [node name="Floor" type="Polygon2D" parent="Pivot" unique_id=645250517]
 position = Vector2(0, 331.99997)
 scale = Vector2(1.9263917, 2.0185204)
-polygon = PackedVector2Array(-273.4729, -37.553528, -274.46558, -389.19556, 273.3672, -390.72104, 271.41748, -40.43695, 574.6858, -35.382446, 574.6858, 333.59406, -577.734, 333.59406, -577.2729, -37.553528)
+polygon = PackedVector2Array(-273.4729, -37.553528, -274.46558, -389.19556, 273.3672, -390.72104, 271.41748, -40.43695, 426.1598, -39.53756, 426.11963, 333.89807, -425.98666, 333.89807, -425.98846, -37.98073)
 uv = PackedVector2Array(-273.4729, -37.553528, -274.46558, -389.19556, 273.3672, -390.72104, 271.41748, -40.43695, 574.6858, -35.382446, 574.6858, 333.59406, -577.734, 333.59406, -577.2729, -37.553528)
 script = ExtResource("1_floordraw")
 
@@ -39,20 +40,6 @@ polygon = PackedVector2Array(-580, -330, 0, -330, 580, -330, 580, 0, 580, 330, 0
 
 [node name="Walls" type="Node2D" parent="Pivot" unique_id=446166208]
 
-[node name="Top" type="StaticBody2D" parent="Pivot/Walls" unique_id=757958021]
-position = Vector2(819, 259)
-scale = Vector2(0.5200012, 1)
-
-[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/Top" unique_id=830430503]
-shape = SubResource("RectShape_wall_h")
-
-[node name="Visual" type="Polygon2D" parent="Pivot/Walls/Top" unique_id=831117799]
-color = Color(1, 1, 1, 1)
-texture_repeat = 1
-texture = ExtResource("2_roof")
-polygon = PackedVector2Array(-580, -10, 580, -10, 580, 10, -580, 10)
-uv = PackedVector2Array(0, 0, 1.865, 0, 1.865, 0.05, 0, 0.05)
-
 [node name="Top3" type="StaticBody2D" parent="Pivot/Walls" unique_id=1772820553]
 position = Vector2(-3.5762787e-07, -460)
 scale = Vector2(0.92000484, 1)
@@ -61,21 +48,19 @@ scale = Vector2(0.92000484, 1)
 shape = SubResource("RectShape_wall_h")
 
 [node name="Visual" type="Polygon2D" parent="Pivot/Walls/Top3" unique_id=1871506674]
-color = Color(1, 1, 1, 1)
 texture_repeat = 1
 texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-580, -10, 580, -10, 580, 10, -580, 10)
 uv = PackedVector2Array(0, 0, 1.865, 0, 1.865, 0.05, 0, 0.05)
 
-[node name="Top2" type="StaticBody2D" parent="Pivot/Walls" unique_id=1663248189]
-position = Vector2(-819, 259)
-scale = Vector2(0.5200012, 1)
+[node name="Top4" type="StaticBody2D" parent="Pivot/Walls" unique_id=223824428]
+position = Vector2(-3.5762787e-07, 282)
+scale = Vector2(-1.402945, 8.06913)
 
-[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/Top2" unique_id=408633536]
+[node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/Top4" unique_id=815912529]
 shape = SubResource("RectShape_wall_h")
 
-[node name="Visual" type="Polygon2D" parent="Pivot/Walls/Top2" unique_id=1639217966]
-color = Color(1, 1, 1, 1)
+[node name="Visual" type="Polygon2D" parent="Pivot/Walls/Top4" unique_id=487850542]
 texture_repeat = 1
 texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-580, -10, 580, -10, 580, 10, -580, 10)
@@ -83,27 +68,25 @@ uv = PackedVector2Array(0, 0, 1.865, 0, 1.865, 0.05, 0, 0.05)
 
 [node name="Bottom" type="StaticBody2D" parent="Pivot/Walls" unique_id=1321215010]
 position = Vector2(0, 1005)
-scale = Vector2(1.9200001, 1)
+scale = Vector2(1.4000001, 1)
 
 [node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/Bottom" unique_id=290487857]
 shape = SubResource("RectShape_wall_h")
 
 [node name="Visual" type="Polygon2D" parent="Pivot/Walls/Bottom" unique_id=1169695017]
-color = Color(1, 1, 1, 1)
 texture_repeat = 1
 texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-580, -10, 580, -10, 580, 10, -580, 10)
 uv = PackedVector2Array(0, 0, 1.865, 0, 1.865, 0.05, 0, 0.05)
 
 [node name="Left" type="StaticBody2D" parent="Pivot/Walls" unique_id=245890369]
-position = Vector2(-1114, 636)
+position = Vector2(-815, 636)
 scale = Vector2(1, 1.0799968)
 
 [node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/Left" unique_id=392305385]
 shape = SubResource("RectShape_wall_v")
 
 [node name="Visual" type="Polygon2D" parent="Pivot/Walls/Left" unique_id=1287832738]
-color = Color(1, 1, 1, 1)
 texture_repeat = 1
 texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-10, -340, 10, -340, 10, 340, -10, 340)
@@ -117,21 +100,19 @@ scale = Vector2(1, 1.0799968)
 shape = SubResource("RectShape_wall_v")
 
 [node name="Visual" type="Polygon2D" parent="Pivot/Walls/Left2" unique_id=1767510326]
-color = Color(1, 1, 1, 1)
 texture_repeat = 1
 texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-10, -340, 10, -340, 10, 340, -10, 340)
 uv = PackedVector2Array(0, 0, 0.032, 0, 0.032, 1.696, 0, 1.696)
 
 [node name="Right" type="StaticBody2D" parent="Pivot/Walls" unique_id=994744013]
-position = Vector2(1114, 636)
+position = Vector2(824, 636)
 scale = Vector2(1, 1.080002)
 
 [node name="CollisionShape" type="CollisionShape2D" parent="Pivot/Walls/Right" unique_id=107964747]
 shape = SubResource("RectShape_wall_v")
 
 [node name="Visual" type="Polygon2D" parent="Pivot/Walls/Right" unique_id=442086046]
-color = Color(1, 1, 1, 1)
 texture_repeat = 1
 texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-10, -340, 10, -340, 10, 340, -10, 340)
@@ -145,7 +126,6 @@ scale = Vector2(1, 1.080002)
 shape = SubResource("RectShape_wall_v")
 
 [node name="Visual" type="Polygon2D" parent="Pivot/Walls/Right2" unique_id=1602233846]
-color = Color(1, 1, 1, 1)
 texture_repeat = 1
 texture = ExtResource("2_roof")
 polygon = PackedVector2Array(-10, -340, 10, -340, 10, 340, -10, 340)
@@ -155,36 +135,37 @@ uv = PackedVector2Array(0, 0, 0.032, 0, 0.032, 1.696, 0, 1.696)
 position = Vector2(0, 280)
 
 [node name="Player" parent="." unique_id=1432727825 instance=ExtResource("3_player")]
-position = Vector2(640, 640)
+position = Vector2(640, 838)
 
 [node name="Referens" type="Sprite2D" parent="." unique_id=2046312169]
-position = Vector2(641.00006, 150)
-scale = Vector2(0.84, 0.7347679)
+position = Vector2(644.00006, 452)
+scale = Vector2(0.55999994, 0.5347682)
 texture = ExtResource("5_ymkxd")
 
 [node name="Down" type="Sprite2D" parent="." unique_id=100324202]
-position = Vector2(629.99994, 1129.0001)
+position = Vector2(630.81525, 1579.1974)
 scale = Vector2(0.32000178, 0.35999873)
 texture = ExtResource("7_cf8pt")
 
 [node name="Gun" type="Sprite2D" parent="." unique_id=1262401504]
-position = Vector2(630, 1085)
+position = Vector2(630.81525, 1535.1973)
 scale = Vector2(0.4222387, 0.41917816)
 texture = ExtResource("8_jt8fb")
 offset = Vector2(-2.6694336, -112.85632)
 
 [node name="Computer" type="Sprite2D" parent="." unique_id=984013428]
-position = Vector2(895.00006, 1091)
+position = Vector2(895.8153, 1541.1973)
 scale = Vector2(0.3761583, 0.31899092)
 texture = ExtResource("9_qs7w2")
 
 [node name="AmmoLine" type="Sprite2D" parent="." unique_id=1824312856]
-position = Vector2(471.99997, 1114)
+position = Vector2(472.81525, 1564.1973)
 scale = Vector2(0.4589892, 0.56289124)
 texture = ExtResource("10_4vxno")
 
-[node name="Patron" type="Sprite2D" parent="AmmoLine" unique_id=1170901743]
-position = Vector2(-71.89702, -35.530907)
-rotation = 1.454284
-scale = Vector2(0.13502054, 0.10699702)
+[node name="Patron" type="Sprite2D" parent="." unique_id=1170901743]
+position = Vector2(439.81528, 1544.1973)
+rotation = 1.4756465
+scale = Vector2(0.075829595, 0.04927743)
+skew = -0.047413945
 texture = ExtResource("3_yi65r")
