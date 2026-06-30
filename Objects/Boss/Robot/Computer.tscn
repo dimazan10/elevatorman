@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bgq1qqvmixcdb"]
 
 [ext_resource type="Texture2D" uid="uid://eqwhbdfr44gb" path="res://Assets/Boss/RobotBoss/Sprite_Gun/Computer.png" id="1_sxpk0"]
-[ext_resource type="Script" uid="uid://c31nmp62v43m6" path="res://Scripts/Computer.gd" id="2_computer"]
+[ext_resource type="Script" uid="uid://bb5twf8kfp4km" path="res://Scripts/Computer.gd" id="2_computer"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sxpk0"]
 size = Vector2(146, 81)

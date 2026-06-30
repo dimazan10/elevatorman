@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dhjq3qagif3gy"]
 
-[ext_resource type="Script" uid="uid://bhto4ap0rjjq4" path="res://Scripts/CannonBullet.gd" id="2_bullet"]
+[ext_resource type="Script" uid="uid://cmtiaktxnn044" path="res://Scripts/CannonBullet.gd" id="2_bullet"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_col"]
 radius = 20.0

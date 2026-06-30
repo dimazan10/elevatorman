@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cyjxde4ptj053" path="res://Assets/Boss/RobotBoss/Sprite_Gun/Gun.png" id="2_1p7nq"]
 [ext_resource type="Texture2D" uid="uid://dgfukb3s1748c" path="res://Assets/Boss/RobotBoss/Sprite_Gun/AmmoLine.png" id="3_ypw4d"]
 [ext_resource type="Texture2D" uid="uid://065ue5uesi21" path="res://Assets/Boss/RobotBoss/Sprite_Gun/Patron.png" id="4_patron"]
-[ext_resource type="Script" uid="uid://dsg8m32dxu2l3" path="res://Scripts/Gun.gd" id="5_gun"]
+[ext_resource type="Script" uid="uid://cut0h7p2urvnf" path="res://Scripts/Gun.gd" id="5_gun"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(187, 115)
