@@ -1,7 +1,7 @@
 extends Node2D
 
 const AIM_OVERLAY := preload("res://Scripts/CannonAimOverlay.gd")
-const CANNON_BULLET: PackedScene = preload("res://Objects/Boss/Robot/CannonBullet.tscn")
+var CANNON_BULLET: PackedScene
 
 var _aiming := false
 var _gun: Node2D = null
@@ -15,6 +15,7 @@ var _player: Node2D = null
 @export var camera_zoom_duration: float = 1.0
 
 func _ready() -> void:
+	CANNON_BULLET = load("res://Objects/Boss/Robot/CannonBullet.tscn")
 	$InteractZone.body_entered.connect(_on_zone_entered)
 
 func _find_gun() -> Node2D:
