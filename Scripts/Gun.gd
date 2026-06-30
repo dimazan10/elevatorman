@@ -37,6 +37,9 @@ func get_barrel_pivot() -> Node2D:
 func get_muzzle() -> Marker2D:
 	return $BarrelPivot/Muzzle
 
+func get_eject_point() -> Marker2D:
+	return $BarrelPivot/EjectPoint
+
 func is_loaded() -> bool:
 	return loaded
 

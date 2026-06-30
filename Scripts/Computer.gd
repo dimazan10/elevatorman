@@ -120,13 +120,13 @@ func _spawn_patron_out(pos: Vector2) -> void:
 		dir = -dir
 	var spr := Sprite2D.new()
 	spr.texture = PATRON_OUT
-	spr.global_position = pos + dir * 20
+	spr.global_position = pos
 	spr.scale = Vector2(0.05, 0.05)
 	spr.rotation = dir.angle()
 	get_tree().current_scene.add_child(spr)
 	var tw := create_tween()
 	tw.set_parallel(true)
-	tw.tween_property(spr, "global_position", spr.global_position + dir * randf_range(40, 80) + Vector2(0, 40), 0.4)
+	tw.tween_property(spr, "global_position", pos + dir * randf_range(30, 60) + Vector2(0, 40), 0.4)
 	tw.tween_property(spr, "modulate", Color.TRANSPARENT, 0.3).set_delay(0.2)
 	tw.tween_property(spr, "rotation", spr.rotation + randf_range(-4, 4), 0.4)
 	tw.finished.connect(spr.queue_free)
@@ -147,8 +147,9 @@ func _on_fire() -> void:
 		get_tree().current_scene.add_child(bullet)
 
 	_shoot_audio.play()
-	if muzzle:
-		_spawn_patron_out(muzzle.global_position)
+	var eject := _gun.get_eject_point() as Marker2D
+	if eject:
+		_spawn_patron_out(eject.global_position)
 	_gun.reset()
 
 	if _player_camera:
