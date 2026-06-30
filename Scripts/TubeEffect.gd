@@ -30,8 +30,17 @@ func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("bullet"):
 		body.queue_free()
 		return
-	if body.has_method("take_damage") and body.is_in_group("crate"):
-		body.take_damage(1)
+	if body.is_in_group("crate") and body not in _pushed:
+		_pushed.append(body)
+		var center = global_position
+		var dir = body.global_position - center
+		if dir.length_squared() < 0.001:
+			dir = Vector2.RIGHT
+		dir = dir.normalized()
+		var impulse = dir * push_force
+		if body is StaticBody2D:
+			var tw = create_tween()
+			tw.tween_property(body, "global_position", body.global_position + dir * push_force * 0.1, 0.2).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 		return
 	if body in _pushed:
 		return
