@@ -66,7 +66,8 @@ func _update_crosshair() -> void:
 		return
 	var input_dir := Vector2.ZERO
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
-		_crosshair_pos = get_global_mouse_position()
+		var mouse_pos = get_global_mouse_position()
+		_crosshair_pos = _crosshair_pos.lerp(mouse_pos, get_process_delta_time() * 4.0)
 	else:
 		input_dir = Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down")
 		if input_dir.length() > 0.2:
