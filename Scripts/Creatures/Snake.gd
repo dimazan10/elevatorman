@@ -139,7 +139,8 @@ func _handle_separation(delta: float) -> void:
 	for body in get_tree().get_nodes_in_group("enemy"):
 		if body == self or not body is Node2D:
 			continue
-		var diff := global_position - body.global_position
+		var other := body as Node2D
+		var diff: Vector2 = global_position - other.global_position
 		if diff.length() > 0.001 and diff.is_finite():
 			sep += diff.normalized() / diff.length()
 	if sep.length() > 0:
