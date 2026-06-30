@@ -19,7 +19,66 @@ height = 189.79082
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_zone"]
 size = Vector2(161.5, 96)
 
-[sub_resource type="Curve2D" id="Curve2D_shell"]
+[sub_resource type="Animation" id="Animation_ypw4d"]
+resource_name = "Line"
+length = 2.1666667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.16666667, 0.2666667, 1.1666666, 2.0333335, 2.1666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-81.00001, 37), Vector2(-81, 64), Vector2(-76, 63.000008), Vector2(-37, 65), Vector2(-1.1920929e-07, 66.00001), Vector2(6.9999924, 65)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1.1333333, 1.5666667),
+"transitions": PackedFloat32Array(0.4829682, 0.4829682),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_yfw2h"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-81, 64)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_r842q"]
+_data = {
+&"Line": SubResource("Animation_ypw4d"),
+&"RESET": SubResource("Animation_yfw2h")
+}
 
 [node name="Gun" type="StaticBody2D" unique_id=1982603159]
 script = ExtResource("5_gun")
@@ -41,7 +100,7 @@ texture = ExtResource("1_yjeil")
 position = Vector2(120, 54)
 
 [node name="Muzzle" type="Marker2D" parent="BarrelPivot" unique_id=100000001]
-position = Vector2(0, -160)
+position = Vector2(0, 1)
 
 [node name="BarrelSprite" type="Sprite2D" parent="BarrelPivot" unique_id=1576445547]
 z_index = 2
@@ -58,25 +117,19 @@ position = Vector2(-35.999996, 83)
 scale = Vector2(0.4589892, 0.56289124)
 texture = ExtResource("3_ypw4d")
 
-[node name="ShellPath" type="Path2D" parent="."]
-curve = SubResource("Curve2D_shell")
-position = Vector2(-36, 83)
-
-[node name="ShellFollow" type="PathFollow2D" parent="ShellPath"]
-rotates = false
-
-[node name="ShellVisual" type="Sprite2D" parent="ShellPath/ShellFollow"]
-scale = Vector2(-0.05, 0.05)
-texture = ExtResource("4_patron")
-visible = false
-
 [node name="InteractZone" type="Area2D" parent="." unique_id=216355006]
 position = Vector2(-37, 70)
 collision_layer = 0
-collision_mask = 1
 
 [node name="ZoneShape" type="CollisionShape2D" parent="InteractZone" unique_id=1326857187]
 position = Vector2(-7.25, 0)
 shape = SubResource("RectangleShape2D_zone")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=100000002]
+libraries/ = SubResource("AnimationLibrary_r842q")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1934632917]
+position = Vector2(-81, 64)
+rotation = 4.728971
+scale = Vector2(0.054121997, -0.045815896)
+texture = ExtResource("4_patron")

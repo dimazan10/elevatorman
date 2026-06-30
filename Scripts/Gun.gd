@@ -6,6 +6,21 @@ var loaded := false
 
 func _ready() -> void:
 	$InteractZone.body_entered.connect(_on_zone_entered)
+	_setup_line_animation()
+
+func _setup_line_animation() -> void:
+	var anim := Animation.new()
+	anim.length = 1.5
+	var track_idx := anim.add_track(Animation.TYPE_VALUE)
+	anim.track_set_path(track_idx, "ShellPath/ShellFollow:progress")
+	anim.track_insert_key(track_idx, 0.0, 0.0)
+	anim.track_insert_key(track_idx, 1.5, 1.0)
+	var lib := $AnimationPlayer.get_animation_library("")
+	if not lib:
+		lib = AnimationLibrary.new()
+		$AnimationPlayer.add_animation_library("", lib)
+	if not lib.has_animation("Line"):
+		lib.add_animation("Line", anim)
 
 func _on_zone_entered(body: Node2D) -> void:
 	if loaded:
