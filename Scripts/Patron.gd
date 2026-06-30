@@ -14,6 +14,9 @@ func _on_body_entered(body: Node2D) -> void:
 	_pickup.call_deferred(body)
 
 func _pickup(body: Node2D) -> void:
+	if body.get_node_or_null("Patron"):
+		attached = false
+		return
 	monitoring = false
 	collision_layer = 0
 	collision_mask = 0

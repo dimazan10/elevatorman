@@ -3,12 +3,13 @@ extends StaticBody2D
 signal loaded_changed(loaded: bool)
 
 var loaded := false
+var _loading := false
 
 func _ready() -> void:
 	$InteractZone.body_entered.connect(_on_zone_entered)
 
 func _on_zone_entered(body: Node2D) -> void:
-	if loaded:
+	if loaded or _loading:
 		return
 	if not body.is_in_group("player"):
 		return
@@ -18,6 +19,7 @@ func _on_zone_entered(body: Node2D) -> void:
 	_start_loading(body, patron)
 
 func _start_loading(player: Node2D, patron: Node2D) -> void:
+	_loading = true
 	player.can_move = false
 	patron.queue_free()
 	$Sprite.visible = true
@@ -25,6 +27,7 @@ func _start_loading(player: Node2D, patron: Node2D) -> void:
 	await $AnimationPlayer.animation_finished
 	$Sprite.visible = false
 	loaded = true
+	_loading = false
 	loaded_changed.emit(true)
 	player.can_move = true
 

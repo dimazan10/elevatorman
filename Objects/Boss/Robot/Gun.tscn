@@ -68,10 +68,10 @@ tracks/1/path = NodePath("Sprite:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.96666664, 1.4666667),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(-0.06666667, 0.099999994, 0.96666664, 1.4666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_r842q"]
@@ -120,7 +120,6 @@ texture = ExtResource("3_ypw4d")
 [node name="InteractZone" type="Area2D" parent="." unique_id=216355006]
 position = Vector2(-37, 70)
 collision_layer = 0
-collision_mask = 1
 
 [node name="ZoneShape" type="CollisionShape2D" parent="InteractZone" unique_id=1326857187]
 position = Vector2(-7.25, 0)
@@ -130,6 +129,7 @@ shape = SubResource("RectangleShape2D_zone")
 libraries/ = SubResource("AnimationLibrary_r842q")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1934632917]
+modulate = Color(1, 1, 1, 0.40000004)
 position = Vector2(-81.00001, 39)
 rotation = 4.728971
 scale = Vector2(0.054121997, -0.045815896)
