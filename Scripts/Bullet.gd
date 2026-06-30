@@ -19,7 +19,7 @@ func _on_body_entered(body: Node2D) -> void:
 		if body.has_method("take_damage"):
 			body.take_damage(1)
 		queue_free()
-	elif body.is_in_group("turret"):
+	elif body.is_in_group("turret") or body.is_in_group("enemy"):
 		return
 	elif body is StaticBody2D:
 		queue_free()
