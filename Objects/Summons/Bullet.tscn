@@ -11,11 +11,12 @@ radius = 9.0
 radius = 54
 
 [node name="Bullet" type="Area2D" unique_id=237565614]
+z_index = 10
 collision_mask = 7
 script = ExtResource("1_ljs67")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1932755893]
-z_index = 5
+z_index = 10
 texture_filter = 1
 texture = ExtResource("1_ubr88")
 
