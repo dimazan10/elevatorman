@@ -12,13 +12,13 @@ func _ready() -> void:
 	var h := ColorRect.new()
 	h.name = "H"
 	h.size = Vector2(40, 4)
-	h.color = Color(1, 0.3, 0.3)
+	h.color = Color(1, 0.2, 0.2, 0.6)
 	h.position = Vector2(-20, -2)
 	ch.add_child(h)
 	var v := ColorRect.new()
 	v.name = "V"
 	v.size = Vector2(4, 40)
-	v.color = Color(1, 0.3, 0.3)
+	v.color = Color(1, 0.2, 0.2, 0.6)
 	v.position = Vector2(-2, -20)
 	ch.add_child(v)
 	add_child(ch)
@@ -32,11 +32,12 @@ func _set_circle_cursor() -> void:
 	var cx := size / 2
 	var cy := size / 2
 	var r := 12.0
+	var col := Color(1, 0.2, 0.2, 200.0 / 255.0)
 	for x in range(size):
 		for y in range(size):
 			var d := Vector2(x - cx, y - cy).length()
 			if d > r - 1.5 and d < r + 1.5:
-				img.set_pixel(x, y, Color.WHITE)
+				img.set_pixel(x, y, col)
 	var tex := ImageTexture.create_from_image(img)
 	Input.set_custom_mouse_cursor(tex, Input.CURSOR_ARROW, Vector2(cx, cy))
 
