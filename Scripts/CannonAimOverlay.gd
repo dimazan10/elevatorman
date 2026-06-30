@@ -32,6 +32,7 @@ func set_crosshair_pos(pos: Vector2) -> void:
 	_crosshair_pos = pos
 
 func _process(_delta: float) -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	var ch := get_node_or_null("Crosshair") as Node2D
 	if ch:
 		ch.global_position = _crosshair_pos
