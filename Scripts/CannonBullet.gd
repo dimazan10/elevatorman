@@ -6,6 +6,12 @@ var speed: float = 1200.0
 func _ready() -> void:
 	add_to_group("bullet")
 	body_entered.connect(_on_body_entered)
+	var vis := ColorRect.new()
+	vis.name = "Visual"
+	vis.size = Vector2(80, 80)
+	vis.color = Color(1, 0.8, 0.2)
+	vis.position = Vector2(-40, -40)
+	add_child(vis)
 
 func _physics_process(delta: float) -> void:
 	if global_position.distance_to(target) < 20:
