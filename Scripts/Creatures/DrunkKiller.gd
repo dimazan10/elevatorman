@@ -6,7 +6,7 @@ const BULLET_SCENE = preload("res://Objects/Summons/Bullet.tscn")
 @export var orbit_distance: float = 250.0 
 @export var melee_range: float = 60.0    
 @export var shoot_spread_degrees: float = 15.0 
-@export var health: int = 100
+@export var health: int = 1
 
 # Настройки расталкивания врагов между собой
 @export var separation_force: float = 80.0 # Сила расталкивания (чем выше, тем жестче держат дистанцию)

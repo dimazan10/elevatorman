@@ -76,3 +76,6 @@ func set_enraged(enraged: bool) -> void:
 		modulate = Color(1.8, 0.7, 0.7)
 	else:
 		modulate = Color.WHITE
+
+func take_damage(_amount: int) -> void:
+	queue_free()

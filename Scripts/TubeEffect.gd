@@ -29,7 +29,7 @@ func _push_nearby() -> void:
 		var other := crate as Node2D
 		var from: Vector2 = other.global_position
 		var to: Vector2 = from + dir * push_dist
-		var query := PhysicsRayQueryParameters2D.create(from, to, 1)
+		var query := PhysicsRayQueryParameters2D.create(from, to, 3)
 		query.exclude = [crate.get_rid()]
 		var result := space_state.intersect_ray(query)
 		if result:

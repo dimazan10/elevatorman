@@ -7,7 +7,7 @@ const WEB_SCENE = preload("res://Objects/Web.tscn")
 @export var separation_force: float = 80.0
 @export var shoot_interval: float = 4.0
 @export var melee_damage: int = 1
-@export var health: int = 80
+@export var health: int = 1
 
 var _player_ref: Node2D = null
 var target: Node2D = null

@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 @export var speed: float = 300.0
-@export var health: int = 100
+@export var health: int = 1
 @export var enrage_interval: float = 8.0
 @export var enrage_duration: float = 5.0
 @export var separation_force: float = 60.0
