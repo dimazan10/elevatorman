@@ -91,7 +91,7 @@ func _rotate_barrel() -> void:
 	var pivot := _gun.get_barrel_pivot() as Node2D
 	if not pivot:
 		return
-	var target_angle = (_crosshair_pos - pivot.global_position).angle()
+	var target_angle = (_crosshair_pos - pivot.global_position).angle() + PI / 2
 	var max_angle = _gun.get_max_angle()
 	var parent := pivot.get_parent()
 	var desired_local = target_angle - parent.global_rotation
