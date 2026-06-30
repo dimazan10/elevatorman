@@ -1,26 +1,32 @@
 extends Area2D
 
 @export var push_force: float = 2000.0
+@export var push_radius: float = 500.0
 
 var _pushed: Array[Node] = []
 
 func _ready() -> void:
 	collision_mask = 7
 	$DestroyTimer.start()
-	call_deferred("_push_nearby_enemies")
+	call_deferred("_push_nearby")
 
-func _push_nearby_enemies() -> void:
+func _push_nearby() -> void:
 	var center = global_position
+	for crate in get_tree().get_nodes_in_group("crate"):
+		if crate in _pushed:
+			continue
+		var dist: float = center.distance_to(crate.global_position)
+		if dist > push_radius:
+			continue
+		_pushed.append(crate)
+		var dir := center.direction_to(crate.global_position)
+		if dir.length_squared() < 0.001:
+			dir = Vector2.RIGHT
+		var tw := create_tween()
+		tw.tween_property(crate, "global_position", crate.global_position + dir * push_force * 0.15, 0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+
 	for body in get_overlapping_bodies():
-		if body.is_in_group("crate") and body not in _pushed:
-			_pushed.append(body)
-			var dir = body.global_position - center
-			if dir.length_squared() < 0.001:
-				dir = Vector2.RIGHT
-			dir = dir.normalized()
-			if body is StaticBody2D:
-				var tw = create_tween()
-				tw.tween_property(body, "global_position", body.global_position + dir * push_force * 0.1, 0.2).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+		if body in _pushed:
 			continue
 		if body.is_in_group("enemy") and body not in _pushed:
 			_pushed.append(body)
@@ -39,18 +45,6 @@ func _push_nearby_enemies() -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("bullet"):
 		body.queue_free()
-		return
-	if body.is_in_group("crate") and body not in _pushed:
-		_pushed.append(body)
-		var center = global_position
-		var dir = body.global_position - center
-		if dir.length_squared() < 0.001:
-			dir = Vector2.RIGHT
-		dir = dir.normalized()
-		var impulse = dir * push_force
-		if body is StaticBody2D:
-			var tw = create_tween()
-			tw.tween_property(body, "global_position", body.global_position + dir * push_force * 0.1, 0.2).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 		return
 	if body in _pushed:
 		return
