@@ -1,8 +1,9 @@
-[gd_scene format=3 uid="uid://lpa1jpfwwdbd"]
+[gd_scene load_steps=5 format=3 uid="uid://lpa1jpfwwdbd"]
 
 [ext_resource type="Script" path="res://Scripts/ArenaRotating.gd" id="1_mv0v1"]
 [ext_resource type="PackedScene" uid="uid://dkax3cjeu00gs" path="res://Objects/EnemySpawner.tscn" id="12_vms8c"]
 [ext_resource type="Script" path="res://Scripts/FloorDraw.gd" id="13_floordraw"]
+[ext_resource type="Script" path="res://Scripts/CrateSpawner.gd" id="14_crate"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
 size = Vector2(615, 20)
@@ -168,3 +169,15 @@ position = Vector2(641, 480)
 
 [node name="SpawnPoint12" type="Marker2D" parent="." groups=["spawn_point_none"]]
 position = Vector2(530, 250)
+
+[node name="CrateSpawner1" type="Marker2D" parent="Pivot" groups=["crate_spawner"]]
+script = ExtResource("14_crate")
+position = Vector2(-200, 100)
+
+[node name="CrateSpawner2" type="Marker2D" parent="Pivot" groups=["crate_spawner"]]
+script = ExtResource("14_crate")
+position = Vector2(200, 100)
+
+[node name="CrateSpawner3" type="Marker2D" parent="Pivot" groups=["crate_spawner"]]
+script = ExtResource("14_crate")
+position = Vector2(0, -150)
