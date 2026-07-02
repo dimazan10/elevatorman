@@ -15,16 +15,17 @@ var _spawn_pos: Vector2 = Vector2.ZERO
 var _zone_name: String = ""
 var _is_waiting: bool = false
 var _enraged: bool = false
+var _attack_timer: float = 0.0
 
 const TRAIL_SCENE = preload("res://Objects/Summons/SlimeTrail.tscn")
 
 enum State { IDLE, CHASING, ATTACKING, STUNNED }
-var current_state: State = State.IDLE
+var current_state: State = State.CHASING
 var _stun_timer: float = 0.0
 
 func _ready() -> void:
 	add_to_group("enemy")
-	_spawn_pos = global_position
+	_spawn_pos = get_meta("spawn_position", global_position)
 	_zone_name = get_meta("zone_name", "")
 	var players := get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
@@ -34,6 +35,7 @@ func _ready() -> void:
 func _setup_animated_sprite() -> void:
 	var anim := AnimatedSprite2D.new()
 	anim.name = "AnimatedSprite2D"
+	anim.scale = Vector2(0.35, 0.35)
 	add_child(anim)
 
 	var frames := SpriteFrames.new()
@@ -66,7 +68,7 @@ func _setup_animated_sprite() -> void:
 	frames.set_animation_loop(&"attack", false)
 
 	anim.sprite_frames = frames
-	anim.play(&"idle")
+	anim.play(&"walk")
 
 func _physics_process(delta: float) -> void:
 	if _check_zone_teleport():
@@ -74,6 +76,7 @@ func _physics_process(delta: float) -> void:
 
 	_melee_timer = maxf(_melee_timer - delta, 0.0)
 	_trail_timer -= delta
+	_attack_timer -= delta
 
 	match current_state:
 		State.IDLE:
@@ -88,7 +91,6 @@ func _physics_process(delta: float) -> void:
 				current_state = State.CHASING
 
 	_handle_separation(delta)
-	queue_redraw()
 
 func _process_idle(_delta: float) -> void:
 	if not is_instance_valid(_player_ref):
@@ -106,6 +108,7 @@ func _process_chasing(delta: float) -> void:
 		_play_anim("attack")
 		velocity = Vector2.ZERO
 		_melee_timer = melee_cooldown
+		_attack_timer = 0.5
 		return
 
 	var dir := global_position.direction_to(_player_ref.global_position)
@@ -113,22 +116,22 @@ func _process_chasing(delta: float) -> void:
 	move_and_slide()
 	_play_anim("walk")
 
-	if velocity.x != 0:
-		var anim := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
-		if anim:
-			anim.flip_h = velocity.x < 0
+	var anim := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if anim and velocity.length() > 10:
+		anim.flip_h = velocity.x < 0
 
 	_drop_trail()
 
 func _process_attacking(_delta: float) -> void:
-	var anim := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
-	if anim and not anim.is_playing():
+	velocity = Vector2.ZERO
+	if _attack_timer <= 0:
 		current_state = State.CHASING
 		_play_anim("walk")
+		return
 
-	if is_instance_valid(_player_ref):
+	if is_instance_valid(_player_ref) and _melee_timer <= 0:
 		var dist := global_position.distance_to(_player_ref.global_position)
-		if dist < melee_range + 10 and _melee_timer <= 0:
+		if dist < melee_range + 15:
 			if _player_ref.has_method("take_damage"):
 				_player_ref.take_damage(melee_damage)
 			_melee_timer = melee_cooldown
