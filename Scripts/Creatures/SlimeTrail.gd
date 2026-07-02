@@ -7,6 +7,7 @@ extends Area2D
 var _time: float = 0.0
 
 func _ready() -> void:
+	modulate = Color(0.6, 0.7, 0.6)
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	$DestroyTimer.wait_time = fade_duration

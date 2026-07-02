@@ -3,7 +3,7 @@ extends CharacterBody2D
 @export var speed: float = 150.0
 @export var separation_force: float = 60.0
 @export var aggro_range: float = 350.0
-@export var melee_range: float = 40.0
+@export var melee_range: float = 50.0
 @export var melee_damage: int = 1
 @export var melee_cooldown: float = 1.5
 @export var trail_interval: float = 0.8
@@ -35,7 +35,7 @@ func _ready() -> void:
 func _setup_animated_sprite() -> void:
 	var anim := AnimatedSprite2D.new()
 	anim.name = "AnimatedSprite2D"
-	anim.scale = Vector2(0.35, 0.35)
+	anim.scale = Vector2(0.45, 0.45)
 	add_child(anim)
 
 	var frames := SpriteFrames.new()
@@ -68,6 +68,7 @@ func _setup_animated_sprite() -> void:
 	frames.set_animation_loop(&"attack", false)
 
 	anim.sprite_frames = frames
+	anim.modulate = Color(0.75, 0.8, 0.75)
 	anim.play(&"walk")
 
 func _physics_process(delta: float) -> void:
@@ -108,7 +109,9 @@ func _process_chasing(delta: float) -> void:
 		_play_anim("attack")
 		velocity = Vector2.ZERO
 		_melee_timer = melee_cooldown
-		_attack_timer = 0.5
+		_attack_timer = 0.6
+		if _player_ref.has_method("take_damage"):
+			_player_ref.take_damage(melee_damage)
 		return
 
 	var dir := global_position.direction_to(_player_ref.global_position)
