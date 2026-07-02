@@ -144,8 +144,7 @@ func _drop_trail() -> void:
 func _play_anim(anim_name: String) -> void:
 	var anim := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 	if anim and anim.sprite_frames.has_animation(anim_name):
-		if anim.current_animation != anim_name:
-			anim.play(anim_name)
+		anim.play(anim_name)
 
 func _check_zone_teleport() -> bool:
 	if _zone_name == "" or Engine.time_scale == 0:
