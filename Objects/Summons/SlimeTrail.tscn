@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Creatures/SlimeTrail.gd" id="1_trail"]
+[ext_resource type="Texture2D" path="res://Assets/Slime/trail_0.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_trail"]
+size = Vector2(40, 25)
+
+[node name="SlimeTrail" type="Area2D"]
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+monitorable = false
+script = ExtResource("1_trail")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = -1
+texture = ExtResource("2_tex")
+scale = Vector2(1.5, 1.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_trail")
+
+[node name="DestroyTimer" type="Timer" parent="."]
+one_shot = true
+autostart = false
