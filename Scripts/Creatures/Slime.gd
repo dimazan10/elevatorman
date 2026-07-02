@@ -199,8 +199,6 @@ func _steal_speed() -> void:
 		return
 	if _player_ref.has_method("apply_slow"):
 		_player_ref.apply_slow(steal_slow_factor, steal_duration)
-	if "slime_trail_timer" in _player_ref:
-		_player_ref._slime_trail_timer = _player_ref._slime_trail_interval
 
 func set_enraged(enraged: bool) -> void:
 	_enraged = enraged

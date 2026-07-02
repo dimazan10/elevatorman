@@ -43,9 +43,6 @@ var _invulnerable := false
 
 var _clone_node: Node2D = null
 var _clone_active := false
-var _slime_trail_timer: float = 0.0
-var _slime_trail_interval: float = 0.2
-var _slime_trail_scene = preload("res://Objects/Summons/SlimeTrail.tscn")
 
 func _ready() -> void:
 	current_lives = max_lives
@@ -136,7 +133,6 @@ func _process(delta: float) -> void:
 		if slow_timer <= 0:
 			slow_timer = 0.0
 			slow_factor = 1.0
-			_slime_trail_timer = 0.0
 
 	if Input.is_action_just_pressed("use_item_1"):
 		_use_item(0)
@@ -203,14 +199,6 @@ func _physics_process(delta: float) -> void:
 		if not velocity.is_finite():
 			velocity = Vector2.ZERO
 		move_and_slide()
-
-		if _slime_trail_timer > 0:
-			_slime_trail_timer -= delta
-			if _slime_trail_timer <= 0:
-				_slime_trail_timer = _slime_trail_interval
-				var trail := _slime_trail_scene.instantiate()
-				trail.global_position = global_position
-				get_tree().current_scene.add_child(trail)
 
 		# ЗАМЕНИЛИ _delta НА ОБЫЧНУЮ delta, чтобы время шагов считалось правильно
 		footstep_timer -= delta
