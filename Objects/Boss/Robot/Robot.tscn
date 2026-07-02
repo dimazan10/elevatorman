@@ -167,6 +167,11 @@ z_index = 1
 scale = Vector2(1.6800013, 1.4)
 texture = ExtResource("10_sj1ie")
 
+[node name="ArmLeft0" type="Sprite2D" parent="WaistBone/TorsoBone/LeftShoulderBone" unique_id=1450376095]
+position = Vector2(0, 98)
+scale = Vector2(1.4000013, 1.4)
+texture = ExtResource("5_a4143")
+
 [node name="LeftHandBone" type="Node2D" parent="WaistBone/TorsoBone" unique_id=106]
 position = Vector2(-291, 318)
 
@@ -182,13 +187,6 @@ position = Vector2(3, -111)
 scale = Vector2(1.4000013, 1.4)
 texture = ExtResource("6_3fpg4")
 
-[node name="LeftUpperArmBone" type="Node2D" parent="WaistBone/TorsoBone/LeftHandBone/LeftLowerArmBone" unique_id=104]
-position = Vector2(13, -137)
-
-[node name="ArmLeft0" type="Sprite2D" parent="WaistBone/TorsoBone/LeftHandBone/LeftLowerArmBone/LeftUpperArmBone" unique_id=1450376095]
-scale = Vector2(1.4000013, 1.4)
-texture = ExtResource("5_a4143")
-
 [node name="RightShoulderBone" type="Node2D" parent="WaistBone/TorsoBone" unique_id=107]
 position = Vector2(271, -30)
 
@@ -196,6 +194,11 @@ position = Vector2(271, -30)
 z_index = 1
 scale = Vector2(1.6800013, 1.4)
 texture = ExtResource("11_cghhy")
+
+[node name="ArmLeft2" type="Sprite2D" parent="WaistBone/TorsoBone/RightShoulderBone" unique_id=1551895128]
+position = Vector2(-7, 111)
+scale = Vector2(1.4000013, 1.4)
+texture = ExtResource("7_fkn03")
 
 [node name="RightHandBone" type="Node2D" parent="WaistBone/TorsoBone" unique_id=110]
 position = Vector2(256, 307)
@@ -211,10 +214,3 @@ position = Vector2(1, -95)
 [node name="ArmLeft3" type="Sprite2D" parent="WaistBone/TorsoBone/RightHandBone/RightLowerArmBone" unique_id=795617459]
 scale = Vector2(1.4000013, 1.4)
 texture = ExtResource("8_knjt5")
-
-[node name="RightUpperArmBone" type="Node2D" parent="WaistBone/TorsoBone/RightHandBone/RightLowerArmBone" unique_id=108]
-position = Vector2(7, -131)
-
-[node name="ArmLeft2" type="Sprite2D" parent="WaistBone/TorsoBone/RightHandBone/RightLowerArmBone/RightUpperArmBone" unique_id=1551895128]
-scale = Vector2(1.4000013, 1.4)
-texture = ExtResource("7_fkn03")
