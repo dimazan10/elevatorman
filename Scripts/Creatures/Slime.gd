@@ -9,7 +9,6 @@ extends CharacterBody2D
 @export var trail_interval: float = 0.2
 @export var steal_slow_factor: float = 0.4
 @export var steal_duration: float = 3.0
-@export var steal_speed_boost: float = 1.5
 
 var _player_ref: Node2D = null
 var _melee_timer: float = 0.0
@@ -19,7 +18,6 @@ var _zone_name: String = ""
 var _is_waiting: bool = false
 var _enraged: bool = false
 var _attack_timer: float = 0.0
-var _steal_timer: float = 0.0
 
 const TRAIL_SCENE = preload("res://Objects/Summons/SlimeTrail.tscn")
 
@@ -82,10 +80,6 @@ func _physics_process(delta: float) -> void:
 	_melee_timer = maxf(_melee_timer - delta, 0.0)
 	_trail_timer -= delta
 	_attack_timer -= delta
-	_steal_timer = maxf(_steal_timer - delta, 0.0)
-
-	if _steal_timer <= 0 and modulate.g < 1.0:
-		modulate = Color(0.75, 0.8, 0.75)
 
 	match current_state:
 		State.IDLE:
@@ -124,8 +118,7 @@ func _process_chasing(delta: float) -> void:
 		return
 
 	var dir := global_position.direction_to(_player_ref.global_position)
-	var mult := steal_speed_boost if _steal_timer > 0 else 1.0
-	velocity = dir * speed * mult * (1.4 if _enraged else 1.0)
+	velocity = dir * speed * (1.4 if _enraged else 1.0)
 	move_and_slide()
 	_play_anim("walk")
 
@@ -153,8 +146,11 @@ func _drop_trail() -> void:
 	if _trail_timer > 0:
 		return
 	_trail_timer = trail_interval
+	_drop_trail_at(global_position)
+
+func _drop_trail_at(pos: Vector2) -> void:
 	var trail := TRAIL_SCENE.instantiate()
-	trail.global_position = global_position
+	trail.global_position = pos
 	get_tree().current_scene.add_child(trail)
 
 func _play_anim(anim_name: String) -> void:
@@ -203,8 +199,11 @@ func _steal_speed() -> void:
 		return
 	if _player_ref.has_method("apply_slow"):
 		_player_ref.apply_slow(steal_slow_factor, steal_duration)
-	_steal_timer = steal_duration
-	modulate = Color(1.0, 1.5, 1.0)
+	_drop_trail_at(_player_ref.global_position)
+	_drop_trail_at(_player_ref.global_position + Vector2(30, 0))
+	_drop_trail_at(_player_ref.global_position + Vector2(-30, 0))
+	_drop_trail_at(_player_ref.global_position + Vector2(0, 30))
+	_drop_trail_at(_player_ref.global_position + Vector2(0, -30))
 
 func set_enraged(enraged: bool) -> void:
 	_enraged = enraged
