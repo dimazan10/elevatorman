@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var slow_factor: float = 0.3
+@export var slow_factor: float = 0.15
 @export var slow_duration: float = 2.0
 @export var fade_duration: float = 7.0
 
