@@ -43,6 +43,7 @@ var _invulnerable := false
 
 var _clone_node: Node2D = null
 var _clone_active := false
+var _slow_vfx: Sprite2D = null
 
 func _ready() -> void:
 	current_lives = max_lives
@@ -103,6 +104,16 @@ func _ready() -> void:
 		var stream = load("res://Assets/Sounds/FootStepsSound/FootStep_" + str(i) + ".wav")
 		if stream:
 			footstep_sounds.append(stream)
+
+	_slow_vfx = Sprite2D.new()
+	_slow_vfx.name = "SlowVFX"
+	_slow_vfx.texture = preload("res://Assets/Slime/trail_0.png")
+	_slow_vfx.scale = Vector2(0.35, 0.35)
+	_slow_vfx.position = Vector2(0, 18)
+	_slow_vfx.z_index = 5
+	_slow_vfx.visible = false
+	_slow_vfx.modulate = Color(0.5, 0.8, 0.5, 0.7)
+	add_child(_slow_vfx)
 	
 var _ghost_timer := 0.0
 var _noclip := false
@@ -130,9 +141,11 @@ func _process(delta: float) -> void:
 
 	if slow_timer > 0:
 		slow_timer -= delta
+		_slow_vfx.visible = true
 		if slow_timer <= 0:
 			slow_timer = 0.0
 			slow_factor = 1.0
+			_slow_vfx.visible = false
 
 	if Input.is_action_just_pressed("use_item_1"):
 		_use_item(0)
