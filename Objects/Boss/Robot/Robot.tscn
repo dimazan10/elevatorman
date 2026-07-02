@@ -48,26 +48,26 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("TorsoBone/LeftHandBone:position")
+tracks/2/path = NodePath("TorsoBone/LeftShoulderBone:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0, 1.5, 3),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)]
+"values": [Vector2(-275, -28), Vector2(-275, -26), Vector2(-275, -28)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("TorsoBone/RightHandBone:position")
+tracks/3/path = NodePath("TorsoBone/RightShoulderBone:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0, 1.5, 3),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)]
+"values": [Vector2(271, -30), Vector2(271, -27), Vector2(271, -30)]
 }
 
 [sub_resource type="Animation" id="Animation_oboc7"]
@@ -99,26 +99,26 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("TorsoBone/LeftHandBone:position")
+tracks/2/path = NodePath("TorsoBone/LeftShoulderBone:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 0)]
+"values": [Vector2(-275, -28)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("TorsoBone/RightHandBone:position")
+tracks/3/path = NodePath("TorsoBone/RightShoulderBone:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 0)]
+"values": [Vector2(271, -30)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ipx7w"]
@@ -159,6 +159,14 @@ position = Vector2(-3, -148)
 scale = Vector2(1.3999977, 1.1200004)
 texture = ExtResource("4_kubtn")
 
+[node name="LeftShoulderBone" type="Node2D" parent="WaistBone/TorsoBone" unique_id=103]
+position = Vector2(-275, -28)
+
+[node name="RightShoulder2" type="Sprite2D" parent="WaistBone/TorsoBone/LeftShoulderBone" unique_id=2008733329]
+z_index = 1
+scale = Vector2(1.6800013, 1.4)
+texture = ExtResource("10_sj1ie")
+
 [node name="LeftHandBone" type="Node2D" parent="WaistBone/TorsoBone" unique_id=106]
 position = Vector2(-291, 318)
 
@@ -181,13 +189,13 @@ position = Vector2(13, -137)
 scale = Vector2(1.4000013, 1.4)
 texture = ExtResource("5_a4143")
 
-[node name="LeftShoulderBone" type="Node2D" parent="WaistBone/TorsoBone/LeftHandBone/LeftLowerArmBone/LeftUpperArmBone" unique_id=103]
-position = Vector2(0, -98)
+[node name="RightShoulderBone" type="Node2D" parent="WaistBone/TorsoBone" unique_id=107]
+position = Vector2(271, -30)
 
-[node name="RightShoulder2" type="Sprite2D" parent="WaistBone/TorsoBone/LeftHandBone/LeftLowerArmBone/LeftUpperArmBone/LeftShoulderBone" unique_id=2008733329]
+[node name="RightShoulder" type="Sprite2D" parent="WaistBone/TorsoBone/RightShoulderBone" unique_id=66831270]
 z_index = 1
 scale = Vector2(1.6800013, 1.4)
-texture = ExtResource("10_sj1ie")
+texture = ExtResource("11_cghhy")
 
 [node name="RightHandBone" type="Node2D" parent="WaistBone/TorsoBone" unique_id=110]
 position = Vector2(256, 307)
@@ -210,11 +218,3 @@ position = Vector2(7, -131)
 [node name="ArmLeft2" type="Sprite2D" parent="WaistBone/TorsoBone/RightHandBone/RightLowerArmBone/RightUpperArmBone" unique_id=1551895128]
 scale = Vector2(1.4000013, 1.4)
 texture = ExtResource("7_fkn03")
-
-[node name="RightShoulderBone" type="Node2D" parent="WaistBone/TorsoBone/RightHandBone/RightLowerArmBone/RightUpperArmBone" unique_id=107]
-position = Vector2(7, -111)
-
-[node name="RightShoulder" type="Sprite2D" parent="WaistBone/TorsoBone/RightHandBone/RightLowerArmBone/RightUpperArmBone/RightShoulderBone" unique_id=66831270]
-z_index = 1
-scale = Vector2(1.6800013, 1.4)
-texture = ExtResource("11_cghhy")
