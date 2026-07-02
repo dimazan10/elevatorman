@@ -199,11 +199,8 @@ func _steal_speed() -> void:
 		return
 	if _player_ref.has_method("apply_slow"):
 		_player_ref.apply_slow(steal_slow_factor, steal_duration)
-	_drop_trail_at(_player_ref.global_position)
-	_drop_trail_at(_player_ref.global_position + Vector2(30, 0))
-	_drop_trail_at(_player_ref.global_position + Vector2(-30, 0))
-	_drop_trail_at(_player_ref.global_position + Vector2(0, 30))
-	_drop_trail_at(_player_ref.global_position + Vector2(0, -30))
+	if "slime_trail_timer" in _player_ref:
+		_player_ref._slime_trail_timer = steal_duration
 
 func set_enraged(enraged: bool) -> void:
 	_enraged = enraged
