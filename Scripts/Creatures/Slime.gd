@@ -199,6 +199,11 @@ func _steal_speed() -> void:
 		return
 	if _player_ref.has_method("apply_slow"):
 		_player_ref.apply_slow(steal_slow_factor, steal_duration)
+	if _player_ref.has_method("set_slime_vfx"):
+		_player_ref.set_slime_vfx(true)
+		await get_tree().create_timer(steal_duration).timeout
+		if is_instance_valid(_player_ref) and _player_ref.has_method("set_slime_vfx"):
+			_player_ref.set_slime_vfx(false)
 
 func set_enraged(enraged: bool) -> void:
 	_enraged = enraged

@@ -424,9 +424,13 @@ func apply_stun_and_knockback(knockback_impulse: Vector2, duration: float) -> vo
 func apply_slow(factor: float, duration: float) -> void:
 	slow_factor = factor
 	slow_timer = duration
-	if factor < 1.0:
+
+func set_slime_vfx(active: bool) -> void:
+	_slimed = active
+	if active:
 		_slow_vfx.show()
-		_slimed = true
+	else:
+		_slow_vfx.hide()
 
 func apply_pull_toward(target: Node2D, duration: float, offset: Vector2 = Vector2.ZERO) -> void:
 	if is_stunned:
