@@ -44,6 +44,7 @@ var _invulnerable := false
 var _clone_node: Node2D = null
 var _clone_active := false
 var _slow_vfx: Sprite2D = null
+var _slimed: bool = false
 
 func _ready() -> void:
 	current_lives = max_lives
@@ -141,11 +142,11 @@ func _process(delta: float) -> void:
 
 	if slow_timer > 0:
 		slow_timer -= delta
-		_slow_vfx.visible = true
 		if slow_timer <= 0:
 			slow_timer = 0.0
 			slow_factor = 1.0
-			_slow_vfx.visible = false
+			_slimed = false
+			_slow_vfx.hide()
 
 	if Input.is_action_just_pressed("use_item_1"):
 		_use_item(0)
@@ -423,6 +424,8 @@ func apply_stun_and_knockback(knockback_impulse: Vector2, duration: float) -> vo
 func apply_slow(factor: float, duration: float) -> void:
 	slow_factor = factor
 	slow_timer = duration
+	_slow_vfx.show()
+	_slimed = true
 
 func apply_pull_toward(target: Node2D, duration: float, offset: Vector2 = Vector2.ZERO) -> void:
 	if is_stunned:
