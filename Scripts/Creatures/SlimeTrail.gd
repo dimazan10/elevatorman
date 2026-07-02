@@ -18,6 +18,7 @@ func _process(delta: float) -> void:
 	var t := _time / fade_duration
 	if t > 0.8:
 		modulate.a = maxf(1.0 - (t - 0.8) / 0.2, 0.0)
+		$CollisionShape2D.set_deferred("disabled", true)
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player") and body.has_method("apply_slow"):

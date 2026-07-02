@@ -14,7 +14,7 @@ monitorable = false
 script = ExtResource("1_trail")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-z_index = -1
+z_index = 5
 texture = ExtResource("2_tex")
 scale = Vector2(0.8, 0.8)
 
