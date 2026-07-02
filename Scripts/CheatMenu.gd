@@ -217,10 +217,11 @@ func _ready() -> void:
 	spawn_clown.pressed.connect(_spawn_creature.bind("res://Objects/Summons/Clown.tscn"))
 	spawn_clown.add_theme_color_override("font_color", Color(1.0, 0.3, 0.5))
 	_panel.add_child(spawn_clown)
+	y += 42
 
 	var spawn_slime = Button.new()
 	spawn_slime.text = "Slime"
-	spawn_slime.position = Vector2(380, y)
+	spawn_slime.position = Vector2(20, y)
 	spawn_slime.size = Vector2(85, 30)
 	spawn_slime.pressed.connect(_spawn_creature.bind("res://Objects/Summons/Slime.tscn"))
 	spawn_slime.add_theme_color_override("font_color", Color(0.3, 0.9, 0.3))

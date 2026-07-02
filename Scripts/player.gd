@@ -111,9 +111,9 @@ func _ready() -> void:
 	_slow_vfx.scale = Vector2(0.35, 0.35)
 	_slow_vfx.position = Vector2(0, 18)
 	_slow_vfx.z_index = 5
-	_slow_vfx.visible = false
 	_slow_vfx.modulate = Color(0.5, 0.8, 0.5, 0.7)
 	add_child(_slow_vfx)
+	_slow_vfx.hide()
 	
 var _ghost_timer := 0.0
 var _noclip := false
