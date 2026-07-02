@@ -7,6 +7,9 @@ extends CharacterBody2D
 @export var melee_damage: int = 1
 @export var melee_cooldown: float = 1.5
 @export var trail_interval: float = 0.2
+@export var steal_slow_factor: float = 0.4
+@export var steal_duration: float = 3.0
+@export var steal_speed_boost: float = 1.5
 
 var _player_ref: Node2D = null
 var _melee_timer: float = 0.0
@@ -16,6 +19,7 @@ var _zone_name: String = ""
 var _is_waiting: bool = false
 var _enraged: bool = false
 var _attack_timer: float = 0.0
+var _steal_timer: float = 0.0
 
 const TRAIL_SCENE = preload("res://Objects/Summons/SlimeTrail.tscn")
 
@@ -78,6 +82,10 @@ func _physics_process(delta: float) -> void:
 	_melee_timer = maxf(_melee_timer - delta, 0.0)
 	_trail_timer -= delta
 	_attack_timer -= delta
+	_steal_timer = maxf(_steal_timer - delta, 0.0)
+
+	if _steal_timer <= 0 and modulate.g < 1.0:
+		modulate = Color(0.75, 0.8, 0.75)
 
 	match current_state:
 		State.IDLE:
@@ -112,10 +120,12 @@ func _process_chasing(delta: float) -> void:
 		_attack_timer = 0.6
 		if _player_ref.has_method("take_damage"):
 			_player_ref.take_damage(melee_damage)
+		_steal_speed()
 		return
 
 	var dir := global_position.direction_to(_player_ref.global_position)
-	velocity = dir * speed * (1.4 if _enraged else 1.0)
+	var mult := steal_speed_boost if _steal_timer > 0 else 1.0
+	velocity = dir * speed * mult * (1.4 if _enraged else 1.0)
 	move_and_slide()
 	_play_anim("walk")
 
@@ -188,8 +198,13 @@ func apply_knockback(impulse: Vector2) -> void:
 	current_state = State.STUNNED
 	_stun_timer = 0.3
 
-func set_target(new_target: Node2D) -> void:
-	pass
+func _steal_speed() -> void:
+	if not is_instance_valid(_player_ref):
+		return
+	if _player_ref.has_method("apply_slow"):
+		_player_ref.apply_slow(steal_slow_factor, steal_duration)
+	_steal_timer = steal_duration
+	modulate = Color(1.0, 1.5, 1.0)
 
 func set_enraged(enraged: bool) -> void:
 	_enraged = enraged
