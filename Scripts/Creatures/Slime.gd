@@ -6,7 +6,7 @@ extends CharacterBody2D
 @export var melee_range: float = 50.0
 @export var melee_damage: int = 1
 @export var melee_cooldown: float = 1.5
-@export var trail_interval: float = 0.8
+@export var trail_interval: float = 0.2
 
 var _player_ref: Node2D = null
 var _melee_timer: float = 0.0
@@ -35,7 +35,7 @@ func _ready() -> void:
 func _setup_animated_sprite() -> void:
 	var anim := AnimatedSprite2D.new()
 	anim.name = "AnimatedSprite2D"
-	anim.scale = Vector2(0.45, 0.45)
+	anim.scale = Vector2(0.55, 0.55)
 	add_child(anim)
 
 	var frames := SpriteFrames.new()
