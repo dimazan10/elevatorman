@@ -19,6 +19,8 @@ func _ready() -> void:
 	var p := get_tree().get_first_node_in_group("player")
 	if p and p.has_signal("inventory_changed"):
 		p.inventory_changed.connect(_refresh)
+	for i in range(slots.size()):
+		slots[i].gui_input.connect(_on_slot_gui_input.bind(i))
 	_refresh()
 
 func _refresh() -> void:
@@ -35,6 +37,17 @@ func _refresh() -> void:
 		else:
 			icon.texture = null
 		slots[i].visible = true
+
+func _on_slot_gui_input(event: InputEvent, slot_index: int) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		_use_item_on_slot(slot_index)
+	elif event is InputEventScreenTouch and event.pressed:
+		_use_item_on_slot(slot_index)
+
+func _use_item_on_slot(slot_index: int) -> void:
+	var p := get_tree().get_first_node_in_group("player")
+	if p and p.has_method("_use_item"):
+		p._use_item(slot_index)
 
 func _setup_gamepad_icons() -> void:
 	_left_gamepad_icon = _make_gamepad_icon("res://Assets/Gamepad/LB.png", left_label)

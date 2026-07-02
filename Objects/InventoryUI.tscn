@@ -36,7 +36,7 @@ mouse_filter = 2
 [node name="Slot0" type="Control" parent="Panel/BgWind" unique_id=297730549]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
-mouse_filter = 2
+mouse_filter = 0
 
 [node name="WindBg" type="TextureRect" parent="Panel/BgWind/Slot0" unique_id=1271320126]
 layout_mode = 1
@@ -71,7 +71,7 @@ border_width = 1.4
 [node name="Slot1" type="Control" parent="Panel/BgWind" unique_id=1629971562]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
-mouse_filter = 2
+mouse_filter = 0
 
 [node name="WindBg" type="TextureRect" parent="Panel/BgWind/Slot1" unique_id=1161606407]
 layout_mode = 1
