@@ -133,10 +133,10 @@ func _process(delta: float) -> void:
 
 	if slow_timer > 0:
 		slow_timer -= delta
-		_slime_trail_timer -= delta
 		if slow_timer <= 0:
 			slow_timer = 0.0
 			slow_factor = 1.0
+			_slime_trail_timer = 0.0
 
 	if Input.is_action_just_pressed("use_item_1"):
 		_use_item(0)
