@@ -109,7 +109,7 @@ func _process_chasing(delta: float) -> void:
 		return
 
 	var dir := global_position.direction_to(_player_ref.global_position)
-	velocity = dir * speed * (_enraged ? 1.4 : 1.0)
+	velocity = dir * speed * (1.4 if _enraged else 1.0)
 	move_and_slide()
 	_play_anim("walk")
 
