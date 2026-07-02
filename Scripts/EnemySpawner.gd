@@ -30,7 +30,7 @@ func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_na
 	var floor_bonus := maxi(0, level - 1)
 	var total := base_count + floor_bonus
 
-	var pool: Array[String] = ["angry_ball", "DrunkKiller", "Spider", "Turret", "Slime"]
+	var pool: Array[String] = ["angry_ball", "DrunkKiller", "Spider", "Turret"]
 	if level >= 2:
 		pool.append("Clown")
 

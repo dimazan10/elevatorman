@@ -43,8 +43,6 @@ var _invulnerable := false
 
 var _clone_node: Node2D = null
 var _clone_active := false
-var _slow_vfx: Sprite2D = null
-var _slimed: bool = false
 
 func _ready() -> void:
 	current_lives = max_lives
@@ -105,16 +103,6 @@ func _ready() -> void:
 		var stream = load("res://Assets/Sounds/FootStepsSound/FootStep_" + str(i) + ".wav")
 		if stream:
 			footstep_sounds.append(stream)
-
-	_slow_vfx = Sprite2D.new()
-	_slow_vfx.name = "SlowVFX"
-	_slow_vfx.texture = preload("res://Assets/Slime/trail_0.png")
-	_slow_vfx.scale = Vector2(0.35, 0.35)
-	_slow_vfx.position = Vector2(0, 18)
-	_slow_vfx.z_index = 5
-	_slow_vfx.modulate = Color(0.5, 0.8, 0.5, 0.7)
-	add_child(_slow_vfx)
-	_slow_vfx.hide()
 	
 var _ghost_timer := 0.0
 var _noclip := false
@@ -145,8 +133,6 @@ func _process(delta: float) -> void:
 		if slow_timer <= 0:
 			slow_timer = 0.0
 			slow_factor = 1.0
-			_slimed = false
-			_slow_vfx.hide()
 
 	if Input.is_action_just_pressed("use_item_1"):
 		_use_item(0)
@@ -424,13 +410,6 @@ func apply_stun_and_knockback(knockback_impulse: Vector2, duration: float) -> vo
 func apply_slow(factor: float, duration: float) -> void:
 	slow_factor = factor
 	slow_timer = duration
-
-func set_slime_vfx(active: bool) -> void:
-	_slimed = active
-	if active:
-		_slow_vfx.show()
-	else:
-		_slow_vfx.hide()
 
 func apply_pull_toward(target: Node2D, duration: float, offset: Vector2 = Vector2.ZERO) -> void:
 	if is_stunned:
