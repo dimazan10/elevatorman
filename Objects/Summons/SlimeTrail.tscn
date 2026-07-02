@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" path="res://Assets/Slime/trail_0.png" id="2_tex"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_trail"]
-size = Vector2(30, 18)
+size = Vector2(48, 30)
 
 [node name="SlimeTrail" type="Area2D"]
 collision_layer = 0

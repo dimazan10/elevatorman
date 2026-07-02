@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@export var speed: float = 150.0
+@export var speed: float = 200.0
 @export var separation_force: float = 60.0
 @export var aggro_range: float = 350.0
 @export var melee_range: float = 50.0
