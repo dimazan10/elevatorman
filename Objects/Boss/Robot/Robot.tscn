@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://b4syde8vbfls1"]
 
-[ext_resource type="Texture2D" uid="uid://cgq1yxr2v3ixu" path="res://Assets/Boss/RobotBoss/Sprite_Robot/Referens.png" id="1_i1d4f"]
 [ext_resource type="Texture2D" uid="uid://dmfe5p8pqid4n" path="res://Assets/Boss/RobotBoss/Sprite_Robot/Waist.png" id="2_oboc7"]
 [ext_resource type="Texture2D" uid="uid://bjsyni3s15iiw" path="res://Assets/Boss/RobotBoss/Sprite_Robot/Frame.png" id="3_ipx7w"]
 [ext_resource type="Texture2D" uid="uid://ci6s5xr51a320" path="res://Assets/Boss/RobotBoss/Sprite_Robot/Head.png" id="4_kubtn"]
@@ -23,64 +22,81 @@ collision_mask = 3
 position = Vector2(-2, 110)
 shape = SubResource("CircleShape2D_hitbox")
 
-[node name="Referens" type="Sprite2D" parent="." unique_id=225696410]
-visible = false
-position = Vector2(10.999999, 112.99999)
-scale = Vector2(0.55999994, 0.5347682)
-texture = ExtResource("1_i1d4f")
+[node name="WaistBone" type="Node2D" parent="." unique_id=100]
 
-[node name="Waist" type="Sprite2D" parent="." unique_id=2004373800]
+[node name="Waist" type="Sprite2D" parent="WaistBone" unique_id=2004373800]
 position = Vector2(-1, 149)
 scale = Vector2(1.7599986, 1.4400007)
 texture = ExtResource("2_oboc7")
 
-[node name="Frame" type="Sprite2D" parent="." unique_id=1094246519]
+[node name="TorsoBone" type="Node2D" parent="WaistBone" unique_id=101]
+position = Vector2(1, -149)
+
+[node name="Frame" type="Sprite2D" parent="WaistBone/TorsoBone" unique_id=1094246519]
 scale = Vector2(1.7600008, 1.4)
 texture = ExtResource("3_ipx7w")
 
-[node name="Head" type="Sprite2D" parent="." unique_id=1460552304]
-position = Vector2(-3, -147.99998)
+[node name="HeadBone" type="Node2D" parent="WaistBone/TorsoBone" unique_id=102]
+position = Vector2(-3, -148)
+
+[node name="Head" type="Sprite2D" parent="WaistBone/TorsoBone/HeadBone" unique_id=1460552304]
 scale = Vector2(1.3999977, 1.1200004)
 texture = ExtResource("4_kubtn")
 
-[node name="ArmLeft0" type="Sprite2D" parent="." unique_id=1450376095]
-position = Vector2(-275, 69)
-scale = Vector2(1.4000013, 1.4)
-texture = ExtResource("5_a4143")
+[node name="LeftShoulderBone" type="Node2D" parent="WaistBone/TorsoBone" unique_id=103]
+position = Vector2(-275, -29)
 
-[node name="ArmLeft1" type="Sprite2D" parent="." unique_id=564056170]
-position = Vector2(-288, 205.99998)
-scale = Vector2(1.4000013, 1.4)
-texture = ExtResource("6_3fpg4")
-
-[node name="ArmLeft2" type="Sprite2D" parent="." unique_id=1551895128]
-position = Vector2(264.00003, 81)
-scale = Vector2(1.4000013, 1.4)
-texture = ExtResource("7_fkn03")
-
-[node name="ArmLeft3" type="Sprite2D" parent="." unique_id=795617459]
-position = Vector2(257, 211.99998)
-scale = Vector2(1.4000013, 1.4)
-texture = ExtResource("8_knjt5")
-
-[node name="HandLeft" type="Sprite2D" parent="." unique_id=204776437]
-position = Vector2(-291, 317)
-rotation = -1.5765288
-scale = Vector2(1.974175, 1.9317867)
-texture = ExtResource("9_mgadr")
-
-[node name="RightShoulder2" type="Sprite2D" parent="." unique_id=2008733329]
-position = Vector2(-275, -29.000002)
+[node name="RightShoulder2" type="Sprite2D" parent="WaistBone/TorsoBone/LeftShoulderBone" unique_id=2008733329]
 scale = Vector2(1.6800013, 1.4)
 texture = ExtResource("10_sj1ie")
 
-[node name="RightShoulder" type="Sprite2D" parent="." unique_id=66831270]
+[node name="LeftUpperArmBone" type="Node2D" parent="WaistBone/TorsoBone/LeftShoulderBone" unique_id=104]
+position = Vector2(0, 98)
+
+[node name="ArmLeft0" type="Sprite2D" parent="WaistBone/TorsoBone/LeftShoulderBone/LeftUpperArmBone" unique_id=1450376095]
+scale = Vector2(1.4000013, 1.4)
+texture = ExtResource("5_a4143")
+
+[node name="LeftLowerArmBone" type="Node2D" parent="WaistBone/TorsoBone/LeftShoulderBone/LeftUpperArmBone" unique_id=105]
+position = Vector2(-13, 137)
+
+[node name="ArmLeft1" type="Sprite2D" parent="WaistBone/TorsoBone/LeftShoulderBone/LeftUpperArmBone/LeftLowerArmBone" unique_id=564056170]
+scale = Vector2(1.4000013, 1.4)
+texture = ExtResource("6_3fpg4")
+
+[node name="LeftHandBone" type="Node2D" parent="WaistBone/TorsoBone/LeftShoulderBone/LeftUpperArmBone/LeftLowerArmBone" unique_id=106]
+position = Vector2(-3, 111)
+
+[node name="HandLeft" type="Sprite2D" parent="WaistBone/TorsoBone/LeftShoulderBone/LeftUpperArmBone/LeftLowerArmBone/LeftHandBone" unique_id=204776437]
+rotation = -1.5765288
+scale = Vector2(1.974175, 1.9317865)
+texture = ExtResource("9_mgadr")
+
+[node name="RightShoulderBone" type="Node2D" parent="WaistBone/TorsoBone" unique_id=107]
 position = Vector2(271, -30)
+
+[node name="RightShoulder" type="Sprite2D" parent="WaistBone/TorsoBone/RightShoulderBone" unique_id=66831270]
 scale = Vector2(1.6800013, 1.4)
 texture = ExtResource("11_cghhy")
 
-[node name="HandLeft2" type="Sprite2D" parent="." unique_id=355476607]
-position = Vector2(256, 307)
-rotation = -4.712472
+[node name="RightUpperArmBone" type="Node2D" parent="WaistBone/TorsoBone/RightShoulderBone" unique_id=108]
+position = Vector2(-7, 111)
+
+[node name="ArmLeft2" type="Sprite2D" parent="WaistBone/TorsoBone/RightShoulderBone/RightUpperArmBone" unique_id=1551895128]
+scale = Vector2(1.4000013, 1.4)
+texture = ExtResource("7_fkn03")
+
+[node name="RightLowerArmBone" type="Node2D" parent="WaistBone/TorsoBone/RightShoulderBone/RightUpperArmBone" unique_id=109]
+position = Vector2(-7, 131)
+
+[node name="ArmLeft3" type="Sprite2D" parent="WaistBone/TorsoBone/RightShoulderBone/RightUpperArmBone/RightLowerArmBone" unique_id=795617459]
+scale = Vector2(1.4000013, 1.4)
+texture = ExtResource("8_knjt5")
+
+[node name="RightHandBone" type="Node2D" parent="WaistBone/TorsoBone/RightShoulderBone/RightUpperArmBone/RightLowerArmBone" unique_id=110]
+position = Vector2(-1, 95)
+
+[node name="HandLeft2" type="Sprite2D" parent="WaistBone/TorsoBone/RightShoulderBone/RightUpperArmBone/RightLowerArmBone/RightHandBone" unique_id=355476607]
+rotation = 1.5707134
 scale = Vector2(1.974175, 1.9317867)
 texture = ExtResource("12_ykdh2")
