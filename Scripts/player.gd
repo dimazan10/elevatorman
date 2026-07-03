@@ -59,12 +59,25 @@ func _ready() -> void:
 	add_child(animated_sprite)
 
 	var frames = SpriteFrames.new()
-	frames.add_animation("idle")
-	frames.set_animation_speed("idle", 5)
+	frames.add_animation("idle_left")
+	frames.add_frame("idle_left", load("res://Assets/Sprites_Player/ggl.png"))
+	frames.add_animation("idle_right")
+	frames.add_frame("idle_right", load("res://Assets/Sprites_Player/ggr.png"))
+	frames.add_animation("walk_left")
+	frames.set_animation_speed("walk_left", 10)
+	for i in range(1, 4):
+		frames.add_frame("walk_left", load("res://Assets/Sprites_Player/gglgo" + str(i) + ".png"))
+	frames.set_animation_loop("walk_left", true)
+	frames.add_animation("walk_right")
+	frames.set_animation_speed("walk_right", 10)
+	for i in range(1, 4):
+		frames.add_frame("walk_right", load("res://Assets/Sprites_Player/ggrgo" + str(i) + ".png"))
+	frames.set_animation_loop("walk_right", true)
+	frames.add_animation("walk_down")
+	frames.set_animation_speed("walk_down", 5)
 	for i in range(1, 5):
-		var tex = load("res://Assets/Sprites_Player/gg" + str(i) + ".png")
-		frames.add_frame("idle", tex)
-	frames.set_animation_loop("idle", true)
+		frames.add_frame("walk_down", load("res://Assets/Sprites_Player/gg" + str(i) + ".png"))
+	frames.set_animation_loop("walk_down", true)
 	frames.add_animation("walk_up")
 	frames.set_animation_speed("walk_up", 5)
 	for i in range(1, 5):
@@ -73,7 +86,7 @@ func _ready() -> void:
 	frames.set_animation_loop("walk_up", true)
 
 	animated_sprite.sprite_frames = frames
-	animated_sprite.play("idle")
+	animated_sprite.play("idle_right")
 	animated_sprite.scale = Vector2(1.0, 1.0)
 
 	audio_player = AudioStreamPlayer2D.new()
@@ -209,19 +222,37 @@ func _physics_process(delta: float) -> void:
 			audio_player.play()
 
 		animated_sprite.speed_scale = 1.0
-		if direction.y < 0:
+		if direction.y < -0.3:
+			animated_sprite.flip_h = direction.x < 0
 			animated_sprite.play("walk_up")
+		elif direction.x < -0.3:
+			animated_sprite.flip_h = false
+			animated_sprite.play("walk_left")
+		elif direction.x > 0.3:
+			animated_sprite.flip_h = false
+			animated_sprite.play("walk_right")
 		else:
-			animated_sprite.play("idle")
-			if direction.x > 0:
-				animated_sprite.flip_h = false
-			elif direction.x < 0:
-				animated_sprite.flip_h = true
+			animated_sprite.flip_h = false
+			if last_move_dir.x < -0.3:
+				animated_sprite.play("walk_left")
+			elif last_move_dir.x > 0.3:
+				animated_sprite.play("walk_right")
+			else:
+				animated_sprite.play("walk_down")
 	else:
 		velocity = Vector2.ZERO
-		animated_sprite.play("idle")
-		animated_sprite.speed_scale = 0.0
 		footstep_timer = 0.0
+		if last_move_dir.y < -0.3:
+			animated_sprite.speed_scale = 0.0
+			animated_sprite.flip_h = last_move_dir.x < 0
+			animated_sprite.play("walk_up")
+		elif last_move_dir.y > 0.3:
+			animated_sprite.speed_scale = 0.0
+			animated_sprite.play("walk_down")
+		elif last_move_dir.x < -0.3:
+			animated_sprite.play("idle_left")
+		else:
+			animated_sprite.play("idle_right")
 	
 	_push_enemies_out()
 
