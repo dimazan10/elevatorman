@@ -8,7 +8,7 @@ func _ready() -> void:
 	_ensure_action("dash", [KEY_SHIFT], [[JOY_AXIS_TRIGGER_RIGHT, 1.0]], [JOY_BUTTON_A])
 	_ensure_action("use_item_1", [KEY_Q], [], [JOY_BUTTON_LEFT_SHOULDER])
 	_ensure_action("use_item_2", [KEY_E], [], [JOY_BUTTON_RIGHT_SHOULDER])
-	_ensure_action("pause_game", [KEY_ESCAPE], [], [JOY_BUTTON_START])
+	_ensure_action("pause_game", [KEY_ESCAPE, KEY_BACK], [], [JOY_BUTTON_START])
 	_ensure_action("cheat_menu", [KEY_F2], [], [JOY_BUTTON_BACK])
 
 	_ensure_action("ui_up", [KEY_UP], [[JOY_AXIS_LEFT_Y, -1.0]], [JOY_BUTTON_DPAD_UP])

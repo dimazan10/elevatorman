@@ -19,6 +19,8 @@ var inventory: Array[Dictionary] = [
 ]
 
 func _ready() -> void:
+	if OS.get_name() == "Android":
+		use_mobile_controls = true
 	_load_settings()
 
 func _load_settings() -> void:

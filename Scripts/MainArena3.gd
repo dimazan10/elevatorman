@@ -729,7 +729,7 @@ func _setup_minimap() -> void:
 	var cl := CanvasLayer.new()
 	cl.layer = 100
 	add_child(cl)
-	var minimap_size := Vector2(120, 120)
+	var minimap_size := Vector2(360, 360)
 	var viewport_size := get_viewport().get_visible_rect().size
 	var ctrl := Control.new()
 	ctrl.position = Vector2(viewport_size.x - minimap_size.x - 10, 10)

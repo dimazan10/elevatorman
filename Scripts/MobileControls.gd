@@ -3,7 +3,7 @@ extends CanvasLayer
 const JOYSTICK_RADIUS := 140.0
 const KNOB_RADIUS := 50.0
 const DEADZONE := 0.15
-const MARGIN := 40.0
+const MARGIN := 80.0
 
 var _base: Panel
 var _knob: Panel
@@ -75,10 +75,10 @@ func _create_ui() -> void:
 
 	var dash_btn = Button.new()
 	dash_btn.text = "DASH"
-	dash_btn.size = Vector2(200, 200)
+	dash_btn.size = Vector2(400, 400)
 	dash_btn.set_anchors_and_offsets_preset(Control.PRESET_CENTER_RIGHT)
-	dash_btn.offset_left = -250
-	dash_btn.offset_top = -100
+	dash_btn.offset_left = -450
+	dash_btn.offset_top = -200
 	dash_btn.modulate = Color(1, 0, 0, 0.4)
 	dash_btn.mouse_filter = Control.MOUSE_FILTER_STOP
 	dash_btn.button_down.connect(_on_dash_pressed)

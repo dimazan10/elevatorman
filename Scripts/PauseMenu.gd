@@ -45,7 +45,7 @@ func _ready() -> void:
 
 	var resume_btn := Button.new()
 	resume_btn.text = "Продолжить"
-	resume_btn.custom_minimum_size = Vector2(200, 40)
+	resume_btn.custom_minimum_size = Vector2(400, 80)
 	resume_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	resume_btn.pressed.connect(_on_resume)
 	vbox.add_child(resume_btn)
@@ -54,21 +54,21 @@ func _ready() -> void:
 
 	var restart_btn := Button.new()
 	restart_btn.text = "Рестарт"
-	restart_btn.custom_minimum_size = Vector2(200, 40)
+	restart_btn.custom_minimum_size = Vector2(400, 80)
 	restart_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	restart_btn.pressed.connect(_on_restart)
 	vbox.add_child(restart_btn)
 
 	var settings_btn := Button.new()
 	settings_btn.text = "Настройки"
-	settings_btn.custom_minimum_size = Vector2(200, 40)
+	settings_btn.custom_minimum_size = Vector2(400, 80)
 	settings_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	settings_btn.pressed.connect(_on_settings)
 	vbox.add_child(settings_btn)
 
 	var exit_btn := Button.new()
 	exit_btn.text = "Главное меню"
-	exit_btn.custom_minimum_size = Vector2(200, 40)
+	exit_btn.custom_minimum_size = Vector2(400, 80)
 	exit_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	exit_btn.pressed.connect(_on_exit)
 	vbox.add_child(exit_btn)

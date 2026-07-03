@@ -24,13 +24,13 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -211.0
-offset_top = -111.0
-offset_right = 845.00415
-offset_bottom = 389.0005
+offset_left = -400.0
+offset_top = -250.0
+offset_right = 656.0
+offset_bottom = 250.0
 grow_horizontal = 0
 grow_vertical = 0
-scale = Vector2(0.14, 0.14)
+scale = Vector2(0.35, 0.35)
 mouse_filter = 2
 
 [node name="Slot0" type="Control" parent="Panel/BgWind" unique_id=297730549]
@@ -97,36 +97,4 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="LeftInterection" type="Label" parent="Panel" unique_id=1380342541]
-modulate = Color(1, 1, 1, 0.78431374)
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -230.0
-offset_top = -128.0
-offset_right = -208.0
-offset_bottom = -97.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_font_sizes/font_size = 20
-text = "Q"
 
-[node name="RightInterection" type="Label" parent="Panel" unique_id=531536962]
-modulate = Color(1, 1, 1, 0.78431374)
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -135.0
-offset_top = -128.0
-offset_right = -113.0
-offset_bottom = -97.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_font_sizes/font_size = 20
-text = "E"
