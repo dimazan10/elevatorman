@@ -60,16 +60,18 @@ func _spawn_attack_circles() -> void:
 
 	match current_state:
 		State.LEFT_ATTACK:
-			_spawn_red_circle(left_hand)
-			_spawn_blue_circle(left_hand)
+			_spawn_random_circle(left_hand)
 		State.RIGHT_ATTACK:
-			_spawn_red_circle(right_hand)
-			_spawn_blue_circle(right_hand)
+			_spawn_random_circle(right_hand)
 		State.BOTH_ATTACK:
-			_spawn_red_circle(left_hand)
-			_spawn_blue_circle(left_hand)
-			_spawn_red_circle(right_hand)
-			_spawn_blue_circle(right_hand)
+			_spawn_random_circle(left_hand)
+			_spawn_random_circle(right_hand)
+
+func _spawn_random_circle(pos: Vector2) -> void:
+	if randi() % 2 == 0:
+		_spawn_red_circle(pos)
+	else:
+		_spawn_blue_circle(pos)
 
 func _spawn_red_circle(pos: Vector2) -> void:
 	var area := Area2D.new()
