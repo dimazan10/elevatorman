@@ -153,3 +153,21 @@ position = Vector2(295, 1367)
 
 [node name="Patron3" parent="." unique_id=455251450 instance=ExtResource("8_enryc")]
 position = Vector2(295, 1308)
+
+[node name="Patron4" parent="." unique_id=1828484765 instance=ExtResource("8_enryc")]
+position = Vector2(186, 1428)
+
+[node name="Patron5" parent="." unique_id=1353520599 instance=ExtResource("8_enryc")]
+position = Vector2(185, 1366)
+
+[node name="Patron6" parent="." unique_id=548265078 instance=ExtResource("8_enryc")]
+position = Vector2(185, 1307)
+
+[node name="Patron7" parent="." unique_id=291486871 instance=ExtResource("8_enryc")]
+position = Vector2(69, 1428)
+
+[node name="Patron8" parent="." unique_id=469207843 instance=ExtResource("8_enryc")]
+position = Vector2(68, 1366)
+
+[node name="Patron9" parent="." unique_id=1796421757 instance=ExtResource("8_enryc")]
+position = Vector2(68, 1307)

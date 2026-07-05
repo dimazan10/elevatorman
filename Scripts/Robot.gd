@@ -1,11 +1,19 @@
 extends CharacterBody2D
 
+signal hp_changed(current_hp: int, max_hp: int)
+
 enum State { IDLE, LEFT_ATTACK, RIGHT_ATTACK, BOTH_ATTACK }
 
 var current_state := State.IDLE
 var _circles_spawned := false
 var _attack_cooldown := 0.0
 var _audio: AudioStreamPlayer2D
+var _death_audio: AudioStreamPlayer2D
+var _is_dead := false
+
+var max_hp := 3
+var current_hp := 3
+var _damaged_parts := {}
 
 const IMPACT_TIME := 1.3
 const CIRCLE_RADIUS_RED := 800.0
@@ -13,6 +21,9 @@ const CIRCLE_RADIUS_BLUE := 780.0
 const CIRCLE_LIFETIME := 2.5
 const DAMAGE := 1
 const MOVE_THRESHOLD := 30.0
+const DEATH_CAMERA_ZOOM := Vector2(0.65, 0.65)
+const DEATH_CAMERA_DURATION := 1.0
+const DEATH_ANIMATION := &"Death_Animation"
 
 const CIRCLE_SCENE := preload("res://Objects/Boss/Robot/AttackCircle.tscn")
 
@@ -27,7 +38,133 @@ func _ready() -> void:
 	_audio.bus = &"Effects"
 	add_child(_audio)
 
+	_death_audio = AudioStreamPlayer2D.new()
+	_death_audio.name = "DeathAudio"
+	_death_audio.stream = load("res://Assets/Boss/RobotBoss/Sprite_Robot/Death.mp3")
+	_death_audio.bus = &"Effects"
+	add_child(_death_audio)
+
+	_setup_hitboxes()
+
+func _setup_hitboxes() -> void:
+	var hitbox: Area2D = $Hitbox
+	if hitbox:
+		hitbox.area_entered.connect(_on_part_hit)
+
+func _on_part_hit(area: Area2D) -> void:
+	if not area.is_in_group("bullet"):
+		return
+	try_hit_with_bullet(area, area.global_position)
+
+func try_hit_with_bullet(bullet: Node, hit_position: Vector2) -> bool:
+	if _is_dead:
+		return false
+	if not bullet or not bullet.is_in_group("bullet"):
+		return false
+	if not bullet.has_method("is_used") or not bullet.has_method("mark_used") or not bullet.has_method("on_hit"):
+		return false
+	var already_used: bool = bool(bullet.call("is_used"))
+	if already_used:
+		return false
+
+	var local_y: float = to_local(hit_position).y
+	var part: String = "Waist"
+	if local_y < -90:
+		part = "Head"
+	elif local_y < 65:
+		part = "Torso"
+	if _damaged_parts.has(part):
+		return false
+
+	bullet.call("mark_used")
+	if bullet is Node2D:
+		var bullet_2d: Node2D = bullet as Node2D
+		bullet_2d.global_position = hit_position
+	bullet.call("on_hit")
+	take_damage_to_part(part)
+	return true
+
+func take_damage_to_part(part_name: String) -> void:
+	if _damaged_parts.has(part_name):
+		return
+	_damaged_parts[part_name] = true
+	current_hp = maxi(current_hp - 1, 0)
+	_darken_part_sprite(part_name)
+	hp_changed.emit(current_hp, max_hp)
+	if current_hp <= 0:
+		_die()
+
+func _darken_part_sprite(part_name: String) -> void:
+	var sprite: Sprite2D = null
+	match part_name:
+		"Waist":
+			sprite = $WaistBone/Waist
+		"Torso":
+			sprite = $WaistBone/TorsoBone/Frame
+		"Head":
+			sprite = $WaistBone/TorsoBone/HeadBone/Head
+	if sprite:
+		sprite.modulate = Color(0.1, 0.1, 0.1)
+
+func _die() -> void:
+	if _is_dead:
+		return
+	_is_dead = true
+	current_state = State.IDLE
+	_attack_cooldown = INF
+	_circles_spawned = true
+	_play_death_sequence()
+
+func _play_death_sequence() -> void:
+	var camera: Camera2D = _get_player_camera()
+	var camera_position: Vector2 = Vector2.ZERO
+	var camera_zoom: Vector2 = Vector2.ONE
+	if camera:
+		camera_position = camera.position
+		camera_zoom = camera.zoom
+		_focus_camera_on_boss(camera)
+
+	_death_audio.play()
+	var animation_player: AnimationPlayer = $WaistBone/AnimationPlayer
+	animation_player.play(DEATH_ANIMATION)
+
+	var wait_time: float = animation_player.current_animation_length
+	if _death_audio.stream:
+		wait_time = maxf(wait_time, _death_audio.stream.get_length())
+	await get_tree().create_timer(wait_time).timeout
+
+	if camera:
+		_return_camera_to_player(camera, camera_position, camera_zoom)
+
+func _get_player_camera() -> Camera2D:
+	var player: Node = get_tree().get_first_node_in_group("player")
+	if not player:
+		return null
+
+	return player.get_node_or_null("PlayerCamera") as Camera2D
+
+func _focus_camera_on_boss(camera: Camera2D) -> void:
+	if not camera:
+		return
+
+	var tween: Tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(camera, "global_position", global_position, DEATH_CAMERA_DURATION).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(camera, "zoom", DEATH_CAMERA_ZOOM, DEATH_CAMERA_DURATION).set_ease(Tween.EASE_IN_OUT)
+
+func _return_camera_to_player(camera: Camera2D, camera_position: Vector2, camera_zoom: Vector2) -> void:
+	if not camera:
+		return
+
+	var tween: Tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(camera, "position", camera_position, DEATH_CAMERA_DURATION).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(camera, "zoom", camera_zoom, DEATH_CAMERA_DURATION).set_ease(Tween.EASE_IN_OUT)
+
 func _process(delta: float) -> void:
+	if _is_dead:
+		return
+
 	if current_state != State.IDLE and not _circles_spawned:
 		if $WaistBone/AnimationPlayer.current_animation_position >= IMPACT_TIME:
 			_spawn_attack_circles()
@@ -43,6 +180,8 @@ func _do_random_attack() -> void:
 	_start_attack(attacks[randi() % attacks.size()])
 
 func _start_attack(attack: State) -> void:
+	if _is_dead:
+		return
 	current_state = attack
 	_circles_spawned = false
 	_audio.play()
@@ -101,6 +240,8 @@ func _spawn_circle(pos: Vector2, radius: float, color: Color, is_blue: bool) -> 
 		area.queue_free()
 
 func _on_animation_finished(anim_name: String) -> void:
+	if _is_dead:
+		return
 	current_state = State.IDLE
 	_attack_cooldown = 2.0 + randf() * 3.0
 	$WaistBone/AnimationPlayer.play("Idle")

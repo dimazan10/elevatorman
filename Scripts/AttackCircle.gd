@@ -1,27 +1,33 @@
 extends Area2D
 
-var circle_radius := 500.0
-var circle_color := Color(1, 0, 0, 0.25)
-var is_blue := false
+var circle_radius: float = 500.0
+var circle_color: Color = Color(1, 0, 0, 0.25)
+var is_blue: bool = false
 
-var _active := false
-var _damage_timer := 0.0
+var _active: bool = false
+var _damage_timer: float = 0.0
+var _bodies_inside: Array[Node2D] = []
 
-const DAMAGE_INTERVAL := 0.5
-const MOVE_THRESHOLD := 30.0
+const DAMAGE_INTERVAL: float = 0.5
+const MOVE_THRESHOLD: float = 30.0
+const CIRCLE_SEGMENTS: int = 96
 
-static var _texture_cache: Dictionary = {}
+static var _polygon_cache: Dictionary = {}
 
 func _ready() -> void:
-	$CollisionShape2D.shape.radius = circle_radius
+	var shape: CircleShape2D = CircleShape2D.new()
+	shape.radius = circle_radius
+	$CollisionShape2D.shape = shape
 
-	var tex := _get_cached_texture(circle_radius)
-	var sprite := Sprite2D.new()
-	sprite.name = "Visual"
-	sprite.texture = tex
-	sprite.modulate = Color(circle_color.r, circle_color.g, circle_color.b, 1.0)
-	add_child(sprite)
-	move_child(sprite, 0)
+	var visual: Polygon2D = Polygon2D.new()
+	visual.name = "Visual"
+	visual.polygon = _get_cached_polygon(circle_radius)
+	visual.color = Color(circle_color.r, circle_color.g, circle_color.b, 1.0)
+	add_child(visual)
+	move_child(visual, 0)
+
+	body_entered.connect(_on_body_entered)
+	body_exited.connect(_on_body_exited)
 
 	modulate = Color(1, 1, 1, 0.0)
 
@@ -37,41 +43,39 @@ func _process(delta: float) -> void:
 	if _damage_timer > 0:
 		return
 
-	for body in get_overlapping_bodies():
+	for body: Node2D in _bodies_inside:
+		if not is_instance_valid(body):
+			continue
 		if body.is_in_group("player") and body.has_method("take_damage"):
 			if is_blue:
-				if body.velocity.length() > MOVE_THRESHOLD:
-					body.take_damage(1)
+				var character: CharacterBody2D = body as CharacterBody2D
+				if character and character.velocity.length() > MOVE_THRESHOLD:
+					body.call("take_damage", 1)
 					_damage_timer = DAMAGE_INTERVAL
 			else:
-				body.take_damage(1)
+				body.call("take_damage", 1)
 				_damage_timer = DAMAGE_INTERVAL
 
 func _exit_tree() -> void:
 	_active = false
+	_bodies_inside.clear()
 
-static func _get_cached_texture(radius: float) -> Texture2D:
-	var key := int(radius)
-	if _texture_cache.has(key):
-		return _texture_cache[key]
+func _on_body_entered(body: Node2D) -> void:
+	if not _bodies_inside.has(body):
+		_bodies_inside.append(body)
 
-	var tex := _create_circle_texture(radius)
-	_texture_cache[key] = tex
-	return tex
+func _on_body_exited(body: Node2D) -> void:
+	_bodies_inside.erase(body)
 
-static func _create_circle_texture(radius: float) -> Texture2D:
-	var size := int(ceil(radius * 2))
-	var image := Image.create(size, size, false, Image.FORMAT_RGBA8)
-	var center := Vector2(radius, radius)
-	var radius_sq := radius * radius
-	for x in size:
-		for y in size:
-			var dx := x - center.x
-			var dy := y - center.y
-			var dist_sq := dx * dx + dy * dy
-			if dist_sq <= radius_sq:
-				var alpha := 1.0
-				if dist_sq > (radius - 2.0) * (radius - 2.0):
-					alpha = 1.0 - (sqrt(dist_sq) - (radius - 2.0)) / 2.0
-				image.set_pixel(x, y, Color(1, 1, 1, alpha))
-	return ImageTexture.create_from_image(image)
+static func _get_cached_polygon(radius: float) -> PackedVector2Array:
+	var key: int = int(radius)
+	if _polygon_cache.has(key):
+		return _polygon_cache[key] as PackedVector2Array
+
+	var points: PackedVector2Array = PackedVector2Array()
+	points.resize(CIRCLE_SEGMENTS)
+	for i: int in range(CIRCLE_SEGMENTS):
+		var angle: float = TAU * float(i) / float(CIRCLE_SEGMENTS)
+		points[i] = Vector2(cos(angle), sin(angle)) * radius
+	_polygon_cache[key] = points
+	return points
