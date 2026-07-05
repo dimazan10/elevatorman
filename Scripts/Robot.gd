@@ -243,17 +243,12 @@ func _update_laser(delta: float) -> void:
 			var muzzle: Marker2D = _laser_muzzle
 			var target_angle: float = muzzle.global_position.angle_to_point(player.global_position)
 			muzzle.global_rotation = lerp_angle(muzzle.global_rotation, target_angle, delta * LASER_TRACK_SPEED)
-			_laser_ray.force_raycast_update()
-			var cast_point: Vector2 = _laser_ray.target_position
-			if _laser_ray.is_colliding():
-				cast_point = muzzle.to_local(_laser_ray.get_collision_point())
-			_laser_line.set_point_position(1, cast_point)
+			_laser_line.set_point_position(1, Vector2(LASER_RANGE, 0))
 
 			var muzzle_dir := Vector2.RIGHT.rotated(muzzle.global_rotation)
 			var to_player := (player.global_position - muzzle.global_position).normalized()
-			var is_aimed_at_player := muzzle_dir.dot(to_player) > 0.95
 			var in_range := muzzle.global_position.distance_to(player.global_position) <= LASER_RANGE
-			var hit_player := is_aimed_at_player and in_range
+			var hit_player := muzzle_dir.dot(to_player) > 0.95 and in_range
 
 			if _laser_state == LaserState.FIRING and hit_player:
 				_laser_damage_accum += LASER_DPS * delta
@@ -262,6 +257,10 @@ func _update_laser(delta: float) -> void:
 					_laser_damage_accum -= dmg
 					if player and player.has_method("take_damage"):
 						player.call("take_damage", dmg)
+						if player is CanvasItem:
+							var tw := create_tween()
+							tw.tween_property(player, "modulate", Color.RED, 0.05)
+							tw.tween_property(player, "modulate", Color.WHITE, 0.1)
 
 			if _laser_timer <= 0:
 				_end_laser()
