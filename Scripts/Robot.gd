@@ -40,6 +40,7 @@ const LASER_FIRE_DURATION := 2.0
 const LASER_COOLDOWN := 4.0
 const LASER_DPS := 50.0
 const LASER_RANGE := 3500.0
+const LASER_TRACK_SPEED := 1.5
 
 const CIRCLE_SCENE := preload("res://Objects/Boss/Robot/AttackCircle.tscn")
 
@@ -240,7 +241,8 @@ func _update_laser(delta: float) -> void:
 		LaserState.WARNING, LaserState.FIRING:
 			_laser_timer -= delta
 			var muzzle: Marker2D = _laser_muzzle
-			muzzle.look_at(player.global_position)
+			var target_angle: float = muzzle.global_position.angle_to_point(player.global_position)
+			muzzle.global_rotation = lerp_angle(muzzle.global_rotation, target_angle, delta * LASER_TRACK_SPEED)
 			_laser_ray.force_raycast_update()
 			var cast_point: Vector2 = _laser_ray.target_position
 			var hit_player := false
@@ -272,7 +274,8 @@ func _start_laser_warning(player: Node2D) -> void:
 	_laser_line.visible = true
 	_laser_line.width = 2.0
 	_laser_line.default_color = Color(1.0, 0.2, 0.2, 0.4)
-	_laser_muzzle.look_at(player.global_position)
+	var target_angle: float = _laser_muzzle.global_position.angle_to_point(player.global_position)
+	_laser_muzzle.global_rotation = target_angle
 
 func _end_laser() -> void:
 	if _laser_state == LaserState.WARNING:
