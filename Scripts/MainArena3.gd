@@ -2,6 +2,7 @@ extends Node2D
 
 const FadeTransition := preload("res://Scripts/FadeTransition.gd")
 const WALL_PUSHER_SCRIPT = preload("res://Scripts/WallPusher.gd")
+const CrateSpawnerScript = preload("res://Scripts/CrateSpawner.gd")
 
 signal player_zone_changed(zone_name: String)
 
@@ -627,6 +628,7 @@ func _enable_collision_shapes(node: Node) -> void:
 		_enable_collision_shapes(child)
 
 func _generate_world() -> void:
+	CrateSpawnerScript.reset_equipment()
 	_arena_switches.clear()
 	_arena_pushers.clear()
 	_minimap_centers.clear()

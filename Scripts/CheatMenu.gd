@@ -440,6 +440,8 @@ func _spawn_creature(scene_path: String) -> void:
 				child.start()
 	_error_label.text = ""
 
+const CRATE_LOOT_POOL := ["tube", "clone", "infinit", "bucket", "collar"]
+
 func _spawn_crate() -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
@@ -450,6 +452,7 @@ func _spawn_crate() -> void:
 		_error_label.text = "Сцена коробки не найдена"
 		return
 	var inst = crate_scene.instantiate()
+	inst.loot_id = CRATE_LOOT_POOL[randi() % CRATE_LOOT_POOL.size()]
 	var offset = Vector2(randf_range(-80, 80), randf_range(-80, 80))
 	inst.global_position = player.global_position + offset
 	get_tree().current_scene.add_child(inst)
