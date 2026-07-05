@@ -243,19 +243,21 @@ func _update_laser(delta: float) -> void:
 			muzzle.look_at(player.global_position)
 			_laser_ray.force_raycast_update()
 			var cast_point: Vector2 = _laser_ray.target_position
+			var hit_player := false
 			if _laser_ray.is_colliding():
-				cast_point = muzzle.to_local(_laser_ray.get_collision_point())
+				var collider: Object = _laser_ray.get_collider()
+				if collider and (collider == player or (collider is Node and collider.is_in_group("player"))):
+					cast_point = muzzle.to_local(_laser_ray.get_collision_point())
+					hit_player = true
 			_laser_line.set_point_position(1, cast_point)
 
-			if _laser_state == LaserState.FIRING:
-				if _laser_ray.is_colliding():
-					_laser_damage_accum += LASER_DPS * delta
-					if _laser_damage_accum >= 1.0:
-						var dmg: int = int(_laser_damage_accum)
-						_laser_damage_accum -= dmg
-						var collider: Object = _laser_ray.get_collider()
-						if collider and collider is Node and collider.has_method("take_damage"):
-							collider.call("take_damage", dmg)
+			if _laser_state == LaserState.FIRING and hit_player:
+				_laser_damage_accum += LASER_DPS * delta
+				if _laser_damage_accum >= 1.0:
+					var dmg: int = int(_laser_damage_accum)
+					_laser_damage_accum -= dmg
+					if player and player.has_method("take_damage"):
+						player.call("take_damage", dmg)
 
 			if _laser_timer <= 0:
 				_end_laser()
