@@ -90,6 +90,9 @@ func _spawn_red_circle(pos: Vector2) -> void:
 	area.add_child(visual)
 
 	area.body_entered.connect(_on_red_circle_entered)
+	area.scale = Vector2.ZERO
+	var tw := area.create_tween()
+	tw.tween_property(area, "scale", Vector2.ONE, 0.4).set_ease(Tween.EASE_OUT)
 
 	get_parent().add_child(area)
 
@@ -114,6 +117,9 @@ func _spawn_blue_circle(pos: Vector2) -> void:
 	area.add_child(visual)
 
 	area.body_entered.connect(_on_blue_circle_entered)
+	area.scale = Vector2.ZERO
+	var tw := area.create_tween()
+	tw.tween_property(area, "scale", Vector2.ONE, 0.4).set_ease(Tween.EASE_OUT)
 
 	get_parent().add_child(area)
 
