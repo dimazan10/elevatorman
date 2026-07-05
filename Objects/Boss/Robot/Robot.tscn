@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://ccffgbs3fxei2" path="res://Assets/Boss/RobotBoss/Sprite_Robot/Left_Shoulder.png" id="10_sj1ie"]
 [ext_resource type="Texture2D" uid="uid://cpqxijeixi7q0" path="res://Assets/Boss/RobotBoss/Sprite_Robot/Right_Shoulder.png" id="11_cghhy"]
 [ext_resource type="Texture2D" uid="uid://cpgbghlaj33x2" path="res://Assets/Boss/RobotBoss/Sprite_Robot/Hand_Right.png" id="12_ykdh2"]
-[ext_resource type="Script" path="res://Scripts/Robot.gd" id="13_robot"]
+[ext_resource type="Script" uid="uid://dn6dces3v2erg" path="res://Scripts/Robot.gd" id="13_robot"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hitbox"]
 radius = 200.0
@@ -760,7 +760,7 @@ scale = Vector2(1.4000013, 1.4)
 texture = ExtResource("8_knjt5")
 
 [node name="LeftCircleMarker" type="Marker2D" parent="." unique_id=130]
-position = Vector2(-290, 150)
+position = Vector2(-291, 360)
 
 [node name="RightCircleMarker" type="Marker2D" parent="." unique_id=131]
-position = Vector2(257, 150)
+position = Vector2(257, 346)

@@ -14,7 +14,7 @@ const CIRCLE_LIFETIME := 2.5
 const DAMAGE := 1
 const MOVE_THRESHOLD := 30.0
 
-const CIRCLE_DRAW := preload("res://Scripts/CircleDraw.gd")
+const CIRCLE_SCENE := preload("res://Objects/Boss/Robot/AttackCircle.tscn")
 
 func _ready() -> void:
 	add_to_group("enemy")
@@ -71,54 +71,21 @@ func _spawn_attack_circles() -> void:
 
 func _spawn_random_circle(pos: Vector2) -> void:
 	if randi() % 2 == 0:
-		_spawn_red_circle(pos)
+		_spawn_circle(pos, CIRCLE_RADIUS_RED, Color(1, 0, 0, 0.25), false)
 	else:
-		_spawn_blue_circle(pos)
+		_spawn_circle(pos, CIRCLE_RADIUS_BLUE, Color(0, 0, 1, 0.25), true)
 
-func _spawn_red_circle(pos: Vector2) -> void:
-	var area := Area2D.new()
+func _spawn_circle(pos: Vector2, radius: float, color: Color, is_blue: bool) -> void:
+	var area := CIRCLE_SCENE.instantiate()
 	area.global_position = pos
+	area.circle_radius = radius
+	area.circle_color = color
+	area.is_blue = is_blue
+	if is_blue:
+		area.body_entered.connect(_on_blue_circle_entered)
+	else:
+		area.body_entered.connect(_on_red_circle_entered)
 
-	var shape := CollisionShape2D.new()
-	var circle := CircleShape2D.new()
-	circle.radius = CIRCLE_RADIUS_RED
-	shape.shape = circle
-	area.add_child(shape)
-
-	var visual := Node2D.new()
-	visual.set_script(CIRCLE_DRAW)
-	visual.radius = CIRCLE_RADIUS_RED
-	visual.color = Color(1, 0, 0, 0.25)
-	area.add_child(visual)
-
-	area.body_entered.connect(_on_red_circle_entered)
-	area.scale = Vector2.ZERO
-	var tw := area.create_tween()
-	tw.tween_property(area, "scale", Vector2.ONE, 0.4).set_ease(Tween.EASE_OUT)
-
-	get_parent().add_child(area)
-
-	await get_tree().create_timer(CIRCLE_LIFETIME).timeout
-	if is_instance_valid(area):
-		area.queue_free()
-
-func _spawn_blue_circle(pos: Vector2) -> void:
-	var area := Area2D.new()
-	area.global_position = pos
-
-	var shape := CollisionShape2D.new()
-	var circle := CircleShape2D.new()
-	circle.radius = CIRCLE_RADIUS_BLUE
-	shape.shape = circle
-	area.add_child(shape)
-
-	var visual := Node2D.new()
-	visual.set_script(CIRCLE_DRAW)
-	visual.radius = CIRCLE_RADIUS_BLUE
-	visual.color = Color(0, 0, 1, 0.25)
-	area.add_child(visual)
-
-	area.body_entered.connect(_on_blue_circle_entered)
 	area.scale = Vector2.ZERO
 	var tw := area.create_tween()
 	tw.tween_property(area, "scale", Vector2.ONE, 0.4).set_ease(Tween.EASE_OUT)
