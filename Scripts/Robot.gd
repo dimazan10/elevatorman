@@ -168,6 +168,7 @@ func _process(delta: float) -> void:
 	if current_state != State.IDLE and not _circles_spawned:
 		if $WaistBone/AnimationPlayer.current_animation_position >= IMPACT_TIME:
 			_spawn_attack_circles()
+			_shake_camera(1.5, 20.0)
 			_circles_spawned = true
 
 	if current_state == State.IDLE:
@@ -192,6 +193,21 @@ func _start_attack(attack: State) -> void:
 			$WaistBone/AnimationPlayer.play("Right_Attack_Hand")
 		State.BOTH_ATTACK:
 			$WaistBone/AnimationPlayer.play("Attack_Hands")
+
+func _shake_camera(duration: float, intensity: float) -> void:
+	var camera := _get_player_camera()
+	if not camera:
+		return
+	var orig_offset := camera.offset
+	var tw := create_tween()
+	tw.tween_method(
+		func(progress: float) -> void:
+			var decay: float = 1.0 - progress
+			var cur: float = intensity * decay
+			camera.offset = Vector2(randf_range(-cur, cur), randf_range(-cur, cur)),
+		0.0, 1.0, duration
+	)
+	tw.tween_callback(func() -> void: camera.offset = orig_offset)
 
 func _spawn_attack_circles() -> void:
 	var left_marker = $LeftCircleMarker
