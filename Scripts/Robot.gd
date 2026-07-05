@@ -86,13 +86,20 @@ func _spawn_circle(pos: Vector2, radius: float, color: Color, is_blue: bool) -> 
 	else:
 		area.body_entered.connect(_on_red_circle_entered)
 
+	get_parent().add_child(area)
+
 	area.scale = Vector2.ZERO
 	var tw := area.create_tween()
 	tw.tween_property(area, "scale", Vector2.ONE, 0.4).set_ease(Tween.EASE_OUT)
+	tw.parallel().tween_property(area, "modulate:a", color.a, 0.4).from(0.0)
 
-	get_parent().add_child(area)
+	await get_tree().create_timer(CIRCLE_LIFETIME - 0.5).timeout
+	if not is_instance_valid(area):
+		return
 
-	await get_tree().create_timer(CIRCLE_LIFETIME).timeout
+	var fade := area.create_tween()
+	fade.tween_property(area, "modulate:a", 0.0, 0.5)
+	await fade.finished
 	if is_instance_valid(area):
 		area.queue_free()
 
