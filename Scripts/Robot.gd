@@ -3,6 +3,7 @@ extends CharacterBody2D
 signal hp_changed(current_hp: int, max_hp: int)
 
 enum State { IDLE, LEFT_ATTACK, RIGHT_ATTACK, BOTH_ATTACK }
+enum LaserState { READY, WARNING, FIRING }
 
 var current_state := State.IDLE
 var _circles_spawned := false
@@ -15,10 +16,10 @@ var max_hp := 3
 var current_hp := 3
 var _damaged_parts := {}
 
-var _laser_state := LaserState.READY
-var _laser_cooldown := 0.0
-var _laser_timer := 0.0
-var _laser_damage_accum := 0.0
+var _laser_state: LaserState = LaserState.READY
+var _laser_cooldown: float = 0.0
+var _laser_timer: float = 0.0
+var _laser_damage_accum: float = 0.0
 var _laser_muzzle: Marker2D
 var _laser_ray: RayCast2D
 var _laser_line: Line2D
@@ -34,7 +35,6 @@ const DEATH_CAMERA_ZOOM := Vector2(0.65, 0.65)
 const DEATH_CAMERA_DURATION := 1.0
 const DEATH_ANIMATION := &"Death_Animation"
 
-enum LaserState { READY, WARNING, FIRING }
 const LASER_WARN_DURATION := 1.0
 const LASER_FIRE_DURATION := 2.0
 const LASER_COOLDOWN := 4.0
@@ -70,9 +70,16 @@ func _setup_laser() -> void:
 	if not _laser_ray or not _laser_line:
 		return
 	_laser_ray.target_position = Vector2(LASER_RANGE, 0)
+	_laser_ray.collision_mask = 3
+	_laser_ray.enabled = false
+	_laser_ray.add_exception(self)
 	_laser_line.clear_points()
 	_laser_line.add_point(Vector2.ZERO)
 	_laser_line.add_point(Vector2.ZERO)
+	_laser_line.visible = false
+	_laser_line.z_index = 20
+	_laser_line.width = 2.0
+	_laser_line.default_color = Color(1.0, 0.2, 0.2, 0.4)
 
 	_laser_audio = AudioStreamPlayer2D.new()
 	_laser_audio.name = "LaserAudio"
@@ -221,7 +228,7 @@ func _process(delta: float) -> void:
 func _update_laser(delta: float) -> void:
 	if _is_dead or not _laser_ray or not _laser_line:
 		return
-	var player := get_tree().get_first_node_in_group("player") as Node2D
+	var player: Node2D = get_tree().get_first_node_in_group("player") as Node2D
 	if not player:
 		return
 
@@ -232,10 +239,10 @@ func _update_laser(delta: float) -> void:
 				_start_laser_warning(player)
 		LaserState.WARNING, LaserState.FIRING:
 			_laser_timer -= delta
-			var muzzle := _laser_muzzle
+			var muzzle: Marker2D = _laser_muzzle
 			muzzle.look_at(player.global_position)
 			_laser_ray.force_raycast_update()
-			var cast_point := _laser_ray.target_position
+			var cast_point: Vector2 = _laser_ray.target_position
 			if _laser_ray.is_colliding():
 				cast_point = muzzle.to_local(_laser_ray.get_collision_point())
 			_laser_line.set_point_position(1, cast_point)
@@ -244,26 +251,17 @@ func _update_laser(delta: float) -> void:
 				if _laser_ray.is_colliding():
 					_laser_damage_accum += LASER_DPS * delta
 					if _laser_damage_accum >= 1.0:
-						var dmg := int(_laser_damage_accum)
+						var dmg: int = int(_laser_damage_accum)
 						_laser_damage_accum -= dmg
-						var collider := _laser_ray.get_collider()
-						if collider and collider.has_method("take_damage"):
+						var collider: Object = _laser_ray.get_collider()
+						if collider and collider is Node and collider.has_method("take_damage"):
 							collider.call("take_damage", dmg)
 
 			if _laser_timer <= 0:
 				_end_laser()
 
 func _has_los(player: Node2D) -> bool:
-	if not _laser_muzzle or not is_instance_valid(player):
-		return false
-	var space := get_world_2d().direct_space_state
-	var query := PhysicsRayQueryParameters2D.create(_laser_muzzle.global_position, player.global_position)
-	query.exclude = [get_rid()]
-	var result := space.intersect_ray(query)
-	if result.is_empty():
-		return false
-	var hit := result.collider as Node
-	return hit and (hit == player or hit.is_in_group("player"))
+	return is_instance_valid(player)
 
 func _start_laser_warning(player: Node2D) -> void:
 	_laser_state = LaserState.WARNING
