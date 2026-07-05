@@ -8,8 +8,8 @@ var _attack_cooldown := 0.0
 var _audio: AudioStreamPlayer2D
 
 const IMPACT_TIME := 1.3
-const CIRCLE_RADIUS_RED := 50.0
-const CIRCLE_RADIUS_BLUE := 40.0
+const CIRCLE_RADIUS_RED := 120.0
+const CIRCLE_RADIUS_BLUE := 100.0
 const CIRCLE_LIFETIME := 2.5
 const DAMAGE := 1
 const MOVE_THRESHOLD := 30.0
