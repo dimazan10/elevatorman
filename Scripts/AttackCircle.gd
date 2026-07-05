@@ -10,10 +10,12 @@ var _damage_timer := 0.0
 const DAMAGE_INTERVAL := 0.5
 const MOVE_THRESHOLD := 30.0
 
+static var _texture_cache: Dictionary = {}
+
 func _ready() -> void:
 	$CollisionShape2D.shape.radius = circle_radius
 
-	var tex := _create_circle_texture(circle_radius)
+	var tex := _get_cached_texture(circle_radius)
 	var sprite := Sprite2D.new()
 	sprite.name = "Visual"
 	sprite.texture = tex
@@ -48,16 +50,28 @@ func _process(delta: float) -> void:
 func _exit_tree() -> void:
 	_active = false
 
-func _create_circle_texture(radius: float) -> Texture2D:
+static func _get_cached_texture(radius: float) -> Texture2D:
+	var key := int(radius)
+	if _texture_cache.has(key):
+		return _texture_cache[key]
+
+	var tex := _create_circle_texture(radius)
+	_texture_cache[key] = tex
+	return tex
+
+static func _create_circle_texture(radius: float) -> Texture2D:
 	var size := int(ceil(radius * 2))
 	var image := Image.create(size, size, false, Image.FORMAT_RGBA8)
 	var center := Vector2(radius, radius)
+	var radius_sq := radius * radius
 	for x in size:
 		for y in size:
-			var dist := Vector2(x, y).distance_to(center)
-			if dist <= radius:
+			var dx := x - center.x
+			var dy := y - center.y
+			var dist_sq := dx * dx + dy * dy
+			if dist_sq <= radius_sq:
 				var alpha := 1.0
-				if dist > radius - 2.0:
-					alpha = 1.0 - (dist - (radius - 2.0)) / 2.0
+				if dist_sq > (radius - 2.0) * (radius - 2.0):
+					alpha = 1.0 - (sqrt(dist_sq) - (radius - 2.0)) / 2.0
 				image.set_pixel(x, y, Color(1, 1, 1, alpha))
 	return ImageTexture.create_from_image(image)
