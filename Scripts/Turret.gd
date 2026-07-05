@@ -16,6 +16,7 @@ var cooldown_timer: Timer
 var player: Node2D
 var _damage_accum: float = 0.0
 var _enraged: bool = false
+var _shoot_audio: AudioStreamPlayer2D
 
 func _ready() -> void:
 	add_to_group("turret")
@@ -54,6 +55,12 @@ func _ready() -> void:
 	line.clear_points()
 	line.add_point(Vector2.ZERO)
 	line.add_point(Vector2.ZERO)
+
+	_shoot_audio = AudioStreamPlayer2D.new()
+	_shoot_audio.name = "ShootAudio"
+	_shoot_audio.stream = load("res://Assets/Turret/laser_shot.mp3")
+	_shoot_audio.bus = &"Effects"
+	add_child(_shoot_audio)
 
 	cooldown_timer.wait_time = cooldown
 	cooldown_timer.autostart = true
@@ -124,6 +131,7 @@ func start_attack_sequence() -> void:
 		return
 
 	current_state = TurretState.FIRING
+	_shoot_audio.play()
 
 	line.width = 6.0
 	line.default_color = Color(1.0, 0.0, 0.0, 1.0)
