@@ -246,9 +246,11 @@ func _update_laser(delta: float) -> void:
 			_laser_line.set_point_position(1, Vector2(LASER_RANGE, 0))
 
 			var muzzle_dir := Vector2.RIGHT.rotated(muzzle.global_rotation)
-			var to_player := (player.global_position - muzzle.global_position).normalized()
-			var in_range := muzzle.global_position.distance_to(player.global_position) <= LASER_RANGE
-			var hit_player := muzzle_dir.dot(to_player) > 0.95 and in_range
+			var to_player_vec := player.global_position - muzzle.global_position
+			var beam_dist := to_player_vec.dot(muzzle_dir)
+			var beam_dist_sq := beam_dist * beam_dist
+			var perp_dist_sq := to_player_vec.length_squared() - beam_dist_sq
+			var hit_player := perp_dist_sq < 1600 and beam_dist > 0 and beam_dist < LASER_RANGE
 
 			if _laser_state == LaserState.FIRING and hit_player:
 				_laser_damage_accum += LASER_DPS * delta
