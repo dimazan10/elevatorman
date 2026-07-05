@@ -39,7 +39,7 @@ const LASER_WARN_DURATION := 1.0
 const LASER_FIRE_DURATION := 2.0
 const LASER_COOLDOWN := 4.0
 const LASER_DPS := 50.0
-const LASER_RANGE := 2000.0
+const LASER_RANGE := 3500.0
 
 const CIRCLE_SCENE := preload("res://Objects/Boss/Robot/AttackCircle.tscn")
 
