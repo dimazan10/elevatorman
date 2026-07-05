@@ -55,17 +55,19 @@ func _start_attack(attack: State) -> void:
 			$WaistBone/AnimationPlayer.play("Attack_Hands")
 
 func _spawn_attack_circles() -> void:
-	var left_hand = $WaistBone/TorsoBone/LeftHandBone.global_position
-	var right_hand = $WaistBone/TorsoBone/RightHandBone.global_position
+	var left_marker = $LeftCircleMarker
+	var right_marker = $RightCircleMarker
+	if not left_marker or not right_marker:
+		return
 
 	match current_state:
 		State.LEFT_ATTACK:
-			_spawn_random_circle(left_hand)
+			_spawn_random_circle(left_marker.global_position)
 		State.RIGHT_ATTACK:
-			_spawn_random_circle(right_hand)
+			_spawn_random_circle(right_marker.global_position)
 		State.BOTH_ATTACK:
-			_spawn_random_circle(left_hand)
-			_spawn_random_circle(right_hand)
+			_spawn_random_circle(left_marker.global_position)
+			_spawn_random_circle(right_marker.global_position)
 
 func _spawn_random_circle(pos: Vector2) -> void:
 	if randi() % 2 == 0:

@@ -758,3 +758,9 @@ position = Vector2(1, -95)
 [node name="ArmLeft3" type="Sprite2D" parent="WaistBone/TorsoBone/RightHandBone/RightLowerArmBone" unique_id=795617459]
 scale = Vector2(1.4000013, 1.4)
 texture = ExtResource("8_knjt5")
+
+[node name="LeftCircleMarker" type="Marker2D" parent="." unique_id=130]
+position = Vector2(-290, 150)
+
+[node name="RightCircleMarker" type="Marker2D" parent="." unique_id=131]
+position = Vector2(257, 150)
