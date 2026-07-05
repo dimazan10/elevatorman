@@ -4,6 +4,12 @@ var circle_radius := 500.0
 var circle_color := Color(1, 0, 0, 0.25)
 var is_blue := false
 
+var _active := false
+var _damage_timer := 0.0
+
+const DAMAGE_INTERVAL := 0.5
+const MOVE_THRESHOLD := 30.0
+
 func _ready() -> void:
 	$CollisionShape2D.shape.radius = circle_radius
 
@@ -16,6 +22,31 @@ func _ready() -> void:
 	move_child(sprite, 0)
 
 	modulate = Color(1, 1, 1, 0.0)
+
+	await get_tree().create_timer(0.35).timeout
+	if is_instance_valid(self):
+		_active = true
+
+func _process(delta: float) -> void:
+	if not _active:
+		return
+
+	_damage_timer -= delta
+	if _damage_timer > 0:
+		return
+
+	for body in get_overlapping_bodies():
+		if body.is_in_group("player") and body.has_method("take_damage"):
+			if is_blue:
+				if body.velocity.length() > MOVE_THRESHOLD:
+					body.take_damage(1)
+					_damage_timer = DAMAGE_INTERVAL
+			else:
+				body.take_damage(1)
+				_damage_timer = DAMAGE_INTERVAL
+
+func _exit_tree() -> void:
+	_active = false
 
 func _create_circle_texture(radius: float) -> Texture2D:
 	var size := int(ceil(radius * 2))

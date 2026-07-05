@@ -81,10 +81,6 @@ func _spawn_circle(pos: Vector2, radius: float, color: Color, is_blue: bool) -> 
 	area.circle_radius = radius
 	area.circle_color = color
 	area.is_blue = is_blue
-	if is_blue:
-		area.body_entered.connect(_on_blue_circle_entered)
-	else:
-		area.body_entered.connect(_on_red_circle_entered)
 
 	get_parent().add_child(area)
 
@@ -97,20 +93,12 @@ func _spawn_circle(pos: Vector2, radius: float, color: Color, is_blue: bool) -> 
 	if not is_instance_valid(area):
 		return
 
+	area._active = false
 	var fade := area.create_tween()
 	fade.tween_property(area, "modulate:a", 0.0, 0.5)
 	await fade.finished
 	if is_instance_valid(area):
 		area.queue_free()
-
-func _on_red_circle_entered(body: Node) -> void:
-	if body.is_in_group("player") and body.has_method("take_damage"):
-		body.take_damage(DAMAGE)
-
-func _on_blue_circle_entered(body: Node) -> void:
-	if body.is_in_group("player") and body.has_method("take_damage"):
-		if body.velocity.length() > MOVE_THRESHOLD:
-			body.take_damage(DAMAGE)
 
 func _on_animation_finished(anim_name: String) -> void:
 	current_state = State.IDLE
