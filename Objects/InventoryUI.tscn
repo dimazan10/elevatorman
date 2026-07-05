@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b8snbi67cgyle"]
 
-[ext_resource type="Texture2D" uid="uid://b6nahey8m886t" path="res://Assets/Inventory/Wind.png" id="1_wind"]
+[ext_resource type="Texture2D" uid="uid://b6nahey8m886t" path="res://Assets/Items/Wind.png" id="1_wind"]
 [ext_resource type="Script" uid="uid://dk18bspkddtpt" path="res://Scripts/InventoryUI.gd" id="2_script"]
 
 [node name="InventoryUI" type="CanvasLayer" unique_id=977704627]

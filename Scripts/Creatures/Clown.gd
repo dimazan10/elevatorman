@@ -29,9 +29,9 @@ var current_state: State = State.WANDERING
 
 const ENRAGE_TINT := Color(1.8, 0.5, 0.5)
 
-const MELODY_PATH := "res://Assets/Clown/SoundEffect/melody-clown-in-the-circus.mp3"
-const HORN_PATH := "res://Assets/Clown/SoundEffect/festive-horn-single-close-sonorous.mp3"
-const LAUGH_PATH := "res://Assets/Clown/SoundEffect/komik-hohochet--gromko.mp3"
+const MELODY_PATH := "res://Assets/Enemies/Clown/SoundEffect/melody-clown-in-the-circus.mp3"
+const HORN_PATH := "res://Assets/Enemies/Clown/SoundEffect/festive-horn-single-close-sonorous.mp3"
+const LAUGH_PATH := "res://Assets/Enemies/Clown/SoundEffect/komik-hohochet--gromko.mp3"
 
 func _ready() -> void:
 	add_to_group("enemy")
@@ -60,7 +60,7 @@ func _setup_animated_sprite() -> void:
 	var frames := SpriteFrames.new()
 	frames.add_animation(&"walk")
 
-	var dir := DirAccess.open("res://Assets/Clown/")
+	var dir := DirAccess.open("res://Assets/Enemies/Clown/")
 	if dir:
 		var file_names: PackedStringArray = []
 		dir.list_dir_begin()
@@ -73,7 +73,7 @@ func _setup_animated_sprite() -> void:
 
 		file_names.sort()
 		for fn in file_names:
-			var tex := load("res://Assets/Clown/" + fn) as Texture2D
+			var tex := load("res://Assets/Enemies/Clown/" + fn) as Texture2D
 			if tex:
 				frames.add_frame(&"walk", tex)
 

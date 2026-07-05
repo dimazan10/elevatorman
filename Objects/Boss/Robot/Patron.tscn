@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cuhm13y7p8m5q"]
 
-[ext_resource type="Texture2D" uid="uid://065ue5uesi21" path="res://Assets/Boss/RobotBoss/Sprite_Gun/Patron.png" id="1_og0tr"]
+[ext_resource type="Texture2D" uid="uid://065ue5uesi21" path="res://Assets/Enemies/Boss/Sprite_Gun/Patron.png" id="1_og0tr"]
 [ext_resource type="Script" uid="uid://b4k2w55o51dc5" path="res://Scripts/Patron.gd" id="2_patron"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pickup"]

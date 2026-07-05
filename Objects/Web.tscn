@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bhmhffsx33emu"]
 
 [ext_resource type="Script" uid="uid://dok1tqat3pxc0" path="res://Scripts/Web.gd" id="1_web"]
-[ext_resource type="Texture2D" uid="uid://8r6i3sacrb22" path="res://Assets/Sprites_Spider/web.png" id="2_web"]
+[ext_resource type="Texture2D" uid="uid://8r6i3sacrb22" path="res://Assets/Enemies/Spider/web.png" id="2_web"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_web"]
 radius = 128.0

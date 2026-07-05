@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dat4ixuir5ckq"]
 
 [ext_resource type="Script" uid="uid://c0qikf17tq8mk" path="res://Scripts/Creatures/AngryBall.gd" id="1_5kt4o"]
-[ext_resource type="Texture2D" uid="uid://chhc7m7lkhcne" path="res://Assets/AngryBall.png" id="1_uhfjk"]
+[ext_resource type="Texture2D" uid="uid://chhc7m7lkhcne" path="res://Assets/Enemies/AngryBall/AngryBall.png" id="1_uhfjk"]
 [ext_resource type="Script" uid="uid://dhvjfjjaltco1" path="res://Scripts/DangerZone.gd" id="2_danger_script"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_f15s6"]

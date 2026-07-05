@@ -51,13 +51,13 @@ func _ready() -> void:
 
 	_audio = AudioStreamPlayer2D.new()
 	_audio.name = "AttackAudio"
-	_audio.stream = load("res://Assets/Boss/RobotBoss/Sprite_Robot/Attack.mp3")
+	_audio.stream = load("res://Assets/Enemies/Boss/Sprite_Robot/Attack.mp3")
 	_audio.bus = &"Effects"
 	add_child(_audio)
 
 	_death_audio = AudioStreamPlayer2D.new()
 	_death_audio.name = "DeathAudio"
-	_death_audio.stream = load("res://Assets/Boss/RobotBoss/Sprite_Robot/Death.mp3")
+	_death_audio.stream = load("res://Assets/Enemies/Boss/Sprite_Robot/Death.mp3")
 	_death_audio.bus = &"Effects"
 	add_child(_death_audio)
 
@@ -84,7 +84,7 @@ func _setup_laser() -> void:
 
 	_laser_audio = AudioStreamPlayer2D.new()
 	_laser_audio.name = "LaserAudio"
-	_laser_audio.stream = load("res://Assets/Turret/laser_shot.mp3")
+	_laser_audio.stream = load("res://Assets/Enemies/Turret/laser_shot.mp3")
 	_laser_audio.bus = &"Effects"
 	add_child(_laser_audio)
 

@@ -43,6 +43,12 @@ var _invulnerable := false
 
 var _clone_node: Node2D = null
 var _clone_active := false
+var _blink_tween: Tween = null
+
+const REWIND_INTERVAL := 0.1
+const REWIND_BUFFER_SIZE := 40
+var _rewind_buffer: Array[Dictionary] = []
+var _rewind_timer := 0.0
 
 func _ready() -> void:
 	current_lives = max_lives
@@ -152,6 +158,11 @@ func _process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("use_item_2"):
 		_use_item(1)
+
+	_rewind_timer += delta
+	if _rewind_timer >= REWIND_INTERVAL:
+		_rewind_timer = 0.0
+		_record_rewind_state()
 
 func _toggle_noclip() -> void:
 	_noclip = not _noclip
@@ -325,10 +336,12 @@ func take_damage(amount: int):
 	
 	if _try_bucket_hit():
 		_invulnerable = true
+		_start_blink(0.5)
 		Engine.time_scale = 0.0
 		await get_tree().create_timer(0.2, true, false, true).timeout
 		Engine.time_scale = 1.0
 		await get_tree().create_timer(0.3).timeout
+		_stop_blink()
 		_invulnerable = false
 		return
 	
@@ -352,6 +365,13 @@ func take_damage(amount: int):
 	await get_tree().create_timer(0.3).timeout
 	_invulnerable = false
 	
+	if _try_collar_hit():
+		_invulnerable = true
+		_start_blink(2.0)
+		await get_tree().create_timer(2.0).timeout
+		_stop_blink()
+		_invulnerable = false
+	
 	if current_lives <= 0:
 		die()
 
@@ -374,15 +394,9 @@ func _infinit_revive() -> void:
 	_is_dying = false
 	_invulnerable = true
 	can_move = true
-	var tw = create_tween()
-	tw.tween_property(self, "modulate", Color.WHITE, 0.1)
-	tw.tween_property(self, "modulate", Color(1, 1, 1, 0.3), 0.15)
-	tw.tween_property(self, "modulate", Color.WHITE, 0.1)
-	tw.tween_property(self, "modulate", Color(1, 1, 1, 0.3), 0.15)
-	tw.tween_property(self, "modulate", Color.WHITE, 0.1)
-	tw.tween_property(self, "modulate", Color(1, 1, 1, 0.3), 0.15)
-	tw.tween_property(self, "modulate", Color.WHITE, 0.1)
-	await tw.finished
+	_start_blink(0.65)
+	await get_tree().create_timer(0.65).timeout
+	_stop_blink()
 	_invulnerable = false
 
 func _use_item(slot: int) -> void:
@@ -398,6 +412,8 @@ func _use_item(slot: int) -> void:
 			_use_clone(slot)
 		"infinit":
 			pass
+		"rewind":
+			_use_rewind(slot)
 
 func _use_tube(slot: int) -> void:
 	var tube = TUBE_SCENE.instantiate()
@@ -427,6 +443,53 @@ func _on_clone_destroyed() -> void:
 	for e in get_tree().get_nodes_in_group("enemy"):
 		if e.has_method("set_target"):
 			e.set_target(self)
+
+func _start_blink(duration: float) -> void:
+	_stop_blink()
+	_blink_tween = create_tween().set_loops()
+	_blink_tween.tween_property(self, "modulate:a", 0.2, 0.08)
+	_blink_tween.tween_property(self, "modulate:a", 1.0, 0.08)
+
+func _stop_blink() -> void:
+	if _blink_tween:
+		_blink_tween.kill()
+		_blink_tween = null
+	modulate.a = 1.0
+
+func _record_rewind_state() -> void:
+	var inv_copy: Array[Dictionary] = []
+	for s in inventory:
+		inv_copy.append({id = s.id, icon = s.icon, name = s.name})
+	_rewind_buffer.append({
+		position = global_position,
+		hp = current_lives,
+		inventory = inv_copy,
+	})
+	if _rewind_buffer.size() > REWIND_BUFFER_SIZE:
+		_rewind_buffer.pop_front()
+
+func _use_rewind(slot: int) -> void:
+	if _rewind_buffer.is_empty():
+		clear_slot(slot)
+		return
+	var state = _rewind_buffer[0]
+	_rewind_buffer.clear()
+	clear_slot(slot)
+	global_position = state.position
+	current_lives = state.hp
+	for i in range(state.inventory.size()):
+		if i < inventory.size() and state.inventory[i].id != "rewind":
+			inventory[i] = state.inventory[i]
+	health_changed.emit(current_lives)
+	inventory_changed.emit()
+	_invulnerable = true
+	_start_blink(0.45)
+	var tw = create_tween()
+	tw.tween_property(self, "modulate", Color(0.4, 0.6, 1.0), 0.15)
+	tw.tween_property(self, "modulate", Color.WHITE, 0.3)
+	await tw.finished
+	_stop_blink()
+	_invulnerable = false
 
 func apply_stun_and_knockback(knockback_impulse: Vector2, duration: float) -> void:
 	if is_stunned: 
@@ -487,7 +550,9 @@ func has_item(id: String) -> bool:
 	return false
 
 const BUCKET_SCENE = preload("res://Objects/Bucket.tscn")
+const COLLAR_SCENE = preload("res://Objects/Collar.tscn")
 var _bucket: Node = null
+var _collar: Node = null
 
 func _setup_bucket() -> void:
 	_bucket = BUCKET_SCENE.instantiate()
@@ -497,8 +562,22 @@ func _setup_bucket() -> void:
 	_bucket.z_index = z_index
 	add_child(_bucket)
 
+func _setup_collar() -> void:
+	_collar = COLLAR_SCENE.instantiate()
+	_collar.name = "Collar"
+	_collar.position = Vector2(0, -10)
+	_collar.scale = Vector2(0.12, 0.12)
+	_collar.z_index = z_index
+	add_child(_collar)
+
 func _try_bucket_hit() -> bool:
 	if not _bucket or not _bucket.active or _bucket.charges <= 0:
 		return false
 	_bucket.hit()
+	return true
+
+func _try_collar_hit() -> bool:
+	if not _collar or not _collar.active:
+		return false
+	_collar.hit()
 	return true

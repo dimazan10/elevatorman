@@ -2,7 +2,7 @@ extends Node2D
 
 const AIM_OVERLAY := preload("res://Scripts/CannonAimOverlay.gd")
 var CANNON_BULLET: PackedScene
-const PATRON_OUT := preload("res://Assets/Boss/RobotBoss/Sprite_Gun/PatronOut.png")
+const PATRON_OUT := preload("res://Assets/Enemies/Boss/Sprite_Gun/PatronOut.png")
 
 var _aiming := false
 var _gun = null
@@ -20,7 +20,7 @@ var _shoot_audio: AudioStreamPlayer2D = null
 func _ready() -> void:
 	CANNON_BULLET = load("res://Objects/Boss/Robot/CannonBullet.tscn")
 	_shoot_audio = AudioStreamPlayer2D.new()
-	_shoot_audio.stream = load("res://Assets/Boss/RobotBoss/Sprite_Gun/Shoot.mp3")
+	_shoot_audio.stream = load("res://Assets/Enemies/Boss/Sprite_Gun/Shoot.mp3")
 	add_child(_shoot_audio)
 	_prebuffer_audio.call_deferred()
 	$InteractZone.body_entered.connect(_on_zone_entered)

@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://bgdg4ma2ce0ub"]
 
 [ext_resource type="Script" uid="uid://batw0t4m8qbnw" path="res://Scripts/Creatures/Spider.gd" id="1_spider"]
-[ext_resource type="Texture2D" uid="uid://caak13fa5yk2v" path="res://Assets/Sprites_Spider/spider1.png" id="2_s1"]
-[ext_resource type="Texture2D" uid="uid://bxfbpkmaewaxx" path="res://Assets/Sprites_Spider/spider2.png" id="3_s2"]
-[ext_resource type="Texture2D" uid="uid://vrk0midj7owl" path="res://Assets/Sprites_Spider/spider3.png" id="4_s3"]
-[ext_resource type="Texture2D" uid="uid://dwd5fqyihisvy" path="res://Assets/Sprites_Spider/spider4.png" id="5_s4"]
-[ext_resource type="Texture2D" uid="uid://cbx38t67q4uww" path="res://Assets/Sprites_Spider/spider5.png" id="6_s5"]
+[ext_resource type="Texture2D" uid="uid://caak13fa5yk2v" path="res://Assets/Enemies/Spider/spider1.png" id="2_s1"]
+[ext_resource type="Texture2D" uid="uid://bxfbpkmaewaxx" path="res://Assets/Enemies/Spider/spider2.png" id="3_s2"]
+[ext_resource type="Texture2D" uid="uid://vrk0midj7owl" path="res://Assets/Enemies/Spider/spider3.png" id="4_s3"]
+[ext_resource type="Texture2D" uid="uid://dwd5fqyihisvy" path="res://Assets/Enemies/Spider/spider4.png" id="5_s4"]
+[ext_resource type="Texture2D" uid="uid://cbx38t67q4uww" path="res://Assets/Enemies/Spider/spider5.png" id="6_s5"]
 [ext_resource type="Script" uid="uid://dhvjfjjaltco1" path="res://Scripts/DangerZone.gd" id="7_danger_script"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_spider"]

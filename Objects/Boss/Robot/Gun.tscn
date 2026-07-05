@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://2v30o3wcsurj"]
 
-[ext_resource type="Texture2D" uid="uid://u2mfcbbr6gj2" path="res://Assets/Boss/RobotBoss/Sprite_Gun/Down.png" id="1_yjeil"]
-[ext_resource type="Texture2D" uid="uid://cyjxde4ptj053" path="res://Assets/Boss/RobotBoss/Sprite_Gun/Gun.png" id="2_1p7nq"]
-[ext_resource type="Texture2D" uid="uid://dgfukb3s1748c" path="res://Assets/Boss/RobotBoss/Sprite_Gun/AmmoLine.png" id="3_ypw4d"]
-[ext_resource type="Texture2D" uid="uid://065ue5uesi21" path="res://Assets/Boss/RobotBoss/Sprite_Gun/Patron.png" id="4_patron"]
+[ext_resource type="Texture2D" uid="uid://u2mfcbbr6gj2" path="res://Assets/Enemies/Boss/Sprite_Gun/Down.png" id="1_yjeil"]
+[ext_resource type="Texture2D" uid="uid://cyjxde4ptj053" path="res://Assets/Enemies/Boss/Sprite_Gun/Gun.png" id="2_1p7nq"]
+[ext_resource type="Texture2D" uid="uid://dgfukb3s1748c" path="res://Assets/Enemies/Boss/Sprite_Gun/AmmoLine.png" id="3_ypw4d"]
+[ext_resource type="Texture2D" uid="uid://065ue5uesi21" path="res://Assets/Enemies/Boss/Sprite_Gun/Patron.png" id="4_patron"]
 [ext_resource type="Script" uid="uid://cut0h7p2urvnf" path="res://Scripts/Gun.gd" id="5_gun"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]

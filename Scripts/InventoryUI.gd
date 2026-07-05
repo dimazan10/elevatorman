@@ -2,7 +2,7 @@ extends CanvasLayer
 
 const GAMEPAD_ICON_SCALE := 0.1
 
-@onready var wind_tex: Texture2D = preload("res://Assets/Inventory/Wind.png")
+@onready var wind_tex: Texture2D = preload("res://Assets/Items/Wind.png")
 @onready var slots: Array[Control] = [
 	$Panel/BgWind/Slot0,
 	$Panel/BgWind/Slot1,

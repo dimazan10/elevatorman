@@ -3,13 +3,17 @@ extends Control
 const MAX_HP := 5
 const COIN_COLOR := Color(1.0, 0.85, 0.2)
 
-const INFINIT_ICON = preload("res://Assets/Inventory/Infinit.png")
-const TUBE_ICON = preload("res://Assets/Inventory/Tube.png")
-const CLONE_ICON = preload("res://Assets/Inventory/Clone.png")
+const INFINIT_ICON = preload("res://Assets/Items/Infinit.png")
+const TUBE_ICON = preload("res://Assets/Items/Tube.png")
+const CLONE_ICON = preload("res://Assets/Items/Clone.png")
+const REWIND_ICON = preload("res://Assets/Items/Rewind.png")
+const COLLAR_ICON = preload("res://Assets/Items/Collar.png")
 
 const PRICE_INFINIT := 9
 const PRICE_TUBE := 2
 const PRICE_CLONE := 6
+const PRICE_REWIND := 5
+const PRICE_COLLAR := 4
 
 @onready var vbox: VBoxContainer = $VBoxMain
 @onready var time_label: Label = $VBoxMain/HBoxMain/InfoSide/TimeLabel
@@ -23,6 +27,10 @@ const PRICE_CLONE := 6
 @onready var tube_status: Label = $VBoxMain/HBoxMain/InfoSide/TubeStatus
 @onready var clone_btn: Button = $VBoxMain/HBoxMain/InfoSide/CloneBtn
 @onready var clone_status: Label = $VBoxMain/HBoxMain/InfoSide/CloneStatus
+@onready var rewind_btn: Button = $VBoxMain/HBoxMain/InfoSide/RewindBtn
+@onready var rewind_status: Label = $VBoxMain/HBoxMain/InfoSide/RewindStatus
+@onready var collar_btn: Button = $VBoxMain/HBoxMain/InfoSide/CollarBtn
+@onready var collar_status: Label = $VBoxMain/HBoxMain/InfoSide/CollarStatus
 @onready var bottle_body: Panel = $VBoxMain/HBoxMain/BottleSide/BottleBody
 @onready var bottle_clip: Control = $VBoxMain/HBoxMain/BottleSide/BottleBody/BottleClip
 @onready var liquid: ColorRect = $VBoxMain/HBoxMain/BottleSide/BottleBody/BottleClip/Liquid
@@ -91,6 +99,7 @@ func _update_item_ui() -> void:
 	_update_item_button("infinit", infinit_btn, infinit_status, PRICE_INFINIT)
 	_update_item_button("tube", tube_btn, tube_status, PRICE_TUBE)
 	_update_item_button("clone", clone_btn, clone_status, PRICE_CLONE)
+	_update_item_button("rewind", rewind_btn, rewind_status, PRICE_REWIND)
 
 func _update_item_button(id: String, btn: Button, status: Label, price: int) -> void:
 	var owned := false
@@ -126,9 +135,17 @@ func _update_bucket_ui() -> void:
 		bucket_btn.text = "Куплено"
 		bucket_status.text = "Ведро (%d зар." % GameState.bucket_charges + ")"
 	else:
-		bucket_btn.disabled = GameState.currency < 3 or not _collected
+		bucket_btn.disabled = GameState.currency < 3 or not _collected or GameState.has_collar
 		bucket_btn.text = "Купить ведро (3 монеты)"
 		bucket_status.text = ""
+	if GameState.has_collar:
+		collar_btn.disabled = true
+		collar_btn.text = "Куплено"
+		collar_status.text = "Ошейник"
+	else:
+		collar_btn.disabled = GameState.currency < PRICE_COLLAR or not _collected or GameState.has_bucket
+		collar_btn.text = "Купить ошейник (%d монет)" % PRICE_COLLAR
+		collar_status.text = ""
 
 func _on_collect() -> void:
 	if _collected:
@@ -184,6 +201,14 @@ func _on_bucket_buy() -> void:
 	_update_bucket_ui()
 	_update_item_ui()
 
+func _on_collar_buy() -> void:
+	if GameState.currency >= PRICE_COLLAR and not GameState.has_collar:
+		GameState.currency -= PRICE_COLLAR
+		GameState.has_collar = true
+	currency_label.text = str(GameState.currency)
+	_update_bucket_ui()
+	_update_item_ui()
+
 func _on_infinit_buy() -> void:
 	_buy_item("infinit", INFINIT_ICON, PRICE_INFINIT)
 
@@ -193,10 +218,17 @@ func _on_tube_buy() -> void:
 func _on_clone_buy() -> void:
 	_buy_item("clone", CLONE_ICON, PRICE_CLONE)
 
+func _on_rewind_buy() -> void:
+	_buy_item("rewind", REWIND_ICON, PRICE_REWIND)
+
 func _on_continue() -> void:
+	if not _collected:
+		GameState.currency += GameState.last_floor_hp
+		_collected = true
 	if GameState.current_floor >= 3:
 		GameState.current_floor = 1
 		GameState.has_bucket = false
+		GameState.has_collar = false
 		GameState.currency = 0
 		StyleManager.reset_score()
 		get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")

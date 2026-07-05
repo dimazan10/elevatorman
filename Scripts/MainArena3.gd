@@ -95,6 +95,7 @@ func _ready() -> void:
 	_show_player()
 	_hide_floor_label()
 	_restore_bucket_state()
+	_restore_collar_state()
 	_restore_inventory_state()
 	player_node.can_move = true
 	_floor_start_time = Time.get_ticks_msec() / 1000.0
@@ -497,11 +498,15 @@ const MAX_FLOOR := 3
 
 func _save_floor_state() -> void:
 	GameState.has_bucket = false
+	GameState.has_collar = false
 	if not is_instance_valid(player_node):
 		return
 	if player_node.has_method("_try_bucket_hit") and player_node._bucket:
 		GameState.has_bucket = true
 		GameState.bucket_charges = player_node._bucket.charges
+	if player_node.has_method("_try_collar_hit") and player_node._collar:
+		GameState.has_collar = true
+		GameState.collar_charges = player_node._collar.charges
 	if player_node.has_method("get_inventory"):
 		GameState.inventory = player_node.get_inventory().duplicate(true)
 	GameState.last_floor_hp = player_node.current_lives if "current_lives" in player_node else 0
@@ -516,6 +521,16 @@ func _restore_bucket_state() -> void:
 		player_node._setup_bucket()
 		if player_node._bucket:
 			player_node._bucket.charges = GameState.bucket_charges
+
+func _restore_collar_state() -> void:
+	if not GameState.has_collar:
+		return
+	if not is_instance_valid(player_node):
+		return
+	if player_node.has_method("_setup_collar"):
+		player_node._setup_collar()
+		if player_node._collar:
+			player_node._collar.charges = GameState.collar_charges
 
 func _restore_inventory_state() -> void:
 	if not is_instance_valid(player_node):

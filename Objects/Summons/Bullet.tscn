@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scripts/Bullet.gd" id="1_ljs67"]
 [ext_resource type="Script" path="res://Scripts/DangerZone.gd" id="2_danger_script"]
-[ext_resource type="Texture2D" path="res://Assets/Sprites_Killer/Bullet.png" id="1_ubr88"]
+[ext_resource type="Texture2D" path="res://Assets/Enemies/DrunkKiller/Bullet.png" id="1_ubr88"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bullet"]
 radius = 9.0

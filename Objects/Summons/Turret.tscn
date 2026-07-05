@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dj7660j34gbb0"]
 
 [ext_resource type="Script" uid="uid://c3iqgpupdvaus" path="res://Scripts/Turret.gd" id="1_dqpqr"]
-[ext_resource type="Texture2D" uid="uid://hip1hh2hvj6o" path="res://Assets/Turret/TurettaA.png" id="2_wqwmc"]
-[ext_resource type="Texture2D" uid="uid://on86kypqogg7" path="res://Assets/Turret/imageB.png" id="3_2ok68"]
+[ext_resource type="Texture2D" uid="uid://hip1hh2hvj6o" path="res://Assets/Enemies/Turret/TurettaA.png" id="2_wqwmc"]
+[ext_resource type="Texture2D" uid="uid://on86kypqogg7" path="res://Assets/Enemies/Turret/imageB.png" id="3_2ok68"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wqwmc"]
 radius = 37.01351

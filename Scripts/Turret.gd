@@ -59,7 +59,7 @@ func _ready() -> void:
 
 	_shoot_audio = AudioStreamPlayer2D.new()
 	_shoot_audio.name = "ShootAudio"
-	_shoot_audio.stream = load("res://Assets/Turret/laser_shot.mp3")
+	_shoot_audio.stream = load("res://Assets/Enemies/Turret/laser_shot.mp3")
 	_shoot_audio.bus = &"Effects"
 	add_child(_shoot_audio)
 

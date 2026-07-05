@@ -118,9 +118,17 @@ func _ready() -> void:
 	bucket_btn.add_theme_color_override("font_color", Color.GOLD)
 	_panel.add_child(bucket_btn)
 
+	var collar_btn = Button.new()
+	collar_btn.text = "Ошейник"
+	collar_btn.position = Vector2(110, y)
+	collar_btn.size = Vector2(85, 30)
+	collar_btn.pressed.connect(_add_collar)
+	collar_btn.add_theme_color_override("font_color", Color.CYAN)
+	_panel.add_child(collar_btn)
+
 	var infinit_btn = Button.new()
 	infinit_btn.text = "Infinit"
-	infinit_btn.position = Vector2(110, y)
+	infinit_btn.position = Vector2(200, y)
 	infinit_btn.size = Vector2(85, 30)
 	infinit_btn.pressed.connect(_add_infinit)
 	infinit_btn.add_theme_color_override("font_color", Color.WHITE)
@@ -128,7 +136,7 @@ func _ready() -> void:
 
 	var tube_btn = Button.new()
 	tube_btn.text = "Tube"
-	tube_btn.position = Vector2(200, y)
+	tube_btn.position = Vector2(290, y)
 	tube_btn.size = Vector2(85, 30)
 	tube_btn.pressed.connect(_add_tube)
 	tube_btn.add_theme_color_override("font_color", Color.WHITE)
@@ -136,11 +144,19 @@ func _ready() -> void:
 
 	var clone_btn = Button.new()
 	clone_btn.text = "Clone"
-	clone_btn.position = Vector2(290, y)
+	clone_btn.position = Vector2(380, y)
 	clone_btn.size = Vector2(85, 30)
 	clone_btn.pressed.connect(_add_clone)
 	clone_btn.add_theme_color_override("font_color", Color.WHITE)
 	_panel.add_child(clone_btn)
+
+	var rewind_btn = Button.new()
+	rewind_btn.text = "Rewind"
+	rewind_btn.position = Vector2(470, y)
+	rewind_btn.size = Vector2(85, 30)
+	rewind_btn.pressed.connect(_add_rewind)
+	rewind_btn.add_theme_color_override("font_color", Color(0.4, 0.6, 1.0))
+	_panel.add_child(rewind_btn)
 	y += 42
 
 	var section3 = Label.new()
@@ -330,6 +346,22 @@ func _add_bucket() -> void:
 	player._bucket = bucket
 	_error_label.text = ""
 
+func _add_collar() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if not player:
+		return
+	if player.has_node("Collar"):
+		_error_label.text = "Ошейник уже есть"
+		return
+	var collar = preload("res://Objects/Collar.tscn").instantiate()
+	collar.name = "Collar"
+	collar.position = Vector2(0, -10)
+	collar.scale = Vector2(0.12, 0.12)
+	collar.z_index = player.z_index
+	player.add_child(collar)
+	player._collar = collar
+	_error_label.text = ""
+
 func _add_infinit() -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if not player or not player.has_method("set_slot"):
@@ -337,7 +369,7 @@ func _add_infinit() -> void:
 		return
 	for i in range(player.inventory.size()):
 		if player.inventory[i].id == "":
-			player.set_slot(i, "infinit", preload("res://Assets/Inventory/Infinit.png"), "Infinit")
+			player.set_slot(i, "infinit", preload("res://Assets/Items/Infinit.png"), "Infinit")
 			_error_label.text = ""
 			return
 	_error_label.text = "Нет свободных слотов"
@@ -349,7 +381,7 @@ func _add_tube() -> void:
 		return
 	for i in range(player.inventory.size()):
 		if player.inventory[i].id == "":
-			player.set_slot(i, "tube", preload("res://Assets/Inventory/Tube.png"), "Tube")
+			player.set_slot(i, "tube", preload("res://Assets/Items/Tube.png"), "Tube")
 			_error_label.text = ""
 			return
 	_error_label.text = "Нет свободных слотов"
@@ -361,7 +393,19 @@ func _add_clone() -> void:
 		return
 	for i in range(player.inventory.size()):
 		if player.inventory[i].id == "":
-			player.set_slot(i, "clone", preload("res://Assets/Inventory/Clone.png"), "Clone")
+			player.set_slot(i, "clone", preload("res://Assets/Items/Clone.png"), "Clone")
+			_error_label.text = ""
+			return
+	_error_label.text = "Нет свободных слотов"
+
+func _add_rewind() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if not player or not player.has_method("set_slot"):
+		_error_label.text = "Игрок не найден"
+		return
+	for i in range(player.inventory.size()):
+		if player.inventory[i].id == "":
+			player.set_slot(i, "rewind", preload("res://Assets/Items/Rewind.png"), "Rewind")
 			_error_label.text = ""
 			return
 	_error_label.text = "Нет свободных слотов"

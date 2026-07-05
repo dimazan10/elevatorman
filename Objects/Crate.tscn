@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://crate01"]
 
 [ext_resource type="Script" path="res://Scripts/Crate.gd" id="1_crate"]
-[ext_resource type="Texture2D" path="res://Assets/crate.png" id="2_crate"]
+[ext_resource type="Texture2D" path="res://Assets/Items/crate.png" id="2_crate"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_crate"]
 size = Vector2(18, 18)

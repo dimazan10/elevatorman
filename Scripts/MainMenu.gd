@@ -56,6 +56,7 @@ func _on_play_pressed() -> void:
 	_play_click()
 	GameState.current_floor = 1
 	GameState.has_bucket = false
+	GameState.has_collar = false
 	GameState.currency = 0
 	GameState.last_floor_hp = 0
 	StyleManager.reset_score()

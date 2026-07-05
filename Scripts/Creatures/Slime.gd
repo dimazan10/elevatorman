@@ -45,7 +45,7 @@ func _setup_animated_sprite() -> void:
 	frames.add_animation(&"walk")
 	frames.add_animation(&"attack")
 
-	var dir := DirAccess.open("res://Assets/Slime/")
+	var dir := DirAccess.open("res://Assets/Enemies/Slime/")
 	if dir:
 		for anim_name in ["idle", "walk", "attack"]:
 			var file_names: PackedStringArray = []
@@ -58,7 +58,7 @@ func _setup_animated_sprite() -> void:
 			dir.list_dir_end()
 			file_names.sort()
 			for fn in file_names:
-				var tex := load("res://Assets/Slime/" + fn) as Texture2D
+				var tex := load("res://Assets/Enemies/Slime/" + fn) as Texture2D
 				if tex:
 					frames.add_frame(anim_name, tex)
 
