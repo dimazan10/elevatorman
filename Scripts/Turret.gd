@@ -17,6 +17,7 @@ var player: Node2D
 var _damage_accum: float = 0.0
 var _enraged: bool = false
 var _shoot_audio: AudioStreamPlayer2D
+var _frame_count: int = 0
 
 func _ready() -> void:
 	add_to_group("turret")
@@ -80,22 +81,29 @@ func _process(delta: float) -> void:
 			if not raycast or not line or not muzzle:
 				return
 
-			raycast.force_raycast_update()
-			var cast_point = raycast.target_position
+			_frame_count += 1
+			var skip: int = 2 if current_state == TurretState.FIRING else 3
+			if _frame_count % skip != 0:
+				return
 
+			raycast.force_raycast_update()
+			var cast_point: Vector2 = raycast.target_position
+			var hit_player := false
 			if raycast.is_colliding():
 				cast_point = muzzle.to_local(raycast.get_collision_point())
-
-				if current_state == TurretState.FIRING:
-					_damage_accum += damage_per_second * delta
-					if _damage_accum >= 1.0:
-						var dmg := int(_damage_accum)
-						_damage_accum -= dmg
-						var collider = raycast.get_collider()
-						if collider and collider.has_method("take_damage"):
-							collider.take_damage(dmg)
+				var collider = raycast.get_collider()
+				if collider and (collider == player or collider.is_in_group("player")):
+					hit_player = true
 
 			line.set_point_position(1, cast_point)
+
+			if current_state == TurretState.FIRING and hit_player:
+				_damage_accum += damage_per_second * delta * skip
+				if _damage_accum >= 1.0:
+					var dmg := int(_damage_accum)
+					_damage_accum -= dmg
+					if player and player.has_method("take_damage"):
+						player.take_damage(dmg)
 
 func _has_line_of_sight() -> bool:
 	if not is_instance_valid(player) or not muzzle:
