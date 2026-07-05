@@ -1052,6 +1052,19 @@ position = Vector2(-3, -148)
 scale = Vector2(1.3999977, 1.1200004)
 texture = ExtResource("4_kubtn")
 
+[node name="LaserMuzzle" type="Marker2D" parent="WaistBone/TorsoBone/HeadBone"]
+gizmo_extents = 15.0
+
+[node name="RayCast2D" type="RayCast2D" parent="WaistBone/TorsoBone/HeadBone/LaserMuzzle"]
+enabled = false
+target_position = Vector2(10000, 0)
+collision_mask = 3
+
+[node name="Line2D" type="Line2D" parent="WaistBone/TorsoBone/HeadBone/LaserMuzzle"]
+visible = false
+points = PackedVector2Array(0, 0, 100, 0)
+width = 30.0
+
 [node name="LeftShoulderBone" type="Node2D" parent="WaistBone/TorsoBone" unique_id=103]
 position = Vector2(-275, -28)
 

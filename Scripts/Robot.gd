@@ -15,6 +15,15 @@ var max_hp := 3
 var current_hp := 3
 var _damaged_parts := {}
 
+var _laser_state := LaserState.READY
+var _laser_cooldown := 0.0
+var _laser_timer := 0.0
+var _laser_damage_accum := 0.0
+var _laser_muzzle: Marker2D
+var _laser_ray: RayCast2D
+var _laser_line: Line2D
+var _laser_audio: AudioStreamPlayer2D
+
 const IMPACT_TIME := 1.3
 const CIRCLE_RADIUS_RED := 800.0
 const CIRCLE_RADIUS_BLUE := 780.0
@@ -24,6 +33,13 @@ const MOVE_THRESHOLD := 30.0
 const DEATH_CAMERA_ZOOM := Vector2(0.65, 0.65)
 const DEATH_CAMERA_DURATION := 1.0
 const DEATH_ANIMATION := &"Death_Animation"
+
+enum LaserState { READY, WARNING, FIRING }
+const LASER_WARN_DURATION := 1.0
+const LASER_FIRE_DURATION := 2.0
+const LASER_COOLDOWN := 4.0
+const LASER_DPS := 50.0
+const LASER_RANGE := 10000.0
 
 const CIRCLE_SCENE := preload("res://Objects/Boss/Robot/AttackCircle.tscn")
 
@@ -45,6 +61,24 @@ func _ready() -> void:
 	add_child(_death_audio)
 
 	_setup_hitboxes()
+	_setup_laser()
+
+func _setup_laser() -> void:
+	_laser_muzzle = $WaistBone/TorsoBone/HeadBone/LaserMuzzle
+	_laser_ray = _laser_muzzle.get_node_or_null("RayCast2D") as RayCast2D
+	_laser_line = _laser_muzzle.get_node_or_null("Line2D") as Line2D
+	if not _laser_ray or not _laser_line:
+		return
+	_laser_ray.target_position = Vector2(LASER_RANGE, 0)
+	_laser_line.clear_points()
+	_laser_line.add_point(Vector2.ZERO)
+	_laser_line.add_point(Vector2.ZERO)
+
+	_laser_audio = AudioStreamPlayer2D.new()
+	_laser_audio.name = "LaserAudio"
+	_laser_audio.stream = load("res://Assets/Turret/laser_shot.mp3")
+	_laser_audio.bus = &"Effects"
+	add_child(_laser_audio)
 
 func _setup_hitboxes() -> void:
 	var hitbox: Area2D = $Hitbox
@@ -113,6 +147,12 @@ func _die() -> void:
 	current_state = State.IDLE
 	_attack_cooldown = INF
 	_circles_spawned = true
+	_laser_state = LaserState.READY
+	_laser_cooldown = INF
+	if _laser_ray:
+		_laser_ray.enabled = false
+	if _laser_line:
+		_laser_line.visible = false
 	_play_death_sequence()
 
 func _play_death_sequence() -> void:
@@ -171,10 +211,84 @@ func _process(delta: float) -> void:
 			_shake_camera(1.5, 20.0)
 			_circles_spawned = true
 
+	_update_laser(delta)
+
 	if current_state == State.IDLE:
 		_attack_cooldown -= delta
 		if _attack_cooldown <= 0:
 			_do_random_attack()
+
+func _update_laser(delta: float) -> void:
+	if _is_dead or not _laser_ray or not _laser_line:
+		return
+	var player := get_tree().get_first_node_in_group("player") as Node2D
+	if not player:
+		return
+
+	match _laser_state:
+		LaserState.READY:
+			_laser_cooldown -= delta
+			if _laser_cooldown <= 0 and _has_los(player):
+				_start_laser_warning(player)
+		LaserState.WARNING, LaserState.FIRING:
+			_laser_timer -= delta
+			var muzzle := _laser_muzzle
+			muzzle.look_at(player.global_position)
+			_laser_ray.force_raycast_update()
+			var cast_point := _laser_ray.target_position
+			if _laser_ray.is_colliding():
+				cast_point = muzzle.to_local(_laser_ray.get_collision_point())
+			_laser_line.set_point_position(1, cast_point)
+
+			if _laser_state == LaserState.FIRING:
+				if _laser_ray.is_colliding():
+					_laser_damage_accum += LASER_DPS * delta
+					if _laser_damage_accum >= 1.0:
+						var dmg := int(_laser_damage_accum)
+						_laser_damage_accum -= dmg
+						var collider := _laser_ray.get_collider()
+						if collider and collider.has_method("take_damage"):
+							collider.call("take_damage", dmg)
+
+			if _laser_timer <= 0:
+				_end_laser()
+
+func _has_los(player: Node2D) -> bool:
+	if not _laser_muzzle or not is_instance_valid(player):
+		return false
+	var space := get_world_2d().direct_space_state
+	var query := PhysicsRayQueryParameters2D.create(_laser_muzzle.global_position, player.global_position)
+	query.exclude = [get_rid()]
+	var result := space.intersect_ray(query)
+	if result.is_empty():
+		return false
+	var hit := result.collider as Node
+	return hit and (hit == player or hit.is_in_group("player"))
+
+func _start_laser_warning(player: Node2D) -> void:
+	_laser_state = LaserState.WARNING
+	_laser_timer = LASER_WARN_DURATION
+	_laser_ray.enabled = true
+	_laser_line.visible = true
+	_laser_line.width = 2.0
+	_laser_line.default_color = Color(1.0, 0.2, 0.2, 0.4)
+	_laser_muzzle.look_at(player.global_position)
+
+func _end_laser() -> void:
+	if _laser_state == LaserState.WARNING:
+		_laser_state = LaserState.FIRING
+		_laser_timer = LASER_FIRE_DURATION
+		_laser_damage_accum = 0.0
+		_laser_line.width = 6.0
+		_laser_line.default_color = Color(1.0, 0.0, 0.0, 1.0)
+		if _laser_audio:
+			_laser_audio.play()
+	else:
+		_laser_state = LaserState.READY
+		_laser_cooldown = LASER_COOLDOWN
+		_laser_ray.enabled = false
+		_laser_line.visible = false
+		_laser_line.set_point_position(1, Vector2.ZERO)
 
 func _do_random_attack() -> void:
 	var attacks := [State.LEFT_ATTACK, State.RIGHT_ATTACK, State.BOTH_ATTACK]
