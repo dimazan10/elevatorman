@@ -1058,7 +1058,7 @@ gizmo_extents = 15.0
 [node name="RayCast2D" type="RayCast2D" parent="WaistBone/TorsoBone/HeadBone/LaserMuzzle"]
 enabled = false
 target_position = Vector2(10000, 0)
-collision_mask = 3
+collision_mask = 1
 
 [node name="Line2D" type="Line2D" parent="WaistBone/TorsoBone/HeadBone/LaserMuzzle"]
 visible = false

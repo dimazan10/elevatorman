@@ -71,7 +71,7 @@ func _setup_laser() -> void:
 	if not _laser_ray or not _laser_line:
 		return
 	_laser_ray.target_position = Vector2(LASER_RANGE, 0)
-	_laser_ray.collision_mask = 3
+	_laser_ray.collision_mask = 1
 	_laser_ray.enabled = false
 	_laser_ray.add_exception(self)
 	_laser_line.clear_points()
