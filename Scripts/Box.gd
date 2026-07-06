@@ -10,9 +10,11 @@ func _ready():
 func _on_anim_finished(anim: String):
 	if anim == "DownFallBox":
 		var audio := AudioStreamPlayer2D.new()
+		audio.name = "EarthquakeAudio"
 		audio.stream = load("res://Assets/Enemies/Boss/Sprite_Robot/earthquake_sound.mp3")
 		audio.bus = &"Effects"
-		add_child(audio)
+		audio.global_position = global_position
+		get_parent().add_child(audio)
 		audio.play()
 		audio.finished.connect(audio.queue_free)
 
