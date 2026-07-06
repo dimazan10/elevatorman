@@ -16,3 +16,20 @@ func _ready() -> void:
 	var robot := get_node_or_null("Robot")
 	if robot:
 		bar.setup(robot)
+
+	var music := AudioStreamPlayer.new()
+	music.name = "BossMusic"
+	music.stream = load("res://Assets/Enemies/Boss/Sprite_Robot/Music.mp3")
+	music.bus = &"Music"
+	add_child(music)
+	music.play()
+
+	if robot:
+		robot.died.connect(_on_boss_died)
+
+func _on_boss_died() -> void:
+	var music := get_node_or_null("BossMusic") as AudioStreamPlayer
+	if not music:
+		return
+	var tw := create_tween()
+	tw.tween_property(music, "volume_db", -80.0, 2.0)

@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 signal hp_changed(current_hp: int, max_hp: int)
+signal died
 
 enum State { IDLE, LEFT_ATTACK, RIGHT_ATTACK, BOTH_ATTACK }
 enum LaserState { READY, WARNING, FIRING }
@@ -156,6 +157,7 @@ func _die() -> void:
 	if _is_dead:
 		return
 	_is_dead = true
+	died.emit()
 	current_state = State.IDLE
 	_attack_cooldown = INF
 	_circles_spawned = true
