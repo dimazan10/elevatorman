@@ -44,14 +44,14 @@ const LASER_TRACK_SPEED := 1.5
 
 const CIRCLE_SCENE := preload("res://Objects/Boss/Robot/AttackCircle.tscn")
 const BOX_SCENE := preload("res://Objects/Boss/Robot/Box.tscn")
-var _box_fall_zone: Node
+var _box_fall_zone: Node2D
 
 func _ready() -> void:
 	add_to_group("enemy")
 	$WaistBone/AnimationPlayer.play("Idle")
 	$WaistBone/AnimationPlayer.animation_finished.connect(_on_animation_finished)
 
-	_box_fall_zone = get_parent().get_node_or_null("BoxFallZone")
+	_box_fall_zone = get_parent().get_node_or_null("BoxFallZone") as Node2D
 
 	_audio = AudioStreamPlayer2D.new()
 	_audio.name = "AttackAudio"
