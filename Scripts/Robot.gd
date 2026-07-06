@@ -43,11 +43,15 @@ const LASER_RANGE := 3500.0
 const LASER_TRACK_SPEED := 1.5
 
 const CIRCLE_SCENE := preload("res://Objects/Boss/Robot/AttackCircle.tscn")
+const BOX_SCENE := preload("res://Objects/Boss/Robot/Box.tscn")
+var _box_fall_zone: Node
 
 func _ready() -> void:
 	add_to_group("enemy")
 	$WaistBone/AnimationPlayer.play("Idle")
 	$WaistBone/AnimationPlayer.animation_finished.connect(_on_animation_finished)
+
+	_box_fall_zone = get_parent().get_node_or_null("BoxFallZone")
 
 	_audio = AudioStreamPlayer2D.new()
 	_audio.name = "AttackAudio"
@@ -218,6 +222,8 @@ func _process(delta: float) -> void:
 			_spawn_attack_circles()
 			_shake_camera(1.5, 20.0)
 			_circles_spawned = true
+			if randf() < 0.3 and _box_fall_zone:
+				_spawn_falling_box()
 
 	_update_laser(delta)
 
@@ -374,6 +380,21 @@ func _spawn_circle(pos: Vector2, radius: float, color: Color, is_blue: bool) -> 
 	await fade.finished
 	if is_instance_valid(area):
 		area.queue_free()
+
+func _spawn_falling_box() -> void:
+	var zone_shape := _box_fall_zone.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if not zone_shape:
+		return
+	var rect: Rect2 = zone_shape.shape.get_rect()
+	var zpos := _box_fall_zone.global_position
+	var zscale := _box_fall_zone.global_scale
+	var global_rect := Rect2(zpos + rect.position * zscale, rect.size * zscale)
+	var box := BOX_SCENE.instantiate()
+	box.global_position = Vector2(
+		randf_range(global_rect.position.x, global_rect.position.x + global_rect.size.x),
+		randf_range(global_rect.position.y, global_rect.position.y + global_rect.size.y)
+	)
+	get_parent().add_child(box)
 
 func _on_animation_finished(anim_name: String) -> void:
 	if _is_dead:

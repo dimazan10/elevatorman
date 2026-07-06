@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://t33eloqiwauh"]
+
+[ext_resource type="Script" path="res://Scripts/Box.gd" id="1_box"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_84fg6"]
+load_path = "res://.godot/imported/crate.png-d8419d2d4a7e023b2a15c056e94b1382.ctex"
+
+[sub_resource type="Animation" id="Animation_re0mf"]
+resource_name = "DownFallBox"
+length = 3.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(7.209997, 7.209997),
+"update": 0,
+"values": [Vector2(0, -1244), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2, 2.54, 3),
+"transitions": PackedFloat32Array(7.209997, 1, 1, 7.209997),
+"update": 0,
+"values": [0.0, -1.1744424, -2.8744988, 0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1.3, 2.0666666, 3, 3.0333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_u7l0j"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_k66dc"]
+_data = {
+&"DownFallBox": SubResource("Animation_re0mf"),
+&"RESET": SubResource("Animation_u7l0j")
+}
+
+[node name="Box" type="Node2D" unique_id=843458272]
+script = ExtResource("1_box")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=113769513]
+z_index = 3
+scale = Vector2(0.11, 0.11)
+texture = SubResource("CompressedTexture2D_84fg6")
+region_enabled = true
+region_rect = Rect2(0, 0, 256, 256)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite2D" unique_id=865190909]
+libraries/ = SubResource("AnimationLibrary_k66dc")

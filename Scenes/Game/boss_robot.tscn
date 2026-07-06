@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://2v30o3wcsurj" path="res://Objects/Boss/Robot/Gun.tscn" id="5_7o10g"]
 [ext_resource type="PackedScene" uid="uid://bgq1qqvmixcdb" path="res://Objects/Boss/Robot/Computer.tscn" id="6_enryc"]
 [ext_resource type="PackedScene" uid="uid://b4syde8vbfls1" path="res://Objects/Boss/Robot/Robot.tscn" id="7_w7dnu"]
-[ext_resource type="PackedScene" uid="uid://cuhm13y7p8m5q" path="res://Objects/Boss/Robot/Patron.tscn" id="8_enryc"]
 
 [sub_resource type="RectangleShape2D" id="RectShape_wall_h"]
 size = Vector2(1160, 20)
@@ -145,29 +144,8 @@ position = Vector2(817, 1485)
 [node name="Robot" parent="." unique_id=637653963 instance=ExtResource("7_w7dnu")]
 position = Vector2(635, 319)
 
-[node name="Patron" parent="." unique_id=103311701 instance=ExtResource("8_enryc")]
-position = Vector2(296, 1429)
+[node name="BoxFallZone" type="Node2D" parent="."]
+position = Vector2(639, 1100)
 
-[node name="Patron2" parent="." unique_id=1229587756 instance=ExtResource("8_enryc")]
-position = Vector2(295, 1367)
-
-[node name="Patron3" parent="." unique_id=455251450 instance=ExtResource("8_enryc")]
-position = Vector2(295, 1308)
-
-[node name="Patron4" parent="." unique_id=1828484765 instance=ExtResource("8_enryc")]
-position = Vector2(186, 1428)
-
-[node name="Patron5" parent="." unique_id=1353520599 instance=ExtResource("8_enryc")]
-position = Vector2(185, 1366)
-
-[node name="Patron6" parent="." unique_id=548265078 instance=ExtResource("8_enryc")]
-position = Vector2(185, 1307)
-
-[node name="Patron7" parent="." unique_id=291486871 instance=ExtResource("8_enryc")]
-position = Vector2(69, 1428)
-
-[node name="Patron8" parent="." unique_id=469207843 instance=ExtResource("8_enryc")]
-position = Vector2(68, 1366)
-
-[node name="Patron9" parent="." unique_id=1796421757 instance=ExtResource("8_enryc")]
-position = Vector2(68, 1307)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoxFallZone"]
+shape = SubResource("RectShape_box_fall")
