@@ -1012,6 +1012,9 @@ _data = {
 &"Right_Attack_Hand": SubResource("Animation_ipx7w")
 }
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_i1d4f"]
+load_path = "res://.godot/imported/Light.png-d3dc6ec4e898ada4c91ea775c2ba7730.ctex"
+
 [node name="Robot" type="CharacterBody2D" unique_id=261732739 groups=["enemy"]]
 collision_mask = 3
 script = ExtResource("13_robot")
@@ -1052,18 +1055,26 @@ position = Vector2(-3, -148)
 scale = Vector2(1.3999977, 1.1200004)
 texture = ExtResource("4_kubtn")
 
-[node name="LaserMuzzle" type="Marker2D" parent="WaistBone/TorsoBone/HeadBone"]
+[node name="LaserMuzzle" type="Marker2D" parent="WaistBone/TorsoBone/HeadBone" unique_id=820023009]
 gizmo_extents = 15.0
 
-[node name="RayCast2D" type="RayCast2D" parent="WaistBone/TorsoBone/HeadBone/LaserMuzzle"]
+[node name="RayCast2D" type="RayCast2D" parent="WaistBone/TorsoBone/HeadBone/LaserMuzzle" unique_id=1444825115]
 enabled = false
 target_position = Vector2(10000, 0)
-collision_mask = 1
 
-[node name="Line2D" type="Line2D" parent="WaistBone/TorsoBone/HeadBone/LaserMuzzle"]
+[node name="Line2D" type="Line2D" parent="WaistBone/TorsoBone/HeadBone/LaserMuzzle" unique_id=340416124]
 visible = false
 points = PackedVector2Array(0, 0, 100, 0)
 width = 30.0
+
+[node name="Light" type="PointLight2D" parent="WaistBone/TorsoBone/HeadBone" unique_id=372843722]
+position = Vector2(3, -3)
+scale = Vector2(0.09162993, 0.09454076)
+color = Color(1.6852883, 0, 0, 1)
+energy = 6.84
+range_z_min = -1
+range_z_max = 1
+texture = SubResource("CompressedTexture2D_i1d4f")
 
 [node name="LeftShoulderBone" type="Node2D" parent="WaistBone/TorsoBone" unique_id=103]
 position = Vector2(-275, -28)
@@ -1122,6 +1133,24 @@ position = Vector2(1, -95)
 [node name="ArmLeft3" type="Sprite2D" parent="WaistBone/TorsoBone/RightHandBone/RightLowerArmBone" unique_id=795617459]
 scale = Vector2(1.4000013, 1.4)
 texture = ExtResource("8_knjt5")
+
+[node name="Light" type="PointLight2D" parent="WaistBone/TorsoBone" unique_id=376787841]
+position = Vector2(-2, 14)
+scale = Vector2(0.1155253, 0.09226825)
+color = Color(1.6852883, 0, 0, 1)
+energy = 8.18
+range_z_min = -1
+range_z_max = 1
+texture = SubResource("CompressedTexture2D_i1d4f")
+
+[node name="Light" type="PointLight2D" parent="WaistBone" unique_id=1100313743]
+position = Vector2(1, 149)
+scale = Vector2(0.1155253, 0.09226825)
+color = Color(1.6852883, 0, 0, 1)
+energy = 8.18
+range_z_min = -1
+range_z_max = 1
+texture = SubResource("CompressedTexture2D_i1d4f")
 
 [node name="LeftCircleMarker" type="Marker2D" parent="." unique_id=130]
 position = Vector2(-291, 360)
