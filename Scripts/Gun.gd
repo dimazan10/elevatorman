@@ -20,7 +20,6 @@ func _on_zone_entered(body: Node2D) -> void:
 
 func _start_loading(player: Node2D, patron: Node2D) -> void:
 	_loading = true
-	player.can_move = false
 	patron.queue_free()
 	$Sprite.visible = true
 	$AnimationPlayer.play("Line")
@@ -29,7 +28,6 @@ func _start_loading(player: Node2D, patron: Node2D) -> void:
 	loaded = true
 	_loading = false
 	loaded_changed.emit(true)
-	player.can_move = true
 
 func get_barrel_pivot() -> Node2D:
 	return $BarrelPivot
