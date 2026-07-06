@@ -4,24 +4,23 @@
 [ext_resource type="Script" uid="uid://c5cctmb6kpi5e" path="res://Scripts/Camera.gd" id="2_3y5cq"]
 [ext_resource type="Texture2D" uid="uid://i7nr533xjhha" path="res://Assets/Sprites_Player/Light.png" id="3_fbc33"]
 
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(20, 40)
 
 [node name="Player" type="CharacterBody2D" unique_id=1739531344 groups=["player"]]
-collision_mask = 9
 z_index = 6
+collision_mask = 9
 script = ExtResource("1_y0qk3")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="." unique_id=88380255]
-position = Vector2(0, 0)
 shape = SubResource("RectangleShape2D_player")
 
-[node name="PlayerLight" type="PointLight2D" parent="."]
-texture = ExtResource("3_fbc33")
-scale = Vector2(0.2, 0.2)
+[node name="PlayerLight" type="PointLight2D" parent="." unique_id=1601938696]
+position = Vector2(-1, -37.000004)
+scale = Vector2(0.3316292, 0.29454014)
 range_z_min = -1
 range_z_max = 1
+texture = ExtResource("3_fbc33")
 
 [node name="PlayerCamera" type="Camera2D" parent="." unique_id=15174669]
 unique_name_in_owner = true

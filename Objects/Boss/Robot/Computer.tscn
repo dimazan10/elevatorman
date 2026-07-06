@@ -6,6 +6,9 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sxpk0"]
 size = Vector2(146, 81)
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3yuq4"]
+load_path = "res://.godot/imported/Light.png-d3dc6ec4e898ada4c91ea775c2ba7730.ctex"
+
 [node name="Computer" type="Node2D" unique_id=514770790]
 script = ExtResource("2_computer")
 
@@ -17,7 +20,6 @@ shape = SubResource("RectangleShape2D_sxpk0")
 
 [node name="InteractZone" type="Area2D" parent="." unique_id=557841295]
 collision_layer = 0
-collision_mask = 1
 
 [node name="ZoneShape" type="CollisionShape2D" parent="InteractZone" unique_id=1789573460]
 position = Vector2(74, 50)
@@ -27,3 +29,11 @@ shape = SubResource("RectangleShape2D_sxpk0")
 position = Vector2(74, 61)
 scale = Vector2(0.3761583, 0.31899092)
 texture = ExtResource("1_sxpk0")
+
+[node name="PlayerLight" type="PointLight2D" parent="." unique_id=194289761]
+position = Vector2(68.99999, 66)
+scale = Vector2(0.09195403, 0.073145255)
+color = Color(0, 1, 0.43137255, 1)
+range_z_min = -1
+range_z_max = 1
+texture = SubResource("CompressedTexture2D_3yuq4")
