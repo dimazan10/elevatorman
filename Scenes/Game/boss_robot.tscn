@@ -14,6 +14,9 @@ size = Vector2(1160, 20)
 [sub_resource type="RectangleShape2D" id="RectShape_wall_v"]
 size = Vector2(20, 680)
 
+[sub_resource type="RectangleShape2D" id="RectShape_box_fall"]
+size = Vector2(1000, 400)
+
 [node name="BossRobot" type="Node2D" unique_id=415151675]
 script = ExtResource("4_boss")
 
