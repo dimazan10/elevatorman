@@ -1,5 +1,7 @@
 extends Node2D
 
+signal aiming_changed(is_aiming: bool)
+
 const AIM_OVERLAY := preload("res://Scripts/CannonAimOverlay.gd")
 var CANNON_BULLET: PackedScene
 const PATRON_OUT := preload("res://Assets/Enemies/Boss/Sprite_Gun/PatronOut.png")
@@ -50,6 +52,7 @@ func _on_zone_entered(body: Node2D) -> void:
 
 func _start_aiming() -> void:
 	_aiming = true
+	aiming_changed.emit(true)
 	_player.can_move = false
 
 	_player_camera = _player.get_node_or_null("PlayerCamera") as Camera2D
@@ -163,6 +166,7 @@ func _end_aiming() -> void:
 	_gun = null
 	_player = null
 	_aiming = false
+	aiming_changed.emit(false)
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
 		player.can_move = true

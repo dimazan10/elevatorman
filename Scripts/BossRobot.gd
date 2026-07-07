@@ -14,6 +14,7 @@ var _spawn_active := false
 var _spawn_timer := 6.0
 var _enemies: Array[Node2D] = []
 var _is_low_hp := false
+var _player_at_computer := false
 
 func _ready() -> void:
 	add_to_group("pausable")
@@ -41,8 +42,12 @@ func _ready() -> void:
 		if zone:
 			_spawn_zones.append(zone)
 
+	var computer := get_node_or_null("Computer")
+	if computer:
+		computer.aiming_changed.connect(_on_computer_aiming_changed)
+
 func _process(delta: float) -> void:
-	if not _spawn_active:
+	if not _spawn_active or _player_at_computer:
 		return
 	_spawn_timer -= delta
 	if _spawn_timer <= 0:
@@ -93,6 +98,17 @@ func _spawn_teleport_effect(pos: Vector2) -> void:
 	var tw := create_tween()
 	tw.tween_interval(0.5)
 	tw.tween_callback(tp.queue_free)
+
+func _on_computer_aiming_changed(is_aiming: bool) -> void:
+	_player_at_computer = is_aiming
+	if is_aiming:
+		for e in _enemies:
+			if is_instance_valid(e):
+				_spawn_teleport_effect(e.global_position)
+				e.queue_free()
+		_enemies.clear()
+	else:
+		_spawn_timer = 6.0
 
 func _on_robot_hp_changed(current_hp: int, max_hp: int) -> void:
 	if not _spawn_active:
