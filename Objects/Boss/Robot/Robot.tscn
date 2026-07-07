@@ -12,6 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://cpqxijeixi7q0" path="res://Assets/Enemies/Boss/Sprite_Robot/Right_Shoulder.png" id="11_cghhy"]
 [ext_resource type="Texture2D" uid="uid://cpgbghlaj33x2" path="res://Assets/Enemies/Boss/Sprite_Robot/Hand_Right.png" id="12_ykdh2"]
 [ext_resource type="Script" uid="uid://dn6dces3v2erg" path="res://Scripts/Robot.gd" id="13_robot"]
+[ext_resource type="Texture2D" path="res://Assets/Enemies/Boss/Sprite_Robot/Red_Warning.png" id="14"]
+[ext_resource type="Texture2D" path="res://Assets/Enemies/Boss/Sprite_Robot/Blue_Warning.png" id="15"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hitbox"]
 radius = 200.0
@@ -1166,3 +1168,19 @@ position = Vector2(-291, 360)
 
 [node name="RightCircleMarker" type="Marker2D" parent="." unique_id=131]
 position = Vector2(257, 346)
+
+[node name="RedWarning" type="Sprite2D" parent="LeftCircleMarker" unique_id=132]
+visible = false
+texture = ExtResource("14")
+
+[node name="BlueWarning" type="Sprite2D" parent="LeftCircleMarker" unique_id=133]
+visible = false
+texture = ExtResource("15")
+
+[node name="RedWarning" type="Sprite2D" parent="RightCircleMarker" unique_id=134]
+visible = false
+texture = ExtResource("14")
+
+[node name="BlueWarning" type="Sprite2D" parent="RightCircleMarker" unique_id=135]
+visible = false
+texture = ExtResource("15")

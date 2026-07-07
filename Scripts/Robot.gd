@@ -50,6 +50,11 @@ var _box_fall_zone: Node2D
 var _patron_attack_counter := 0
 var _player_near_robot := false
 
+var _warning_active := false
+var _warning_timer := 0.0
+var _pending_attack: State = State.IDLE
+var _pending_colors: Array[bool] = []
+
 func _ready() -> void:
 	add_to_group("enemy")
 	$WaistBone/AnimationPlayer.play("Idle")
@@ -119,6 +124,76 @@ func _on_proximity_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		_player_near_robot = false
 
+func _show_warnings() -> void:
+	match _pending_attack:
+		State.LEFT_ATTACK:
+			if _pending_colors[0]:
+				$LeftCircleMarker/BlueWarning.visible = true
+			else:
+				$LeftCircleMarker/RedWarning.visible = true
+		State.RIGHT_ATTACK:
+			if _pending_colors[0]:
+				$RightCircleMarker/BlueWarning.visible = true
+			else:
+				$RightCircleMarker/RedWarning.visible = true
+		State.BOTH_ATTACK:
+			if _pending_colors[0]:
+				$LeftCircleMarker/BlueWarning.visible = true
+			else:
+				$LeftCircleMarker/RedWarning.visible = true
+			if _pending_colors[1]:
+				$RightCircleMarker/BlueWarning.visible = true
+			else:
+				$RightCircleMarker/RedWarning.visible = true
+
+func _hide_warnings() -> void:
+	$LeftCircleMarker/RedWarning.visible = false
+	$LeftCircleMarker/BlueWarning.visible = false
+	$RightCircleMarker/RedWarning.visible = false
+	$RightCircleMarker/BlueWarning.visible = false
+	$LeftCircleMarker/RedWarning.position = Vector2.ZERO
+	$LeftCircleMarker/BlueWarning.position = Vector2.ZERO
+	$RightCircleMarker/RedWarning.position = Vector2.ZERO
+	$RightCircleMarker/BlueWarning.position = Vector2.ZERO
+
+func _update_warning_positions() -> void:
+	var camera := _get_player_camera()
+	if not camera:
+		return
+	var viewport := get_viewport()
+	var viewport_size := viewport.get_visible_rect().size
+	var margin := 60.0
+	var camera_center := camera.get_screen_center_position()
+	var inv_zoom := Vector2.ONE / camera.zoom
+	var half_viewport := viewport_size * 0.5
+
+	for marker in [$LeftCircleMarker, $RightCircleMarker]:
+		var has_visible := false
+		for child in marker.get_children():
+			if child is Sprite2D and child.visible:
+				has_visible = true
+				break
+		if not has_visible:
+			continue
+
+		var world_pos := marker.global_position
+		var rel := world_pos - camera_center
+		var screen_pos := rel * camera.zoom + half_viewport
+
+		var csx := clampf(screen_pos.x, margin, viewport_size.x - margin)
+		var csy := clampf(screen_pos.y, margin, viewport_size.y - margin)
+		var clamped := csx != screen_pos.x or csy != screen_pos.y
+
+		if clamped:
+			var target_world := (Vector2(csx, csy) - half_viewport) * inv_zoom + camera_center
+			for child in marker.get_children():
+				if child is Sprite2D and child.visible:
+					child.global_position = target_world
+		else:
+			for child in marker.get_children():
+				if child is Sprite2D:
+					child.position = Vector2.ZERO
+
 func try_hit_with_bullet(bullet: Node, hit_position: Vector2) -> bool:
 	if _is_dead:
 		return false
@@ -174,6 +249,8 @@ func _die() -> void:
 		return
 	_is_dead = true
 	died.emit()
+	_hide_warnings()
+	_warning_active = false
 	_patron_attack_counter = 0
 	current_state = State.IDLE
 	_attack_cooldown = INF
@@ -236,6 +313,15 @@ func _process(delta: float) -> void:
 	if _is_dead:
 		return
 
+	if _warning_active:
+		_warning_timer -= delta
+		_update_warning_positions()
+		if _warning_timer <= 0:
+			_warning_active = false
+			_hide_warnings()
+			_start_attack(_pending_attack)
+			_attack_cooldown = 2.0 + randf() * 3.0
+
 	if current_state != State.IDLE and not _circles_spawned:
 		if $WaistBone/AnimationPlayer.current_animation_position >= IMPACT_TIME:
 			_spawn_attack_circles()
@@ -249,11 +335,10 @@ func _process(delta: float) -> void:
 
 	_update_laser(delta)
 
-	if current_state == State.IDLE:
+	if current_state == State.IDLE and not _warning_active:
 		_attack_cooldown -= delta
 		if _attack_cooldown <= 0:
 			_do_random_attack()
-			_attack_cooldown = 2.0 + randf() * 3.0
 
 func _update_laser(delta: float) -> void:
 	if _is_dead or not _laser_ray or not _laser_line:
@@ -327,7 +412,19 @@ func _end_laser() -> void:
 
 func _do_random_attack() -> void:
 	var attacks := [State.LEFT_ATTACK, State.RIGHT_ATTACK, State.BOTH_ATTACK]
-	_start_attack(attacks[randi() % attacks.size()])
+	_pending_attack = attacks[randi() % attacks.size()]
+
+	_pending_colors.clear()
+	match _pending_attack:
+		State.LEFT_ATTACK, State.RIGHT_ATTACK:
+			_pending_colors.append(randi() % 2 == 1)
+		State.BOTH_ATTACK:
+			_pending_colors.append(randi() % 2 == 1)
+			_pending_colors.append(randi() % 2 == 1)
+
+	_show_warnings()
+	_warning_active = true
+	_warning_timer = 2.0
 
 func _start_attack(attack: State) -> void:
 	if _is_dead:
@@ -366,18 +463,18 @@ func _spawn_attack_circles() -> void:
 
 	match current_state:
 		State.LEFT_ATTACK:
-			_spawn_random_circle(left_marker.global_position)
+			_spawn_precolored_circle(left_marker.global_position, _pending_colors[0])
 		State.RIGHT_ATTACK:
-			_spawn_random_circle(right_marker.global_position)
+			_spawn_precolored_circle(right_marker.global_position, _pending_colors[0])
 		State.BOTH_ATTACK:
-			_spawn_random_circle(left_marker.global_position)
-			_spawn_random_circle(right_marker.global_position)
+			_spawn_precolored_circle(left_marker.global_position, _pending_colors[0])
+			_spawn_precolored_circle(right_marker.global_position, _pending_colors[1])
 
-func _spawn_random_circle(pos: Vector2) -> void:
-	if randi() % 2 == 0:
-		_spawn_circle(pos, CIRCLE_RADIUS_RED, Color(1, 0, 0, 0.25), false)
-	else:
+func _spawn_precolored_circle(pos: Vector2, is_blue: bool) -> void:
+	if is_blue:
 		_spawn_circle(pos, CIRCLE_RADIUS_BLUE, Color(0, 0, 1, 0.25), true)
+	else:
+		_spawn_circle(pos, CIRCLE_RADIUS_RED, Color(1, 0, 0, 0.25), false)
 
 func _spawn_circle(pos: Vector2, radius: float, color: Color, is_blue: bool) -> void:
 	var area := CIRCLE_SCENE.instantiate()
@@ -422,4 +519,5 @@ func _on_animation_finished(anim_name: String) -> void:
 	if _is_dead:
 		return
 	current_state = State.IDLE
+	_hide_warnings()
 	$WaistBone/AnimationPlayer.play("Idle")
