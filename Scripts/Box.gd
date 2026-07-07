@@ -16,7 +16,6 @@ func _ready():
 
 	_anim.animation_finished.connect(_on_anim_finished)
 	_anim.play("DownFallBox")
-	modulate.a = 0.0
 
 func _on_anim_finished(anim: String):
 	if anim == "DownFallBox":
