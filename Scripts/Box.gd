@@ -14,6 +14,7 @@ func _ready():
 	audio.play()
 	audio.finished.connect(audio.queue_free)
 
+	modulate.a = 0.0
 	_anim.animation_finished.connect(_on_anim_finished)
 	_anim.play("DownFallBox")
 
