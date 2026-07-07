@@ -4,13 +4,10 @@ extends Node2D
 @onready var _rocket_sprite: Sprite2D = $Rocket
 @onready var _anim_player: AnimationPlayer = $Rocket/AnimationPlayer
 @onready var _explosion: AnimatedSprite2D = $AnimatedSprite2D
-@onready var _hitbox: Area2D = $Hitbox
-
 func _ready() -> void:
 	_explosion.visible = false
 	_explosion.stop()
 	_explosion.animation_finished.connect(_on_explosion_finished)
-	_hitbox.monitoring = false
 
 	var tw := create_tween()
 	tw.tween_interval(1.0)
@@ -29,14 +26,14 @@ func _start_fall() -> void:
 
 func _on_land(_anim_name: String) -> void:
 	_rocket_sprite.visible = false
-	_hitbox.monitoring = true
 	_explosion.visible = true
 	_explosion.play("Boom")
 
-	await get_tree().physics_frame
-	for body in _hitbox.get_overlapping_bodies():
-		if body.is_in_group("player") and body.has_method("take_damage"):
-			body.call("take_damage", 1)
+	var player := get_tree().get_first_node_in_group("player") as Node2D
+	if player and player.has_method("take_damage"):
+		var dist := global_position.distance_to(player.global_position)
+		if dist < 100.0:
+			player.call("take_damage", 1)
 
 func _on_explosion_finished() -> void:
 	queue_free()
