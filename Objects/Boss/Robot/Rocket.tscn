@@ -1,0 +1,153 @@
+[gd_scene format=3 uid="uid://d0redyfq65fan"]
+
+[ext_resource type="Texture2D" uid="uid://bh4tjcgfgejdy" path="res://Assets/Enemies/Boss/Boom/Rocket.png" id="1_74xx1"]
+[ext_resource type="Texture2D" uid="uid://bmmbbtq72ji62" path="res://Assets/Enemies/Boss/Boom/fire1.png" id="2_4u1td"]
+[ext_resource type="Texture2D" uid="uid://ceb8jyi5tl810" path="res://Assets/Enemies/Boss/Boom/fire2.png" id="3_4g3nr"]
+[ext_resource type="Texture2D" uid="uid://dvpev6lbwn1k4" path="res://Assets/Enemies/Boss/Boom/fire3.png" id="4_m2r35"]
+[ext_resource type="Texture2D" uid="uid://v0wphr4wfg3r" path="res://Assets/Enemies/Boss/Boom/fire4.png" id="5_bebbv"]
+[ext_resource type="Texture2D" uid="uid://cmld2tcwa2jcc" path="res://Assets/Enemies/Boss/Boom/fire5.png" id="6_p7td0"]
+[ext_resource type="Texture2D" uid="uid://bwprtgync236u" path="res://Assets/Enemies/Boss/Boom/fire6.png" id="7_n3x1l"]
+[ext_resource type="Texture2D" uid="uid://bt481dp6y07kj" path="res://Assets/Enemies/Boss/Sprite_Robot/Marker.png" id="8"]
+[ext_resource type="Script" path="res://Scripts/Rocket.gd" id="9"]
+
+[sub_resource type="Animation" id="Animation_hnmgi"]
+resource_name = "BoomAnimation"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(4.594794, 4.594794),
+"update": 0,
+"values": [Vector2(-7.275958e-12, -880), Vector2(0, -7.6293945e-06)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_w68xh"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -7.6293945e-06)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gak4a"]
+_data = {
+&"BoomAnimation": SubResource("Animation_hnmgi"),
+&"RESET": SubResource("Animation_w68xh")
+}
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_s1fef"]
+blend_mode = 1
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qsuaf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_4u1td")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_4g3nr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_m2r35")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_bebbv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_p7td0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_n3x1l")
+}],
+"loop": 0,
+"name": &"Boom",
+"speed": 13.0
+}]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_2enf5"]
+load_path = "res://.godot/imported/Light.png-d3dc6ec4e898ada4c91ea775c2ba7730.ctex"
+
+[node name="Rocket" type="Node2D" unique_id=352241438]
+script = ExtResource("9")
+
+[node name="Rocket" type="Sprite2D" parent="." unique_id=2022824110]
+position = Vector2(0, -7.6293945e-06)
+rotation = -3.1415927
+scale = Vector2(-0.040000573, 0.039999284)
+texture = ExtResource("1_74xx1")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Rocket" unique_id=457270380]
+libraries/ = SubResource("AnimationLibrary_gak4a")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1025356950]
+material = SubResource("CanvasItemMaterial_s1fef")
+scale = Vector2(1.3600016, 1.2799987)
+sprite_frames = SubResource("SpriteFrames_qsuaf")
+animation = &"Boom"
+frame = 0
+playing = false
+
+[node name="Light" type="PointLight2D" parent="AnimatedSprite2D" unique_id=1607047375]
+position = Vector2(0, -9.536743e-07)
+scale = Vector2(0.19552629, 0.1722678)
+color = Color(1.6847857, 0.5305094, 0.4262114, 1)
+energy = 0.15
+range_z_min = -1
+range_z_max = 1
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.7882353)
+shadow_filter = 1
+shadow_filter_smooth = 10.2
+texture = SubResource("CompressedTexture2D_2enf5")
+
+[node name="Marker" type="Sprite2D" parent="." unique_id=691234567]
+z_index = -1
+scale = Vector2(0.2, 0.2)
+self_modulate = Color(1, 1, 1, 0.6274509803921569)
+texture = ExtResource("8")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hitbox_r"]
+radius = 100.0
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=891234568]
+collision_mask = 1
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=991234569]
+shape = SubResource("CircleShape2D_hitbox_r")

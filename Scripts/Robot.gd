@@ -45,7 +45,11 @@ const LASER_TRACK_SPEED := 1.5
 
 const CIRCLE_SCENE := preload("res://Objects/Boss/Robot/AttackCircle.tscn")
 const BOX_SCENE := preload("res://Objects/Boss/Robot/Box.tscn")
+const ROCKET_SCENE := preload("res://Objects/Boss/Robot/Rocket.tscn")
 const PATRON_COUNT := 4
+const ROCKET_COOLDOWN := 10.0
+const ROCKET_COUNT_MIN := 3
+const ROCKET_COUNT_MAX := 4
 var _box_fall_zone: Node2D
 var _patron_attack_counter := 0
 var _player_near_robot := false
@@ -55,12 +59,16 @@ var _warning_timer := 0.0
 var _pending_attack: State = State.IDLE
 var _pending_colors: Array[bool] = []
 
+var _rocket_fall_zone: Node2D
+var _rocket_cooldown := 0.0
+
 func _ready() -> void:
 	add_to_group("enemy")
 	$WaistBone/AnimationPlayer.play("Idle")
 	$WaistBone/AnimationPlayer.animation_finished.connect(_on_animation_finished)
 
 	_box_fall_zone = get_parent().get_node_or_null("BoxFallZone") as Node2D
+	_rocket_fall_zone = get_parent().get_node_or_null("RocketFallZone") as Node2D
 
 	_audio = AudioStreamPlayer2D.new()
 	_audio.name = "AttackAudio"
@@ -338,6 +346,12 @@ func _process(delta: float) -> void:
 
 	_update_laser(delta)
 
+	if not _is_dead and _rocket_fall_zone:
+		_rocket_cooldown -= delta
+		if _rocket_cooldown <= 0:
+			_spawn_rocket_attack()
+			_rocket_cooldown = ROCKET_COOLDOWN
+
 	if current_state == State.IDLE and not _warning_active:
 		_attack_cooldown -= delta
 		if _attack_cooldown <= 0:
@@ -517,6 +531,23 @@ func _spawn_falling_box() -> void:
 		randf_range(global_rect.position.y, global_rect.position.y + global_rect.size.y)
 	)
 	get_parent().add_child(box)
+
+func _spawn_rocket_attack() -> void:
+	var zone_shape := _rocket_fall_zone.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if not zone_shape:
+		return
+	var rect: Rect2 = zone_shape.shape.get_rect()
+	var zpos := _rocket_fall_zone.global_position
+	var zscale := _rocket_fall_zone.global_scale
+	var global_rect := Rect2(zpos + rect.position * zscale, rect.size * zscale)
+	var count := randi_range(ROCKET_COUNT_MIN, ROCKET_COUNT_MAX)
+	for _i in count:
+		var rocket := ROCKET_SCENE.instantiate()
+		rocket.global_position = Vector2(
+			randf_range(global_rect.position.x, global_rect.position.x + global_rect.size.x),
+			randf_range(global_rect.position.y, global_rect.position.y + global_rect.size.y)
+		)
+		get_parent().add_child(rocket)
 
 func _on_animation_finished(anim_name: String) -> void:
 	if _is_dead:

@@ -17,6 +17,9 @@ size = Vector2(20, 680)
 [sub_resource type="RectangleShape2D" id="RectShape_box_fall"]
 size = Vector2(1301, 504)
 
+[sub_resource type="RectangleShape2D" id="RectShape_rocket_fall"]
+size = Vector2(800, 400)
+
 [node name="BossRobot" type="Node2D" unique_id=415151675]
 script = ExtResource("4_boss")
 
@@ -153,3 +156,9 @@ position = Vector2(639, 1100)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BoxFallZone" unique_id=1914325050]
 position = Vector2(-0.5, -98)
 shape = SubResource("RectShape_box_fall")
+
+[node name="RocketFallZone" type="Node2D" parent="." unique_id=2386498636]
+position = Vector2(640, 600)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RocketFallZone" unique_id=2914325051]
+shape = SubResource("RectShape_rocket_fall")
