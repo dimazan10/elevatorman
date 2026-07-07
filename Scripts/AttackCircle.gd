@@ -20,7 +20,7 @@ func _ready() -> void:
 	var visual := Line2D.new()
 	visual.name = "Visual"
 	visual.points = _get_cached_points(circle_radius)
-	visual.width = 8.0
+	visual.width = 16.0
 	visual.default_color = Color(circle_color.r, circle_color.g, circle_color.b, 1.0)
 	add_child(visual)
 	move_child(visual, 0)
