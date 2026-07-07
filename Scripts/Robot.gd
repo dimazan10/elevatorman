@@ -427,7 +427,7 @@ func _do_random_attack() -> void:
 
 	_show_warnings()
 	_warning_active = true
-	_warning_timer = 2.0
+	_warning_timer = 1.0
 
 func _start_attack(attack: State) -> void:
 	if _is_dead:
