@@ -5,6 +5,7 @@ var circle_color: Color = Color(1, 0, 0, 0.25)
 var is_blue: bool = false
 
 var _hit_bodies: Array[Node2D] = []
+var _expansion_done := false
 
 const MOVE_THRESHOLD: float = 30.0
 const CIRCLE_SEGMENTS: int = 64
@@ -28,7 +29,13 @@ func _ready() -> void:
 
 	modulate.a = 0.0
 
+	await get_tree().create_timer(0.4).timeout
+	if is_instance_valid(self):
+		_expansion_done = true
+
 func _on_body_entered(body: Node2D) -> void:
+	if _expansion_done:
+		return
 	if not body.is_in_group("player") or not body.has_method("take_damage"):
 		return
 	if _hit_bodies.has(body):
