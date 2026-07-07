@@ -31,6 +31,7 @@ func _ready() -> void:
 	await get_tree().create_timer(0.35).timeout
 	if is_instance_valid(self):
 		_active = true
+		_apply_damage_to_inside_bodies()
 
 func _on_body_entered(body: Node2D) -> void:
 	if not _active:
@@ -46,6 +47,11 @@ func _on_body_entered(body: Node2D) -> void:
 			body.call("take_damage", 1)
 	else:
 		body.call("take_damage", 1)
+
+func _apply_damage_to_inside_bodies() -> void:
+	var bodies := get_overlapping_bodies()
+	for body: Node2D in bodies:
+		_on_body_entered(body)
 
 func _exit_tree() -> void:
 	_active = false
