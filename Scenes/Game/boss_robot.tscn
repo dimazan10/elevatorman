@@ -27,8 +27,10 @@ load_path = "res://.godot/imported/Light.png-d3dc6ec4e898ada4c91ea775c2ba7730.ct
 [node name="BossRobot" type="Node2D" unique_id=415151675]
 script = ExtResource("4_boss")
 
-[node name="Background" type="Polygon2D" parent="."]
+[node name="Background" type="Polygon2D" parent="." unique_id=1896983558]
 z_index = -2
+position = Vector2(-1003.99994, -1156)
+scale = Vector2(3.1600006, 2.4399996)
 color = Color(0, 0, 0, 1)
 polygon = PackedVector2Array(-1000, -1000, 2000, -1000, 2000, 2500, -1000, 2500)
 

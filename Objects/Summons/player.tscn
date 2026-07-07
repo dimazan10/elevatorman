@@ -20,6 +20,10 @@ position = Vector2(-1, -37.000004)
 scale = Vector2(0.3316292, 0.29454014)
 range_z_min = -1
 range_z_max = 1
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.4117647)
+shadow_filter = 1
+shadow_filter_smooth = 13.9
 texture = ExtResource("3_fbc33")
 
 [node name="PlayerCamera" type="Camera2D" parent="." unique_id=15174669]
