@@ -6,6 +6,7 @@ extends Node2D
 @onready var _explosion: AnimatedSprite2D = $AnimatedSprite2D
 
 func _ready() -> void:
+	_rocket_sprite.visible = false
 	_explosion.visible = false
 	_explosion.stop()
 	_explosion.animation_finished.connect(_on_explosion_finished)
@@ -22,6 +23,7 @@ func _process(delta: float) -> void:
 	_marker.rotation += delta * 2.0
 
 func _start_fall() -> void:
+	_rocket_sprite.visible = true
 	_anim_player.animation_finished.connect(_on_land)
 	_anim_player.play("BoomAnimation")
 
