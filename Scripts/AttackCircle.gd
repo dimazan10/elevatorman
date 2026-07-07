@@ -8,25 +8,26 @@ var _active: bool = false
 var _hit_bodies: Array[Node2D] = []
 
 const MOVE_THRESHOLD: float = 30.0
-const CIRCLE_SEGMENTS: int = 96
+const CIRCLE_SEGMENTS: int = 64
 
-static var _polygon_cache: Dictionary = {}
+static var _points_cache: Dictionary = {}
 
 func _ready() -> void:
 	var shape: CircleShape2D = CircleShape2D.new()
 	shape.radius = circle_radius
 	$CollisionShape2D.shape = shape
 
-	var visual: Polygon2D = Polygon2D.new()
+	var visual := Line2D.new()
 	visual.name = "Visual"
-	visual.polygon = _get_cached_polygon(circle_radius)
-	visual.color = Color(circle_color.r, circle_color.g, circle_color.b, 1.0)
+	visual.points = _get_cached_points(circle_radius)
+	visual.width = 8.0
+	visual.default_color = Color(circle_color.r, circle_color.g, circle_color.b, 1.0)
 	add_child(visual)
 	move_child(visual, 0)
 
 	body_entered.connect(_on_body_entered)
 
-	modulate = Color(1, 1, 1, 0.0)
+	modulate.a = 0.0
 
 	await get_tree().create_timer(0.35).timeout
 	if is_instance_valid(self):
@@ -57,15 +58,16 @@ func _exit_tree() -> void:
 	_active = false
 	_hit_bodies.clear()
 
-static func _get_cached_polygon(radius: float) -> PackedVector2Array:
+static func _get_cached_points(radius: float) -> PackedVector2Array:
 	var key: int = int(radius)
-	if _polygon_cache.has(key):
-		return _polygon_cache[key] as PackedVector2Array
+	if _points_cache.has(key):
+		return _points_cache[key] as PackedVector2Array
 
 	var points: PackedVector2Array = PackedVector2Array()
-	points.resize(CIRCLE_SEGMENTS)
+	points.resize(CIRCLE_SEGMENTS + 1)
 	for i: int in range(CIRCLE_SEGMENTS):
 		var angle: float = TAU * float(i) / float(CIRCLE_SEGMENTS)
 		points[i] = Vector2(cos(angle), sin(angle)) * radius
-	_polygon_cache[key] = points
+	points[CIRCLE_SEGMENTS] = points[0]
+	_points_cache[key] = points
 	return points
