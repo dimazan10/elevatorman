@@ -167,7 +167,10 @@ func _update_warning_positions() -> void:
 	var inv_zoom := Vector2.ONE / camera.zoom
 	var half_viewport := viewport_size * 0.5
 
-	for marker in [$LeftCircleMarker, $RightCircleMarker]:
+	for marker_node in [$LeftCircleMarker, $RightCircleMarker]:
+		var marker := marker_node as Marker2D
+		if not marker:
+			continue
 		var has_visible := false
 		for child in marker.get_children():
 			if child is Sprite2D and child.visible:
@@ -176,9 +179,9 @@ func _update_warning_positions() -> void:
 		if not has_visible:
 			continue
 
-		var world_pos := marker.global_position
-		var rel := world_pos - camera_center
-		var screen_pos := rel * camera.zoom + half_viewport
+		var world_pos: Vector2 = marker.global_position
+		var rel: Vector2 = world_pos - camera_center
+		var screen_pos: Vector2 = rel * camera.zoom + half_viewport
 
 		var csx := clampf(screen_pos.x, margin, viewport_size.x - margin)
 		var csy := clampf(screen_pos.y, margin, viewport_size.y - margin)
