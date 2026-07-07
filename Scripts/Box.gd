@@ -1,12 +1,13 @@
 extends Node2D
 
 const PATRON_SCENE := preload("res://Objects/Boss/Robot/Patron.tscn")
+const EARTHQUAKE_SOUND := preload("res://Assets/Enemies/Boss/Sprite_Robot/earthquake_sound.mp3")
 @onready var _anim := $Sprite2D/AnimationPlayer
 
 func _ready():
 	var audio := AudioStreamPlayer2D.new()
 	audio.name = "EarthquakeAudio"
-	audio.stream = load("res://Assets/Enemies/Boss/Sprite_Robot/earthquake_sound.mp3")
+	audio.stream = EARTHQUAKE_SOUND
 	audio.bus = &"Effects"
 	audio.global_position = global_position
 	get_parent().add_child(audio)
