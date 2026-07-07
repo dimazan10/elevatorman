@@ -253,7 +253,7 @@ func _process(delta: float) -> void:
 		_attack_cooldown -= delta
 		if _attack_cooldown <= 0:
 			_do_random_attack()
-			_attack_cooldown = 1.5 if _player_near_robot else 2.0 + randf() * 3.0
+			_attack_cooldown = 2.0 + randf() * 3.0
 
 func _update_laser(delta: float) -> void:
 	if _is_dead or not _laser_ray or not _laser_line:

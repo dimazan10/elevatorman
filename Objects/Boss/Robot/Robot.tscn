@@ -1033,10 +1033,10 @@ collision_mask = 4
 position = Vector2(-1, 0)
 shape = SubResource("RectShape_body")
 
-[node name="ProximityZone" type="Area2D" parent="."]
-collision_mask = 1
+[node name="ProximityZone" type="Area2D" parent="." unique_id=2097417828]
+position = Vector2(0, 148)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ProximityZone"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ProximityZone" unique_id=1599720780]
 shape = SubResource("CircleShape2D_prox")
 
 [node name="WaistBone" type="Node2D" parent="." unique_id=100]

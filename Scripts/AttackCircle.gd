@@ -5,10 +5,8 @@ var circle_color: Color = Color(1, 0, 0, 0.25)
 var is_blue: bool = false
 
 var _active: bool = false
-var _damage_timer: float = 0.0
-var _bodies_inside: Array[Node2D] = []
+var _hit_bodies: Array[Node2D] = []
 
-const DAMAGE_INTERVAL: float = 0.5
 const MOVE_THRESHOLD: float = 30.0
 const CIRCLE_SEGMENTS: int = 96
 
@@ -27,7 +25,6 @@ func _ready() -> void:
 	move_child(visual, 0)
 
 	body_entered.connect(_on_body_entered)
-	body_exited.connect(_on_body_exited)
 
 	modulate = Color(1, 1, 1, 0.0)
 
@@ -35,37 +32,24 @@ func _ready() -> void:
 	if is_instance_valid(self):
 		_active = true
 
-func _process(delta: float) -> void:
+func _on_body_entered(body: Node2D) -> void:
 	if not _active:
 		return
-
-	_damage_timer -= delta
-	if _damage_timer > 0:
+	if not body.is_in_group("player") or not body.has_method("take_damage"):
 		return
-
-	for body: Node2D in _bodies_inside:
-		if not is_instance_valid(body):
-			continue
-		if body.is_in_group("player") and body.has_method("take_damage"):
-			if is_blue:
-				var character: CharacterBody2D = body as CharacterBody2D
-				if character and character.velocity.length() > MOVE_THRESHOLD:
-					body.call("take_damage", 1)
-					_damage_timer = DAMAGE_INTERVAL
-			else:
-				body.call("take_damage", 1)
-				_damage_timer = DAMAGE_INTERVAL
+	if _hit_bodies.has(body):
+		return
+	_hit_bodies.append(body)
+	if is_blue:
+		var character: CharacterBody2D = body as CharacterBody2D
+		if character and character.velocity.length() > MOVE_THRESHOLD:
+			body.call("take_damage", 1)
+	else:
+		body.call("take_damage", 1)
 
 func _exit_tree() -> void:
 	_active = false
-	_bodies_inside.clear()
-
-func _on_body_entered(body: Node2D) -> void:
-	if not _bodies_inside.has(body):
-		_bodies_inside.append(body)
-
-func _on_body_exited(body: Node2D) -> void:
-	_bodies_inside.erase(body)
+	_hit_bodies.clear()
 
 static func _get_cached_polygon(radius: float) -> PackedVector2Array:
 	var key: int = int(radius)
