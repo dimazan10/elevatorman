@@ -4,7 +4,6 @@ var circle_radius: float = 500.0
 var circle_color: Color = Color(1, 0, 0, 0.25)
 var is_blue: bool = false
 
-var _active: bool = false
 var _hit_bodies: Array[Node2D] = []
 
 const MOVE_THRESHOLD: float = 30.0
@@ -29,14 +28,7 @@ func _ready() -> void:
 
 	modulate.a = 0.0
 
-	await get_tree().create_timer(0.35).timeout
-	if is_instance_valid(self):
-		_active = true
-		_apply_damage_to_inside_bodies()
-
 func _on_body_entered(body: Node2D) -> void:
-	if not _active:
-		return
 	if not body.is_in_group("player") or not body.has_method("take_damage"):
 		return
 	if _hit_bodies.has(body):
@@ -49,13 +41,7 @@ func _on_body_entered(body: Node2D) -> void:
 	else:
 		body.call("take_damage", 1)
 
-func _apply_damage_to_inside_bodies() -> void:
-	var bodies := get_overlapping_bodies()
-	for body: Node2D in bodies:
-		_on_body_entered(body)
-
 func _exit_tree() -> void:
-	_active = false
 	_hit_bodies.clear()
 
 static func _get_cached_points(radius: float) -> PackedVector2Array:
