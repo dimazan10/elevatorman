@@ -48,8 +48,8 @@ const BOX_SCENE := preload("res://Objects/Boss/Robot/Box.tscn")
 const ROCKET_SCENE := preload("res://Objects/Boss/Robot/Rocket.tscn")
 const PATRON_COUNT := 4
 const ROCKET_COOLDOWN := 10.0
-const ROCKET_COUNT_MIN := 3
-const ROCKET_COUNT_MAX := 4
+const ROCKET_COUNT_MIN := 6
+const ROCKET_COUNT_MAX := 8
 var _box_fall_zone: Node2D
 var _patron_attack_counter := 0
 var _player_near_robot := false

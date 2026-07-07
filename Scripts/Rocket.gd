@@ -33,6 +33,9 @@ func _on_land(_anim_name: String) -> void:
 	_explosion.visible = true
 	_explosion.play("Boom")
 
+	call_deferred("_apply_damage")
+
+func _apply_damage() -> void:
 	for body in _hitbox.get_overlapping_bodies():
 		if body.is_in_group("player") and body.has_method("take_damage"):
 			body.call("take_damage", 1)
