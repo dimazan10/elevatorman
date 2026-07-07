@@ -21,6 +21,9 @@ size = Vector2(1301, 504)
 [sub_resource type="RectangleShape2D" id="RectShape_rocket_fall"]
 size = Vector2(800, 400)
 
+[sub_resource type="RectangleShape2D" id="RectShape_spawn_zone"]
+size = Vector2(300, 200)
+
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_enryc"]
 load_path = "res://.godot/imported/Light.png-d3dc6ec4e898ada4c91ea775c2ba7730.ctex"
 
@@ -176,6 +179,18 @@ scale = Vector2(3.0799987, 1.88)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RocketFallZone" unique_id=-1380642245]
 shape = SubResource("RectShape_rocket_fall")
+
+[node name="SpawnZoneLeft" type="Node2D" parent="."]
+position = Vector2(250, 1100)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpawnZoneLeft"]
+shape = SubResource("RectShape_spawn_zone")
+
+[node name="SpawnZoneRight" type="Node2D" parent="."]
+position = Vector2(1030, 1100)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpawnZoneRight"]
+shape = SubResource("RectShape_spawn_zone")
 
 [node name="Area" type="Sprite2D" parent="." unique_id=714977625]
 z_index = -1
