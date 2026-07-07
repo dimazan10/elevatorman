@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://cmld2tcwa2jcc" path="res://Assets/Enemies/Boss/Boom/fire5.png" id="6_p7td0"]
 [ext_resource type="Texture2D" uid="uid://bwprtgync236u" path="res://Assets/Enemies/Boss/Boom/fire6.png" id="7_n3x1l"]
 [ext_resource type="Texture2D" uid="uid://bt481dp6y07kj" path="res://Assets/Enemies/Boss/Sprite_Robot/Marker.png" id="8"]
-[ext_resource type="Script" path="res://Scripts/Rocket.gd" id="9"]
+[ext_resource type="Script" uid="uid://bkjoheurgswx3" path="res://Scripts/Rocket.gd" id="9"]
 
 [sub_resource type="Animation" id="Animation_hnmgi"]
 resource_name = "BoomAnimation"
@@ -21,9 +21,9 @@ tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 3),
-"transitions": PackedFloat32Array(4.594794, 4.594794),
+"transitions": PackedFloat32Array(2.8284268, 2.8284268),
 "update": 0,
-"values": [Vector2(-7.275958e-12, -880), Vector2(0, -7.6293945e-06)]
+"values": [Vector2(-7.275958e-12, -1505), Vector2(0, -7.6293945e-06)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -123,8 +123,6 @@ material = SubResource("CanvasItemMaterial_s1fef")
 scale = Vector2(1.3600016, 1.2799987)
 sprite_frames = SubResource("SpriteFrames_qsuaf")
 animation = &"Boom"
-frame = 0
-playing = false
 
 [node name="Light" type="PointLight2D" parent="AnimatedSprite2D" unique_id=1607047375]
 position = Vector2(0, -9.536743e-07)
@@ -140,13 +138,12 @@ shadow_filter_smooth = 10.2
 texture = SubResource("CompressedTexture2D_2enf5")
 
 [node name="Marker" type="Sprite2D" parent="." unique_id=691234567]
+modulate = Color(1, 1, 1, 0.8)
 z_index = 10
 scale = Vector2(0.2, 0.2)
-modulate = Color(1, 1, 1, 0.8)
 texture = ExtResource("8")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=891234568]
-collision_mask = 1
 monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=991234569]
