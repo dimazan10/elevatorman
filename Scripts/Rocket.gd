@@ -14,7 +14,8 @@ func _ready() -> void:
 	_audio = AudioStreamPlayer2D.new()
 	_audio.stream = load("res://Assets/Enemies/Boss/Boom/BoomSound.mp3")
 	_audio.bus = &"Effects"
-	add_child(_audio)
+	_audio.finished.connect(_audio.queue_free)
+	get_tree().root.add_child(_audio)
 
 	var tw := create_tween()
 	tw.tween_interval(1.0)
