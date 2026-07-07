@@ -157,8 +157,9 @@ position = Vector2(639, 1100)
 position = Vector2(-0.5, -98)
 shape = SubResource("RectShape_box_fall")
 
-[node name="RocketFallZone" type="Node2D" parent="." unique_id=2386498636]
-position = Vector2(640, 600)
+[node name="RocketFallZone" type="Node2D" parent="." unique_id=-1908468660]
+position = Vector2(638, 1115)
+scale = Vector2(3.0799987, 1.88)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RocketFallZone" unique_id=2914325051]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RocketFallZone" unique_id=-1380642245]
 shape = SubResource("RectShape_rocket_fall")

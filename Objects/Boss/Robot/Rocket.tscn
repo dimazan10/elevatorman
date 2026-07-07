@@ -140,7 +140,7 @@ shadow_filter_smooth = 10.2
 texture = SubResource("CompressedTexture2D_2enf5")
 
 [node name="Marker" type="Sprite2D" parent="." unique_id=691234567]
-z_index = -1
+z_index = 10
 scale = Vector2(0.2, 0.2)
 self_modulate = Color(1, 1, 1, 0.6274509803921569)
 texture = ExtResource("8")
