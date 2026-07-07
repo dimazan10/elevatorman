@@ -62,7 +62,6 @@ var _pending_colors: Array[bool] = []
 
 var _rocket_fall_zone: Node2D
 var _rocket_cooldown := ROCKET_COOLDOWN
-var _rocket_sound_played := false
 
 func _ready() -> void:
 	add_to_group("enemy")
@@ -351,13 +350,10 @@ func _process(delta: float) -> void:
 
 	if not _is_dead and _rocket_fall_zone:
 		_rocket_cooldown -= delta
-		if _rocket_cooldown <= 2.0 and not _rocket_sound_played:
-			_play_rocket_sound()
-			_rocket_sound_played = true
 		if _rocket_cooldown <= 0:
 			_spawn_rocket_attack()
+			_play_rocket_sound()
 			_rocket_cooldown = ROCKET_COOLDOWN
-			_rocket_sound_played = false
 
 	if current_state == State.IDLE and not _warning_active:
 		_attack_cooldown -= delta
@@ -540,9 +536,10 @@ func _spawn_falling_box() -> void:
 	get_parent().add_child(box)
 
 func _play_rocket_sound() -> void:
-	var audio := AudioStreamPlayer2D.new()
+	var audio := AudioStreamPlayer.new()
 	audio.stream = load("res://Assets/Enemies/Boss/Boom/BoomSound.mp3")
 	audio.bus = &"Effects"
+	audio.volume_db = -6
 	audio.finished.connect(audio.queue_free)
 	get_tree().root.add_child(audio)
 	audio.play()
