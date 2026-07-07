@@ -16,6 +16,10 @@ func _ready() -> void:
 	tw.tween_interval(1.0)
 	tw.tween_callback(_start_fall)
 
+	var fade_tw := create_tween()
+	fade_tw.tween_interval(3.0)
+	fade_tw.tween_property(_marker, "modulate:a", 0.0, 0.8)
+
 func _process(delta: float) -> void:
 	_marker.rotation += delta * 2.0
 
