@@ -1171,16 +1171,20 @@ position = Vector2(257, 346)
 
 [node name="RedWarning" type="Sprite2D" parent="LeftCircleMarker" unique_id=132]
 visible = false
+scale = Vector2(0.4, 0.4)
 texture = ExtResource("14")
 
 [node name="BlueWarning" type="Sprite2D" parent="LeftCircleMarker" unique_id=133]
 visible = false
+scale = Vector2(0.4, 0.4)
 texture = ExtResource("15")
 
 [node name="RedWarning" type="Sprite2D" parent="RightCircleMarker" unique_id=134]
 visible = false
+scale = Vector2(0.4, 0.4)
 texture = ExtResource("14")
 
 [node name="BlueWarning" type="Sprite2D" parent="RightCircleMarker" unique_id=135]
 visible = false
+scale = Vector2(0.4, 0.4)
 texture = ExtResource("15")
