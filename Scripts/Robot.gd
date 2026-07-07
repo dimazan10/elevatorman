@@ -50,6 +50,7 @@ const PATRON_COUNT := 4
 const ROCKET_COOLDOWN := 10.0
 const ROCKET_COUNT_MIN := 6
 const ROCKET_COUNT_MAX := 8
+const ROCKET_MIN_DISTANCE := 150.0
 var _box_fall_zone: Node2D
 var _patron_attack_counter := 0
 var _player_near_robot := false
@@ -541,12 +542,26 @@ func _spawn_rocket_attack() -> void:
 	var zscale := _rocket_fall_zone.global_scale
 	var global_rect := Rect2(zpos + rect.position * zscale, rect.size * zscale)
 	var count := randi_range(ROCKET_COUNT_MIN, ROCKET_COUNT_MAX)
+	var positions: Array[Vector2] = []
+	var max_attempts := 30
 	for _i in count:
+		var pos: Vector2
+		var ok := false
+		for attempt in max_attempts:
+			pos = Vector2(
+				randf_range(global_rect.position.x, global_rect.position.x + global_rect.size.x),
+				randf_range(global_rect.position.y, global_rect.position.y + global_rect.size.y)
+			)
+			ok = true
+			for existing in positions:
+				if pos.distance_squared_to(existing) < ROCKET_MIN_DISTANCE * ROCKET_MIN_DISTANCE:
+					ok = false
+					break
+			if ok:
+				break
+		positions.append(pos)
 		var rocket := ROCKET_SCENE.instantiate()
-		rocket.global_position = Vector2(
-			randf_range(global_rect.position.x, global_rect.position.x + global_rect.size.x),
-			randf_range(global_rect.position.y, global_rect.position.y + global_rect.size.y)
-		)
+		rocket.global_position = pos
 		get_parent().add_child(rocket)
 
 func _on_animation_finished(anim_name: String) -> void:
