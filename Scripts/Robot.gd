@@ -134,36 +134,45 @@ func _on_proximity_exited(body: Node2D) -> void:
 		_player_near_robot = false
 
 func _show_warnings() -> void:
+	var shown: Array[Sprite2D] = []
 	match _pending_attack:
 		State.LEFT_ATTACK:
 			if _pending_colors[0]:
-				$LeftCircleMarker/BlueWarning.visible = true
+				shown.append($LeftCircleMarker/BlueWarning)
 			else:
-				$LeftCircleMarker/RedWarning.visible = true
+				shown.append($LeftCircleMarker/RedWarning)
 		State.RIGHT_ATTACK:
 			if _pending_colors[0]:
-				$RightCircleMarker/BlueWarning.visible = true
+				shown.append($RightCircleMarker/BlueWarning)
 			else:
-				$RightCircleMarker/RedWarning.visible = true
+				shown.append($RightCircleMarker/RedWarning)
 		State.BOTH_ATTACK:
 			if _pending_colors[0]:
-				$LeftCircleMarker/BlueWarning.visible = true
+				shown.append($LeftCircleMarker/BlueWarning)
 			else:
-				$LeftCircleMarker/RedWarning.visible = true
+				shown.append($LeftCircleMarker/RedWarning)
 			if _pending_colors[1]:
-				$RightCircleMarker/BlueWarning.visible = true
+				shown.append($RightCircleMarker/BlueWarning)
 			else:
-				$RightCircleMarker/RedWarning.visible = true
+				shown.append($RightCircleMarker/RedWarning)
+	for s in shown:
+		s.modulate.a = 0.3
+		var tw := create_tween().set_loops()
+		tw.tween_property(s, "modulate:a", 1.0, 0.3)
+		tw.tween_property(s, "modulate:a", 0.3, 0.3)
+		s.set_meta("pulse_tween", tw)
+		s.visible = true
 
 func _hide_warnings() -> void:
-	$LeftCircleMarker/RedWarning.visible = false
-	$LeftCircleMarker/BlueWarning.visible = false
-	$RightCircleMarker/RedWarning.visible = false
-	$RightCircleMarker/BlueWarning.visible = false
-	$LeftCircleMarker/RedWarning.position = Vector2.ZERO
-	$LeftCircleMarker/BlueWarning.position = Vector2.ZERO
-	$RightCircleMarker/RedWarning.position = Vector2.ZERO
-	$RightCircleMarker/BlueWarning.position = Vector2.ZERO
+	for marker in [$LeftCircleMarker, $RightCircleMarker]:
+		for child in marker.get_children():
+			if child is Sprite2D:
+				if child.has_meta("pulse_tween"):
+					child.get_meta("pulse_tween").kill()
+					child.remove_meta("pulse_tween")
+				child.modulate.a = 1.0
+				child.visible = false
+				child.position = Vector2.ZERO
 
 func _update_warning_positions() -> void:
 	var camera := _get_player_camera()
