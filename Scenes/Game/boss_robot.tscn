@@ -151,7 +151,8 @@ position = Vector2(817, 1485)
 position = Vector2(635, 319)
 
 [node name="BoxFallZone" type="Node2D" parent="." unique_id=1386498635]
-position = Vector2(639, 1100)
+position = Vector2(639, 973)
+scale = Vector2(0.76, 0.6400012)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BoxFallZone" unique_id=1914325050]
 position = Vector2(-0.5, -98)

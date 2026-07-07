@@ -241,6 +241,7 @@ func take_damage_to_part(part_name: String) -> void:
 	current_hp = maxi(current_hp - 1, 0)
 	_darken_part_sprite(part_name)
 	hp_changed.emit(current_hp, max_hp)
+	_shake_camera(0.3, 8.0)
 	if current_hp <= 0:
 		_die()
 
