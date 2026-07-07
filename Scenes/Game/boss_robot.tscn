@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://2v30o3wcsurj" path="res://Objects/Boss/Robot/Gun.tscn" id="5_7o10g"]
 [ext_resource type="PackedScene" uid="uid://bgq1qqvmixcdb" path="res://Objects/Boss/Robot/Computer.tscn" id="6_enryc"]
 [ext_resource type="PackedScene" uid="uid://b4syde8vbfls1" path="res://Objects/Boss/Robot/Robot.tscn" id="7_w7dnu"]
+[ext_resource type="Texture2D" uid="uid://g4bjixpcnw26" path="res://Assets/Enemies/Boss/Area.png" id="8_enryc"]
 
 [sub_resource type="RectangleShape2D" id="RectShape_wall_h"]
 size = Vector2(1160, 20)
@@ -20,14 +21,23 @@ size = Vector2(1301, 504)
 [sub_resource type="RectangleShape2D" id="RectShape_rocket_fall"]
 size = Vector2(800, 400)
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_enryc"]
+load_path = "res://.godot/imported/Light.png-d3dc6ec4e898ada4c91ea775c2ba7730.ctex"
+
 [node name="BossRobot" type="Node2D" unique_id=415151675]
 script = ExtResource("4_boss")
+
+[node name="Background" type="Polygon2D" parent="."]
+z_index = -2
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-1000, -1000, 2000, -1000, 2000, 2500, -1000, 2500)
 
 [node name="Pivot" type="Node2D" parent="." unique_id=478305121]
 position = Vector2(639, 176)
 scale = Vector2(1.5712776, 1.538192)
 
 [node name="Floor" type="Polygon2D" parent="Pivot" unique_id=645250517]
+visible = false
 position = Vector2(0, 331.99997)
 scale = Vector2(1.9263917, 2.0185204)
 polygon = PackedVector2Array(-273.4729, -37.553528, -274.46558, -389.19556, 273.3672, -390.72104, 271.41748, -40.43695, 426.1598, -39.53756, 426.11963, 333.89807, -425.98666, 333.89807, -425.98846, -37.98073)
@@ -164,3 +174,65 @@ scale = Vector2(3.0799987, 1.88)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RocketFallZone" unique_id=-1380642245]
 shape = SubResource("RectShape_rocket_fall")
+
+[node name="Area" type="Sprite2D" parent="." unique_id=714977625]
+z_index = -1
+position = Vector2(661.9999, 609.1501)
+scale = Vector2(2.5156841, 2.7001011)
+texture = ExtResource("8_enryc")
+
+[node name="PlayerLight" type="PointLight2D" parent="Area" unique_id=1120209919]
+position = Vector2(383.99103, 19.94366)
+scale = Vector2(0.18852696, 0.13158284)
+color = Color(0.5595139, 0.31731132, 0.9626202, 1)
+energy = 1.45
+range_z_min = -1
+range_z_max = 1
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.4117647)
+shadow_filter = 1
+shadow_filter_smooth = 13.9
+texture = SubResource("CompressedTexture2D_enryc")
+texture_scale = 0.53
+
+[node name="PlayerLight2" type="PointLight2D" parent="Area" unique_id=475298770]
+position = Vector2(259.17407, 19.94366)
+scale = Vector2(0.18852696, 0.13158284)
+color = Color(0.5595139, 0.31731132, 0.9626202, 1)
+energy = 1.45
+range_z_min = -1
+range_z_max = 1
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.4117647)
+shadow_filter = 1
+shadow_filter_smooth = 13.9
+texture = SubResource("CompressedTexture2D_enryc")
+texture_scale = 0.53
+
+[node name="PlayerLight3" type="PointLight2D" parent="Area" unique_id=651985516]
+position = Vector2(-268.31665, 19.94366)
+scale = Vector2(0.18852696, 0.13158284)
+color = Color(0.5595139, 0.31731132, 0.9626202, 1)
+energy = 1.45
+range_z_min = -1
+range_z_max = 1
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.4117647)
+shadow_filter = 1
+shadow_filter_smooth = 13.9
+texture = SubResource("CompressedTexture2D_enryc")
+texture_scale = 0.53
+
+[node name="PlayerLight4" type="PointLight2D" parent="Area" unique_id=741049260]
+position = Vector2(-391.14603, 19.94366)
+scale = Vector2(0.18852696, 0.13158284)
+color = Color(0.5595139, 0.31731132, 0.9626202, 1)
+energy = 1.45
+range_z_min = -1
+range_z_max = 1
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.4117647)
+shadow_filter = 1
+shadow_filter_smooth = 13.9
+texture = SubResource("CompressedTexture2D_enryc")
+texture_scale = 0.53
