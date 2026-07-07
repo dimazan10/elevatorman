@@ -45,7 +45,10 @@ const LASER_TRACK_SPEED := 1.5
 
 const CIRCLE_SCENE := preload("res://Objects/Boss/Robot/AttackCircle.tscn")
 const BOX_SCENE := preload("res://Objects/Boss/Robot/Box.tscn")
+const PATRON_COUNT := 4
 var _box_fall_zone: Node2D
+var _patron_attack_counter := 0
+var _player_near_robot := false
 
 func _ready() -> void:
 	add_to_group("enemy")
@@ -65,6 +68,11 @@ func _ready() -> void:
 	_death_audio.stream = load("res://Assets/Enemies/Boss/Sprite_Robot/Death.mp3")
 	_death_audio.bus = &"Effects"
 	add_child(_death_audio)
+
+	var zone := $ProximityZone as Area2D
+	if zone:
+		zone.body_entered.connect(_on_proximity_entered)
+		zone.body_exited.connect(_on_proximity_exited)
 
 	_setup_hitboxes()
 	_setup_laser()
@@ -102,6 +110,14 @@ func _on_part_hit(area: Area2D) -> void:
 	if not area.is_in_group("bullet"):
 		return
 	try_hit_with_bullet(area, area.global_position)
+
+func _on_proximity_entered(body: Node2D) -> void:
+	if body.is_in_group("player"):
+		_player_near_robot = true
+
+func _on_proximity_exited(body: Node2D) -> void:
+	if body.is_in_group("player"):
+		_player_near_robot = false
 
 func try_hit_with_bullet(bullet: Node, hit_position: Vector2) -> bool:
 	if _is_dead:
@@ -158,6 +174,7 @@ func _die() -> void:
 		return
 	_is_dead = true
 	died.emit()
+	_patron_attack_counter = 0
 	current_state = State.IDLE
 	_attack_cooldown = INF
 	_circles_spawned = true
@@ -224,8 +241,11 @@ func _process(delta: float) -> void:
 			_spawn_attack_circles()
 			_shake_camera(1.5, 20.0)
 			_circles_spawned = true
-			if randf() < 0.3 and _box_fall_zone:
-				_spawn_falling_box()
+			if not _player_near_robot and _box_fall_zone:
+				_patron_attack_counter += 1
+				if _patron_attack_counter >= PATRON_COUNT:
+					_patron_attack_counter = 0
+					_spawn_falling_box()
 
 	_update_laser(delta)
 
@@ -233,6 +253,7 @@ func _process(delta: float) -> void:
 		_attack_cooldown -= delta
 		if _attack_cooldown <= 0:
 			_do_random_attack()
+			_attack_cooldown = 1.5 if _player_near_robot else 2.0 + randf() * 3.0
 
 func _update_laser(delta: float) -> void:
 	if _is_dead or not _laser_ray or not _laser_line:
@@ -402,5 +423,4 @@ func _on_animation_finished(anim_name: String) -> void:
 	if _is_dead:
 		return
 	current_state = State.IDLE
-	_attack_cooldown = 2.0 + randf() * 3.0
 	$WaistBone/AnimationPlayer.play("Idle")

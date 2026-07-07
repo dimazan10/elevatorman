@@ -19,6 +19,9 @@ radius = 200.0
 [sub_resource type="RectangleShape2D" id="RectShape_body"]
 size = Vector2(500, 500)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_prox"]
+radius = 450.0
+
 [sub_resource type="Animation" id="Animation_kubtn"]
 resource_name = "Attack_Hands"
 length = 1.5
@@ -1029,6 +1032,12 @@ collision_mask = 4
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1112398808]
 position = Vector2(-1, 0)
 shape = SubResource("RectShape_body")
+
+[node name="ProximityZone" type="Area2D" parent="."]
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ProximityZone"]
+shape = SubResource("CircleShape2D_prox")
 
 [node name="WaistBone" type="Node2D" parent="." unique_id=100]
 
