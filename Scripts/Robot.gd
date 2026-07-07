@@ -397,7 +397,6 @@ func _spawn_circle(pos: Vector2, radius: float, color: Color, is_blue: bool) -> 
 	if not is_instance_valid(area):
 		return
 
-	area._active = false
 	var fade := area.create_tween()
 	fade.tween_property(area, "modulate:a", 0.0, 0.5)
 	await fade.finished
