@@ -4,10 +4,17 @@ extends Node2D
 @onready var _rocket_sprite: Sprite2D = $Rocket
 @onready var _anim_player: AnimationPlayer = $Rocket/AnimationPlayer
 @onready var _explosion: AnimatedSprite2D = $AnimatedSprite2D
+var _audio: AudioStreamPlayer2D
+
 func _ready() -> void:
 	_explosion.visible = false
 	_explosion.stop()
 	_explosion.animation_finished.connect(_on_explosion_finished)
+
+	_audio = AudioStreamPlayer2D.new()
+	_audio.stream = load("res://Assets/Enemies/Boss/Boom/BoomSound.mp3")
+	_audio.bus = &"Effects"
+	add_child(_audio)
 
 	var tw := create_tween()
 	tw.tween_interval(1.0)
@@ -23,6 +30,8 @@ func _process(delta: float) -> void:
 func _start_fall() -> void:
 	_anim_player.animation_finished.connect(_on_land)
 	_anim_player.play("BoomAnimation")
+	if _audio:
+		_audio.play()
 
 func _on_land(_anim_name: String) -> void:
 	_rocket_sprite.visible = false
