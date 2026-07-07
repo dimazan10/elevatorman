@@ -534,10 +534,19 @@ func _spawn_falling_box() -> void:
 	)
 	get_parent().add_child(box)
 
+func _play_rocket_sound() -> void:
+	var audio := AudioStreamPlayer2D.new()
+	audio.stream = load("res://Assets/Enemies/Boss/Boom/BoomSound.mp3")
+	audio.bus = &"Effects"
+	audio.finished.connect(audio.queue_free)
+	get_tree().root.add_child(audio)
+	audio.play()
+
 func _spawn_rocket_attack() -> void:
 	var zone_shape := _rocket_fall_zone.get_node_or_null("CollisionShape2D") as CollisionShape2D
 	if not zone_shape:
 		return
+	_play_rocket_sound()
 	var rect: Rect2 = zone_shape.shape.get_rect()
 	var zpos := _rocket_fall_zone.global_position
 	var zscale := _rocket_fall_zone.global_scale
