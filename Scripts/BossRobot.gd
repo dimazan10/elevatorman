@@ -79,7 +79,9 @@ func _spawn_enemies() -> void:
 		_enemies.append(enemy)
 		var tw := create_tween()
 		tw.tween_interval(5.0)
-		tw.tween_callback(_despawn_enemy.bind(enemy))
+		tw.tween_callback(func():
+			_despawn_enemy(enemy)
+		)
 
 func _despawn_enemy(enemy: Node2D) -> void:
 	if not is_instance_valid(enemy):
@@ -97,7 +99,10 @@ func _spawn_teleport_effect(pos: Vector2) -> void:
 		anim.play("default")
 	var tw := create_tween()
 	tw.tween_interval(0.5)
-	tw.tween_callback(tp.queue_free)
+	tw.tween_callback(func():
+		if is_instance_valid(tp):
+			tp.queue_free()
+	)
 
 func _on_computer_aiming_changed(is_aiming: bool) -> void:
 	_player_at_computer = is_aiming
