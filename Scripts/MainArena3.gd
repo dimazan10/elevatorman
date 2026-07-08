@@ -3,6 +3,7 @@ extends Node2D
 const FadeTransition := preload("res://Scripts/FadeTransition.gd")
 const WALL_PUSHER_SCRIPT = preload("res://Scripts/WallPusher.gd")
 const CrateSpawnerScript = preload("res://Scripts/CrateSpawner.gd")
+const TELEPORT := preload("res://Objects/Summons/Teleport.tscn")
 
 signal player_zone_changed(zone_name: String)
 
@@ -32,6 +33,7 @@ var _main_pushers: Array[Node] = []
 var _arena_pushers: Dictionary = {}
 var _player_zones: Array[String] = []
 var _current_player_zone: String = ""
+var _last_player_zone: String = ""
 var _paused_saved_zone: String = ""
 var _gate_audio: AudioStreamPlayer2D
 var _arena_scale_factor := 1.0
@@ -169,7 +171,53 @@ func _on_zone_exited(body: Node2D, zone_name: String) -> void:
 		_current_player_zone = best
 		player_zone_changed.emit(_current_player_zone)
 
+func _on_player_zone_changed(zone: String) -> void:
+	if _last_player_zone == zone:
+		return
+	var old_zone := _last_player_zone
+	_last_player_zone = zone
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		if not is_instance_valid(enemy):
+			continue
+		var enemy_zone := ""
+		if enemy.has_meta("zone_name"):
+			enemy_zone = enemy.get_meta("zone_name", "")
+		if enemy_zone.is_empty():
+			continue
+		if enemy_zone == old_zone and enemy_zone != zone:
+			_spawn_teleport_effect(enemy.global_position)
+			enemy.hide()
+			enemy.set_physics_process(false)
+			_disable_collision_shapes(enemy)
+			for child in enemy.get_children():
+				if child is Timer and child.has_method("stop"):
+					child.stop()
+		elif enemy_zone == zone and enemy_zone != old_zone:
+			_spawn_teleport_effect(enemy.global_position)
+			enemy.show()
+			enemy.set_physics_process(true)
+			_enable_collision_shapes(enemy)
+			for child in enemy.get_children():
+				if child is Timer and child.has_method("start"):
+					if child.has_method("stop") and child.is_stopped():
+						child.start()
+
+func _spawn_teleport_effect(pos: Vector2) -> void:
+	var tp := TELEPORT.instantiate()
+	tp.global_position = pos
+	add_child(tp)
+	var anim := tp.get_node("AnimatedSprite2D") as AnimatedSprite2D
+	if anim:
+		anim.play("default")
+	var tw := create_tween()
+	tw.tween_interval(0.5)
+	tw.tween_callback(func():
+		if is_instance_valid(tp):
+			tp.queue_free()
+	)
+
 func _setup_zone_triggers() -> void:
+	player_zone_changed.connect(_on_player_zone_changed)
 	var main_zone = _arena_rotator.get_node("ArenaScaler/Floor/ZoneTrigger") as Area2D
 	if main_zone:
 		main_zone.body_entered.connect(_on_zone_entered.bind("main_arena"))
@@ -591,6 +639,7 @@ func _show_player() -> void:
 
 func _hide_enemies() -> void:
 	for enemy in get_tree().get_nodes_in_group("enemy"):
+		_spawn_teleport_effect(enemy.global_position)
 		enemy.hide()
 		enemy.z_index = 0
 		enemy.set_physics_process(false)
