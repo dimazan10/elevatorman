@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://c6638wcouwqxl"]
+
+[ext_resource type="Texture2D" uid="uid://dwfwkfnvh0qfs" path="res://Assets/Teleport/Portal.png" id="1_sxa80"]
+[ext_resource type="Texture2D" uid="uid://byp5nf3aedluw" path="res://Assets/Teleport/Portal2.png" id="2_kfgcr"]
+[ext_resource type="Texture2D" uid="uid://k0xswtnpsbhm" path="res://Assets/Teleport/Portal3.png" id="3_iddvs"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_s1fef"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_sxa80")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_kfgcr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_iddvs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_kfgcr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_sxa80")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 15.0
+}]
+
+[node name="Teleport" type="Node2D" unique_id=436657282]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=408628041]
+position = Vector2(0.12499869, -44)
+scale = Vector2(0.30344203, 0.3321033)
+sprite_frames = SubResource("SpriteFrames_s1fef")
+frame = 4
+frame_progress = 1.0
