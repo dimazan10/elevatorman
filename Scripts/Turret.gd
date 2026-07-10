@@ -89,28 +89,34 @@ func _process(delta: float) -> void:
 			raycast.force_raycast_update()
 			var cast_point: Vector2 = raycast.target_position
 			var hit_player := false
+			var hit_crate: Node2D = null
 			if raycast.is_colliding():
 				cast_point = muzzle.to_local(raycast.get_collision_point())
 				var collider = raycast.get_collider()
 				if collider and (collider == player or collider.is_in_group("player")):
 					hit_player = true
+				elif collider and collider.is_in_group("crate"):
+					hit_crate = collider
 
 			line.set_point_position(1, cast_point)
 
-			if current_state == TurretState.FIRING and hit_player:
-				_damage_accum += damage_per_second * delta * skip
-				if _damage_accum >= 1.0:
-					var dmg := int(_damage_accum)
-					_damage_accum -= dmg
-					if player and player.has_method("take_damage"):
-						player.take_damage(dmg)
+			if current_state == TurretState.FIRING:
+				if hit_crate and hit_crate.has_method("take_damage"):
+					hit_crate.take_damage(1)
+				elif hit_player:
+					_damage_accum += damage_per_second * delta * skip
+					if _damage_accum >= 1.0:
+						var dmg := int(_damage_accum)
+						_damage_accum -= dmg
+						if player and player.has_method("take_damage"):
+							player.take_damage(dmg)
 
 func _has_line_of_sight() -> bool:
 	if not is_instance_valid(player) or not muzzle:
 		return false
 
 	var space_state = get_world_2d().direct_space_state
-	var from = muzzle.global_position
+	var from: Vector2 = muzzle.global_position
 	var query = PhysicsRayQueryParameters2D.create(from, player.global_position)
 	query.exclude = [self.get_rid()]
 	var result = space_state.intersect_ray(query)

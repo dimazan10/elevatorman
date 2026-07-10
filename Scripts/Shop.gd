@@ -40,12 +40,15 @@ const PRICE_COLLAR := 4
 @onready var coin_layer: Control = $CoinLayer
 @onready var neck: Panel = $VBoxMain/HBoxMain/BottleSide/BottleNeck
 @onready var neck_liquid: ColorRect = $VBoxMain/HBoxMain/BottleSide/BottleNeck/NeckClip/NeckLiquid
+@onready var shop_label: Label = $VBoxMain/HBoxMain/InfoSide/ShopLabel
 
 var _collected := false
+var _shop_items: Array[Dictionary] = []
 
 func _ready() -> void:
 	CursorManager.setup_buttons(self)
 	_setup_bottle_style()
+	_pick_random_items()
 	var t = GameState.last_floor_time
 	var m = int(t) / 60
 	var s = int(t) % 60
@@ -56,6 +59,36 @@ func _ready() -> void:
 	_update_bucket_ui()
 	_update_item_ui()
 	collect_btn.grab_focus.call_deferred()
+
+func _pick_random_items() -> void:
+	var all_items: Array[Dictionary] = [
+		{"id": "bucket", "btn": bucket_btn, "status": bucket_status, "price": 3},
+		{"id": "collar", "btn": collar_btn, "status": collar_status, "price": PRICE_COLLAR},
+		{"id": "infinit", "btn": infinit_btn, "status": infinit_status, "price": PRICE_INFINIT},
+		{"id": "tube", "btn": tube_btn, "status": tube_status, "price": PRICE_TUBE},
+		{"id": "clone", "btn": clone_btn, "status": clone_status, "price": PRICE_CLONE},
+		{"id": "rewind", "btn": rewind_btn, "status": rewind_status, "price": PRICE_REWIND},
+	]
+	if GameState.current_floor < 2:
+		all_items = all_items.filter(func(item): return item["price"] <= 5)
+	all_items.shuffle()
+	_shop_items = all_items.slice(0, mini(3, all_items.size()))
+
+	var all_btns := [bucket_btn, collar_btn, infinit_btn, tube_btn, clone_btn, rewind_btn]
+	var all_statuses := [bucket_status, collar_status, infinit_status, tube_status, clone_status, rewind_status]
+	var selected_btns: Array[Button] = []
+	var selected_statuses: Array[Label] = []
+	for item in _shop_items:
+		selected_btns.append(item["btn"])
+		selected_statuses.append(item["status"])
+
+	var info_side = $VBoxMain/HBoxMain/InfoSide
+	for i in range(all_btns.size()):
+		var btn: Button = all_btns[i]
+		var status: Label = all_statuses[i]
+		if btn not in selected_btns:
+			btn.visible = false
+			status.visible = false
 
 func _setup_bottle_style() -> void:
 	var sbf := StyleBoxFlat.new()
@@ -96,12 +129,16 @@ func _item_slot_free() -> int:
 	return -1
 
 func _update_item_ui() -> void:
-	_update_item_button("infinit", infinit_btn, infinit_status, PRICE_INFINIT)
-	_update_item_button("tube", tube_btn, tube_status, PRICE_TUBE)
-	_update_item_button("clone", clone_btn, clone_status, PRICE_CLONE)
-	_update_item_button("rewind", rewind_btn, rewind_status, PRICE_REWIND)
+	for item in _shop_items:
+		_update_item_button(item["id"], item["btn"], item["status"], item["price"])
 
 func _update_item_button(id: String, btn: Button, status: Label, price: int) -> void:
+	if id == "bucket":
+		_update_bucket_ui()
+		return
+	if id == "collar":
+		_update_collar_ui()
+		return
 	var owned := false
 	var slot = -1
 	for i in range(GameState.inventory.size()):
@@ -118,6 +155,26 @@ func _update_item_button(id: String, btn: Button, status: Label, price: int) -> 
 		btn.text = "Купить " + id.capitalize() + " (" + str(price) + " монет)"
 		status.text = ""
 
+func _update_bucket_ui() -> void:
+	if GameState.has_bucket:
+		bucket_btn.disabled = true
+		bucket_btn.text = "Куплено"
+		bucket_status.text = "Ведро (%d зар." % GameState.bucket_charges + ")"
+	else:
+		bucket_btn.disabled = GameState.currency < 3 or not _collected or GameState.has_collar
+		bucket_btn.text = "Купить ведро (3 монеты)"
+		bucket_status.text = ""
+
+func _update_collar_ui() -> void:
+	if GameState.has_collar:
+		collar_btn.disabled = true
+		collar_btn.text = "Куплено"
+		collar_status.text = "Ошейник"
+	else:
+		collar_btn.disabled = GameState.currency < PRICE_COLLAR or not _collected or GameState.has_bucket
+		collar_btn.text = "Купить ошейник (%d монет)" % PRICE_COLLAR
+		collar_status.text = ""
+
 func _buy_item(id: String, icon: Texture2D, price: int) -> void:
 	if GameState.currency < price:
 		return
@@ -128,24 +185,6 @@ func _buy_item(id: String, icon: Texture2D, price: int) -> void:
 	GameState.inventory[slot] = {id = id, icon = icon, name = id.capitalize()}
 	currency_label.text = str(GameState.currency)
 	_update_item_ui()
-
-func _update_bucket_ui() -> void:
-	if GameState.has_bucket:
-		bucket_btn.disabled = true
-		bucket_btn.text = "Куплено"
-		bucket_status.text = "Ведро (%d зар." % GameState.bucket_charges + ")"
-	else:
-		bucket_btn.disabled = GameState.currency < 3 or not _collected or GameState.has_collar
-		bucket_btn.text = "Купить ведро (3 монеты)"
-		bucket_status.text = ""
-	if GameState.has_collar:
-		collar_btn.disabled = true
-		collar_btn.text = "Куплено"
-		collar_status.text = "Ошейник"
-	else:
-		collar_btn.disabled = GameState.currency < PRICE_COLLAR or not _collected or GameState.has_bucket
-		collar_btn.text = "Купить ошейник (%d монет)" % PRICE_COLLAR
-		collar_status.text = ""
 
 func _on_collect() -> void:
 	if _collected:

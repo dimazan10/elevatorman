@@ -33,7 +33,12 @@ func _push_nearby() -> void:
 		query.exclude = [crate.get_rid()]
 		var result := space_state.intersect_ray(query)
 		if result:
-			push_dist = from.distance_to(result.position) - 5.0
+			var wall_dist: float = from.distance_to(result.position)
+			if wall_dist < 20.0:
+				if crate.has_method("take_damage"):
+					crate.take_damage(1)
+				continue
+			push_dist = wall_dist - 5.0
 		push_dist = maxf(push_dist, 0.0)
 
 		var tw := create_tween()

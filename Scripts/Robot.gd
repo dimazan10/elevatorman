@@ -395,17 +395,22 @@ func _update_laser(delta: float) -> void:
 			var perp_dist_sq := to_player_vec.length_squared() - beam_dist_sq
 			var hit_player := perp_dist_sq < 1600 and beam_dist > 0 and beam_dist < LASER_RANGE
 
-			if _laser_state == LaserState.FIRING and hit_player:
-				_laser_damage_accum += LASER_DPS * delta
-				if _laser_damage_accum >= 1.0:
-					var dmg: int = int(_laser_damage_accum)
-					_laser_damage_accum -= dmg
-					if player and player.has_method("take_damage"):
-						player.call("take_damage", dmg)
-						if player is CanvasItem:
-							var tw := create_tween()
-							tw.tween_property(player, "modulate", Color.RED, 0.05)
-							tw.tween_property(player, "modulate", Color.WHITE, 0.1)
+			if _laser_state == LaserState.FIRING:
+				if _laser_ray and _laser_ray.is_colliding():
+					var collider = _laser_ray.get_collider()
+					if collider and collider.is_in_group("crate") and collider.has_method("take_damage"):
+						collider.take_damage(1)
+				if hit_player:
+					_laser_damage_accum += LASER_DPS * delta
+					if _laser_damage_accum >= 1.0:
+						var dmg: int = int(_laser_damage_accum)
+						_laser_damage_accum -= dmg
+						if player and player.has_method("take_damage"):
+							player.call("take_damage", dmg)
+							if player is CanvasItem:
+								var tw := create_tween()
+								tw.tween_property(player, "modulate", Color.RED, 0.05)
+								tw.tween_property(player, "modulate", Color.WHITE, 0.1)
 
 			if _laser_timer <= 0:
 				_end_laser()
