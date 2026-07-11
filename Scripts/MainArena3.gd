@@ -670,14 +670,24 @@ func _show_enemies() -> void:
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		enemy.show()
 		enemy.z_index = 6
-		enemy.set_physics_process(true)
-		_enable_collision_shapes(enemy)
-		for child in enemy.get_children():
-			if child is Timer and child.has_method("start"):
-				if child.has_method("stop") and child.is_stopped():
-					child.start()
-		if enemy is RigidBody2D:
-			enemy.freeze = false
+		var enemy_zone: String = enemy.get_meta("zone_name", "") if enemy.has_meta("zone_name") else ""
+		if enemy_zone == _current_player_zone:
+			enemy.set_physics_process(true)
+			_enable_collision_shapes(enemy)
+			for child in enemy.get_children():
+				if child is Timer and child.has_method("start"):
+					if child.has_method("stop") and child.is_stopped():
+						child.start()
+			if enemy is RigidBody2D:
+				enemy.freeze = false
+		else:
+			enemy.set_physics_process(false)
+			_disable_collision_shapes(enemy)
+			for child in enemy.get_children():
+				if child is Timer and child.has_method("stop"):
+					child.stop()
+			if enemy is RigidBody2D:
+				enemy.freeze = true
 
 func _disable_collision_shapes(node: Node) -> void:
 	if node is CollisionShape2D:
