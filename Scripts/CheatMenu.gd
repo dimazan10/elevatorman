@@ -200,6 +200,14 @@ func _ready() -> void:
 	spawn_turret.pressed.connect(_spawn_creature.bind("res://Objects/Summons/Turret.tscn"))
 	spawn_turret.add_theme_color_override("font_color", Color(0.3, 0.7, 1.0))
 	_panel.add_child(spawn_turret)
+
+	var spawn_grenade = Button.new()
+	spawn_grenade.text = "GrenadeMan"
+	spawn_grenade.position = Vector2(380, y)
+	spawn_grenade.size = Vector2(85, 30)
+	spawn_grenade.pressed.connect(_spawn_creature.bind("res://Objects/Summons/GrenadeMan.tscn"))
+	spawn_grenade.add_theme_color_override("font_color", Color(0.9, 0.4, 0.9))
+	_panel.add_child(spawn_grenade)
 	y += 38
 
 	var spawn_switch = Button.new()

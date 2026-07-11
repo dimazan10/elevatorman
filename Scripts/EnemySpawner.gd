@@ -33,6 +33,7 @@ func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_na
 	var pool: Array[String] = ["angry_ball", "DrunkKiller", "Spider", "Turret"]
 	if level >= 2:
 		pool.append("Clown")
+		pool.append("GrenadeMan")
 
 	var types: Array[String] = []
 	var available := pool.duplicate()
