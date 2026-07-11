@@ -3,7 +3,8 @@ extends Area2D
 const FIRE_TRAIL_SCENE = preload("res://Objects/Summons/FireTrail.tscn")
 
 @export var speed: float = 400.0
-@export var arc_height: float = 150.0
+@export var arc_height: float = 250.0
+@export var peak_time: float = 0.35
 
 var target_pos: Vector2 = Vector2.ZERO
 var _start_pos: Vector2 = Vector2.ZERO
@@ -52,8 +53,14 @@ func _physics_process(delta: float) -> void:
 	var t := clampf(_elapsed / _duration, 0.0, 1.0)
 
 	var flat_pos := _start_pos.lerp(target_pos, t)
-	var arc := -4.0 * arc_height * t * (t - 1.0)
-	global_position = flat_pos + Vector2(0, arc)
+
+	var arc: float
+	if t < peak_time:
+		arc = arc_height * (t / peak_time)
+	else:
+		arc = arc_height * (1.0 - (t - peak_time) / (1.0 - peak_time))
+
+	global_position = flat_pos + Vector2(0, -arc)
 
 	_sprite.rotation += delta * 8.0
 
