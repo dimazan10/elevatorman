@@ -3,7 +3,7 @@ extends CharacterBody2D
 const GRENADE_SCENE = preload("res://Objects/Summons/Grenade.tscn")
 
 @export var speed: float = 120.0
-@export var throw_cooldown: float = 1.8
+@export var throw_cooldown: float = 2.0
 @export var throw_range_min: float = 150.0
 @export var throw_range_max: float = 400.0
 
@@ -112,11 +112,11 @@ func set_enraged(enraged: bool) -> void:
 	if enraged:
 		modulate = Color(1.8, 0.7, 0.7)
 		_speed_multiplier = 1.5
-		throw_cooldown = 1.2
+		throw_cooldown = 1.5
 	else:
 		modulate = Color.WHITE
 		_speed_multiplier = 1.0
-		throw_cooldown = 1.8
+		throw_cooldown = 2.0
 
 func set_target(new_target: Node2D) -> void:
 	_player_ref = new_target
