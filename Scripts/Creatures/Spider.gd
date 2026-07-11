@@ -103,11 +103,8 @@ func _check_zone_teleport() -> bool:
 			global_position = _spawn_pos
 			velocity = Vector2.ZERO
 			shoot_timer.stop()
+			_stop_all_audio()
 			visible = false
-			_set_collision_enabled(false)
-			if run_audio:
-				run_audio.stop()
-				_run_audio_playing = false
 			if animated_sprite and animated_sprite.sprite_frames.has_animation("walk"):
 				animated_sprite.stop()
 		return true
@@ -128,6 +125,12 @@ func _set_collision_enabled(enabled: bool) -> void:
 			for sub in child.get_children():
 				if sub is CollisionShape2D:
 					sub.set_deferred("disabled", not enabled)
+
+func _stop_all_audio() -> void:
+	_run_audio_playing = false
+	for child in get_children():
+		if child is AudioStreamPlayer or child is AudioStreamPlayer2D:
+			child.stop()
 
 func set_enraged(enraged: bool) -> void:
 	_enraged = enraged

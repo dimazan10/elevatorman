@@ -133,10 +133,7 @@ func _check_zone_teleport() -> bool:
 			_is_waiting = true
 			global_position = _spawn_pos
 			velocity = Vector2.ZERO
-			_melody_player.stop()
-			_melody_playing = false
-			_horn_player.stop()
-			_laugh_player.stop()
+			_stop_all_audio()
 			visible = false
 			_set_collision_enabled(false)
 			var anim := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
@@ -151,6 +148,12 @@ func _check_zone_teleport() -> bool:
 		if anim:
 			anim.play(&"walk")
 	return false
+
+func _stop_all_audio() -> void:
+	for child in get_children():
+		if child is AudioStreamPlayer or child is AudioStreamPlayer2D:
+			child.stop()
+	_melody_playing = false
 
 func _set_collision_enabled(enabled: bool) -> void:
 	for child in get_children():

@@ -74,6 +74,7 @@ func _check_zone_teleport() -> bool:
 			burst_timer.stop()
 			shot_delay_timer.stop()
 			current_state = States.MOVING
+			_stop_all_audio()
 			visible = false
 			_set_collision_enabled(false)
 			if enemy_sprite and enemy_sprite.sprite_frames.has_animation("walk"):
@@ -87,6 +88,14 @@ func _check_zone_teleport() -> bool:
 		if enemy_sprite and enemy_sprite.sprite_frames.has_animation("walk"):
 			enemy_sprite.play("walk")
 	return false
+
+func _stop_all_audio() -> void:
+	for child in get_children():
+		if child is AudioStreamPlayer or child is AudioStreamPlayer2D:
+			child.stop()
+	for ap in _shot_audio_pool:
+		if is_instance_valid(ap):
+			ap.stop()
 
 func _set_collision_enabled(enabled: bool) -> void:
 	for child in get_children():

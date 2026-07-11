@@ -172,6 +172,7 @@ func _check_zone_teleport() -> bool:
 			velocity = Vector2.ZERO
 			visible = false
 			_set_collision_enabled(false)
+			_stop_all_audio()
 			_play_anim("idle")
 		return true
 	if _is_waiting:
@@ -189,6 +190,11 @@ func _set_collision_enabled(enabled: bool) -> void:
 			for sub in child.get_children():
 				if sub is CollisionShape2D:
 					sub.set_deferred("disabled", not enabled)
+
+func _stop_all_audio() -> void:
+	for child in get_children():
+		if child is AudioStreamPlayer or child is AudioStreamPlayer2D:
+			child.stop()
 
 func _handle_separation(delta: float) -> void:
 	var sep := Vector2.ZERO
