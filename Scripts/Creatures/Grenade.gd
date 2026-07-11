@@ -67,8 +67,6 @@ func _physics_process(delta: float) -> void:
 func _explode() -> void:
 	_arrived = true
 
-	_play_explosion_sound()
-
 	var fire = FIRE_TRAIL_SCENE.instantiate()
 	fire.global_position = target_pos
 	get_tree().current_scene.add_child(fire)
@@ -79,12 +77,3 @@ func _explode() -> void:
 			body.take_damage(2)
 
 	queue_free()
-
-func _play_explosion_sound() -> void:
-	var audio := AudioStreamPlayer.new()
-	audio.stream = load("res://Assets/Enemies/Boss/Boom/BoomSound.mp3")
-	audio.bus = &"Effects"
-	audio.volume_db = -4
-	audio.finished.connect(audio.queue_free)
-	get_tree().root.add_child(audio)
-	audio.play()

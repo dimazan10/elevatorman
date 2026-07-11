@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/Creatures/FireTrail.gd" id="1_ft"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ft"]
-radius = 40.0
+radius = 100.0
 
 [node name="FireTrail" type="Area2D"]
 collision_layer = 0
