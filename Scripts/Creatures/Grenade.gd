@@ -10,7 +10,7 @@ var _start_pos: Vector2 = Vector2.ZERO
 var _elapsed: float = 0.0
 var _duration: float = 0.0
 var _arrived: bool = false
-var _sprite: Sprite2D
+var _sprite: AnimatedSprite2D
 
 func _ready() -> void:
 	_start_pos = global_position
@@ -18,7 +18,7 @@ func _ready() -> void:
 	if _duration < 0.3:
 		_duration = 0.3
 
-	_sprite = Sprite2D.new()
+	_sprite = AnimatedSprite2D.new()
 	_sprite.z_index = 10
 	add_child(_sprite)
 
