@@ -11,6 +11,7 @@ var _sprite: AnimatedSprite2D
 func _ready() -> void:
 	_sprite = AnimatedSprite2D.new()
 	_sprite.z_index = 2
+	_sprite.scale = Vector2(2.5, 2.5)
 	add_child(_sprite)
 
 	var frames := SpriteFrames.new()
