@@ -74,15 +74,28 @@ func _check_zone_teleport() -> bool:
 			burst_timer.stop()
 			shot_delay_timer.stop()
 			current_state = States.MOVING
+			visible = false
+			_set_collision_enabled(false)
 			if enemy_sprite and enemy_sprite.sprite_frames.has_animation("walk"):
 				enemy_sprite.stop()
 		return true
 	if _is_waiting:
 		_is_waiting = false
+		visible = true
+		_set_collision_enabled(true)
 		set_random_burst_pause()
 		if enemy_sprite and enemy_sprite.sprite_frames.has_animation("walk"):
 			enemy_sprite.play("walk")
 	return false
+
+func _set_collision_enabled(enabled: bool) -> void:
+	for child in get_children():
+		if child is CollisionShape2D:
+			child.set_deferred("disabled", not enabled)
+		elif child is Area2D:
+			for sub in child.get_children():
+				if sub is CollisionShape2D:
+					sub.set_deferred("disabled", not enabled)
 
 func _physics_process(_delta: float) -> void:
 	if not target or not is_instance_valid(target):

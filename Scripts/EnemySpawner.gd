@@ -52,7 +52,10 @@ func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_na
 		while clown_count > 1:
 			for i in types.size():
 				if types[i] == "Clown":
-					types[i] = pool[randi() % pool.size()]
+					var replacement := pool[randi() % pool.size()]
+					while replacement == "Clown":
+						replacement = pool[randi() % pool.size()]
+					types[i] = replacement
 					clown_count -= 1
 					break
 

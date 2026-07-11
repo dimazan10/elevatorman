@@ -99,13 +99,26 @@ func _check_zone_teleport() -> bool:
 			_is_waiting = true
 			global_position = _spawn_pos
 			velocity = Vector2.ZERO
+			visible = false
+			_set_collision_enabled(false)
 			anim.play("idle")
 		return true
 	if _is_waiting:
 		_is_waiting = false
+		visible = true
+		_set_collision_enabled(true)
 		_throw_timer = randf_range(1.0, throw_cooldown)
 		anim.play("walk")
 	return false
+
+func _set_collision_enabled(enabled: bool) -> void:
+	for child in get_children():
+		if child is CollisionShape2D:
+			child.set_deferred("disabled", not enabled)
+		elif child is Area2D:
+			for sub in child.get_children():
+				if sub is CollisionShape2D:
+					sub.set_deferred("disabled", not enabled)
 
 func set_enraged(enraged: bool) -> void:
 	_enraged = enraged

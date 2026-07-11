@@ -103,6 +103,8 @@ func _check_zone_teleport() -> bool:
 			global_position = _spawn_pos
 			velocity = Vector2.ZERO
 			shoot_timer.stop()
+			visible = false
+			_set_collision_enabled(false)
 			if run_audio:
 				run_audio.stop()
 				_run_audio_playing = false
@@ -111,10 +113,21 @@ func _check_zone_teleport() -> bool:
 		return true
 	if _is_waiting:
 		_is_waiting = false
+		visible = true
+		_set_collision_enabled(true)
 		shoot_timer.start(randf_range(8.0, 12.0))
 		if animated_sprite and animated_sprite.sprite_frames.has_animation("walk"):
 			animated_sprite.play("walk")
 	return false
+
+func _set_collision_enabled(enabled: bool) -> void:
+	for child in get_children():
+		if child is CollisionShape2D:
+			child.set_deferred("disabled", not enabled)
+		elif child is Area2D:
+			for sub in child.get_children():
+				if sub is CollisionShape2D:
+					sub.set_deferred("disabled", not enabled)
 
 func set_enraged(enraged: bool) -> void:
 	_enraged = enraged

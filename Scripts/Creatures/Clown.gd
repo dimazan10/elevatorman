@@ -135,16 +135,31 @@ func _check_zone_teleport() -> bool:
 			velocity = Vector2.ZERO
 			_melody_player.stop()
 			_melody_playing = false
+			_horn_player.stop()
+			_laugh_player.stop()
+			visible = false
+			_set_collision_enabled(false)
 			var anim := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 			if anim:
 				anim.stop()
 		return true
 	if _is_waiting:
 		_is_waiting = false
+		visible = true
+		_set_collision_enabled(true)
 		var anim := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 		if anim:
 			anim.play(&"walk")
 	return false
+
+func _set_collision_enabled(enabled: bool) -> void:
+	for child in get_children():
+		if child is CollisionShape2D:
+			child.set_deferred("disabled", not enabled)
+		elif child is Area2D:
+			for sub in child.get_children():
+				if sub is CollisionShape2D:
+					sub.set_deferred("disabled", not enabled)
 
 func _process_wandering(delta: float) -> void:
 	_change_dir_timer -= delta
