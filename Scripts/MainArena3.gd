@@ -185,22 +185,32 @@ func _on_player_zone_changed(zone: String) -> void:
 		if enemy_zone.is_empty():
 			continue
 		if enemy_zone == old_zone and enemy_zone != zone:
-			_spawn_teleport_effect(enemy.global_position)
-			enemy.hide()
+			var spawn_pos = enemy.get_meta("spawn_position", enemy.global_position)
+			enemy.global_position = spawn_pos
 			enemy.set_physics_process(false)
 			_disable_collision_shapes(enemy)
+			_stop_enemy_audio(enemy)
 			for child in enemy.get_children():
 				if child is Timer and child.has_method("stop"):
 					child.stop()
+				if child is AnimatedSprite2D:
+					child.stop()
+			if "velocity" in enemy:
+				enemy.velocity = Vector2.ZERO
 		elif enemy_zone == zone and enemy_zone != old_zone:
-			_spawn_teleport_effect(enemy.global_position)
-			enemy.show()
 			enemy.set_physics_process(true)
 			_enable_collision_shapes(enemy)
 			for child in enemy.get_children():
 				if child is Timer and child.has_method("start"):
 					if child.has_method("stop") and child.is_stopped():
 						child.start()
+				if child is AnimatedSprite2D:
+					if child.sprite_frames and child.sprite_frames.has_animation("walk"):
+						child.play("walk")
+					elif child.sprite_frames and child.sprite_frames.has_animation("idle"):
+						child.play("idle")
+			if enemy.has_method("on_zone_entered"):
+				enemy.on_zone_entered()
 
 func _spawn_teleport_effect(pos: Vector2) -> void:
 	var tp := TELEPORT.instantiate()
@@ -215,6 +225,11 @@ func _spawn_teleport_effect(pos: Vector2) -> void:
 		if is_instance_valid(tp):
 			tp.queue_free()
 	)
+
+func _stop_enemy_audio(enemy: Node) -> void:
+	for child in enemy.get_children():
+		if child is AudioStreamPlayer or child is AudioStreamPlayer2D:
+			child.stop()
 
 func _setup_zone_triggers() -> void:
 	player_zone_changed.connect(_on_player_zone_changed)
@@ -971,7 +986,6 @@ func _on_pause_state_changed(is_paused: bool) -> void:
 				continue
 			var enemy_zone: String = enemy.get_meta("zone_name", "") if enemy.has_meta("zone_name") else ""
 			if enemy_zone == _paused_saved_zone:
-				enemy.show()
 				enemy.set_physics_process(true)
 				_enable_collision_shapes(enemy)
 				for child in enemy.get_children():
@@ -981,7 +995,6 @@ func _on_pause_state_changed(is_paused: bool) -> void:
 				if enemy is RigidBody2D:
 					enemy.freeze = false
 			else:
-				enemy.hide()
 				enemy.set_physics_process(false)
 				_disable_collision_shapes(enemy)
 				for child in enemy.get_children():

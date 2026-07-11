@@ -31,9 +31,6 @@ func _ready() -> void:
 	anim.play("idle")
 
 func _physics_process(delta: float) -> void:
-	if _check_zone_teleport():
-		return
-
 	if _knockback.length_squared() > 0:
 		velocity = _knockback
 		_knockback = _knockback.move_toward(Vector2.ZERO, 2000.0 * delta)
@@ -87,44 +84,10 @@ func _start_throw() -> void:
 
 	_throw_timer = throw_cooldown + randf_range(-0.5, 0.5)
 
-func _check_zone_teleport() -> bool:
-	if _zone_name == "" or Engine.time_scale == 0:
-		return false
-	var main = get_tree().current_scene
-	var player_zone := ""
-	if main and main.has_method("get_player_zone"):
-		player_zone = main.get_player_zone()
-	if player_zone != _zone_name:
-		if not _is_waiting:
-			_is_waiting = true
-			global_position = _spawn_pos
-			velocity = Vector2.ZERO
-			visible = false
-			_set_collision_enabled(false)
-			_stop_all_audio()
-			anim.play("idle")
-		return true
-	if _is_waiting:
-		_is_waiting = false
-		visible = true
-		_set_collision_enabled(true)
-		_throw_timer = randf_range(1.0, throw_cooldown)
-		anim.play("walk")
-	return false
-
-func _set_collision_enabled(enabled: bool) -> void:
-	for child in get_children():
-		if child is CollisionShape2D:
-			child.set_deferred("disabled", not enabled)
-		elif child is Area2D:
-			for sub in child.get_children():
-				if sub is CollisionShape2D:
-					sub.set_deferred("disabled", not enabled)
-
-func _stop_all_audio() -> void:
-	for child in get_children():
-		if child is AudioStreamPlayer or child is AudioStreamPlayer2D:
-			child.stop()
+func on_zone_entered() -> void:
+	_is_waiting = false
+	_throw_timer = randf_range(1.0, throw_cooldown)
+	anim.play("walk")
 
 func set_enraged(enraged: bool) -> void:
 	_enraged = enraged

@@ -90,47 +90,9 @@ func _get_separation_vector() -> Vector2:
 		sep = sep.normalized()
 	return sep
 
-func _check_zone_teleport() -> bool:
-	if _zone_name == "" or Engine.time_scale == 0:
-		return false
-	var main = get_tree().current_scene
-	var player_zone = ""
-	if main and main.has_method("get_player_zone"):
-		player_zone = main.get_player_zone()
-	if player_zone != _zone_name:
-		if not _is_waiting:
-			_is_waiting = true
-			global_position = _spawn_pos
-			velocity = Vector2.ZERO
-			shoot_timer.stop()
-			_stop_all_audio()
-			visible = false
-			if animated_sprite and animated_sprite.sprite_frames.has_animation("walk"):
-				animated_sprite.stop()
-		return true
-	if _is_waiting:
-		_is_waiting = false
-		visible = true
-		_set_collision_enabled(true)
-		shoot_timer.start(randf_range(8.0, 12.0))
-		if animated_sprite and animated_sprite.sprite_frames.has_animation("walk"):
-			animated_sprite.play("walk")
-	return false
-
-func _set_collision_enabled(enabled: bool) -> void:
-	for child in get_children():
-		if child is CollisionShape2D:
-			child.set_deferred("disabled", not enabled)
-		elif child is Area2D:
-			for sub in child.get_children():
-				if sub is CollisionShape2D:
-					sub.set_deferred("disabled", not enabled)
-
-func _stop_all_audio() -> void:
-	_run_audio_playing = false
-	for child in get_children():
-		if child is AudioStreamPlayer or child is AudioStreamPlayer2D:
-			child.stop()
+func on_zone_entered() -> void:
+	_is_waiting = false
+	shoot_timer.start(randf_range(8.0, 12.0))
 
 func set_enraged(enraged: bool) -> void:
 	_enraged = enraged
@@ -145,10 +107,6 @@ func _physics_process(delta: float) -> void:
 	if not target or not is_instance_valid(target):
 		target = _player_ref
 	if not target:
-		_stop_run_audio()
-		return
-	if _check_zone_teleport():
-		animated_sprite.flip_h = target.global_position.x < global_position.x
 		_stop_run_audio()
 		return
 
