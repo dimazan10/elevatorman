@@ -5,19 +5,16 @@ const FIRE_TRAIL_SCENE = preload("res://Objects/Summons/FireTrail.tscn")
 @export var speed: float = 400.0
 @export var arc_height: float = 250.0
 @export var peak_time: float = 0.35
+@export var flight_time: float = 1.0
 
 var target_pos: Vector2 = Vector2.ZERO
 var _start_pos: Vector2 = Vector2.ZERO
 var _elapsed: float = 0.0
-var _duration: float = 0.0
 var _arrived: bool = false
 var _sprite: AnimatedSprite2D
 
 func _ready() -> void:
 	_start_pos = global_position
-	_duration = _start_pos.distance_to(target_pos) / speed
-	if _duration < 0.3:
-		_duration = 0.3
 
 	_sprite = AnimatedSprite2D.new()
 	_sprite.z_index = 10
@@ -50,7 +47,7 @@ func _physics_process(delta: float) -> void:
 		return
 
 	_elapsed += delta
-	var t := clampf(_elapsed / _duration, 0.0, 1.0)
+	var t := clampf(_elapsed / flight_time, 0.0, 1.0)
 
 	var flat_pos := _start_pos.lerp(target_pos, t)
 
@@ -70,6 +67,8 @@ func _physics_process(delta: float) -> void:
 func _explode() -> void:
 	_arrived = true
 
+	_play_explosion_sound()
+
 	var fire = FIRE_TRAIL_SCENE.instantiate()
 	fire.global_position = target_pos
 	get_tree().current_scene.add_child(fire)
@@ -80,3 +79,12 @@ func _explode() -> void:
 			body.take_damage(2)
 
 	queue_free()
+
+func _play_explosion_sound() -> void:
+	var audio := AudioStreamPlayer.new()
+	audio.stream = load("res://Assets/Enemies/Boss/Boom/BoomSound.mp3")
+	audio.bus = &"Effects"
+	audio.volume_db = -4
+	audio.finished.connect(audio.queue_free)
+	get_tree().root.add_child(audio)
+	audio.play()
