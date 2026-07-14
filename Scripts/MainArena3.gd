@@ -179,8 +179,6 @@ func _on_player_zone_changed(zone: String) -> void:
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		if not is_instance_valid(enemy):
 			continue
-		if enemy is RigidBody2D:
-			continue
 		var enemy_zone := ""
 		if enemy.has_meta("zone_name"):
 			enemy_zone = enemy.get_meta("zone_name", "")
@@ -189,28 +187,36 @@ func _on_player_zone_changed(zone: String) -> void:
 		if enemy_zone == old_zone and enemy_zone != zone:
 			var spawn_pos = enemy.get_meta("spawn_position", enemy.global_position)
 			enemy.global_position = spawn_pos
-			enemy.set_physics_process(false)
-			_disable_collision_shapes(enemy)
-			_stop_enemy_audio(enemy)
-			for child in enemy.get_children():
-				if child is Timer and child.has_method("stop"):
-					child.stop()
-				if child is AnimatedSprite2D:
-					child.stop()
-			if "velocity" in enemy:
-				enemy.velocity = Vector2.ZERO
+			if enemy is RigidBody2D:
+				enemy.freeze = true
+				enemy.linear_velocity = Vector2.ZERO
+			else:
+				enemy.set_physics_process(false)
+				_disable_collision_shapes(enemy)
+				_stop_enemy_audio(enemy)
+				for child in enemy.get_children():
+					if child is Timer and child.has_method("stop"):
+						child.stop()
+					if child is AnimatedSprite2D:
+						child.stop()
+				if "velocity" in enemy:
+					enemy.velocity = Vector2.ZERO
 		elif enemy_zone == zone and enemy_zone != old_zone:
-			enemy.set_physics_process(true)
-			_enable_collision_shapes(enemy)
-			for child in enemy.get_children():
-				if child is Timer and child.has_method("start"):
-					if child.has_method("stop") and child.is_stopped():
-						child.start()
-				if child is AnimatedSprite2D:
-					if child.sprite_frames and child.sprite_frames.has_animation("walk"):
-						child.play("walk")
-					elif child.sprite_frames and child.sprite_frames.has_animation("idle"):
-						child.play("idle")
+			if enemy is RigidBody2D:
+				enemy.freeze = false
+				_enable_collision_shapes(enemy)
+			else:
+				enemy.set_physics_process(true)
+				_enable_collision_shapes(enemy)
+				for child in enemy.get_children():
+					if child is Timer and child.has_method("start"):
+						if child.has_method("stop") and child.is_stopped():
+							child.start()
+					if child is AnimatedSprite2D:
+						if child.sprite_frames and child.sprite_frames.has_animation("walk"):
+							child.play("walk")
+						elif child.sprite_frames and child.sprite_frames.has_animation("idle"):
+							child.play("idle")
 			if enemy.has_method("on_zone_entered"):
 				enemy.on_zone_entered()
 
@@ -674,22 +680,26 @@ func _show_enemies() -> void:
 		enemy.z_index = 6
 		var enemy_zone: String = enemy.get_meta("zone_name", "") if enemy.has_meta("zone_name") else ""
 		if enemy_zone == _current_player_zone:
-			enemy.set_physics_process(true)
-			_enable_collision_shapes(enemy)
-			for child in enemy.get_children():
-				if child is Timer and child.has_method("start"):
-					if child.has_method("stop") and child.is_stopped():
-						child.start()
 			if enemy is RigidBody2D:
 				enemy.freeze = false
+				_enable_collision_shapes(enemy)
+			else:
+				enemy.set_physics_process(true)
+				_enable_collision_shapes(enemy)
+				for child in enemy.get_children():
+					if child is Timer and child.has_method("start"):
+						if child.has_method("stop") and child.is_stopped():
+							child.start()
 		else:
-			enemy.set_physics_process(false)
-			_disable_collision_shapes(enemy)
-			for child in enemy.get_children():
-				if child is Timer and child.has_method("stop"):
-					child.stop()
 			if enemy is RigidBody2D:
 				enemy.freeze = true
+				_disable_collision_shapes(enemy)
+			else:
+				enemy.set_physics_process(false)
+				_disable_collision_shapes(enemy)
+				for child in enemy.get_children():
+					if child is Timer and child.has_method("stop"):
+						child.stop()
 
 func _disable_collision_shapes(node: Node) -> void:
 	if node is CollisionShape2D:
@@ -996,23 +1006,25 @@ func _on_pause_state_changed(is_paused: bool) -> void:
 		for enemy in get_tree().get_nodes_in_group("enemy"):
 			if not is_instance_valid(enemy):
 				continue
-			if enemy is RigidBody2D:
-				continue
 			var enemy_zone: String = enemy.get_meta("zone_name", "") if enemy.has_meta("zone_name") else ""
 			if enemy_zone == _paused_saved_zone:
-				enemy.set_physics_process(true)
-				_enable_collision_shapes(enemy)
-				for child in enemy.get_children():
-					if child is Timer and child.has_method("start"):
-						if child.has_method("stop") and child.is_stopped():
-							child.start()
 				if enemy is RigidBody2D:
 					enemy.freeze = false
+					_enable_collision_shapes(enemy)
+				else:
+					enemy.set_physics_process(true)
+					_enable_collision_shapes(enemy)
+					for child in enemy.get_children():
+						if child is Timer and child.has_method("start"):
+							if child.has_method("stop") and child.is_stopped():
+								child.start()
 			else:
-				enemy.set_physics_process(false)
-				_disable_collision_shapes(enemy)
-				for child in enemy.get_children():
-					if child is Timer and child.has_method("stop"):
-						child.stop()
 				if enemy is RigidBody2D:
 					enemy.freeze = true
+					_disable_collision_shapes(enemy)
+				else:
+					enemy.set_physics_process(false)
+					_disable_collision_shapes(enemy)
+					for child in enemy.get_children():
+						if child is Timer and child.has_method("stop"):
+							child.stop()
