@@ -80,9 +80,6 @@ animations = [{
 "texture": ExtResource("17_t3")
 }, {
 "duration": 1.0,
-"texture": ExtResource("18_t4")
-}, {
-"duration": 1.0,
 "texture": ExtResource("19_t5")
 }],
 "loop": false,
