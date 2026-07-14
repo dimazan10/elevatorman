@@ -68,7 +68,7 @@ func _physics_process(delta: float) -> void:
 
 func _start_throw() -> void:
 	_is_throwing = true
-	_throw_anim_timer = 0.5
+	_throw_anim_timer = 0.9
 	velocity = Vector2.ZERO
 	anim.play("throw")
 	anim.flip_h = _player_ref.global_position.x < global_position.x
@@ -76,13 +76,20 @@ func _start_throw() -> void:
 	await get_tree().create_timer(0.3).timeout
 	if not is_instance_valid(self) or not is_instance_valid(_player_ref):
 		return
+	_spawn_grenade()
 
+	await get_tree().create_timer(0.4).timeout
+	if not is_instance_valid(self) or not is_instance_valid(_player_ref):
+		return
+	_spawn_grenade()
+
+	_throw_timer = throw_cooldown + randf_range(-0.3, 0.3)
+
+func _spawn_grenade() -> void:
 	var grenade = GRENADE_SCENE.instantiate()
 	grenade.global_position = global_position + Vector2(0, -20)
 	grenade.target_pos = _player_ref.global_position
 	get_tree().current_scene.add_child(grenade)
-
-	_throw_timer = throw_cooldown + randf_range(-0.5, 0.5)
 
 func on_zone_entered() -> void:
 	_is_waiting = false
@@ -94,7 +101,7 @@ func set_enraged(enraged: bool) -> void:
 	if enraged:
 		modulate = Color(1.8, 0.7, 0.7)
 		_speed_multiplier = 1.5
-		throw_cooldown = 1.5
+		throw_cooldown = 1.0
 	else:
 		modulate = Color.WHITE
 		_speed_multiplier = 1.0
