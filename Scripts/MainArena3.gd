@@ -179,6 +179,8 @@ func _on_player_zone_changed(zone: String) -> void:
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		if not is_instance_valid(enemy):
 			continue
+		if enemy is RigidBody2D:
+			continue
 		var enemy_zone := ""
 		if enemy.has_meta("zone_name"):
 			enemy_zone = enemy.get_meta("zone_name", "")
@@ -676,30 +678,26 @@ func _hide_enemies() -> void:
 
 func _show_enemies() -> void:
 	for enemy in get_tree().get_nodes_in_group("enemy"):
+		if enemy is RigidBody2D:
+			enemy.show()
+			enemy.z_index = 6
+			continue
 		enemy.show()
 		enemy.z_index = 6
 		var enemy_zone: String = enemy.get_meta("zone_name", "") if enemy.has_meta("zone_name") else ""
 		if enemy_zone == _current_player_zone:
-			if enemy is RigidBody2D:
-				enemy.freeze = false
-				_enable_collision_shapes(enemy)
-			else:
-				enemy.set_physics_process(true)
-				_enable_collision_shapes(enemy)
-				for child in enemy.get_children():
-					if child is Timer and child.has_method("start"):
-						if child.has_method("stop") and child.is_stopped():
-							child.start()
+			enemy.set_physics_process(true)
+			_enable_collision_shapes(enemy)
+			for child in enemy.get_children():
+				if child is Timer and child.has_method("start"):
+					if child.has_method("stop") and child.is_stopped():
+						child.start()
 		else:
-			if enemy is RigidBody2D:
-				enemy.freeze = true
-				_disable_collision_shapes(enemy)
-			else:
-				enemy.set_physics_process(false)
-				_disable_collision_shapes(enemy)
-				for child in enemy.get_children():
-					if child is Timer and child.has_method("stop"):
-						child.stop()
+			enemy.set_physics_process(false)
+			_disable_collision_shapes(enemy)
+			for child in enemy.get_children():
+				if child is Timer and child.has_method("stop"):
+					child.stop()
 
 func _disable_collision_shapes(node: Node) -> void:
 	if node is CollisionShape2D:
@@ -1005,6 +1003,8 @@ func _on_pause_state_changed(is_paused: bool) -> void:
 		_last_player_zone = _paused_saved_zone
 		for enemy in get_tree().get_nodes_in_group("enemy"):
 			if not is_instance_valid(enemy):
+				continue
+			if enemy is RigidBody2D:
 				continue
 			var enemy_zone: String = enemy.get_meta("zone_name", "") if enemy.has_meta("zone_name") else ""
 			if enemy_zone == _paused_saved_zone:

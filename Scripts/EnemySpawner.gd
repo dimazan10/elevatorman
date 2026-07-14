@@ -74,9 +74,7 @@ func spawn(level: int, parent: Node, group_name: String = "spawn_point", zone_na
 		var inst = scene.instantiate()
 		inst.set_meta("spawn_position", pt.global_position)
 		inst.set_meta("zone_name", zone_name)
-		if inst is RigidBody2D:
-			inst.freeze = true
-		else:
+		if not inst is RigidBody2D:
 			inst.set_physics_process(false)
 		parent.add_child(inst)
 		inst.global_position = pt.global_position
