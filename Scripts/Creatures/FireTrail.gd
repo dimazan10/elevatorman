@@ -18,7 +18,7 @@ func _ready() -> void:
 	frames.add_animation(&"default")
 	frames.set_animation_loop(&"default", false)
 	frames.set_animation_speed(&"default", 8.0)
-	for i in 6:
+	for i in 16:
 		var tex = load("res://Assets/Enemies/GrenadeMan/fire_%d.png" % i) as Texture2D
 		if tex:
 			frames.add_frame(&"default", tex)
