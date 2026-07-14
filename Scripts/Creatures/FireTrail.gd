@@ -25,17 +25,6 @@ func _ready() -> void:
 			frames.add_frame(&"default", tex)
 	_sprite.sprite_frames = frames
 	_sprite.play(&"default")
-	_sprite.frame_changed.connect(_on_frame_changed)
-	_update_collision_shape()
-
-func _on_frame_changed() -> void:
-	_update_collision_shape()
-
-func _update_collision_shape() -> void:
-	var tex = _sprite.sprite_frames.get_frame_texture(&"default", _sprite.frame)
-	if tex:
-		var sz = tex.get_size() * _sprite.scale.x * 0.45
-		_col.shape.radius = sz
 
 	_col = CollisionShape2D.new()
 	var shape := CircleShape2D.new()
@@ -43,12 +32,26 @@ func _update_collision_shape() -> void:
 	_col.shape = shape
 	add_child(_col)
 
+	_sprite.frame_changed.connect(_on_frame_changed)
+	_update_collision_shape()
+
 	collision_layer = 0
 	collision_mask = 1
 	monitoring = true
 
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
+
+func _on_frame_changed() -> void:
+	_update_collision_shape()
+
+func _update_collision_shape() -> void:
+	if not _col or not _col.shape:
+		return
+	var tex = _sprite.sprite_frames.get_frame_texture(&"default", _sprite.frame)
+	if tex:
+		var sz = tex.get_size() * _sprite.scale.x * 0.45
+		_col.shape.radius = sz
 
 func _physics_process(delta: float) -> void:
 	_elapsed += delta
