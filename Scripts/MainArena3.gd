@@ -179,6 +179,8 @@ func _on_player_zone_changed(zone: String) -> void:
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		if not is_instance_valid(enemy):
 			continue
+		if enemy is RigidBody2D:
+			continue
 		var enemy_zone := ""
 		if enemy.has_meta("zone_name"):
 			enemy_zone = enemy.get_meta("zone_name", "")
@@ -993,6 +995,8 @@ func _on_pause_state_changed(is_paused: bool) -> void:
 		_last_player_zone = _paused_saved_zone
 		for enemy in get_tree().get_nodes_in_group("enemy"):
 			if not is_instance_valid(enemy):
+				continue
+			if enemy is RigidBody2D:
 				continue
 			var enemy_zone: String = enemy.get_meta("zone_name", "") if enemy.has_meta("zone_name") else ""
 			if enemy_zone == _paused_saved_zone:
