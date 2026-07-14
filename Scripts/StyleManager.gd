@@ -55,27 +55,5 @@ func reset_score() -> void:
 	if _label and is_instance_valid(_label):
 		_label.text = "СТИЛЬ: 0"
 
-func setup_display(parent: Node) -> void:
-	if _label and is_instance_valid(_label):
-		_label.get_parent().get_parent().queue_free()
-	var ui = CanvasLayer.new()
-	ui.name = "StyleUI"
-	ui.layer = 128
-	parent.add_child(ui)
-	var container = Control.new()
-	container.name = "StyleContainer"
-	container.set_anchors_preset(Control.PRESET_FULL_RECT)
-	container.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	ui.add_child(container)
-	_label = Label.new()
-	_label.name = "StyleLabel"
-	_label.add_theme_font_size_override("font_size", 28)
-	_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2))
-	_label.add_theme_constant_override("outline_size", 4)
-	_label.add_theme_color_override("font_outline_color", Color.BLACK)
-	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_label.size = Vector2(270, 40)
-	var vp_size = parent.get_viewport_rect().size
-	_label.position = Vector2(vp_size.x - 280, 10)
-	_label.text = "СТИЛЬ: 0"
-	container.add_child(_label)
+func setup_display(_parent: Node) -> void:
+	pass
