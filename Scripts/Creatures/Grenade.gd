@@ -21,7 +21,8 @@ func _ready() -> void:
 	add_child(_sprite)
 
 	var frames := SpriteFrames.new()
-	frames.add_animation(&"default")
+	if not frames.has_animation(&"default"):
+		frames.add_animation(&"default")
 	frames.set_animation_loop(&"default", true)
 	frames.set_animation_speed(&"default", 10.0)
 	for i in 5:

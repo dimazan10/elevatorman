@@ -16,7 +16,8 @@ func _ready() -> void:
 	add_child(_sprite)
 
 	var frames := SpriteFrames.new()
-	frames.add_animation(&"default")
+	if not frames.has_animation(&"default"):
+		frames.add_animation(&"default")
 	frames.set_animation_loop(&"default", true)
 	frames.set_animation_speed(&"default", 12.0)
 	for i in 16:
@@ -50,7 +51,7 @@ func _update_collision_shape() -> void:
 		return
 	var tex = _sprite.sprite_frames.get_frame_texture(&"default", _sprite.frame)
 	if tex:
-		var sz = tex.get_size() * _sprite.scale.x * 0.45
+		var sz: float = tex.get_width() * _sprite.scale.x * 0.45
 		_col.shape.radius = sz
 
 func _physics_process(delta: float) -> void:
