@@ -7,6 +7,7 @@ extends Area2D
 var _elapsed: float = 0.0
 var _damage_timer: float = 0.0
 var _sprite: AnimatedSprite2D
+var _col: CollisionShape2D
 
 func _ready() -> void:
 	_sprite = AnimatedSprite2D.new()
@@ -16,20 +17,31 @@ func _ready() -> void:
 
 	var frames := SpriteFrames.new()
 	frames.add_animation(&"default")
-	frames.set_animation_loop(&"default", false)
-	frames.set_animation_speed(&"default", 8.0)
+	frames.set_animation_loop(&"default", true)
+	frames.set_animation_speed(&"default", 12.0)
 	for i in 16:
 		var tex = load("res://Assets/Enemies/GrenadeMan/fire_%d.png" % i) as Texture2D
 		if tex:
 			frames.add_frame(&"default", tex)
 	_sprite.sprite_frames = frames
 	_sprite.play(&"default")
+	_sprite.frame_changed.connect(_on_frame_changed)
+	_update_collision_shape()
 
-	var col := CollisionShape2D.new()
+func _on_frame_changed() -> void:
+	_update_collision_shape()
+
+func _update_collision_shape() -> void:
+	var tex = _sprite.sprite_frames.get_frame_texture(&"default", _sprite.frame)
+	if tex:
+		var sz = tex.get_size() * _sprite.scale.x * 0.45
+		_col.shape.radius = sz
+
+	_col = CollisionShape2D.new()
 	var shape := CircleShape2D.new()
-	shape.radius = 100.0
-	col.shape = shape
-	add_child(col)
+	shape.radius = 50.0
+	_col.shape = shape
+	add_child(_col)
 
 	collision_layer = 0
 	collision_mask = 1
