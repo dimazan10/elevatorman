@@ -84,9 +84,6 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": ExtResource("19_t5")
-}, {
-"duration": 1.0,
-"texture": ExtResource("20_t6")
 }],
 "loop": false,
 "name": &"throw",
