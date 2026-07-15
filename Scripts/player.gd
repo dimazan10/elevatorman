@@ -387,19 +387,62 @@ func die() -> void:
 	animated_sprite.visible = false
 	$Death_Animation.visible = true
 	$Death_Animation.play("default")
-	await get_tree().create_timer(0.3, true, false, true).timeout
-	var death_screen := CanvasLayer.new()
-	death_screen.name = "DeathScreen"
-	death_screen.set_script(load("res://Scripts/DeathScreen.gd"))
-	get_tree().root.add_child(death_screen)
-	get_tree().paused = true
 
-	await get_tree().create_timer(3.0, true, true, true).timeout
-	if not is_instance_valid(death_screen):
-		return
-	get_tree().paused = false
-	death_screen.queue_free()
+	var overlay := CanvasLayer.new()
+	overlay.layer = 128
+	overlay.process_mode = PROCESS_MODE_ALWAYS
+	get_tree().root.add_child(overlay)
+
+	var black := ColorRect.new()
+	black.color = Color.BLACK
+	black.anchors_preset = Control.PRESET_FULL_RECT
+	black.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	black.modulate = Color(1, 1, 1, 0)
+	overlay.add_child(black)
+
+	var label := Label.new()
+	label.text = "свет погас"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.anchors_preset = Control.PRESET_CENTER
+	label.offset_left = -200
+	label.offset_top = -50
+	label.offset_right = 200
+	label.offset_bottom = 30
+	label.modulate = Color(1, 0, 0, 0)
+	label.add_theme_font_size_override("font_size", 64)
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 4)
+	overlay.add_child(label)
+
+	create_tween().tween_property(black, "modulate:a", 0.6, 1.5).set_delay(0.5)
+
+	var t2 := create_tween().set_delay(1.0)
+	t2.tween_callback(func():
+		var ox := label.offset_left
+		var s: Tween = create_tween()
+		s.tween_property(label, "offset_left", ox + 6, 0.03)
+		s.tween_property(label, "offset_left", ox - 6, 0.03)
+		s.tween_property(label, "offset_left", ox + 6, 0.03)
+		s.tween_property(label, "offset_left", ox - 6, 0.03)
+		s.tween_property(label, "offset_left", ox + 6, 0.03)
+		s.tween_property(label, "offset_left", ox - 6, 0.03)
+		s.tween_property(label, "offset_left", ox, 0.03))
+	t2.tween_property(label, "modulate:a", 1.0, 0.3)
+
+	var t3 := create_tween().set_delay(1.5).set_parallel()
+	t3.tween_property(label, "modulate:a", 0.0, 0.3)
+	t3.tween_property(black, "modulate:a", 1.0, 0.3)
+
+	await get_tree().create_timer(2.5).timeout
 	get_tree().reload_current_scene()
+
+	await get_tree().create_timer(1.0).timeout
+
+	var t4: Tween = overlay.create_tween()
+	t4.tween_property(black, "modulate:a", 0.0, 1.0)
+	await t4.finished
+	overlay.queue_free()
 
 func _infinit_revive() -> void:
 	for i in range(inventory.size()):
