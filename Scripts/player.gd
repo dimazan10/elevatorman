@@ -394,6 +394,7 @@ func die() -> void:
 	animated_sprite.play("death")
 	await animated_sprite.animation_finished
 	var death_screen := CanvasLayer.new()
+	death_screen.name = "DeathScreen"
 	death_screen.set_script(load("res://Scripts/DeathScreen.gd"))
 	get_tree().root.add_child(death_screen)
 	get_tree().paused = true
