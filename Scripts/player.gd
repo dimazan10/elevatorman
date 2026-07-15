@@ -189,6 +189,10 @@ func _physics_process(delta: float) -> void:
 		_toggle_noclip()
 	_f1_held = f1_down
 
+	if _is_dying:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
 	if not can_move:
 		velocity = Vector2.ZERO
 		move_and_slide()
