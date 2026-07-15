@@ -91,6 +91,19 @@ func _ready() -> void:
 		frames.add_frame("walk_up", tex)
 	frames.set_animation_loop("walk_up", true)
 
+	frames.add_animation("death")
+	frames.set_animation_speed("death", 8)
+	frames.set_animation_loop("death", false)
+	for i in range(1, 8):
+		var path = "res://Assets/Sprites_Player/Death/gg_death" + str(i) + "-removebg-preview.png"
+		var img: Image = Image.load_from_file(path)
+		if img:
+			frames.add_frame("death", ImageTexture.create_from_image(img))
+	if frames.get_frame_count("death") == 0:
+		var img: Image = Image.load_from_file("res://Assets/Sprites_Player/gg.png")
+		if img:
+			frames.add_frame("death", ImageTexture.create_from_image(img))
+
 	animated_sprite.sprite_frames = frames
 	animated_sprite.play("idle_right")
 	animated_sprite.scale = Vector2(1.0, 1.0)
@@ -383,69 +396,16 @@ func die() -> void:
 	if has_item("infinit"):
 		_infinit_revive()
 		return
-	set_physics_process(false)
-	animated_sprite.visible = false
-	$Death_Animation.visible = true
-	$Death_Animation.play("default")
-
-	var overlay := CanvasLayer.new()
-	overlay.layer = 128
-	overlay.process_mode = PROCESS_MODE_ALWAYS
-	get_tree().root.add_child(overlay)
-
-	var black := ColorRect.new()
-	black.color = Color.BLACK
-	black.anchors_preset = Control.PRESET_FULL_RECT
-	black.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	black.modulate = Color(1, 1, 1, 0)
-	overlay.add_child(black)
-
-	var label := Label.new()
-	label.text = "свет погас"
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.anchors_preset = Control.PRESET_CENTER
-	label.offset_left = -200
-	label.offset_top = -50
-	label.offset_right = 200
-	label.offset_bottom = 30
-	label.modulate = Color(1, 0, 0, 0)
-	label.add_theme_font_size_override("font_size", 64)
-	label.add_theme_color_override("font_outline_color", Color.BLACK)
-	label.add_theme_constant_override("outline_size", 4)
-	overlay.add_child(label)
-
-	create_tween().tween_property(black, "modulate:a", 0.6, 1.5).set_delay(0.5)
-
-	var t2: Tween = create_tween()
-	t2.tween_interval(1.0)
-	t2.tween_callback(func():
-		var ox: float = label.offset_left
-		var s: Tween = create_tween()
-		s.tween_property(label, "offset_left", ox + 6, 0.03)
-		s.tween_property(label, "offset_left", ox - 6, 0.03)
-		s.tween_property(label, "offset_left", ox + 6, 0.03)
-		s.tween_property(label, "offset_left", ox - 6, 0.03)
-		s.tween_property(label, "offset_left", ox + 6, 0.03)
-		s.tween_property(label, "offset_left", ox - 6, 0.03)
-		s.tween_property(label, "offset_left", ox, 0.03))
-	t2.tween_property(label, "modulate:a", 1.0, 0.3)
-
-	var t3: Tween = create_tween()
-	t3.tween_interval(1.5)
-	t3.set_parallel()
-	t3.tween_property(label, "modulate:a", 0.0, 0.3)
-	t3.tween_property(black, "modulate:a", 1.0, 0.3)
-
-	await get_tree().create_timer(2.5).timeout
-	get_tree().reload_current_scene()
-
-	await get_tree().create_timer(1.0).timeout
-
-	var t4: Tween = overlay.create_tween()
-	t4.tween_property(black, "modulate:a", 0.0, 1.0)
-	await t4.finished
-	overlay.queue_free()
+	_is_dying = true
+	animated_sprite.play("death")
+	var attempts: int = GameState.add_death(GameState.current_floor)
+	await get_tree().create_timer(3.0, true, false, true).timeout
+	var death_screen := CanvasLayer.new()
+	death_screen.name = "DeathScreen"
+	death_screen.set_script(load("res://Scripts/DeathScreen.gd"))
+	death_screen.set_meta("attempts", attempts)
+	get_tree().root.add_child(death_screen)
+	get_tree().paused = true
 
 func _infinit_revive() -> void:
 	for i in range(inventory.size()):
