@@ -386,11 +386,14 @@ func die() -> void:
 		_infinit_revive()
 		return
 	set_physics_process(false)
+	var orig_scale := animated_sprite.scale
+	animated_sprite.scale = Vector2(0.5, 0.5)
 	animated_sprite.play("death")
 	await animated_sprite.animation_finished
-	get_tree().paused = true
+	animated_sprite.scale = orig_scale
 	var death_screen := preload("res://Objects/DeathScreen.tscn").instantiate()
 	get_tree().root.add_child(death_screen)
+	get_tree().paused = true
 
 func _infinit_revive() -> void:
 	for i in range(inventory.size()):
