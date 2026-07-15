@@ -14,6 +14,7 @@ var _arrived: bool = false
 var _sprite: AnimatedSprite2D
 
 func _ready() -> void:
+	add_to_group("grenade")
 	_start_pos = global_position
 
 	_sprite = AnimatedSprite2D.new()
