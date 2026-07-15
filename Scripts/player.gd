@@ -387,12 +387,10 @@ func die() -> void:
 	animated_sprite.visible = false
 	$Death_Animation.visible = true
 	$Death_Animation.play("default")
-	var attempts: int = GameState.add_death(GameState.current_floor)
 	await get_tree().create_timer(0.3, true, false, true).timeout
 	var death_screen := CanvasLayer.new()
 	death_screen.name = "DeathScreen"
 	death_screen.set_script(load("res://Scripts/DeathScreen.gd"))
-	death_screen.set_meta("attempts", attempts)
 	get_tree().root.add_child(death_screen)
 	get_tree().paused = true
 
