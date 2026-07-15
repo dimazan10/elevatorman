@@ -379,10 +379,9 @@ func die() -> void:
 	if has_item("infinit"):
 		_infinit_revive()
 		return
-	print("Игрок погиб!")
-	var tree := get_tree()
-	if tree:
-		tree.reload_current_scene()
+	get_tree().paused = true
+	var death_screen := preload("res://Objects/DeathScreen.tscn").instantiate()
+	get_tree().root.add_child(death_screen)
 
 func _infinit_revive() -> void:
 	for i in range(inventory.size()):
