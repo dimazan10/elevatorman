@@ -393,13 +393,8 @@ func die() -> void:
 	_is_dying = true
 	set_physics_process(false)
 	animated_sprite.play("death")
-	# Death visual: flash red then fade out
-	animated_sprite.modulate = Color.RED
-	var tw := create_tween()
-	tw.tween_property(animated_sprite, "modulate", Color(1, 0.3, 0.3, 1), 0.15)
-	tw.tween_property(animated_sprite, "modulate:a", 0.0, 0.4)
 	var attempts: int = GameState.add_death(GameState.current_floor)
-	await get_tree().create_timer(1.5, true, false, true).timeout
+	await get_tree().create_timer(3.0, true, false, true).timeout
 	var death_screen := CanvasLayer.new()
 	death_screen.name = "DeathScreen"
 	death_screen.set_script(load("res://Scripts/DeathScreen.gd"))
