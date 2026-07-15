@@ -380,8 +380,12 @@ func die() -> void:
 		_infinit_revive()
 		return
 	set_physics_process(false)
-	await get_tree().create_timer(0.3).timeout
-	get_tree().reload_current_scene()
+	animated_sprite.visible = false
+	$Death_Animation.visible = true
+	$Death_Animation.play("default")
+	var overlay := CanvasLayer.new()
+	overlay.script = preload("res://Scripts/DeathOverlay.gd")
+	get_tree().root.add_child(overlay)
 
 func _infinit_revive() -> void:
 	for i in range(inventory.size()):
