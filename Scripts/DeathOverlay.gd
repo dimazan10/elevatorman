@@ -32,8 +32,8 @@ func _ready() -> void:
 	_run()
 
 func _run() -> void:
-	var darken: Tween = create_tween().set_delay(0.5)
-	darken.tween_property(_black, "modulate:a", 0.6, 1.0)
+	var darken: Tween = create_tween()
+	darken.tween_property(_black, "modulate:a", 0.6, 1.0).set_delay(0.5)
 	darken.tween_property(_black, "modulate:a", 1.0, 0.5)
 
 	await get_tree().create_timer(1.0).timeout
