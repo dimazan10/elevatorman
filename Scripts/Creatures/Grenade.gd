@@ -73,7 +73,9 @@ func _explode() -> void:
 	fire.global_position = target_pos
 	get_tree().current_scene.add_child(fire)
 
-	var nearby := get_overlapping_bodies() if monitoring else []
+	var nearby: Array[Node2D] = []
+	if monitoring:
+		nearby = get_overlapping_bodies()
 	for body in nearby:
 		if body.is_in_group("player") and body.has_method("take_damage"):
 			body.take_damage(2)
