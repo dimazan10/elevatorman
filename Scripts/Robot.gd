@@ -342,7 +342,7 @@ func _process(delta: float) -> void:
 			_warning_active = false
 			_hide_warnings()
 			_start_attack(_pending_attack)
-			_attack_cooldown = 2.0 + randf() * 3.0
+			_attack_cooldown = 8.0 if current_hp <= 2 else 2.0 + randf() * 3.0
 
 	if current_state != State.IDLE and not _circles_spawned:
 		if $WaistBone/AnimationPlayer.current_animation_position >= IMPACT_TIME:
@@ -439,7 +439,7 @@ func _end_laser() -> void:
 			_laser_audio.play()
 	else:
 		_laser_state = LaserState.READY
-		_laser_cooldown = LASER_COOLDOWN
+		_laser_cooldown = 10.0 if current_hp <= 2 else LASER_COOLDOWN
 		_laser_ray.enabled = false
 		_laser_line.visible = false
 		_laser_line.set_point_position(1, Vector2.ZERO)
