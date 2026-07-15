@@ -33,11 +33,11 @@ func _run() -> void:
 	await get_tree().create_timer(1.0).timeout
 
 	create_tween().tween_property(_label, "modulate:a", 1.0, 0.3)
-	var orig_x: float = _label.offset.x
+	var orig_x: float = _label.offset_left
 	for i in range(6):
-		_label.offset.x = orig_x + (6 if i % 2 == 0 else -6)
+		_label.offset_left = orig_x + (6 if i % 2 == 0 else -6)
 		await get_tree().create_timer(0.03).timeout
-	_label.offset.x = orig_x
+	_label.offset_left = orig_x
 
 	await get_tree().create_timer(0.32).timeout
 
