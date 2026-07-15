@@ -387,7 +387,9 @@ func die() -> void:
 		return
 	set_physics_process(false)
 	animated_sprite.play("death")
-	await animated_sprite.animation_finished
+	var timer := get_tree().create_timer(3.0)
+	while timer.time_left > 0 and animated_sprite.is_playing():
+		await get_tree().process_frame
 	var death_screen := preload("res://Objects/DeathScreen.tscn").instantiate()
 	get_tree().root.add_child(death_screen)
 	get_tree().paused = true
