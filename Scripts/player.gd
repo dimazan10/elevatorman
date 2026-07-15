@@ -93,6 +93,7 @@ func _ready() -> void:
 
 	frames.add_animation("death")
 	frames.set_animation_speed("death", 8)
+	frames.set_animation_loop("death", false)
 	for i in range(1, 8):
 		var path = "res://Assets/Sprites_Player/Death/gg_death" + str(i) + "-removebg-preview.png"
 		var tex = load(path)
