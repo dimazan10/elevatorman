@@ -389,7 +389,7 @@ func die() -> void:
 	animated_sprite.play("death")
 	await animated_sprite.animation_finished
 	var death_screen := preload("res://Objects/DeathScreen.tscn").instantiate()
-	get_tree().current_scene.add_child(death_screen)
+	get_tree().root.add_child(death_screen)
 	get_tree().paused = true
 
 func _infinit_revive() -> void:
