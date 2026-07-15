@@ -19,6 +19,10 @@ func _ready() -> void:
 	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_label.anchors_preset = Control.PRESET_CENTER
+	_label.offset_left = -200
+	_label.offset_top = -50
+	_label.offset_right = 200
+	_label.offset_bottom = 30
 	_label.modulate = Color(1, 0, 0, 0)
 	_label.add_theme_font_size_override("font_size", 64)
 	_label.add_theme_color_override("font_outline_color", Color.BLACK)
@@ -28,7 +32,9 @@ func _ready() -> void:
 	_run()
 
 func _run() -> void:
-	create_tween().tween_property(_black, "modulate:a", 0.6, 1.5).set_delay(0.5)
+	var darken := create_tween().set_delay(0.5)
+	darken.tween_property(_black, "modulate:a", 0.6, 1.0)
+	darken.tween_property(_black, "modulate:a", 1.0, 0.5)
 
 	await get_tree().create_timer(1.0).timeout
 
@@ -42,9 +48,7 @@ func _run() -> void:
 	await get_tree().create_timer(0.32).timeout
 
 	var t := create_tween()
-	t.set_parallel()
 	t.tween_property(_label, "modulate:a", 0.0, 0.5)
-	t.tween_property(_black, "modulate:a", 1.0, 0.5)
 
 	await get_tree().create_timer(1.0).timeout
 
