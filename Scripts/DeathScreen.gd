@@ -23,7 +23,7 @@ func _ready():
 	vbox.offset_right = 200
 	vbox.offset_bottom = 100
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	vbox.add_theme_constant_override("separation", 30)
+	vbox.add_theme_constant_override("separation", 20)
 	root_ctrl.add_child(vbox)
 
 	var label := Label.new()
@@ -36,6 +36,17 @@ func _ready():
 	label.add_theme_constant_override("outline_size", 4)
 	label.add_theme_color_override("font_outline_color", Color.BLACK)
 	vbox.add_child(label)
+
+	var attempts: int = 1
+	if has_meta("attempts"):
+		attempts = get_meta("attempts") as int
+	var counter := Label.new()
+	counter.text = "Попытка #%d на этаже %d" % [attempts, GameState.current_floor]
+	counter.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	counter.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	counter.add_theme_font_size_override("font_size", 24)
+	counter.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1))
+	vbox.add_child(counter)
 
 	var restart_btn := Button.new()
 	restart_btn.text = "Рестарт"

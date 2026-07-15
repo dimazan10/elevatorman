@@ -15,10 +15,20 @@ var collar_charges: int = 3
 var currency: int = 0
 var last_floor_hp: int = 0
 var last_floor_time: float = 0.0
+var death_counts: Dictionary = {}
 var inventory: Array[Dictionary] = [
 	{id = "", icon = null, name = ""},
 	{id = "", icon = null, name = ""},
 ]
+
+func add_death(floor_num: int) -> int:
+	if not death_counts.has(floor_num):
+		death_counts[floor_num] = 0
+	death_counts[floor_num] += 1
+	return death_counts[floor_num]
+
+func get_deaths(floor_num: int) -> int:
+	return death_counts.get(floor_num, 0)
 
 func _ready() -> void:
 	_load_settings()

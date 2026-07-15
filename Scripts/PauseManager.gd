@@ -96,6 +96,7 @@ func _on_exit() -> void:
 	GameState.current_floor = 1
 	GameState.has_bucket = false
 	GameState.has_collar = false
+	GameState.death_counts = {}
 	StyleManager.reset_score()
 	get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
 
