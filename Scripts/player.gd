@@ -390,10 +390,11 @@ func die() -> void:
 	if has_item("infinit"):
 		_infinit_revive()
 		return
+	_is_dying = true
 	set_physics_process(false)
 	animated_sprite.play("death")
 	var attempts: int = GameState.add_death(GameState.current_floor)
-	await animated_sprite.animation_finished
+	await get_tree().create_timer(1.5, true, false, true).timeout
 	var death_screen := CanvasLayer.new()
 	death_screen.name = "DeathScreen"
 	death_screen.set_script(load("res://Scripts/DeathScreen.gd"))
