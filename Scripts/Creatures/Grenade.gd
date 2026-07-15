@@ -39,7 +39,7 @@ func _ready() -> void:
 	col.shape = shape
 	add_child(col)
 
-	collision_layer = 0
+	collision_layer = 1
 	collision_mask = 0
 
 	monitoring = false
@@ -73,7 +73,7 @@ func _explode() -> void:
 	fire.global_position = target_pos
 	get_tree().current_scene.add_child(fire)
 
-	var nearby := get_overlapping_bodies()
+	var nearby := get_overlapping_bodies() if monitoring else []
 	for body in nearby:
 		if body.is_in_group("player") and body.has_method("take_damage"):
 			body.take_damage(2)

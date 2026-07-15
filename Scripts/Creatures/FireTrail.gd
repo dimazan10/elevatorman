@@ -60,9 +60,10 @@ func _physics_process(delta: float) -> void:
 
 	if _damage_timer <= 0:
 		_damage_timer = damage_interval
-		for body in get_overlapping_bodies():
-			if body.is_in_group("player") and body.has_method("take_damage"):
-				body.take_damage(damage)
+		if monitoring:
+			for body in get_overlapping_bodies():
+				if body.is_in_group("player") and body.has_method("take_damage"):
+					body.take_damage(damage)
 
 	var t := _elapsed / duration
 	if t > 0.7:
