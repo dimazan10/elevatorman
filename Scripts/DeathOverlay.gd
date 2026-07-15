@@ -41,9 +41,10 @@ func _run() -> void:
 
 	await get_tree().create_timer(0.32).timeout
 
-	create_tween().set_parallel() \
-		.tween_property(_label, "modulate:a", 0.0, 0.5) \
-		.tween_property(_black, "modulate:a", 1.0, 0.5)
+	var t := create_tween()
+	t.set_parallel()
+	t.tween_property(_label, "modulate:a", 0.0, 0.5)
+	t.tween_property(_black, "modulate:a", 1.0, 0.5)
 
 	await get_tree().create_timer(1.0).timeout
 
