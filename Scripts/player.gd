@@ -94,8 +94,12 @@ func _ready() -> void:
 	frames.add_animation("death")
 	frames.set_animation_speed("death", 8)
 	for i in range(1, 8):
-		var tex = load("res://Assets/Sprites_Player/Death/gg_death" + str(i) + "-removebg-preview.png")
-		frames.add_frame("death", tex)
+		var path = "res://Assets/Sprites_Player/Death/gg_death" + str(i) + "-removebg-preview.png"
+		var tex = load(path)
+		if tex:
+			frames.add_frame("death", tex)
+	if frames.get_frame_count("death") == 0:
+		frames.add_frame("death", load("res://Assets/Sprites_Player/gg.png"))
 
 	animated_sprite.sprite_frames = frames
 	animated_sprite.play("idle_right")
