@@ -391,7 +391,6 @@ func die() -> void:
 		_infinit_revive()
 		return
 	_is_dying = true
-	set_physics_process(false)
 	animated_sprite.play("death")
 	var attempts: int = GameState.add_death(GameState.current_floor)
 	await get_tree().create_timer(3.0, true, false, true).timeout
