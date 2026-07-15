@@ -29,34 +29,30 @@ func _ready() -> void:
 	_label.add_theme_constant_override("outline_size", 4)
 	add_child(_label)
 
-	_run()
+	var tween: Tween = create_tween()
+	tween.tween_interval(0.5)
+	tween.tween_property(_black, "modulate:a", 0.6, 1.0)
+	tween.tween_property(_label, "modulate:a", 1.0, 0.3)
+	tween.tween_callback(_shake)
+	tween.tween_interval(0.2)
+	tween.tween_property(_label, "modulate:a", 0.0, 0.5)
+	tween.parallel().tween_property(_black, "modulate:a", 1.0, 0.5)
+	tween.tween_interval(0.5)
+	tween.tween_callback(_reload)
+	tween.tween_interval(1.0)
+	tween.tween_property(_black, "modulate:a", 0.0, 1.0)
+	tween.tween_callback(queue_free)
 
-func _run() -> void:
-	var darken: Tween = create_tween()
-	darken.tween_property(_black, "modulate:a", 0.6, 1.0).set_delay(0.5)
-	darken.tween_property(_black, "modulate:a", 1.0, 0.5)
-
-	await get_tree().create_timer(1.0).timeout
-
-	create_tween().tween_property(_label, "modulate:a", 1.0, 0.3)
+func _shake() -> void:
 	var orig_x: float = _label.offset_left
-	for i in range(6):
-		_label.offset_left = orig_x + (6 if i % 2 == 0 else -6)
-		await get_tree().create_timer(0.03).timeout
-	_label.offset_left = orig_x
+	var shake: Tween = create_tween()
+	shake.tween_property(_label, "offset_left", orig_x + 6, 0.03)
+	shake.tween_property(_label, "offset_left", orig_x - 6, 0.03)
+	shake.tween_property(_label, "offset_left", orig_x + 6, 0.03)
+	shake.tween_property(_label, "offset_left", orig_x - 6, 0.03)
+	shake.tween_property(_label, "offset_left", orig_x + 6, 0.03)
+	shake.tween_property(_label, "offset_left", orig_x - 6, 0.03)
+	shake.tween_property(_label, "offset_left", orig_x, 0.03)
 
-	await get_tree().create_timer(0.32).timeout
-
-	var t: Tween = create_tween()
-	t.tween_property(_label, "modulate:a", 0.0, 0.5)
-
-	await get_tree().create_timer(1.0).timeout
-
+func _reload() -> void:
 	get_tree().reload_current_scene()
-
-	await get_tree().create_timer(1.0).timeout
-
-	var brighten: Tween = create_tween()
-	brighten.tween_property(_black, "modulate:a", 0.0, 1.0)
-	await brighten.finished
-	queue_free()
