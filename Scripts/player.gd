@@ -417,9 +417,10 @@ func die() -> void:
 
 	create_tween().tween_property(black, "modulate:a", 0.6, 1.5).set_delay(0.5)
 
-	var t2 := create_tween().set_delay(1.0)
+	var t2: Tween = create_tween()
+	t2.set_delay(1.0)
 	t2.tween_callback(func():
-		var ox := label.offset_left
+		var ox: float = label.offset_left
 		var s: Tween = create_tween()
 		s.tween_property(label, "offset_left", ox + 6, 0.03)
 		s.tween_property(label, "offset_left", ox - 6, 0.03)
@@ -430,7 +431,9 @@ func die() -> void:
 		s.tween_property(label, "offset_left", ox, 0.03))
 	t2.tween_property(label, "modulate:a", 1.0, 0.3)
 
-	var t3 := create_tween().set_delay(1.5).set_parallel()
+	var t3: Tween = create_tween()
+	t3.set_delay(1.5)
+	t3.set_parallel()
 	t3.tween_property(label, "modulate:a", 0.0, 0.3)
 	t3.tween_property(black, "modulate:a", 1.0, 0.3)
 
