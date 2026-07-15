@@ -1,42 +1,6 @@
-[gd_scene format=3 uid="uid://cdeathscreen01"]
+[gd_scene format=3 uid="uid://bsw5urr77qwea"]
 
 [ext_resource type="Script" path="res://Scripts/DeathScreen.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://cdeath_tex01" path="res://Assets/Sprites_Player/Death/gg_death1-removebg-preview.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://cdeath_tex02" path="res://Assets/Sprites_Player/Death/gg_death2-removebg-preview.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://cdeath_tex03" path="res://Assets/Sprites_Player/Death/gg_death3-removebg-preview.png" id="4"]
-[ext_resource type="Texture2D" uid="uid://cdeath_tex04" path="res://Assets/Sprites_Player/Death/gg_death4-removebg-preview.png" id="5"]
-[ext_resource type="Texture2D" uid="uid://cdeath_tex05" path="res://Assets/Sprites_Player/Death/gg_death5-removebg-preview.png" id="6"]
-[ext_resource type="Texture2D" uid="uid://cdeath_tex06" path="res://Assets/Sprites_Player/Death/gg_death6-removebg-preview.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://cdeath_tex07" path="res://Assets/Sprites_Player/Death/gg_death7-removebg-preview.png" id="8"]
-
-[sub_resource type="SpriteFrames" id="SFRames_death"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("2")
-}, {
-"duration": 1.0,
-"texture": ExtResource("3")
-}, {
-"duration": 1.0,
-"texture": ExtResource("4")
-}, {
-"duration": 1.0,
-"texture": ExtResource("5")
-}, {
-"duration": 1.0,
-"texture": ExtResource("6")
-}, {
-"duration": 1.0,
-"texture": ExtResource("7")
-}, {
-"duration": 1.0,
-"texture": ExtResource("8")
-}],
-"loop": false,
-"name": &"death",
-"speed": 8.0
-}]
 
 [node name="DeathScreen" type="CanvasLayer"]
 process_mode = 3
@@ -46,12 +10,6 @@ anchors_preset = 0
 size = Vector2i(1920, 1080)
 color = Color(0, 0, 0, 0.6)
 mouse_filter = 2
-
-[node name="DeathAnimation" type="AnimatedSprite2D" parent="."]
-position = Vector2(960, 400)
-scale = Vector2(2, 2)
-sprite_frames = SubResource("SFRames_death")
-animation = &"death"
 
 [node name="Label" type="Label" parent="."]
 anchors_preset = 8

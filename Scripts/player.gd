@@ -91,6 +91,12 @@ func _ready() -> void:
 		frames.add_frame("walk_up", tex)
 	frames.set_animation_loop("walk_up", true)
 
+	frames.add_animation("death")
+	frames.set_animation_speed("death", 8)
+	for i in range(1, 8):
+		var tex = load("res://Assets/Sprites_Player/Death/gg_death" + str(i) + "-removebg-preview.png")
+		frames.add_frame("death", tex)
+
 	animated_sprite.sprite_frames = frames
 	animated_sprite.play("idle_right")
 	animated_sprite.scale = Vector2(1.0, 1.0)
@@ -379,6 +385,9 @@ func die() -> void:
 	if has_item("infinit"):
 		_infinit_revive()
 		return
+	set_physics_process(false)
+	animated_sprite.play("death")
+	await animated_sprite.animation_finished
 	get_tree().paused = true
 	var death_screen := preload("res://Objects/DeathScreen.tscn").instantiate()
 	get_tree().root.add_child(death_screen)

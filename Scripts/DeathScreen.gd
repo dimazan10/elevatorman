@@ -1,7 +1,6 @@
 extends CanvasLayer
 
 func _ready():
-	$DeathAnimation.play("death")
 	$RestartButton.pressed.connect(_on_restart)
 
 func _on_restart():
