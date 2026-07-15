@@ -178,6 +178,10 @@ func _physics_process(delta: float) -> void:
 		_toggle_noclip()
 	_f1_held = f1_down
 
+	if _is_dying:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
 	if not can_move:
 		velocity = Vector2.ZERO
 		move_and_slide()
@@ -383,9 +387,21 @@ func die() -> void:
 	animated_sprite.visible = false
 	$Death_Animation.visible = true
 	$Death_Animation.play("default")
-	var overlay := CanvasLayer.new()
-	overlay.script = preload("res://Scripts/DeathOverlay.gd")
-	get_tree().root.add_child(overlay)
+	var attempts: int = GameState.add_death(GameState.current_floor)
+	await get_tree().create_timer(0.3, true, false, true).timeout
+	var death_screen := CanvasLayer.new()
+	death_screen.name = "DeathScreen"
+	death_screen.set_script(load("res://Scripts/DeathScreen.gd"))
+	death_screen.set_meta("attempts", attempts)
+	get_tree().root.add_child(death_screen)
+	get_tree().paused = true
+
+	await get_tree().create_timer(3.0, true, true, true).timeout
+	if not is_instance_valid(death_screen):
+		return
+	get_tree().paused = false
+	death_screen.queue_free()
+	get_tree().reload_current_scene()
 
 func _infinit_revive() -> void:
 	for i in range(inventory.size()):

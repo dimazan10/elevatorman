@@ -3,9 +3,45 @@
 [ext_resource type="Script" uid="uid://6p0foblkvtd0" path="res://Scripts/player.gd" id="1_y0qk3"]
 [ext_resource type="Script" uid="uid://c5cctmb6kpi5e" path="res://Scripts/Camera.gd" id="2_3y5cq"]
 [ext_resource type="Texture2D" uid="uid://i7nr533xjhha" path="res://Assets/Sprites_Player/Light.png" id="3_fbc33"]
+[ext_resource type="Texture2D" uid="uid://8gkriih8c7d" path="res://Assets/Sprites_Player/Death/gg_death1-removebg-preview.png" id="4_nqlnr"]
+[ext_resource type="Texture2D" uid="uid://cvl201rupcyhj" path="res://Assets/Sprites_Player/Death/gg_death2-removebg-preview.png" id="5_q72v0"]
+[ext_resource type="Texture2D" uid="uid://drnb4c7ifrqub" path="res://Assets/Sprites_Player/Death/gg_death3-removebg-preview.png" id="6_cd7a8"]
+[ext_resource type="Texture2D" uid="uid://1o5ly2v5368g" path="res://Assets/Sprites_Player/Death/gg_death4-removebg-preview.png" id="7_gppbv"]
+[ext_resource type="Texture2D" uid="uid://e020150jppvf" path="res://Assets/Sprites_Player/Death/gg_death5-removebg-preview.png" id="8_315ro"]
+[ext_resource type="Texture2D" uid="uid://ct5cw6g4i2htx" path="res://Assets/Sprites_Player/Death/gg_death6-removebg-preview.png" id="9_rb074"]
+[ext_resource type="Texture2D" uid="uid://dbb1tfykxqqjn" path="res://Assets/Sprites_Player/Death/gg_death7-removebg-preview.png" id="10_4457i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(20, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_s1fef"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_nqlnr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_q72v0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_cd7a8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_gppbv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_315ro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_rb074")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_4457i")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 15.0
+}]
 
 [node name="Player" type="CharacterBody2D" unique_id=1739531344 groups=["player"]]
 z_index = 6
@@ -33,3 +69,9 @@ zoom = Vector2(1.2, 1.2)
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
 script = ExtResource("2_3y5cq")
+
+[node name="Death_Animation" type="AnimatedSprite2D" parent="." unique_id=1598303129]
+visible = false
+position = Vector2(-1.0000005, -6)
+scale = Vector2(0.728022, 0.8203125)
+sprite_frames = SubResource("SpriteFrames_s1fef")
