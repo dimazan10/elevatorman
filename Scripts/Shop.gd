@@ -12,7 +12,7 @@ const COLLAR_ICON = preload("res://Assets/Items/Collar.png")
 const PRICE_INFINIT := 9
 const PRICE_TUBE := 2
 const PRICE_CLONE := 6
-const PRICE_REWIND := 5
+const PRICE_REWIND := 4
 const PRICE_COLLAR := 4
 
 @onready var vbox: VBoxContainer = $VBoxMain
