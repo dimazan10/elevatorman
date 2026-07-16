@@ -405,22 +405,26 @@ func die() -> void:
 	get_tree().paused = true
 
 func _play_death_frames() -> void:
-	var frames: Array[Texture2D] = []
+	var textures: Array[Texture2D] = []
 	for i in range(1, 8):
 		var tex = load("res://Assets/Sprites_Player/Death/gg_death" + str(i) + "-removebg-preview.png")
 		if tex:
-			frames.append(tex)
-	if frames.is_empty():
+			textures.append(tex)
+	if textures.is_empty():
 		var fallback = load("res://Assets/Sprites_Player/gg.png")
 		if fallback:
-			frames.append(fallback)
-	if frames.is_empty():
+			textures.append(fallback)
+	if textures.is_empty():
 		return
-	animated_sprite.stop()
-	animated_sprite.sprite_frames = null
-	for tex in frames:
-		animated_sprite.texture = tex
-		await get_tree().create_timer(0.125).timeout
+	animated_sprite.visible = false
+	var sprite := Sprite2D.new()
+	sprite.name = "DeathSprite"
+	sprite.position = animated_sprite.position
+	sprite.scale = animated_sprite.scale
+	add_child(sprite)
+	for tex in textures:
+		sprite.texture = tex
+		await get_tree().create_timer(0.125, true, false, true).timeout
 
 func _infinit_revive() -> void:
 	for i in range(inventory.size()):
