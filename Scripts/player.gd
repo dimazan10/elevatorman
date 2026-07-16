@@ -95,14 +95,11 @@ func _ready() -> void:
 	frames.set_animation_speed("death", 8)
 	frames.set_animation_loop("death", false)
 	for i in range(1, 8):
-		var path = "res://Assets/Sprites_Player/Death/gg_death" + str(i) + "-removebg-preview.png"
-		var img: Image = Image.load_from_file(path)
-		if img:
-			frames.add_frame("death", ImageTexture.create_from_image(img))
+		var tex = load("res://Assets/Sprites_Player/Death/gg_death" + str(i) + "-removebg-preview.png")
+		if tex:
+			frames.add_frame("death", tex)
 	if frames.get_frame_count("death") == 0:
-		var img: Image = Image.load_from_file("res://Assets/Sprites_Player/gg.png")
-		if img:
-			frames.add_frame("death", ImageTexture.create_from_image(img))
+		frames.add_frame("death", load("res://Assets/Sprites_Player/gg.png"))
 
 	animated_sprite.sprite_frames = frames
 	animated_sprite.play("idle_right")
@@ -397,8 +394,8 @@ func die() -> void:
 		_infinit_revive()
 		return
 	_is_dying = true
-	animated_sprite.play("death")
 	var attempts: int = GameState.add_death(GameState.current_floor)
+	_play_death_frames()
 	await get_tree().create_timer(3.0, true, false, true).timeout
 	var death_screen := CanvasLayer.new()
 	death_screen.name = "DeathScreen"
@@ -406,6 +403,24 @@ func die() -> void:
 	death_screen.set_meta("attempts", attempts)
 	get_tree().root.add_child(death_screen)
 	get_tree().paused = true
+
+func _play_death_frames() -> void:
+	var frames: Array[Texture2D] = []
+	for i in range(1, 8):
+		var tex = load("res://Assets/Sprites_Player/Death/gg_death" + str(i) + "-removebg-preview.png")
+		if tex:
+			frames.append(tex)
+	if frames.is_empty():
+		var fallback = load("res://Assets/Sprites_Player/gg.png")
+		if fallback:
+			frames.append(fallback)
+	if frames.is_empty():
+		return
+	animated_sprite.stop()
+	animated_sprite.sprite_frames = null
+	for tex in frames:
+		animated_sprite.texture = tex
+		await get_tree().create_timer(0.125).timeout
 
 func _infinit_revive() -> void:
 	for i in range(inventory.size()):
