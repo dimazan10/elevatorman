@@ -394,9 +394,12 @@ func die() -> void:
 		_infinit_revive()
 		return
 	_is_dying = true
+	var light = get_node_or_null("PlayerLight")
+	if light:
+		light.visible = false
 	var attempts: int = GameState.add_death(GameState.current_floor)
 	_play_death_frames()
-	await get_tree().create_timer(3.0, true, false, true).timeout
+	await get_tree().create_timer(1.2, true, false, true).timeout
 	var death_screen := CanvasLayer.new()
 	death_screen.name = "DeathScreen"
 	death_screen.set_script(load("res://Scripts/DeathScreen.gd"))
