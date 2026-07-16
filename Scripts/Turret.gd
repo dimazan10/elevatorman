@@ -117,8 +117,7 @@ func _has_line_of_sight() -> bool:
 
 	var space_state = get_world_2d().direct_space_state
 	var from: Vector2 = muzzle.global_position
-	var query = PhysicsRayQueryParameters2D.create(from, player.global_position)
-	query.exclude = [self.get_rid()]
+	var query = PhysicsRayQueryParameters2D.create(from, player.global_position, 3, [self.get_rid()])
 	var result = space_state.intersect_ray(query)
 	if result.is_empty():
 		return false

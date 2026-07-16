@@ -12,6 +12,7 @@ var _start_pos: Vector2 = Vector2.ZERO
 var _elapsed: float = 0.0
 var _arrived: bool = false
 var _sprite: AnimatedSprite2D
+var _direction: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	add_to_group("grenade")
@@ -43,6 +44,7 @@ func _ready() -> void:
 	collision_mask = 0
 
 	monitoring = false
+	_direction = (target_pos - _start_pos).normalized()
 
 func _physics_process(delta: float) -> void:
 	if _arrived:
@@ -63,8 +65,23 @@ func _physics_process(delta: float) -> void:
 
 	_sprite.rotation += delta * 8.0
 
+	_check_wall_collision(flat_pos)
+
 	if t >= 1.0:
 		_explode()
+
+func _check_wall_collision(flat_pos: Vector2) -> void:
+	var space_state = get_world_2d().direct_space_state
+	var query = PhysicsRayQueryParameters2D.create(flat_pos, flat_pos + _direction * 50.0, 2)
+	query.exclude = [self.get_rid()]
+	var result = space_state.intersect_ray(query)
+	if not result.is_empty():
+		var wall_point: Vector2 = result.position
+		var dist_total: float = _start_pos.distance_to(target_pos)
+		var dist_hit: float = _start_pos.distance_to(wall_point)
+		if dist_hit < dist_total:
+			target_pos = wall_point
+			_direction = (target_pos - _start_pos).normalized()
 
 func _explode() -> void:
 	_arrived = true

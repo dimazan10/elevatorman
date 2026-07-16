@@ -1021,6 +1021,7 @@ _data = {
 load_path = "res://.godot/imported/Light.png-d3dc6ec4e898ada4c91ea775c2ba7730.ctex"
 
 [node name="Robot" type="CharacterBody2D" unique_id=261732739 groups=["enemy"]]
+collision_layer = 4
 collision_mask = 3
 script = ExtResource("13_robot")
 
