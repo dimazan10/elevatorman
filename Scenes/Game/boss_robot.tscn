@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://csha62md44m3r" path="res://Assets/SpritesElevator/Lift2.png" id="16_38eov"]
 [ext_resource type="Script" uid="uid://djxyju2y0vl67" path="res://Scripts/BossElevatorStart.gd" id="17_bosstart"]
 [ext_resource type="Script" uid="uid://cvfnr058a8e3m" path="res://Scripts/BossElevatorEnd.gd" id="18_bosend"]
+[ext_resource type="Script" path="res://Scripts/BossTrigger.gd" id="19_trig"]
 
 [sub_resource type="RectangleShape2D" id="RectShape_wall_h"]
 size = Vector2(1160, 20)
@@ -348,6 +349,14 @@ position = Vector2(817, 1485)
 [node name="Robot" parent="." unique_id=637653963 instance=ExtResource("7_w7dnu")]
 position = Vector2(635, 319)
 
+[node name="BossTrigger" type="Area2D" parent="." unique_id=1386498636]
+position = Vector2(640, 1000)
+script = ExtResource("19_trig")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="BossTrigger" unique_id=1386498637]
+shape = SubResource("RectShape_wall_h")
+scale = Vector2(2, 1)
+
 [node name="BoxFallZone" type="Node2D" parent="." unique_id=1386498635]
 position = Vector2(639, 973)
 scale = Vector2(0.76, 0.6400012)
@@ -675,18 +684,11 @@ texture = ExtResource("2_roof")
 [node name="ElevatorArea" type="Area2D" parent="HoleStart/FloorElevator" unique_id=585586480]
 position = Vector2(-1.7341766, 146.85342)
 scale = Vector2(-0.86139643, 0.35211897)
-monitoring = false
+script = ExtResource("14_iswnu")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="HoleStart/FloorElevator/ElevatorArea" unique_id=1449731972]
 position = Vector2(2.0132155, 147.1204)
 shape = SubResource("CircleShape2D_detect")
-
-[node name="TransportArea" type="Area2D" parent="HoleStart/FloorElevator" unique_id=2075162743]
-position = Vector2(-1.7341614, 36.281433)
-script = ExtResource("17_bosstart")
-
-[node name="CollisionShape" type="CollisionShape2D" parent="HoleStart/FloorElevator/TransportArea" unique_id=1698997329]
-shape = SubResource("CircleShape2D_transport")
 
 [node name="FloorCollision" type="StaticBody2D" parent="HoleStart/FloorElevator" unique_id=1416435979]
 
