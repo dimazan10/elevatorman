@@ -16,6 +16,7 @@ var currency: int = 0
 var last_floor_hp: int = 0
 var last_floor_time: float = 0.0
 var death_counts: Dictionary = {}
+var dark_mode: bool = false
 var inventory: Array[Dictionary] = [
 	{id = "", icon = null, name = ""},
 	{id = "", icon = null, name = ""},
