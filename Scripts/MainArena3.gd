@@ -666,7 +666,7 @@ func _hide_enemies() -> void:
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		_spawn_teleport_effect(enemy.global_position)
 		enemy.hide()
-		enemy.z_index = 0
+		enemy.z_index = 2
 		enemy.set_physics_process(false)
 		_disable_collision_shapes(enemy)
 		for child in enemy.get_children():

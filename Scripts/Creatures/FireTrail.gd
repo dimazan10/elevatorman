@@ -11,7 +11,7 @@ var _col: CollisionShape2D
 
 func _ready() -> void:
 	_sprite = AnimatedSprite2D.new()
-	_sprite.z_index = -1
+	_sprite.z_index = 1
 	_sprite.scale = Vector2(2.5, 2.5)
 	add_child(_sprite)
 
