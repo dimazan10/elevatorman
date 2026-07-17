@@ -1,11 +1,9 @@
 [gd_scene format=3 uid="uid://bqbjv7p2dwqk3"]
 
-[ext_resource type="Script" uid="uid://doelcxpual008" path="res://Scripts/Settings.gd" id="1_3rng0"]
-[ext_resource type="AudioStream" uid="uid://g7lsuis7yl21" path="res://Assets/Sounds/Effects/Click_Button.mp3" id="2_click"]
-[ext_resource type="Texture2D" uid="uid://3af03wkyt78r" path="res://Assets/MainMenu/SettingBG.png" id="2_swut7"]
+[ext_resource type="Script" path="res://Scripts/Settings.gd" id="1_3rng0"]
+[ext_resource type="AudioStream" path="res://Assets/Sounds/Effects/Click_Button.mp3" id="2_click"]
 
-[node name="Settings" type="Control" unique_id=2008954020]
-layout_mode = 3
+[node name="Settings" type="Control"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -13,87 +11,83 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3rng0")
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=322947264]
-layout_mode = 0
-offset_right = 1283.0
-offset_bottom = 735.0
-texture = ExtResource("2_swut7")
-
-[node name="ClickSound" type="AudioStreamPlayer" parent="." unique_id=1882416459]
+[node name="ClickSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_click")
 bus = &"Effects"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=561657903]
-layout_mode = 0
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -300.0
+offset_left = -200.0
 offset_top = -140.0
-offset_right = 300.0
+offset_right = 200.0
 offset_bottom = 140.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 12
 alignment = 1
 
-[node name="Title" type="Label" parent="VBoxContainer" unique_id=739318037]
+[node name="Title" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "Настройки"
 horizontal_alignment = 1
 
-[node name="MasterLabel" type="Label" parent="VBoxContainer" unique_id=972019012]
+[node name="MasterLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "Общая громкость"
 horizontal_alignment = 1
 
-[node name="MasterHSlider" type="HSlider" parent="VBoxContainer" unique_id=1072875953]
+[node name="MasterHSlider" type="HSlider" parent="VBoxContainer"]
 layout_mode = 2
 min_value = -40.0
 max_value = 0.0
+value = 0.0
 
-[node name="MasterPct" type="Label" parent="VBoxContainer" unique_id=448981199]
+[node name="MasterPct" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "100%"
 horizontal_alignment = 1
 
-[node name="MusicLabel" type="Label" parent="VBoxContainer" unique_id=1960104310]
+[node name="MusicLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "Громкость музыки"
 horizontal_alignment = 1
 
-[node name="MusicHSlider" type="HSlider" parent="VBoxContainer" unique_id=497777703]
+[node name="MusicHSlider" type="HSlider" parent="VBoxContainer"]
 layout_mode = 2
 min_value = -40.0
 max_value = 0.0
+value = 0.0
 
-[node name="MusicPct" type="Label" parent="VBoxContainer" unique_id=879792427]
+[node name="MusicPct" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "100%"
 horizontal_alignment = 1
 
-[node name="EffectsLabel" type="Label" parent="VBoxContainer" unique_id=1008929620]
+[node name="EffectsLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "Громкость эффектов"
 horizontal_alignment = 1
 
-[node name="EffectsHSlider" type="HSlider" parent="VBoxContainer" unique_id=1897230485]
+[node name="EffectsHSlider" type="HSlider" parent="VBoxContainer"]
 layout_mode = 2
 min_value = -40.0
 max_value = 0.0
+value = 0.0
 
-[node name="EffectsPct" type="Label" parent="VBoxContainer" unique_id=1025373963]
+[node name="EffectsPct" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "100%"
 horizontal_alignment = 1
 
-[node name="FPSCheckbox" type="CheckBox" parent="VBoxContainer" unique_id=1903861610]
+[node name="FPSCheckbox" type="CheckBox" parent="VBoxContainer"]
 layout_mode = 2
 text = "Показать FPS"
 
-[node name="Back" type="Button" parent="VBoxContainer" unique_id=793673116]
-custom_minimum_size = Vector2(0, 80)
+[node name="Back" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Назад"
 

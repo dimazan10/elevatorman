@@ -132,19 +132,6 @@ func _ready() -> void:
 		var stream = load("res://Assets/Sounds/FootStepsSound/FootStep_" + str(i) + ".wav")
 		if stream:
 			footstep_sounds.append(stream)
-
-	if GameState.dark_mode:
-		var light = get_node_or_null("PlayerLight")
-		if light and light is PointLight2D:
-			light.scale = Vector2(0.75, 0.75)
-			light.range_item_cull_mask = 2147483647
-			light.range_z_min = -128
-			light.range_z_max = 128
-			light.energy = 1.0
-			light.shadow_enabled = true
-			light.shadow_filter = 2
-			light.shadow_filter_smooth = 12.0
-			light.modulate = Color(1.2, 1.2, 1.2, 1)
 	
 var _ghost_timer := 0.0
 var _noclip := false
@@ -294,23 +281,20 @@ func _physics_process(delta: float) -> void:
 	
 	_push_enemies_out()
 
-var _push_radius := 30.0
-var _push_radius_sq := 900.0
-
 func _push_enemies_out() -> void:
-	var push_delta := get_physics_process_delta_time()
-	var pos := global_position
+	var push_radius := 30.0
 	for e in get_tree().get_nodes_in_group("enemy"):
-		var diff: Vector2 = e.global_position - pos
-		var dist_sq := diff.length_squared()
-		if dist_sq < _push_radius_sq and dist_sq > 0.000001:
-			var dist := sqrt(dist_sq)
+		if not is_instance_valid(e):
+			continue
+		var diff: Vector2 = e.global_position - global_position
+		var dist := diff.length()
+		if dist < push_radius and dist > 0.001:
 			var push_dir := diff / dist
-			var push_force := (_push_radius - dist) * 8.0
+			var push_force := (push_radius - dist) * 8.0
 			if e is RigidBody2D:
 				e.apply_central_impulse(push_dir * push_force)
 			elif e is CharacterBody2D:
-				e.position += push_dir * push_force * push_delta
+				e.position += push_dir * push_force * get_physics_process_delta_time()
 
 func _spawn_ghost() -> void:
 	if not animated_sprite or not animated_sprite.sprite_frames:

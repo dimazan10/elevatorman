@@ -104,7 +104,7 @@ animations = [{
 load_path = "res://.godot/imported/Light.png-d3dc6ec4e898ada4c91ea775c2ba7730.ctex"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hitbox_r"]
-radius = 100.0
+radius = 189.00264
 
 [node name="Rocket" type="Node2D" unique_id=352241438]
 script = ExtResource("9")
@@ -120,9 +120,11 @@ libraries/ = SubResource("AnimationLibrary_gak4a")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1025356950]
 material = SubResource("CanvasItemMaterial_s1fef")
-scale = Vector2(1.3600016, 1.2799987)
+scale = Vector2(2.3175006, 2.104788)
 sprite_frames = SubResource("SpriteFrames_qsuaf")
 animation = &"Boom"
+frame = 5
+frame_progress = 1.0
 
 [node name="Light" type="PointLight2D" parent="AnimatedSprite2D" unique_id=1607047375]
 position = Vector2(0, -9.536743e-07)
@@ -138,9 +140,10 @@ shadow_filter_smooth = 10.2
 texture = SubResource("CompressedTexture2D_2enf5")
 
 [node name="Marker" type="Sprite2D" parent="." unique_id=691234567]
-modulate = Color(1, 1, 1, 0.8)
+modulate = Color(1, 1, 1, 0.7058824)
+self_modulate = Color(1, 0, 0, 1)
 z_index = 10
-scale = Vector2(0.2, 0.2)
+scale = Vector2(0.33125, 0.329)
 texture = ExtResource("8")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=891234568]

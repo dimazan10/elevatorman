@@ -62,6 +62,7 @@ var _pending_colors: Array[bool] = []
 
 var _rocket_fall_zone: Node2D
 var _rocket_cooldown := ROCKET_COOLDOWN
+var _can_attack := false
 
 func _ready() -> void:
 	add_to_group("enemy")
@@ -91,6 +92,9 @@ func _ready() -> void:
 	_setup_hitboxes()
 	_setup_laser()
 
+func set_can_attack(value: bool) -> void:
+	_can_attack = value
+
 func _setup_laser() -> void:
 	_laser_muzzle = $WaistBone/TorsoBone/HeadBone/LaserMuzzle
 	_laser_ray = _laser_muzzle.get_node_or_null("RayCast2D") as RayCast2D
@@ -106,7 +110,7 @@ func _setup_laser() -> void:
 	_laser_line.add_point(Vector2.ZERO)
 	_laser_line.visible = false
 	_laser_line.z_index = 20
-	_laser_line.width = 2.0
+	_laser_line.width = 4.0
 	_laser_line.default_color = Color(1.0, 0.2, 0.2, 0.4)
 
 	_laser_audio = AudioStreamPlayer2D.new()
@@ -332,7 +336,7 @@ func _return_camera_to_player(camera: Camera2D, camera_position: Vector2, camera
 	tween.tween_property(camera, "zoom", camera_zoom, DEATH_CAMERA_DURATION).set_ease(Tween.EASE_IN_OUT)
 
 func _process(delta: float) -> void:
-	if _is_dead:
+	if _is_dead or not _can_attack:
 		return
 
 	if _warning_active:
@@ -423,7 +427,7 @@ func _start_laser_warning(player: Node2D) -> void:
 	_laser_timer = LASER_WARN_DURATION
 	_laser_ray.enabled = true
 	_laser_line.visible = true
-	_laser_line.width = 2.0
+	_laser_line.width = 4.0
 	_laser_line.default_color = Color(1.0, 0.2, 0.2, 0.4)
 	var target_angle: float = _laser_muzzle.global_position.angle_to_point(player.global_position)
 	_laser_muzzle.global_rotation = target_angle
@@ -433,7 +437,7 @@ func _end_laser() -> void:
 		_laser_state = LaserState.FIRING
 		_laser_timer = LASER_FIRE_DURATION
 		_laser_damage_accum = 0.0
-		_laser_line.width = 6.0
+		_laser_line.width = 8.0
 		_laser_line.default_color = Color(1.0, 0.0, 0.0, 1.0)
 		if _laser_audio:
 			_laser_audio.play()

@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Elevatorman"
+config/name="ElevatorFF"
 run/main_scene="uid://b6duhj6uwaea6"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://Assets/icon.png"
@@ -37,8 +37,6 @@ MobileControls="*res://Scripts/MobileControls.gd"
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/size/mode=4
-window/stretch/mode="canvas_items"
-window/stretch/aspect="keep"
 
 [gui]
 

@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://b6duhj6uwaea6"]
 
-[ext_resource type="Texture2D" uid="uid://by8oviwm7j405" path="res://Assets/MainMenu/BGMainMenu.png" id="1_cdkru"]
-[ext_resource type="Texture2D" uid="uid://bs8e807t0wque" path="res://Assets/MainMenu/buttonQuit.png" id="2_kpx3y"]
-[ext_resource type="Texture2D" uid="uid://cvxfj208woj2x" path="res://Assets/MainMenu/buttonPlay.png" id="3_ua038"]
-[ext_resource type="Texture2D" uid="uid://bmgioa6x7knpu" path="res://Assets/MainMenu/buttonSettings.png" id="4_vapy7"]
+[ext_resource type="Texture2D" uid="uid://by8oviwm7j405" path="res://Assets/BGMainMenu.png" id="1_cdkru"]
+[ext_resource type="Texture2D" uid="uid://bs8e807t0wque" path="res://Assets/buttonQuit.png" id="2_kpx3y"]
+[ext_resource type="Texture2D" uid="uid://cvxfj208woj2x" path="res://Assets/buttonPlay.png" id="3_ua038"]
+[ext_resource type="Texture2D" uid="uid://bmgioa6x7knpu" path="res://Assets/buttonSettings.png" id="4_vapy7"]
 [ext_resource type="Script" uid="uid://duvm74ksi552c" path="res://Scripts/ButtonQuit.gd" id="5_ua038"]
 [ext_resource type="Script" uid="uid://bjfteco1ew5lh" path="res://Scripts/MainMenu.gd" id="6_75e0l"]
 [ext_resource type="Texture2D" uid="uid://bryvarg5ckwya" path="res://Assets/MainMenu/Picsart_26-06-23_17-52-38-741.png" id="8_0hjx5"]
@@ -80,11 +80,6 @@ grow_vertical = 2
 texture = ExtResource("8_0hjx5")
 expand_mode = 1
 
-[node name="SecretDarkButton" type="Button" parent="."]
-layout_mode = 0
-mouse_filter = 0
-
 [connection signal="pressed" from="VBoxContainer/ButtonPlay" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonSettings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonQuit" to="VBoxContainer/ButtonQuit" method="_on_pressed"]
-[connection signal="pressed" from="SecretDarkButton" to="." method="_on_secret_pressed"]

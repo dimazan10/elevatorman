@@ -14,7 +14,6 @@ var raycast: RayCast2D
 var line: Line2D
 var cooldown_timer: Timer
 var player: Node2D
-var _pivot_node: Node2D = null
 var _damage_accum: float = 0.0
 var _enraged: bool = false
 var _shoot_audio: AudioStreamPlayer2D
@@ -24,12 +23,12 @@ func _ready() -> void:
 	add_to_group("turret")
 	player = get_tree().get_first_node_in_group("player")
 
-	_pivot_node = get_node_or_null("Node2D")
-	if not _pivot_node:
+	var pivot_node = get_node_or_null("Node2D")
+	if not pivot_node:
 		push_error("Turret: 'Node2D' не найден!")
 		return
 
-	muzzle = _pivot_node.get_node_or_null("Marker2D")
+	muzzle = pivot_node.get_node_or_null("Marker2D")
 	if not muzzle:
 		push_error("Turret: 'Marker2D' не найден!")
 		return
@@ -69,13 +68,14 @@ func _ready() -> void:
 	cooldown_timer.timeout.connect(_on_cooldown_timeout)
 
 func _process(delta: float) -> void:
-	if not _pivot_node:
+	var pivot_node = get_node_or_null("Node2D")
+	if not pivot_node:
 		return
 
 	match current_state:
 		TurretState.TRACKING:
 			if is_instance_valid(player):
-				_pivot_node.look_at(player.global_position)
+				pivot_node.look_at(player.global_position)
 
 		TurretState.WARNING, TurretState.FIRING:
 			if not raycast or not line or not muzzle:

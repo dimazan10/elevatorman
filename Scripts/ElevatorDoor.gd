@@ -16,3 +16,11 @@ func _on_body_entered(body: Node2D) -> void:
 func _on_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		anim.play("Close")
+
+func force_open() -> void:
+	anim.stop()
+	anim.play("Open")
+
+func force_close() -> void:
+	anim.stop()
+	anim.play("Close")

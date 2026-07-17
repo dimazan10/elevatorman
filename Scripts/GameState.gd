@@ -8,8 +8,6 @@ var music_volume: float = 0.0
 var effects_volume: float = 0.0
 var show_fps: bool = false
 var use_mobile_controls: bool = false
-var fullscreen: bool = false
-var resolution_index: int = 0
 var has_bucket: bool = false
 var bucket_charges: int = 2
 var has_collar: bool = false
@@ -18,7 +16,6 @@ var currency: int = 0
 var last_floor_hp: int = 0
 var last_floor_time: float = 0.0
 var death_counts: Dictionary = {}
-var dark_mode: bool = false
 var inventory: Array[Dictionary] = [
 	{id = "", icon = null, name = ""},
 	{id = "", icon = null, name = ""},
@@ -50,9 +47,6 @@ func _load_settings() -> void:
 	current_floor = 1
 	show_fps = cfg.get_value("display", "show_fps", false)
 	use_mobile_controls = cfg.get_value("display", "use_mobile_controls", false)
-	fullscreen = cfg.get_value("display", "fullscreen", false)
-	resolution_index = cfg.get_value("display", "resolution_index", 0)
-	_apply_resolution()
 
 func _save_settings() -> void:
 	var cfg := ConfigFile.new()
@@ -61,8 +55,6 @@ func _save_settings() -> void:
 	cfg.set_value("audio", "effects_volume", effects_volume)
 	cfg.set_value("display", "show_fps", show_fps)
 	cfg.set_value("display", "use_mobile_controls", use_mobile_controls)
-	cfg.set_value("display", "fullscreen", fullscreen)
-	cfg.set_value("display", "resolution_index", resolution_index)
 	cfg.save(SAVE_PATH)
 
 func set_master_volume(db: float) -> void:
@@ -87,31 +79,3 @@ func set_show_fps(enabled: bool) -> void:
 func set_mobile_controls(enabled: bool) -> void:
 	use_mobile_controls = enabled
 	_save_settings()
-
-const RESOLUTIONS: Array[Vector2i] = [
-	Vector2i(1280, 720),
-	Vector2i(1600, 900),
-	Vector2i(1920, 1080),
-	Vector2i(2560, 1440),
-]
-
-func set_fullscreen(enabled: bool) -> void:
-	fullscreen = enabled
-	_apply_resolution()
-	_save_settings()
-
-func set_resolution_index(idx: int) -> void:
-	resolution_index = clampi(idx, 0, RESOLUTIONS.size() - 1)
-	_apply_resolution()
-	_save_settings()
-
-func _apply_resolution() -> void:
-	if fullscreen:
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-	else:
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-		var res := RESOLUTIONS[resolution_index]
-		DisplayServer.window_set_size(res)
-		DisplayServer.window_set_position(
-			DisplayServer.screen_get_position() + (DisplayServer.screen_get_size() - res) / 2
-		)
