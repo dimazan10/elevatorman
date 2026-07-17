@@ -8,5 +8,13 @@
 export/
 android/
 
+# Сборки
+*.exe
+*.pck
+*.apk
+*.apk.idsig
+*.rar
+*.zip
+
 # Пользовательские настройки
 user://settings.cfg
