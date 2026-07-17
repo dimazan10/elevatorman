@@ -12,6 +12,7 @@ var return_to_game := false
 @onready var effects_label := $VBoxContainer/EffectsPct as Label
 
 @onready var fps_checkbox := $VBoxContainer/FPSCheckbox as CheckBox
+
 func _ready() -> void:
 	CursorManager.setup_buttons(self)
 	master_slider.value = GameState.master_volume
@@ -21,19 +22,56 @@ func _ready() -> void:
 	effects_slider.value = GameState.effects_volume
 	effects_label.text = _db_to_pct(GameState.effects_volume)
 	fps_checkbox.button_pressed = GameState.show_fps
-	
+
 	var mobile_checkbox: CheckBox = $VBoxContainer.get_node_or_null("MobileCheckbox")
 	if not mobile_checkbox:
-		mobile_checkbox = CheckBox.new()
 		mobile_checkbox = CheckBox.new()
 		mobile_checkbox.name = "MobileCheckbox"
 		mobile_checkbox.text = "Мобильное управление"
 		mobile_checkbox.toggled.connect(_on_mobile_checkbox_toggled)
 		$VBoxContainer.add_child(mobile_checkbox)
-		$VBoxContainer.move_child(mobile_checkbox, $VBoxContainer.get_child_count() - 2)  # Before Back button
-	
+		$VBoxContainer.move_child(mobile_checkbox, $VBoxContainer.get_child_count() - 2)
+
 	mobile_checkbox.button_pressed = GameState.use_mobile_controls
+
+	_setup_display_controls()
 	master_slider.grab_focus.call_deferred()
+
+func _setup_display_controls() -> void:
+	if OS.get_name() == "Android":
+		return
+
+	var res_label := Label.new()
+	res_label.name = "ResLabel"
+	res_label.text = "Разрешение"
+	res_label.horizontal_alignment = 1
+	$VBoxContainer.add_child(res_label)
+	$VBoxContainer.move_child(res_label, $VBoxContainer.get_child_count() - 2)
+
+	var res_option := OptionButton.new()
+	res_option.name = "ResOption"
+	res_option.add_item("1280 x 720", 0)
+	res_option.add_item("1600 x 900", 1)
+	res_option.add_item("1920 x 1080", 2)
+	res_option.add_item("2560 x 1440", 3)
+	res_option.selected = GameState.resolution_index
+	res_option.item_selected.connect(_on_res_option_selected)
+	$VBoxContainer.add_child(res_option)
+	$VBoxContainer.move_child(res_option, $VBoxContainer.get_child_count() - 2)
+
+	var fullscreen_cb := CheckBox.new()
+	fullscreen_cb.name = "FullscreenCheckbox"
+	fullscreen_cb.text = "Полноэкранный режим"
+	fullscreen_cb.toggled.connect(_on_fullscreen_toggled)
+	fullscreen_cb.button_pressed = GameState.fullscreen
+	$VBoxContainer.add_child(fullscreen_cb)
+	$VBoxContainer.move_child(fullscreen_cb, $VBoxContainer.get_child_count() - 2)
+
+func _on_res_option_selected(idx: int) -> void:
+	GameState.set_resolution_index(idx)
+
+func _on_fullscreen_toggled(enabled: bool) -> void:
+	GameState.set_fullscreen(enabled)
 
 func _on_master_slider_value_changed(value: float) -> void:
 	GameState.set_master_volume(value)
