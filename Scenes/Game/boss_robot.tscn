@@ -119,38 +119,296 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Door2:position")
+tracks/0/path = NodePath("RoofElevator:scale:y")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
+"update": 1,
+"values": [0.99999994]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Door1:position")
+tracks/1/path = NodePath("RoofElevator:position:y")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
+"update": 1,
+"values": [2.0809915]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath(".:position")
+tracks/2/path = NodePath("RoofElevator2:position:y")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [-0.29339597]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("RoofElevator2:scale:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.99853295]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Door2:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(0, 2.218531)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Door2:scale:y")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.9999999]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Door1:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(0, 2.0723612)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Door1:scale:y")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1.0383357]
+}
+
+[sub_resource type="Animation" id="Animation_ypmwd"]
+resource_name = "DownClose"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RoofElevator:scale:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(19.698288, 19.698288),
 "update": 0,
-"values": [Vector2(1.5228987e-05, -61.08454)]
+"values": [0.99999994, -5.8731293e-06]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RoofElevator:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(19.698288, 19.698288),
+"update": 0,
+"values": [2.0809915, 180.62508]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("RoofElevator2:position:y")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(19.56752, 19.56752),
+"update": 0,
+"values": [-0.29339597, 225.41797]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("RoofElevator2:scale:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(19.56752, 19.56752),
+"update": 0,
+"values": [0.99853295, 1.8181647]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Door2:scale:y")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(19.698294, 19.698294),
+"update": 0,
+"values": [1.0376086, 0.8746148]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Door2:position:y")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(19.698294, 19.698294),
+"update": 0,
+"values": [2.218531, 34.980293]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Door1:position:y")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(19.698294, 19.698294),
+"update": 0,
+"values": [2.0723612, 34.980278]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Door1:scale:y")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(19.698294, 19.698294),
+"update": 0,
+"values": [1.0383357, 0.8746147]
+}
+
+[sub_resource type="Animation" id="Animation_oejk7"]
+resource_name = "DownUp"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RoofElevator:scale:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1.1486967, 1.1486967),
+"update": 0,
+"values": [-5.8731293e-06, 0.99999994]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RoofElevator:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1.1486967, 1.1486967),
+"update": 0,
+"values": [180.62508, 2.0809915]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("RoofElevator2:position:y")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1.1486967, 1.1486967),
+"update": 0,
+"values": [225.41797, -0.29339597]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("RoofElevator2:scale:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1.1486967, 1.1486967),
+"update": 0,
+"values": [1.8181647, 0.99853295]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Door2:scale:y")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1.1486967, 1.1486967),
+"update": 0,
+"values": [0.8746148, 1.0376086]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Door2:position:y")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1.1486967, 1.1486967),
+"update": 0,
+"values": [34.980293, 2.218531]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Door1:position:y")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1.1486967, 1.1486967),
+"update": 0,
+"values": [34.980278, 2.0723612]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Door1:scale:y")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1.1486967, 1.1486967),
+"update": 0,
+"values": [0.8746147, 1.0383357]
 }
 
 [sub_resource type="Animation" id="Animation_j5evx"]
@@ -172,6 +430,8 @@ tracks/0/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_sttla"]
 _data = {
 &"Close": SubResource("Animation_sttla"),
+&"DownClose": SubResource("Animation_ypmwd"),
+&"DownUp": SubResource("Animation_oejk7"),
 &"Open": SubResource("Animation_a1q7l"),
 &"RESET": SubResource("Animation_e5qfr"),
 &"Up": SubResource("Animation_j5evx")
@@ -338,7 +598,7 @@ position = Vector2(0, 280)
 
 [node name="Player" parent="." unique_id=1432727825 instance=ExtResource("3_player")]
 z_index = 1
-position = Vector2(647, 3200)
+position = Vector2(647, 3228)
 
 [node name="Gun" parent="." unique_id=608897434 instance=ExtResource("5_7o10g")]
 position = Vector2(466, 1488)
@@ -696,31 +956,6 @@ shape = SubResource("CircleShape2D_detect")
 position = Vector2(0, 50)
 scale = Vector2(0.32, 1)
 shape = SubResource("RectShape_wall_h")
-
-[node name="Top" type="StaticBody2D" parent="HoleStart/FloorElevator" unique_id=1416435978]
-position = Vector2(1.7341309, -10.366119)
-scale = Vector2(0.23695809, 1)
-
-[node name="CollisionShape" type="CollisionShape2D" parent="HoleStart/FloorElevator/Top" unique_id=603161963]
-position = Vector2(-14.636999, -25.915314)
-shape = SubResource("RectangleShape2D_sttla")
-
-[node name="RightUpper" type="StaticBody2D" parent="HoleStart/FloorElevator" unique_id=1016845303]
-position = Vector2(119.65813, 53.558296)
-scale = Vector2(3.9827793, 0.9232049)
-
-[node name="CollisionShape" type="CollisionShape2D" parent="HoleStart/FloorElevator/RightUpper" unique_id=2025063446]
-position = Vector2(3.7083435, 38.363724)
-scale = Vector2(0.9999992, 0.9999994)
-shape = SubResource("RectangleShape2D_e5qfr")
-
-[node name="LeftUpper" type="StaticBody2D" parent="HoleStart/FloorElevator" unique_id=12229014]
-position = Vector2(-124.86073, 38.009117)
-scale = Vector2(3.913425, 1.1305274)
-
-[node name="CollisionShape" type="CollisionShape2D" parent="HoleStart/FloorElevator/LeftUpper" unique_id=1764635693]
-position = Vector2(-2.6588135, 51.95926)
-shape = SubResource("RectangleShape2D_j5evx")
 
 [node name="HoleEnd" type="Sprite2D" parent="." unique_id=1424549872]
 position = Vector2(646, 1166.0001)
