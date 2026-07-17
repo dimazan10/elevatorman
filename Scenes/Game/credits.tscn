@@ -1,52 +1,52 @@
 [gd_scene format=3 uid="uid://credits"]
 
-[ext_resource type="Script" uid="uid://credits_script" path="res://Scripts/Credits.gd" id="1_credits"]
+[ext_resource type="Script" uid="uid://cm26mhdx5e7ky" path="res://Scripts/Credits.gd" id="1_credits"]
 
-[node name="Credits" type="CanvasLayer"]
-script = ExtResource("1_credits")
+[node name="Credits" type="CanvasLayer" unique_id=1095154905]
 process_mode = 3
+script = ExtResource("1_credits")
 
-[node name="Background" type="ColorRect" parent="."]
-anchors_preset = 0
-offset_left = 0.0
-offset_top = 0.0
+[node name="Background" type="ColorRect" parent="." unique_id=430325693]
 offset_right = 1280.0
 offset_bottom = 720.0
-color = Color(0, 0, 0, 1)
 mouse_filter = 2
+color = Color(0, 0, 0, 1)
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="." unique_id=1839445803]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -320.0
+offset_left = -482.5
 offset_top = -80.0
-offset_right = 320.0
+offset_right = 482.5
 offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 alignment = 1
 
-[node name="Label" type="Label" parent="VBox"]
+[node name="Label" type="Label" parent="VBox" unique_id=81644482]
 layout_mode = 2
 size_flags_horizontal = 4
-horizontal_alignment = 1
-vertical_alignment = 1
-theme_override_font_sizes/font_size = 48
 theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_constants/outline_size = 4
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 25
 text = "Спасибо за прохождение Demo версии!"
-
-[node name="SubLabel" type="Label" parent="VBox"]
-layout_mode = 2
-size_flags_horizontal = 4
 horizontal_alignment = 1
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 24
-theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
-text = ""
 
-[node name="Timer" type="Timer" parent="."]
+[node name="SubLabel" type="Label" parent="VBox" unique_id=731757068]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Timer" type="Timer" parent="." unique_id=2142564228]
 wait_time = 8.0
 one_shot = true

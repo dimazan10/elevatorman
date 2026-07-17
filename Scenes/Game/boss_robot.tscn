@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://boy4be35w2syx" path="res://Scripts/FloorDraw.gd" id="1_floordraw"]
 [ext_resource type="Texture2D" uid="uid://74cir4cs1tst" path="res://Assets/SpritesElevator/roof3.png" id="2_roof"]
-[ext_resource type="PackedScene" uid="uid://mt70rvdsdeyx" path="res://Objects/Summons/player.tscn" id="3_player"]
 [ext_resource type="Script" uid="uid://dd1mf0o5nw7l" path="res://Scripts/BossRobot.gd" id="4_boss"]
 [ext_resource type="PackedScene" uid="uid://2v30o3wcsurj" path="res://Objects/Boss/Robot/Gun.tscn" id="5_7o10g"]
 [ext_resource type="PackedScene" uid="uid://bgq1qqvmixcdb" path="res://Objects/Boss/Robot/Computer.tscn" id="6_enryc"]
@@ -337,7 +336,7 @@ position = Vector2(0, 280)
 
 [node name="Player" parent="." unique_id=1432727825 instance=ExtResource("3_player")]
 z_index = 1
-position = Vector2(647, 3100)
+position = Vector2(647, 3200)
 
 [node name="Gun" parent="." unique_id=608897434 instance=ExtResource("5_7o10g")]
 position = Vector2(466, 1488)
@@ -675,7 +674,7 @@ texture = ExtResource("2_roof")
 [node name="ElevatorArea" type="Area2D" parent="HoleStart/FloorElevator" unique_id=585586480]
 position = Vector2(-1.7341766, 146.85342)
 scale = Vector2(-0.86139643, 0.35211897)
-script = ExtResource("14_iswnu")
+monitoring = false
 
 [node name="CollisionShape" type="CollisionShape2D" parent="HoleStart/FloorElevator/ElevatorArea" unique_id=1449731972]
 position = Vector2(2.0132155, 147.1204)
@@ -687,6 +686,13 @@ script = ExtResource("17_bosstart")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="HoleStart/FloorElevator/TransportArea" unique_id=1698997329]
 shape = SubResource("CircleShape2D_transport")
+
+[node name="FloorCollision" type="StaticBody2D" parent="HoleStart/FloorElevator" unique_id=1416435979]
+
+[node name="CollisionShape" type="CollisionShape2D" parent="HoleStart/FloorElevator/FloorCollision" unique_id=1416435980]
+position = Vector2(0, 50)
+scale = Vector2(0.32, 1)
+shape = SubResource("RectShape_wall_h")
 
 [node name="Top" type="StaticBody2D" parent="HoleStart/FloorElevator" unique_id=1416435978]
 position = Vector2(1.7341309, -10.366119)
