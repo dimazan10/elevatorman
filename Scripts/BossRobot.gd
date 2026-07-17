@@ -8,6 +8,7 @@ const BossHPBar := preload("res://Scripts/BossHPBar.gd")
 const DRUNK_KILLER := preload("res://Objects/Summons/DrunkKiller.tscn")
 const SPIDER := preload("res://Objects/Summons/Spider.tscn")
 const TELEPORT := preload("res://Objects/Summons/Teleport.tscn")
+const ElevatorDoorScript := preload("res://Scripts/ElevatorDoor.gd")
 
 var _spawn_zones: Array[Node2D] = []
 var _spawn_active := false
@@ -17,6 +18,7 @@ var _is_low_hp := false
 var _player_at_computer := false
 
 func _ready() -> void:
+	print("[BossRobot] _ready called! Scene loaded successfully.")
 	add_to_group("pausable")
 	add_child(HealthUI.instantiate())
 	add_child(DashUI.instantiate())
@@ -45,6 +47,107 @@ func _ready() -> void:
 	var computer := get_node_or_null("Computer")
 	if computer:
 		computer.aiming_changed.connect(_on_computer_aiming_changed)
+
+	_setup_boss_elevator()
+
+func _setup_boss_elevator() -> void:
+	var player := get_node_or_null("Player") as Node2D
+	if not player:
+		return
+
+	var gun := get_node_or_null("Gun") as Node2D
+	var gun_pos := Vector2(466, 1488) if not gun else gun.global_position
+	var elevator_x := gun_pos.x
+	var elevator_start_y := gun_pos.y + 80.0
+	var elevator_end_y := 1246.0
+
+	var elevator := Node2D.new()
+	elevator.name = "BossElevator"
+	elevator.position = Vector2(elevator_x, elevator_start_y)
+	add_child(elevator)
+
+	var platform := Sprite2D.new()
+	platform.name = "Platform"
+	platform.texture = load("res://Assets/SpritesElevator/Lift.png")
+	platform.scale = Vector2(0.32, 0.57)
+	platform.z_index = 2
+	elevator.add_child(platform)
+
+	var door1 := Sprite2D.new()
+	door1.name = "Door1"
+	door1.texture = load("res://Assets/SpritesElevator/Lift2.png")
+	door1.position = Vector2(0, -5)
+	door1.z_index = 3
+	elevator.add_child(door1)
+
+	var door2 := Sprite2D.new()
+	door2.name = "Door2"
+	door2.texture = load("res://Assets/SpritesElevator/Lift.png")
+	door2.position = Vector2(0, -5)
+	door2.z_index = 3
+	elevator.add_child(door2)
+
+	var roof := Sprite2D.new()
+	roof.name = "Roof"
+	roof.texture = load("res://Assets/SpritesElevator/roof3.png")
+	roof.position = Vector2(0, -12)
+	roof.z_index = 3
+	elevator.add_child(roof)
+
+	var shaft_visual := Sprite2D.new()
+	shaft_visual.name = "ShaftVisual"
+	shaft_visual.texture = load("res://Assets/SpritesElevator/Hole.png")
+	shaft_visual.position = Vector2(0, 0)
+	shaft_visual.scale = Vector2(0.5, 1.0)
+	shaft_visual.z_index = -1
+	shaft_visual.modulate = Color(0.15, 0.15, 0.2)
+	elevator.add_child(shaft_visual)
+
+	player.global_position = Vector2(elevator_x, elevator_start_y)
+	player.z_index = 4
+	_hide_player_visual(player)
+
+	var tw := create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+	tw.tween_interval(1.0)
+	tw.tween_property(elevator, "position:y", elevator_end_y, 3.0)
+	tw.tween_callback(func():
+		_show_player_visual(player)
+		player.z_index = 1
+		var door_tw := create_tween().set_parallel(true)
+		door_tw.tween_property(door1, "position:x", 72.0, 0.4)
+		door_tw.tween_property(door2, "position:x", -72.0, 0.4)
+		door_tw.tween_callback(func():
+			elevator.queue_free()
+		).set_delay(0.5)
+	)
+
+func _hide_player_visual(p: Node2D) -> void:
+	for child in p.get_children():
+		if child is Camera2D:
+			continue
+		if child is AnimatedSprite2D:
+			child.hide()
+		if child is Sprite2D:
+			child.hide()
+		if child is CollisionShape2D:
+			child.set_deferred("disabled", true)
+		if child is AudioStreamPlayer2D:
+			child.stop()
+	p.set_process(false)
+	p.set_physics_process(false)
+
+func _show_player_visual(p: Node2D) -> void:
+	p.set_process(true)
+	p.set_physics_process(true)
+	for child in p.get_children():
+		if child is Camera2D:
+			continue
+		if child is AnimatedSprite2D:
+			child.show()
+		if child is Sprite2D:
+			child.show()
+		if child is CollisionShape2D:
+			child.set_deferred("disabled", false)
 
 func _process(delta: float) -> void:
 	if not _spawn_active or _player_at_computer:
@@ -122,6 +225,7 @@ func _on_robot_hp_changed(current_hp: int, max_hp: int) -> void:
 	_is_low_hp = current_hp <= 1
 
 func _on_boss_died() -> void:
+	print("[BossRobot] Boss died!")
 	_spawn_active = false
 	for e in _enemies:
 		if is_instance_valid(e):

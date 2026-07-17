@@ -18,6 +18,7 @@ var _zone_name: String = ""
 var _is_waiting: bool = false
 var _enraged: bool = false
 var _attack_timer: float = 0.0
+var _anim: AnimatedSprite2D = null
 
 const TRAIL_SCENE = preload("res://Objects/Summons/SlimeTrail.tscn")
 
@@ -35,10 +36,10 @@ func _ready() -> void:
 	_setup_animated_sprite()
 
 func _setup_animated_sprite() -> void:
-	var anim := AnimatedSprite2D.new()
-	anim.name = "AnimatedSprite2D"
-	anim.scale = Vector2(0.55, 0.55)
-	add_child(anim)
+	_anim = AnimatedSprite2D.new()
+	_anim.name = "AnimatedSprite2D"
+	_anim.scale = Vector2(0.55, 0.55)
+	add_child(_anim)
 
 	var frames := SpriteFrames.new()
 	frames.add_animation(&"idle")
@@ -69,9 +70,9 @@ func _setup_animated_sprite() -> void:
 	frames.set_animation_speed(&"attack", 10)
 	frames.set_animation_loop(&"attack", false)
 
-	anim.sprite_frames = frames
-	anim.modulate = Color(0.75, 0.8, 0.75)
-	anim.play(&"walk")
+	_anim.sprite_frames = frames
+	_anim.modulate = Color(0.75, 0.8, 0.75)
+	_anim.play(&"walk")
 
 func _physics_process(delta: float) -> void:
 	_melee_timer = maxf(_melee_timer - delta, 0.0)
@@ -119,9 +120,8 @@ func _process_chasing(delta: float) -> void:
 	move_and_slide()
 	_play_anim("walk")
 
-	var anim := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
-	if anim and velocity.length() > 10:
-		anim.flip_h = velocity.x < 0
+	if _anim and velocity.length() > 10:
+		_anim.flip_h = velocity.x < 0
 
 	_drop_trail()
 
@@ -151,9 +151,8 @@ func _drop_trail_at(pos: Vector2) -> void:
 	get_tree().current_scene.add_child(trail)
 
 func _play_anim(anim_name: String) -> void:
-	var anim := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
-	if anim and anim.sprite_frames.has_animation(anim_name):
-		anim.play(anim_name)
+	if _anim and _anim.sprite_frames.has_animation(anim_name):
+		_anim.play(anim_name)
 
 func on_zone_entered() -> void:
 	_is_waiting = false
@@ -161,13 +160,14 @@ func on_zone_entered() -> void:
 
 func _handle_separation(delta: float) -> void:
 	var sep := Vector2.ZERO
+	var pos := global_position
 	for body in get_tree().get_nodes_in_group("enemy"):
 		if body == self or not body is Node2D:
 			continue
-		var other := body as Node2D
-		var diff: Vector2 = global_position - other.global_position
-		if diff.length() > 0.001 and diff.is_finite():
-			sep += diff.normalized() / diff.length()
+		var diff: Vector2 = pos - body.global_position
+		var dist_sq := diff.length_squared()
+		if dist_sq > 0.000001 and dist_sq < 1000000.0 and diff.is_finite():
+			sep += diff / sqrt(dist_sq)
 	if sep.length() > 0:
 		global_position += sep.normalized() * separation_force * delta
 

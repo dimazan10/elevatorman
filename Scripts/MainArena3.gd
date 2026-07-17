@@ -64,6 +64,12 @@ const _ZONE_PRIORITY := {
 
 func _ready() -> void:
 	randomize()
+	if GameState.dark_mode:
+		var cm := CanvasModulate.new()
+		cm.name = "DarkOverlay"
+		cm.color = Color(0.01, 0.01, 0.02)
+		cm.z_index = -10
+		add_child(cm)
 	_quest_mode = QuestMode.CLASSIC if randi() % 2 == 0 else QuestMode.TIME_ATTACK
 	var floor_num = GameState.current_floor
 	_arena_scale_factor = 1.0 + (MAX_FLOOR - floor_num) * 0.15
@@ -174,7 +180,6 @@ func _on_zone_exited(body: Node2D, zone_name: String) -> void:
 func _on_player_zone_changed(zone: String) -> void:
 	if _last_player_zone == zone:
 		return
-	var old_zone := _last_player_zone
 	_last_player_zone = zone
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		if not is_instance_valid(enemy):
@@ -186,41 +191,47 @@ func _on_player_zone_changed(zone: String) -> void:
 			enemy_zone = enemy.get_meta("zone_name", "")
 		if enemy_zone.is_empty():
 			continue
-		if enemy_zone == old_zone and enemy_zone != zone:
-			var spawn_pos = enemy.get_meta("spawn_position", enemy.global_position)
-			enemy.global_position = spawn_pos
-			if enemy is RigidBody2D:
-				enemy.freeze = true
-				enemy.linear_velocity = Vector2.ZERO
-			else:
-				enemy.set_physics_process(false)
-				_disable_collision_shapes(enemy)
-				_stop_enemy_audio(enemy)
-				for child in enemy.get_children():
-					if child is Timer and child.has_method("stop"):
-						child.stop()
-					if child is AnimatedSprite2D:
-						child.stop()
-				if "velocity" in enemy:
-					enemy.velocity = Vector2.ZERO
-		elif enemy_zone == zone and enemy_zone != old_zone:
-			if enemy is RigidBody2D:
-				enemy.freeze = false
-				_enable_collision_shapes(enemy)
-			else:
-				enemy.set_physics_process(true)
-				_enable_collision_shapes(enemy)
-				for child in enemy.get_children():
-					if child is Timer and child.has_method("start"):
-						if child.has_method("stop") and child.is_stopped():
-							child.start()
-					if child is AnimatedSprite2D:
-						if child.sprite_frames and child.sprite_frames.has_animation("walk"):
-							child.play("walk")
-						elif child.sprite_frames and child.sprite_frames.has_animation("idle"):
-							child.play("idle")
-			if enemy.has_method("on_zone_entered"):
-				enemy.on_zone_entered()
+		if enemy_zone == zone:
+			if enemy.get_meta("zone_frozen", false):
+				enemy.remove_meta("zone_frozen")
+				if enemy is RigidBody2D:
+					enemy.freeze = false
+					_enable_collision_shapes(enemy)
+				else:
+					enemy.set_physics_process(true)
+					_enable_collision_shapes(enemy)
+					for child in enemy.get_children():
+						if child is Timer and child.has_method("start"):
+							if child.has_method("stop") and child.is_stopped():
+								child.start()
+						if child is AnimatedSprite2D:
+							if child.sprite_frames and child.sprite_frames.has_animation("walk"):
+								child.play("walk")
+							elif child.sprite_frames and child.sprite_frames.has_animation("idle"):
+								child.play("idle")
+					if "velocity" in enemy:
+						enemy.velocity = Vector2.ZERO
+				if enemy.has_method("on_zone_entered"):
+					enemy.on_zone_entered()
+		else:
+			if not enemy.get_meta("zone_frozen", false):
+				enemy.set_meta("zone_frozen", true)
+				var spawn_pos = enemy.get_meta("spawn_position", enemy.global_position)
+				enemy.global_position = spawn_pos
+				if enemy is RigidBody2D:
+					enemy.freeze = true
+					enemy.linear_velocity = Vector2.ZERO
+				else:
+					enemy.set_physics_process(false)
+					_disable_collision_shapes(enemy)
+					_stop_enemy_audio(enemy)
+					for child in enemy.get_children():
+						if child is Timer and child.has_method("stop"):
+							child.stop()
+						if child is AnimatedSprite2D:
+							child.stop()
+					if "velocity" in enemy:
+						enemy.velocity = Vector2.ZERO
 
 func _spawn_teleport_effect(pos: Vector2) -> void:
 	var tp := TELEPORT.instantiate()
@@ -423,6 +434,9 @@ func _update_turret_positions() -> void:
 
 func _start_combat_timer() -> void:
 	for enemy in get_tree().get_nodes_in_group("enemy"):
+		var enemy_zone: String = enemy.get_meta("zone_name", "") if enemy.has_meta("zone_name") else ""
+		if enemy_zone != "" and enemy_zone != _current_player_zone:
+			continue
 		enemy.show()
 		enemy.z_index = 6
 		enemy.set_physics_process(true)
@@ -618,7 +632,9 @@ func _restore_inventory_state() -> void:
 
 func start_restart() -> void:
 	if lift_state != LiftState.RETURNING:
+		print("[MainArena3] start_restart blocked: lift_state=", lift_state)
 		return
+	print("[MainArena3] start_restart: current_floor=", GameState.current_floor)
 	_save_floor_state()
 	player_node.can_move = false
 	lift_state = LiftState.NONE
@@ -716,6 +732,9 @@ func _generate_world() -> void:
 	_arena_switches.clear()
 	_arena_pushers.clear()
 	_minimap_centers.clear()
+	_secondary_arenas.clear()
+	_cached_gates.clear()
+	_cached_gate_triggers.clear()
 	var floor_rect = preload("res://Objects/Rooms/Floor_Rectangle.tscn")
 	var arena_none_scene = preload("res://Objects/Rooms/ArenaNone.tscn")
 	var arena_switch_scene = preload("res://Objects/Rooms/ArenaSwitch.tscn")
@@ -910,12 +929,23 @@ func _set_shaft_collision(enabled: bool) -> void:
 
 var _rotation_speed := 0.5
 
-func _update_gate() -> void:
-	var gates := [_arena_rotator.get_node("ArenaScaler/Walls/W4/Gate") as StaticBody2D]
+var _cached_gates: Array = []
+var _cached_gate_triggers: Array = []
+
+func _cache_gates() -> void:
+	_cached_gates.clear()
+	var main_gate = _arena_rotator.get_node_or_null("ArenaScaler/Walls/W4/Gate") as StaticBody2D
+	if main_gate:
+		_cached_gates.append(main_gate)
 	for sa in _secondary_arenas:
 		var g = sa.get_node_or_null("Pivot/Walls/W4/Gate") as StaticBody2D
 		if g:
-			gates.append(g)
+			_cached_gates.append(g)
+
+func _update_gate() -> void:
+	if _cached_gates.is_empty():
+		_cache_gates()
+	_cached_gate_triggers = get_tree().get_nodes_in_group("gate_trigger")
 
 	var in_corridor = _current_player_zone == "corridor"
 	if lift_state != LiftState.COMBAT:
@@ -923,15 +953,17 @@ func _update_gate() -> void:
 			sa.rotation_speed = 1.0 if in_corridor else 0.5
 
 	var main_near = false
-	for gate in gates:
+	for gate in _cached_gates:
+		if not is_instance_valid(gate):
+			continue
 		if lift_state == LiftState.COMBAT:
 			gate.collision_layer = 3
 			gate.get_node("Visual").modulate = Color(1, 0.15, 0.15)
 			continue
 		var gate_pos = gate.global_position
 		var is_near = false
-		for t in get_tree().get_nodes_in_group("gate_trigger"):
-			if gate_pos.distance_to(t.global_position) < 80.0:
+		for t in _cached_gate_triggers:
+			if is_instance_valid(t) and gate_pos.distance_to(t.global_position) < 80.0:
 				is_near = true
 				break
 		gate.collision_layer = 2 if is_near else 3

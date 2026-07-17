@@ -19,6 +19,8 @@ var _zone_name: String = ""
 var _is_waiting: bool = false
 var _player_prev_lives: int = -1
 var _melody_playing: bool = false
+var _anim: AnimatedSprite2D = null
+var _current_scene: Node = null
 
 var _melody_player: AudioStreamPlayer2D
 var _horn_player: AudioStreamPlayer2D
@@ -38,6 +40,7 @@ func _ready() -> void:
 	_spawn_pos = get_meta("spawn_position", global_position)
 	_zone_name = get_meta("zone_name", "")
 	_enrage_timer = enrage_interval
+	_current_scene = get_tree().current_scene
 
 	var players := get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
@@ -53,9 +56,9 @@ func _ready() -> void:
 	_setup_audio()
 
 func _setup_animated_sprite() -> void:
-	var anim := AnimatedSprite2D.new()
-	anim.name = "AnimatedSprite2D"
-	add_child(anim)
+	_anim = AnimatedSprite2D.new()
+	_anim.name = "AnimatedSprite2D"
+	add_child(_anim)
 
 	var frames := SpriteFrames.new()
 	frames.add_animation(&"walk")
@@ -82,8 +85,8 @@ func _setup_animated_sprite() -> void:
 
 	frames.set_animation_speed(&"walk", walk_fps)
 	frames.set_animation_loop(&"walk", true)
-	anim.sprite_frames = frames
-	anim.play(&"walk")
+	_anim.sprite_frames = frames
+	_anim.play(&"walk")
 
 func _setup_audio() -> void:
 	_melody_player = AudioStreamPlayer2D.new()
@@ -132,18 +135,16 @@ func _process_wandering(delta: float) -> void:
 	move_and_slide()
 
 	if velocity.length() > 10:
-		var anim := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
-		if anim and anim.is_playing():
-			anim.flip_h = velocity.x < 0
+		if _anim and _anim.is_playing():
+			_anim.flip_h = velocity.x < 0
 
 	_update_melody()
 	_check_enrage()
 
 func _update_melody() -> void:
-	var main = get_tree().current_scene
 	var player_zone := ""
-	if main and main.has_method("get_player_zone"):
-		player_zone = main.get_player_zone()
+	if _current_scene and _current_scene.has_method("get_player_zone"):
+		player_zone = _current_scene.get_player_zone()
 
 	var same_zone := player_zone == _zone_name and _zone_name != ""
 	if same_zone and not _melody_playing:
@@ -166,17 +167,13 @@ func _trigger_enrage() -> void:
 	tween.tween_callback(_end_enrage)
 
 	for enemy in get_tree().get_nodes_in_group("enemy"):
-		if enemy == self:
-			continue
-		if enemy.has_method("set_enraged"):
+		if enemy != self and enemy.is_in_group("enemy"):
 			enemy.set_enraged(true)
 
 func _end_enrage() -> void:
 	_enraged_visual = false
 	for enemy in get_tree().get_nodes_in_group("enemy"):
-		if enemy == self:
-			continue
-		if enemy.has_method("set_enraged"):
+		if enemy != self:
 			enemy.set_enraged(false)
 
 func _on_player_health_changed(new_health: int) -> void:
@@ -187,13 +184,14 @@ func _on_player_health_changed(new_health: int) -> void:
 
 func _handle_separation(delta: float) -> void:
 	var sep := Vector2.ZERO
+	var pos := global_position
 	for body in get_tree().get_nodes_in_group("enemy"):
 		if body == self or not body is Node2D:
 			continue
-		var other := body as Node2D
-		var diff: Vector2 = global_position - other.global_position
-		if diff.length() > 0.001 and diff.is_finite():
-			sep += diff.normalized() / diff.length()
+		var diff: Vector2 = pos - body.global_position
+		var dist_sq := diff.length_squared()
+		if dist_sq > 0.000001 and dist_sq < 1000000.0 and diff.is_finite():
+			sep += diff / sqrt(dist_sq)
 	if sep.length() > 0:
 		global_position += sep.normalized() * separation_force * delta
 

@@ -63,7 +63,7 @@ func _ready() -> void:
 
 func _pick_random_items() -> void:
 	var all_items: Array[Dictionary] = [
-		{"id": "bucket", "btn": bucket_btn, "status": bucket_status, "price": PRICE_BUCKET},
+		{"id": "bucket", "btn": bucket_btn, "status": bucket_status, "price": 4},
 		{"id": "collar", "btn": collar_btn, "status": collar_status, "price": PRICE_COLLAR},
 		{"id": "infinit", "btn": infinit_btn, "status": infinit_status, "price": PRICE_INFINIT},
 		{"id": "tube", "btn": tube_btn, "status": tube_status, "price": PRICE_TUBE},
@@ -265,13 +265,12 @@ func _on_continue() -> void:
 	if not _collected:
 		GameState.currency += GameState.last_floor_hp
 		_collected = true
+	print("[Shop] _on_continue: current_floor=", GameState.current_floor)
 	if GameState.current_floor >= 3:
-		GameState.current_floor = 1
-		GameState.has_bucket = false
-		GameState.has_collar = false
-		GameState.currency = 0
-		StyleManager.reset_score()
-		get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
+		print("[Shop] → Loading boss_robot.tscn")
+		var err := get_tree().change_scene_to_file("res://Scenes/Game/boss_robot.tscn")
+		print("[Shop] change_scene_to_file returned: ", err)
 	else:
 		GameState.current_floor += 1
+		print("[Shop] → Floor ", GameState.current_floor, ", loading game.tscn")
 		get_tree().change_scene_to_file("res://Scenes/Game/game.tscn")
