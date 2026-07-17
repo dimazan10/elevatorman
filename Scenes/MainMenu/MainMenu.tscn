@@ -80,6 +80,11 @@ grow_vertical = 2
 texture = ExtResource("8_0hjx5")
 expand_mode = 1
 
+[node name="SecretDarkButton" type="Button" parent="."]
+layout_mode = 0
+mouse_filter = 0
+
 [connection signal="pressed" from="VBoxContainer/ButtonPlay" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonSettings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonQuit" to="VBoxContainer/ButtonQuit" method="_on_pressed"]
+[connection signal="pressed" from="SecretDarkButton" to="." method="_on_secret_pressed"]

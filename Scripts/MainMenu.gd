@@ -9,6 +9,9 @@ extends Control
 var extra := 60.0
 var max_move := 25.0
 
+const SECRET_TEX_POS := Vector2(1082, 520)
+const SECRET_TEX_SIZE := Vector2(1536, 1024)
+
 func _ready() -> void:
 	CursorManager.setup_buttons(self)
 	_animate_logo()
@@ -17,12 +20,12 @@ func _ready() -> void:
 	bg.offset_right += extra
 	bg.offset_bottom += extra
 	
-	# Увеличиваем кнопки в 1.5 раза
 	play_btn.scale = Vector2(1.5, 1.5)
 	settings_btn.scale = Vector2(1.5, 1.5)
 	quit_btn.scale = Vector2(1.5, 1.5)
 	
 	play_btn.grab_focus.call_deferred()
+	_position_secret_button()
 
 func _animate_logo() -> void:
 	var tw = create_tween().set_loops()
@@ -67,3 +70,28 @@ func _on_settings_pressed() -> void:
 	_play_click()
 	await get_tree().create_timer(0.15).timeout
 	get_tree().change_scene_to_file("res://Scenes/Settings/Settings.tscn")
+
+func _position_secret_button() -> void:
+	var btn := get_node_or_null("SecretDarkButton")
+	if not btn:
+		return
+	var rect: Rect2 = bg.get_global_rect()
+	var scale_f := minf(rect.size.x / SECRET_TEX_SIZE.x, rect.size.y / SECRET_TEX_SIZE.y)
+	var tex_w := SECRET_TEX_SIZE.x * scale_f
+	var tex_h := SECRET_TEX_SIZE.y * scale_f
+	var tex_x := rect.position.x + (rect.size.x - tex_w) * 0.5
+	var tex_y := rect.position.y + (rect.size.y - tex_h) * 0.5
+	btn.position = Vector2(tex_x + SECRET_TEX_POS.x * scale_f, tex_y + SECRET_TEX_POS.y * scale_f)
+	btn.size = Vector2(60, 60)
+
+func _on_secret_pressed() -> void:
+	_play_click()
+	GameState.dark_mode = true
+	GameState.current_floor = 1
+	GameState.has_bucket = false
+	GameState.has_collar = false
+	GameState.currency = 0
+	GameState.last_floor_hp = 0
+	StyleManager.reset_score()
+	await get_tree().create_timer(0.15).timeout
+	get_tree().change_scene_to_file("res://Scenes/Game/start.tscn")

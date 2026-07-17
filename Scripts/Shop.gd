@@ -12,8 +12,9 @@ const COLLAR_ICON = preload("res://Assets/Items/Collar.png")
 const PRICE_INFINIT := 9
 const PRICE_TUBE := 2
 const PRICE_CLONE := 6
-const PRICE_REWIND := 4
+const PRICE_REWIND := 3
 const PRICE_COLLAR := 4
+const PRICE_BUCKET := 4
 
 @onready var vbox: VBoxContainer = $VBoxMain
 @onready var time_label: Label = $VBoxMain/HBoxMain/InfoSide/TimeLabel
@@ -62,7 +63,7 @@ func _ready() -> void:
 
 func _pick_random_items() -> void:
 	var all_items: Array[Dictionary] = [
-		{"id": "bucket", "btn": bucket_btn, "status": bucket_status, "price": 3},
+		{"id": "bucket", "btn": bucket_btn, "status": bucket_status, "price": PRICE_BUCKET},
 		{"id": "collar", "btn": collar_btn, "status": collar_status, "price": PRICE_COLLAR},
 		{"id": "infinit", "btn": infinit_btn, "status": infinit_status, "price": PRICE_INFINIT},
 		{"id": "tube", "btn": tube_btn, "status": tube_status, "price": PRICE_TUBE},
@@ -158,11 +159,11 @@ func _update_item_button(id: String, btn: Button, status: Label, price: int) -> 
 func _update_bucket_ui() -> void:
 	if GameState.has_bucket:
 		bucket_btn.disabled = true
-		bucket_btn.text = "Куплено"
-		bucket_status.text = "Ведро (%d зар." % GameState.bucket_charges + ")"
+		bucket_btn.text = "Bought"
+		bucket_status.text = "Bucket (%d chg.)" % GameState.bucket_charges
 	else:
-		bucket_btn.disabled = GameState.currency < 3 or not _collected or GameState.has_collar
-		bucket_btn.text = "Купить ведро (3 монеты)"
+		bucket_btn.disabled = GameState.currency < PRICE_BUCKET or not _collected or GameState.has_collar
+		bucket_btn.text = "Buy Bucket (%d coins)" % PRICE_BUCKET
 		bucket_status.text = ""
 
 func _update_collar_ui() -> void:
@@ -232,8 +233,8 @@ func _spawn_coins(count: int) -> void:
 		ct.tween_callback(coin.queue_free).set_delay(i * 0.08 + 0.6)
 
 func _on_bucket_buy() -> void:
-	if GameState.currency >= 3 and not GameState.has_bucket:
-		GameState.currency -= 3
+	if GameState.currency >= PRICE_BUCKET and not GameState.has_bucket:
+		GameState.currency -= PRICE_BUCKET
 		GameState.has_bucket = true
 		GameState.bucket_charges = 2
 	currency_label.text = str(GameState.currency)
