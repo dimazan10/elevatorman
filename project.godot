@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="ElevatorFF"
+config/name="Elevatorman"
 run/main_scene="uid://b6duhj6uwaea6"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://Assets/icon.png"
