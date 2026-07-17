@@ -424,7 +424,11 @@ func _play_death_frames() -> void:
 	sprite.name = "DeathSprite"
 	sprite.position = animated_sprite.position
 	sprite.scale = animated_sprite.scale
+	sprite.z_index = 10
+	sprite.visible = false
 	add_child(sprite)
+	await get_tree().process_frame
+	sprite.visible = true
 	for tex in textures:
 		sprite.texture = tex
 		await get_tree().create_timer(0.125, true, false, true).timeout
