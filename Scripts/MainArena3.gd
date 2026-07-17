@@ -678,13 +678,11 @@ func _hide_enemies() -> void:
 
 func _show_enemies() -> void:
 	for enemy in get_tree().get_nodes_in_group("enemy"):
-		if enemy is RigidBody2D:
-			enemy.show()
-			enemy.z_index = 6
-			continue
 		enemy.show()
 		enemy.z_index = 6
 		var enemy_zone: String = enemy.get_meta("zone_name", "") if enemy.has_meta("zone_name") else ""
+		if enemy is RigidBody2D:
+			enemy.freeze = false
 		if enemy_zone == _current_player_zone:
 			enemy.set_physics_process(true)
 			_enable_collision_shapes(enemy)
