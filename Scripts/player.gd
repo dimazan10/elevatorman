@@ -136,11 +136,15 @@ func _ready() -> void:
 	if GameState.dark_mode:
 		var light = get_node_or_null("PlayerLight")
 		if light and light is PointLight2D:
-			light.scale *= 2.0
+			light.scale = Vector2(2.8, 2.8)
 			light.range_item_cull_mask = 2147483647
 			light.range_z_min = -128
 			light.range_z_max = 128
-			light.modulate = Color(1.8, 1.8, 1.8, 1)
+			light.energy = 2.0
+			light.shadow_enabled = true
+			light.shadow_filter = 2
+			light.shadow_filter_smooth = 20.0
+			light.modulate = Color(2.0, 2.0, 2.0, 1)
 	
 var _ghost_timer := 0.0
 var _noclip := false

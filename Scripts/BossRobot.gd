@@ -24,6 +24,20 @@ func _ready() -> void:
 	add_child(DashUI.instantiate())
 	add_child(InventoryUI.instantiate())
 
+	if GameState.dark_mode:
+		var cm := CanvasModulate.new()
+		cm.name = "DarkOverlay"
+		cm.color = Color(0.0, 0.0, 0.0)
+		cm.z_index = -10
+		add_child(cm)
+		for light in get_tree().get_nodes_in_group(""):
+			pass
+		var area := get_node_or_null("Area")
+		if area:
+			for child in area.get_children():
+				if child is PointLight2D:
+					child.queue_free()
+
 	var bar := BossHPBar.new()
 	add_child(bar)
 	var robot := get_node_or_null("Robot")

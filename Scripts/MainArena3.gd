@@ -67,7 +67,7 @@ func _ready() -> void:
 	if GameState.dark_mode:
 		var cm := CanvasModulate.new()
 		cm.name = "DarkOverlay"
-		cm.color = Color(0.01, 0.01, 0.02)
+		cm.color = Color(0.0, 0.0, 0.0)
 		cm.z_index = -10
 		add_child(cm)
 	_quest_mode = QuestMode.CLASSIC if randi() % 2 == 0 else QuestMode.TIME_ATTACK
