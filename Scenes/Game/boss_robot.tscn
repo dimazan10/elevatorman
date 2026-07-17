@@ -797,7 +797,7 @@ color = Color(0, 1, 0, 0.3)
 polygon = PackedVector2Array(-120, -80, 120, -80, 120, 80, -120, 80)
 
 [node name="ArenaSwitch" type="AnimatableBody2D" parent="." unique_id=418966575]
-position = Vector2(9, 2892)
+position = Vector2(1089, 1145.5)
 script = ExtResource("10_cf8pt")
 
 [node name="Pivot" type="Node2D" parent="ArenaSwitch" unique_id=268876278]
