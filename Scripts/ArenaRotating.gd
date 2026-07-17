@@ -10,7 +10,7 @@ func _physics_process(delta: float) -> void:
 	var pivot = $Pivot
 	if not pivot:
 		return
-	var rot := pivot.rotation + delta * rotation_speed
+	var rot: float = pivot.rotation + delta * rotation_speed
 	if rot >= TAU:
 		pivot.rotation = 0.0
 		set_process(false)
