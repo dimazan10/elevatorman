@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://boy4be35w2syx" path="res://Scripts/FloorDraw.gd" id="1_floordraw"]
 [ext_resource type="Texture2D" uid="uid://74cir4cs1tst" path="res://Assets/SpritesElevator/roof3.png" id="2_roof"]
+[ext_resource type="PackedScene" uid="uid://mt70rvdsdeyx" path="res://Objects/Summons/player.tscn" id="3_player"]
 [ext_resource type="Script" uid="uid://dd1mf0o5nw7l" path="res://Scripts/BossRobot.gd" id="4_boss"]
 [ext_resource type="PackedScene" uid="uid://2v30o3wcsurj" path="res://Objects/Boss/Robot/Gun.tscn" id="5_7o10g"]
 [ext_resource type="PackedScene" uid="uid://bgq1qqvmixcdb" path="res://Objects/Boss/Robot/Computer.tscn" id="6_enryc"]
