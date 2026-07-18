@@ -440,6 +440,7 @@ func _infinit_revive() -> void:
 		if inventory[i].id == "infinit":
 			clear_slot(i)
 			break
+	max_lives -= 1
 	current_lives = max_lives
 	health_changed.emit(current_lives)
 	_is_dying = false
