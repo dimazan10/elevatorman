@@ -6,7 +6,7 @@ extends Control
 @onready var settings_btn := $VBoxContainer/ButtonSettings as TextureButton
 @onready var quit_btn := $VBoxContainer/ButtonQuit as TextureButton
 @onready var discord_btn := $DiscordButton as Button
-@onready var dark_mode_btn := $TextureRect/DarkModeButton as Button
+@onready var dark_mode_btn := $DarkModeButton as Button
 
 var extra := 60.0
 var max_move := 25.0
