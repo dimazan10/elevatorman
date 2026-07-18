@@ -274,9 +274,12 @@ func _setup_dark_mode() -> void:
 	move_child(cm, 0)
 	var light := player_node.get_node_or_null("PlayerLight") as PointLight2D
 	if light:
+		light.light_mask = 7
 		light.texture_scale = 2.5
 		light.energy = 1.5
 		light.shadow_enabled = true
+	player_node.light_mask = 7
+	player_node.visibility_layer = 7
 
 func _setup_ui() -> void:
 	var ui := CanvasLayer.new()

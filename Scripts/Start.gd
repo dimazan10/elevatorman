@@ -3,5 +3,24 @@ extends Node2D
 const FadeTransition := preload("res://Scripts/FadeTransition.gd")
 
 func _ready() -> void:
+	if GameState.dark_mode:
+		_setup_dark_mode()
 	add_to_group("pausable")
 	await FadeTransition.fade_in()
+
+func _setup_dark_mode() -> void:
+	var cm := CanvasModulate.new()
+	cm.color = Color(0, 0, 0, 1)
+	add_child(cm)
+	move_child(cm, 0)
+	var player = get_node_or_null("Player")
+	if not player:
+		return
+	var light := player.get_node_or_null("PlayerLight") as PointLight2D
+	if light:
+		light.light_mask = 7
+		light.texture_scale = 2.5
+		light.energy = 1.5
+		light.shadow_enabled = true
+	player.light_mask = 7
+	player.visibility_layer = 7
