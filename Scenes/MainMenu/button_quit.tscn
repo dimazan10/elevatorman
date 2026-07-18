@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ddyst8eld2jg0"]
 
-[ext_resource type="Texture2D" uid="uid://bs8e807t0wque" path="res://Assets/buttonQuit.png" id="1_rout1"]
+[ext_resource type="Texture2D" uid="uid://bs8e807t0wque" path="res://Assets/MainMenu/buttonQuit.png" id="1_rout1"]
 
 [node name="ButtonQuit" type="TextureButton" unique_id=1641062299]
 anchors_preset = -1
