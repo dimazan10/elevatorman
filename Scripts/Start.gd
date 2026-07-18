@@ -24,3 +24,11 @@ func _setup_dark_mode() -> void:
 		light.shadow_enabled = true
 	player.light_mask = 7
 	player.visibility_layer = 7
+	_set_all_layers(self)
+
+func _set_all_layers(node: Node) -> void:
+	for child in node.get_children():
+		if child is CanvasItem:
+			child.light_mask = 7
+			child.visibility_layer = 7
+		_set_all_layers(child)
