@@ -39,17 +39,17 @@ expand_mode = 1
 stretch_mode = 6
 metadata/_edit_use_anchors_ = true
 
-[node name="DarkModeButton" type="Button" parent="."]
+[node name="DarkModeButton" type="Button" parent="TextureRect" unique_id=1157692041]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -50.0
-offset_top = -120.0
-offset_right = -10.0
-offset_bottom = -80.0
+offset_left = -393.0
+offset_top = -354.0
+offset_right = -353.0
+offset_bottom = -314.0
 grow_horizontal = 0
 grow_vertical = 0
 
@@ -98,7 +98,7 @@ expand_mode = 1
 visible = false
 layout_mode = 0
 
-[connection signal="pressed" from="DarkModeButton" to="." method="_on_dark_mode_pressed"]
+[connection signal="pressed" from="TextureRect/DarkModeButton" to="." method="_on_dark_mode_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonPlay" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonSettings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonQuit" to="VBoxContainer/ButtonQuit" method="_on_pressed"]
