@@ -361,6 +361,7 @@ func take_damage(amount: int):
 	
 	_invulnerable = true
 	current_lives -= amount
+	GameState.took_damage_this_run = true
 	health_changed.emit(current_lives)
 	if current_lives <= 0:
 		_is_dying = true

@@ -265,6 +265,7 @@ func _on_continue() -> void:
 		GameState.currency += GameState.last_floor_hp
 		_collected = true
 	if GameState.current_floor >= 3:
+		GameState.check_achievements_on_completion()
 		GameState.current_floor = 1
 		GameState.has_bucket = false
 		GameState.has_collar = false

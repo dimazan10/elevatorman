@@ -30,6 +30,14 @@ var inventory: Array[Dictionary] = [
 	{id = "", icon = null, name = ""},
 ]
 var dark_mode: bool = false
+var took_damage_this_run: bool = false
+
+var achievements: Dictionary = {
+	"completed_game": false,
+	"no_damage_run": false,
+	"dark_mode_clear": false,
+	"dark_mode_no_damage": false,
+}
 
 func add_death(floor_num: int) -> int:
 	if not death_counts.has(floor_num):
@@ -42,6 +50,7 @@ func get_deaths(floor_num: int) -> int:
 
 func _ready() -> void:
 	_load_settings()
+	_load_achievements()
 	_apply_resolution()
 
 func _apply_resolution() -> void:
@@ -113,3 +122,35 @@ func set_resolution(index: int) -> void:
 	resolution_index = index
 	_apply_resolution()
 	_save_settings()
+
+func unlock_achievement(id: String) -> void:
+	if achievements.has(id) and not achievements[id]:
+		achievements[id] = true
+		_save_achievements()
+
+func is_achievement_unlocked(id: String) -> bool:
+	return achievements.get(id, false)
+
+func check_achievements_on_completion() -> void:
+	unlock_achievement("completed_game")
+	if not took_damage_this_run:
+		unlock_achievement("no_damage_run")
+	if dark_mode:
+		unlock_achievement("dark_mode_clear")
+	if dark_mode and not took_damage_this_run:
+		unlock_achievement("dark_mode_no_damage")
+
+func _save_achievements() -> void:
+	var cfg := ConfigFile.new()
+	cfg.load(SAVE_PATH)
+	for key in achievements:
+		cfg.set_value("achievements", key, achievements[key])
+	cfg.save(SAVE_PATH)
+
+func _load_achievements() -> void:
+	var cfg := ConfigFile.new()
+	var err = cfg.load(SAVE_PATH)
+	if err != OK:
+		return
+	for key in achievements:
+		achievements[key] = cfg.get_value("achievements", key, false)
