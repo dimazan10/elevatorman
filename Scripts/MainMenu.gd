@@ -5,7 +5,7 @@ extends Control
 @onready var play_btn := $VBoxContainer/ButtonPlay as TextureButton
 @onready var settings_btn := $VBoxContainer/ButtonSettings as TextureButton
 @onready var quit_btn := $VBoxContainer/ButtonQuit as TextureButton
-@onready var discord_btn := $DiscordButton as TextureButton
+@onready var discord_btn := $DiscordButton as Button
 
 var extra := 60.0
 var max_move := 25.0
@@ -27,11 +27,11 @@ func _ready() -> void:
 	play_btn.grab_focus.call_deferred()
 
 func _setup_discord_button() -> void:
-	discord_btn.texture_normal = preload("res://Assets/discord_macos_bigsur_icon_190238.webp")
+	var discord_tex = preload("res://Assets/discord_macos_bigsur_icon_190238.webp")
+	discord_btn.icon = discord_tex
 	discord_btn.custom_minimum_size = Vector2(40, 40)
 	discord_btn.size = Vector2(40, 40)
-	discord_btn.expand_mode = 3
-	discord_btn.stretch_mode = 5
+	discord_btn.expand_icon = true
 	discord_btn.anchors_preset = Control.PRESET_BOTTOM_RIGHT
 	discord_btn.anchor_left = 1.0
 	discord_btn.anchor_top = 1.0
