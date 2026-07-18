@@ -56,7 +56,7 @@ func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 
 	for child in get_children():
-		if child.name == "Visual":
+		if child.name == "Visual" or child.name == "Death_Animation":
 			remove_child(child)
 			child.queue_free()
 
@@ -432,6 +432,7 @@ func _play_death_frames() -> void:
 	for tex in textures:
 		sprite.texture = tex
 		await get_tree().create_timer(0.125, true, false, true).timeout
+	sprite.queue_free()
 
 func _infinit_revive() -> void:
 	for i in range(inventory.size()):

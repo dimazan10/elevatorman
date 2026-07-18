@@ -26,7 +26,7 @@ func _process(delta: float) -> void:
 		var mult = _calc_multiplier()
 		_score += _active_dangers * mult * delta * 10.0
 		if _label:
-			_label.text = "СТИЛЬ: " + str(int(_score))
+			_label.text = "STYLE: " + str(int(_score))
 
 func add_danger() -> void:
 	_active_dangers += 1
@@ -41,7 +41,7 @@ func remove_danger() -> void:
 func _reset_score(_new_hp: int) -> void:
 	_score *= 0.5
 	if _label:
-		_label.text = "СТИЛЬ: " + str(int(_score))
+		_label.text = "STYLE: " + str(int(_score))
 
 func _calc_multiplier() -> float:
 	if not _player:
@@ -53,7 +53,7 @@ func _calc_multiplier() -> float:
 func reset_score() -> void:
 	_score = 0.0
 	if _label and is_instance_valid(_label):
-		_label.text = "СТИЛЬ: 0"
+		_label.text = "STYLE: 0"
 
 func setup_display(_parent: Node) -> void:
 	pass

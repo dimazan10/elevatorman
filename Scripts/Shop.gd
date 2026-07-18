@@ -52,7 +52,7 @@ func _ready() -> void:
 	var t = GameState.last_floor_time
 	var m = int(t) / 60
 	var s = int(t) % 60
-	time_label.text = "Время: %02d:%02d" % [m, s]
+	time_label.text = "Time: %02d:%02d" % [m, s]
 	hp_count_label.text = str(GameState.last_floor_hp)
 	_set_liquid_fill(clampf(GameState.last_floor_hp / float(MAX_HP), 0.0, 1.0))
 	currency_label.text = str(GameState.currency)
@@ -148,31 +148,31 @@ func _update_item_button(id: String, btn: Button, status: Label, price: int) -> 
 			break
 	if owned:
 		btn.disabled = true
-		btn.text = "Куплено"
-		status.text = "Слот " + str(slot + 1)
+		btn.text = "Purchased"
+		status.text = "Slot " + str(slot + 1)
 	else:
 		btn.disabled = GameState.currency < price or _item_slot_free() == -1
-		btn.text = "Купить " + id.capitalize() + " (" + str(price) + " монет)"
+		btn.text = "Buy " + id.capitalize() + " (" + str(price) + " coins)"
 		status.text = ""
 
 func _update_bucket_ui() -> void:
 	if GameState.has_bucket:
 		bucket_btn.disabled = true
-		bucket_btn.text = "Куплено"
-		bucket_status.text = "Ведро (%d зар." % GameState.bucket_charges + ")"
+		bucket_btn.text = "Purchased"
+		bucket_status.text = "Bucket (%d charges)" % GameState.bucket_charges
 	else:
 		bucket_btn.disabled = GameState.currency < 3 or not _collected or GameState.has_collar
-		bucket_btn.text = "Купить ведро (3 монеты)"
+		bucket_btn.text = "Buy Bucket (3 coins)"
 		bucket_status.text = ""
 
 func _update_collar_ui() -> void:
 	if GameState.has_collar:
 		collar_btn.disabled = true
-		collar_btn.text = "Куплено"
-		collar_status.text = "Ошейник"
+		collar_btn.text = "Purchased"
+		collar_status.text = "Collar"
 	else:
 		collar_btn.disabled = GameState.currency < PRICE_COLLAR or not _collected or GameState.has_bucket
-		collar_btn.text = "Купить ошейник (%d монет)" % PRICE_COLLAR
+		collar_btn.text = "Buy Collar (%d coins)" % PRICE_COLLAR
 		collar_status.text = ""
 
 func _buy_item(id: String, icon: Texture2D, price: int) -> void:

@@ -6,9 +6,4 @@ func _physics_process(delta: float) -> void:
 	var pivot: Node2D = $Pivot
 	if not pivot:
 		return
-	var rot: float = pivot.rotation + delta * rotation_speed
-	if rot >= TAU:
-		pivot.rotation = 0.0
-		set_physics_process(false)
-	else:
-		pivot.rotation = rot
+	pivot.rotation = fmod(pivot.rotation + delta * rotation_speed, TAU)

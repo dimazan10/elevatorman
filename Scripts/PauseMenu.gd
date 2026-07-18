@@ -36,7 +36,7 @@ func _ready() -> void:
 	add_child(vbox)
 
 	var title := Label.new()
-	title.text = "ПАУЗА"
+	title.text = "PAUSE"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 48)
 	title.add_theme_color_override("font_color", Color(1, 1, 1))
@@ -44,7 +44,7 @@ func _ready() -> void:
 	vbox.add_child(title)
 
 	var resume_btn := Button.new()
-	resume_btn.text = "Продолжить"
+	resume_btn.text = "Resume"
 	resume_btn.custom_minimum_size = Vector2(200, 40)
 	resume_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	resume_btn.pressed.connect(_on_resume)
@@ -53,21 +53,21 @@ func _ready() -> void:
 	resume_btn.grab_focus.call_deferred()
 
 	var restart_btn := Button.new()
-	restart_btn.text = "Рестарт"
+	restart_btn.text = "Restart"
 	restart_btn.custom_minimum_size = Vector2(200, 40)
 	restart_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	restart_btn.pressed.connect(_on_restart)
 	vbox.add_child(restart_btn)
 
 	var settings_btn := Button.new()
-	settings_btn.text = "Настройки"
+	settings_btn.text = "Settings"
 	settings_btn.custom_minimum_size = Vector2(200, 40)
 	settings_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	settings_btn.pressed.connect(_on_settings)
 	vbox.add_child(settings_btn)
 
 	var exit_btn := Button.new()
-	exit_btn.text = "Главное меню"
+	exit_btn.text = "Main Menu"
 	exit_btn.custom_minimum_size = Vector2(200, 40)
 	exit_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	exit_btn.pressed.connect(_on_exit)

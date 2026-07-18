@@ -25,27 +25,27 @@ func _ready() -> void:
 
 	var pivot_node = get_node_or_null("Node2D")
 	if not pivot_node:
-		push_error("Turret: 'Node2D' не найден!")
+		push_error("Turret: 'Node2D' not found!")
 		return
 
 	muzzle = pivot_node.get_node_or_null("Marker2D")
 	if not muzzle:
-		push_error("Turret: 'Marker2D' не найден!")
+		push_error("Turret: 'Marker2D' not found!")
 		return
 
 	raycast = muzzle.get_node_or_null("RayCast2D")
 	if not raycast:
-		push_error("Turret: 'RayCast2D' не найден!")
+		push_error("Turret: 'RayCast2D' not found!")
 		return
 
 	line = muzzle.get_node_or_null("Line2D")
 	if not line:
-		push_error("Turret: 'Line2D' не найден!")
+		push_error("Turret: 'Line2D' not found!")
 		return
 
 	cooldown_timer = get_node_or_null("Timer")
 	if not cooldown_timer:
-		push_error("Turret: 'Timer' не найден!")
+		push_error("Turret: 'Timer' not found!")
 		return
 
 	raycast.target_position = Vector2(laser_range, 0)

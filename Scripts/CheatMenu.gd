@@ -19,7 +19,7 @@ func _ready() -> void:
 	var y := 0
 
 	var title = Label.new()
-	title.text = "ЧИТЫ"
+	title.text = "CHEATS"
 	title.add_theme_font_size_override("font_size", 28)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.position = Vector2(0, y + 10)
@@ -28,7 +28,7 @@ func _ready() -> void:
 	y += 50
 
 	var section1 = Label.new()
-	section1.text = "── Значения ──"
+	section1.text = "-- Values --"
 	section1.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	section1.position = Vector2(0, y)
 	section1.size = Vector2(400, 20)
@@ -46,7 +46,7 @@ func _ready() -> void:
 	_hp_input = LineEdit.new()
 	_hp_input.position = Vector2(80, y - 2)
 	_hp_input.size = Vector2(140, 30)
-	_hp_input.placeholder_text = "кол-во HP"
+	_hp_input.placeholder_text = "HP amount"
 	_hp_input.text_changed.connect(_on_hp_text_changed)
 	_panel.add_child(_hp_input)
 
@@ -59,7 +59,7 @@ func _ready() -> void:
 	y += 36
 
 	var currency_label = Label.new()
-	currency_label.text = "Монеты:"
+	currency_label.text = "Coins:"
 	currency_label.position = Vector2(20, y)
 	currency_label.size = Vector2(55, 28)
 	_panel.add_child(currency_label)
@@ -67,7 +67,7 @@ func _ready() -> void:
 	_currency_input = LineEdit.new()
 	_currency_input.position = Vector2(80, y - 2)
 	_currency_input.size = Vector2(140, 30)
-	_currency_input.placeholder_text = "кол-во монет"
+	_currency_input.placeholder_text = "coin amount"
 	_currency_input.text_changed.connect(_on_currency_text_changed)
 	_panel.add_child(_currency_input)
 
@@ -80,7 +80,7 @@ func _ready() -> void:
 	y += 36
 
 	var speed_label = Label.new()
-	speed_label.text = "Скорость:"
+	speed_label.text = "Speed:"
 	speed_label.position = Vector2(20, y)
 	speed_label.size = Vector2(55, 28)
 	_panel.add_child(speed_label)
@@ -101,7 +101,7 @@ func _ready() -> void:
 	y += 40
 
 	var section2 = Label.new()
-	section2.text = "── Предметы ──"
+	section2.text = "-- Items --"
 	section2.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	section2.position = Vector2(0, y)
 	section2.size = Vector2(400, 20)
@@ -111,7 +111,7 @@ func _ready() -> void:
 	y += 22
 
 	var bucket_btn = Button.new()
-	bucket_btn.text = "Ведро"
+	bucket_btn.text = "Bucket"
 	bucket_btn.position = Vector2(20, y)
 	bucket_btn.size = Vector2(85, 30)
 	bucket_btn.pressed.connect(_add_bucket)
@@ -119,7 +119,7 @@ func _ready() -> void:
 	_panel.add_child(bucket_btn)
 
 	var collar_btn = Button.new()
-	collar_btn.text = "Ошейник"
+	collar_btn.text = "Collar"
 	collar_btn.position = Vector2(110, y)
 	collar_btn.size = Vector2(85, 30)
 	collar_btn.pressed.connect(_add_collar)
@@ -160,7 +160,7 @@ func _ready() -> void:
 	y += 42
 
 	var section3 = Label.new()
-	section3.text = "── Призвать ──"
+	section3.text = "-- Summon --"
 	section3.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	section3.position = Vector2(0, y)
 	section3.size = Vector2(400, 20)
@@ -227,7 +227,7 @@ func _ready() -> void:
 	_panel.add_child(spawn_two)
 
 	var spawn_crate = Button.new()
-	spawn_crate.text = "Коробка"
+	spawn_crate.text = "Crate"
 	spawn_crate.position = Vector2(200, y)
 	spawn_crate.size = Vector2(85, 30)
 	spawn_crate.pressed.connect(_spawn_crate)
@@ -246,7 +246,7 @@ func _ready() -> void:
 	y += 42
 
 	var return_btn = Button.new()
-	return_btn.text = "Следующий этаж"
+	return_btn.text = "Next Floor"
 	return_btn.position = Vector2(20, y)
 	return_btn.size = Vector2(170, 30)
 	return_btn.pressed.connect(_return_elevator)
@@ -261,7 +261,7 @@ func _ready() -> void:
 	_panel.add_child(_error_label)
 
 	var close_btn = Button.new()
-	close_btn.text = "Закрыть"
+	close_btn.text = "Close"
 	close_btn.position = Vector2(140, y + 65)
 	close_btn.size = Vector2(120, 30)
 	close_btn.pressed.connect(_close)
@@ -304,11 +304,11 @@ func _on_speed_text_changed(new_text: String) -> void:
 func _apply_hp() -> void:
 	var val = _hp_input.text.strip_edges().to_int()
 	if val < 1:
-		_error_label.text = "HP должно быть >= 1"
+		_error_label.text = "HP must be >= 1"
 		return
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
-		_error_label.text = "Игрок не найден"
+		_error_label.text = "Player not found"
 		return
 	player.current_lives = val
 	player.max_lives = val
@@ -319,31 +319,31 @@ func _apply_hp() -> void:
 func _apply_currency() -> void:
 	var val = _currency_input.text.strip_edges().to_int()
 	if val < 0:
-		_error_label.text = "Валюта не может быть отрицательной"
+		_error_label.text = "Currency cannot be negative"
 		return
 	GameState.currency = val
 	_currency_input.text = ""
-	_error_label.text = "Валюта: " + str(val)
+	_error_label.text = "Currency: " + str(val)
 
 func _apply_speed() -> void:
 	var val = _speed_input.text.strip_edges().to_float()
 	if val <= 0:
-		_error_label.text = "Скорость должна быть > 0"
+		_error_label.text = "Speed must be > 0"
 		return
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
-		_error_label.text = "Игрок не найден"
+		_error_label.text = "Player not found"
 		return
 	player.speed = val
 	_speed_input.text = ""
-	_error_label.text = "Скорость: " + str(val)
+	_error_label.text = "Speed: " + str(val)
 
 func _add_bucket() -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
 		return
 	if player.has_node("Bucket"):
-		_error_label.text = "Ведро уже есть"
+		_error_label.text = "Bucket already exists"
 		return
 	var bucket = preload("res://Objects/Bucket.tscn").instantiate()
 	bucket.name = "Bucket"
@@ -359,7 +359,7 @@ func _add_collar() -> void:
 	if not player:
 		return
 	if player.has_node("Collar"):
-		_error_label.text = "Ошейник уже есть"
+		_error_label.text = "Collar already exists"
 		return
 	var collar = preload("res://Objects/Collar.tscn").instantiate()
 	collar.name = "Collar"
@@ -373,55 +373,55 @@ func _add_collar() -> void:
 func _add_infinit() -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if not player or not player.has_method("set_slot"):
-		_error_label.text = "Игрок не найден"
+		_error_label.text = "Player not found"
 		return
 	for i in range(player.inventory.size()):
 		if player.inventory[i].id == "":
 			player.set_slot(i, "infinit", preload("res://Assets/Items/Infinit.png"), "Infinit")
 			_error_label.text = ""
 			return
-	_error_label.text = "Нет свободных слотов"
+	_error_label.text = "No free slots"
 
 func _add_tube() -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if not player or not player.has_method("set_slot"):
-		_error_label.text = "Игрок не найден"
+		_error_label.text = "Player not found"
 		return
 	for i in range(player.inventory.size()):
 		if player.inventory[i].id == "":
 			player.set_slot(i, "tube", preload("res://Assets/Items/Tube.png"), "Tube")
 			_error_label.text = ""
 			return
-	_error_label.text = "Нет свободных слотов"
+	_error_label.text = "No free slots"
 
 func _add_clone() -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if not player or not player.has_method("set_slot"):
-		_error_label.text = "Игрок не найден"
+		_error_label.text = "Player not found"
 		return
 	for i in range(player.inventory.size()):
 		if player.inventory[i].id == "":
 			player.set_slot(i, "clone", preload("res://Assets/Items/Clone.png"), "Clone")
 			_error_label.text = ""
 			return
-	_error_label.text = "Нет свободных слотов"
+	_error_label.text = "No free slots"
 
 func _add_rewind() -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if not player or not player.has_method("set_slot"):
-		_error_label.text = "Игрок не найден"
+		_error_label.text = "Player not found"
 		return
 	for i in range(player.inventory.size()):
 		if player.inventory[i].id == "":
 			player.set_slot(i, "rewind", preload("res://Assets/Items/Rewind.png"), "Rewind")
 			_error_label.text = ""
 			return
-	_error_label.text = "Нет свободных слотов"
+	_error_label.text = "No free slots"
 
 func _return_elevator() -> void:
 	var arena = get_tree().current_scene.get_node_or_null("MainArena3")
 	if not arena:
-		_error_label.text = "Арена не найдена"
+		_error_label.text = "Arena not found"
 		return
 	if arena.has_method("start_restart"):
 		arena.lift_state = 5
@@ -430,11 +430,11 @@ func _return_elevator() -> void:
 func _spawn_creature(scene_path: String) -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
-		_error_label.text = "Игрок не найден"
+		_error_label.text = "Player not found"
 		return
 	var scene = load(scene_path)
 	if not scene:
-		_error_label.text = "Сцена не найдена"
+		_error_label.text = "Scene not found"
 		return
 	var inst = scene.instantiate()
 	var offset = Vector2(randf_range(-80, 80), randf_range(-80, 80))
@@ -453,11 +453,11 @@ const CRATE_LOOT_POOL := ["tube", "clone", "infinit", "bucket", "collar"]
 func _spawn_crate() -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
-		_error_label.text = "Игрок не найден"
+		_error_label.text = "Player not found"
 		return
 	var crate_scene = load("res://Objects/Crate.tscn")
 	if not crate_scene:
-		_error_label.text = "Сцена коробки не найдена"
+		_error_label.text = "Crate scene not found"
 		return
 	var inst = crate_scene.instantiate()
 	inst.loot_id = CRATE_LOOT_POOL[randi() % CRATE_LOOT_POOL.size()]

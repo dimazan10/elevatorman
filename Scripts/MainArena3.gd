@@ -328,7 +328,7 @@ func _setup_ui() -> void:
 	floor_label.size = Vector2(600, 100)
 	floor_label.set_anchors_and_offsets_preset(Control.PRESET_CENTER, Control.PRESET_MODE_KEEP_SIZE)
 	floor_label.modulate = Color(1, 1, 1, 0)
-	floor_label.text = "Этаж " + str(GameState.current_floor)
+	floor_label.text = "Floor " + str(GameState.current_floor)
 	ui.add_child(floor_label)
 
 	quest_label = Label.new()
@@ -341,7 +341,7 @@ func _setup_ui() -> void:
 	quest_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
 	quest_label.offset_top = 10
 	quest_label.offset_bottom = 50
-	quest_label.text = "Активировать 3 рычага" if _quest_mode == QuestMode.CLASSIC else "Активировать 2 рычага"
+	quest_label.text = "Activate 3 levers" if _quest_mode == QuestMode.CLASSIC else "Activate 2 levers"
 	ui.add_child(quest_label)
 
 	var music = AudioStreamPlayer.new()
@@ -560,19 +560,19 @@ func _update_quest_text(state: String) -> void:
 		QuestMode.CLASSIC:
 			match state:
 				"done":
-					quest_label.text = "Идти к лифту"
+					quest_label.text = "Go to the elevator"
 				_:
-					quest_label.text = "Активировать 3 рычага"
+					quest_label.text = "Activate 3 levers"
 		QuestMode.TIME_ATTACK:
 			match state:
 				"first_switch":
-					quest_label.text = "Найди второй рычаг"
+					quest_label.text = "Find the second lever"
 				"done":
-					quest_label.text = "Идти к лифту"
+					quest_label.text = "Go to the elevator"
 				"reset":
-					quest_label.text = "Активировать 2 рычага"
+					quest_label.text = "Activate 2 levers"
 				_:
-					quest_label.text = "Активировать 2 рычага"
+					quest_label.text = "Activate 2 levers"
 
 func _on_combat_timeout() -> void:
 	if lift_state != LiftState.COMBAT:
@@ -907,7 +907,7 @@ func _spawn_switches(level: int) -> void:
 func _show_floor_label() -> void:
 	if not floor_label:
 		return
-	floor_label.text = "Этаж " + str(GameState.current_floor)
+	floor_label.text = "Floor " + str(GameState.current_floor)
 	floor_label.modulate = Color(1, 1, 1, 0)
 	floor_label.show()
 	var tw = create_tween()

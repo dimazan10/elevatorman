@@ -27,7 +27,7 @@ func _ready():
 	root_ctrl.add_child(vbox)
 
 	var label := Label.new()
-	label.text = "свет угас..."
+	label.text = "The light fades..."
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -41,7 +41,7 @@ func _ready():
 	if has_meta("attempts"):
 		attempts = get_meta("attempts") as int
 	var counter := Label.new()
-	counter.text = "Попытка #%d на этаже %d" % [attempts, GameState.current_floor]
+	counter.text = "Attempt #%d on floor %d" % [attempts, GameState.current_floor]
 	counter.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	counter.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	counter.add_theme_font_size_override("font_size", 24)
@@ -49,7 +49,7 @@ func _ready():
 	vbox.add_child(counter)
 
 	var restart_btn := Button.new()
-	restart_btn.text = "Рестарт"
+	restart_btn.text = "Restart"
 	restart_btn.custom_minimum_size = Vector2(200, 40)
 	restart_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	restart_btn.add_theme_font_size_override("font_size", 32)

@@ -27,7 +27,7 @@ func _ready() -> void:
 		mobile_checkbox = CheckBox.new()
 		mobile_checkbox = CheckBox.new()
 		mobile_checkbox.name = "MobileCheckbox"
-		mobile_checkbox.text = "Мобильное управление"
+		mobile_checkbox.text = "Mobile Controls"
 		mobile_checkbox.toggled.connect(_on_mobile_checkbox_toggled)
 		$VBoxContainer.add_child(mobile_checkbox)
 		$VBoxContainer.move_child(mobile_checkbox, $VBoxContainer.get_child_count() - 2)  # Before Back button
@@ -38,7 +38,7 @@ func _ready() -> void:
 	if not fullscreen_checkbox:
 		fullscreen_checkbox = CheckBox.new()
 		fullscreen_checkbox.name = "FullscreenCheckbox"
-		fullscreen_checkbox.text = "Полноэкранный режим"
+		fullscreen_checkbox.text = "Fullscreen"
 		fullscreen_checkbox.toggled.connect(_on_fullscreen_toggled)
 		$VBoxContainer.add_child(fullscreen_checkbox)
 		$VBoxContainer.move_child(fullscreen_checkbox, $VBoxContainer.get_child_count() - 2)

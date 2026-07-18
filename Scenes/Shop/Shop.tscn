@@ -36,7 +36,7 @@ theme_override_constants/separation = 12
 
 [node name="TitleLabel" type="Label" parent="VBoxMain"]
 layout_mode = 2
-text = "МЕЖДУ ЭТАЖАМИ"
+text = "BETWEEN FLOORS"
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 28
 
@@ -122,7 +122,7 @@ offset_left = 30
 offset_top = 220
 offset_right = 170
 offset_bottom = 252
-text = "СОБРАТЬ МОНЕТЫ"
+text = "COLLECT COINS"
 
 [node name="InfoSide" type="VBoxContainer" parent="VBoxMain/HBoxMain"]
 layout_mode = 2
@@ -132,7 +132,7 @@ theme_override_constants/separation = 10
 
 [node name="TimeLabel" type="Label" parent="VBoxMain/HBoxMain/InfoSide"]
 layout_mode = 2
-text = "Время: 00:00"
+text = "Time: 00:00"
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 18
 
@@ -160,13 +160,13 @@ layout_mode = 2
 
 [node name="ShopLabel" type="Label" parent="VBoxMain/HBoxMain/InfoSide"]
 layout_mode = 2
-text = "МАГАЗИН"
+text = "SHOP"
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 20
 
 [node name="BucketBuy" type="Button" parent="VBoxMain/HBoxMain/InfoSide"]
 layout_mode = 2
-text = "Купить ведро (3 монеты)"
+text = "Buy Bucket (3 coins)"
 size_flags_horizontal = 4
 
 [node name="BucketStatus" type="Label" parent="VBoxMain/HBoxMain/InfoSide"]
@@ -176,7 +176,7 @@ horizontal_alignment = 1
 
 [node name="CollarBtn" type="Button" parent="VBoxMain/HBoxMain/InfoSide"]
 layout_mode = 2
-text = "Купить ошейник (4 монеты)"
+text = "Buy Collar (4 coins)"
 size_flags_horizontal = 4
 
 [node name="CollarStatus" type="Label" parent="VBoxMain/HBoxMain/InfoSide"]
@@ -186,7 +186,7 @@ horizontal_alignment = 1
 
 [node name="InfinitBtn" type="Button" parent="VBoxMain/HBoxMain/InfoSide"]
 layout_mode = 2
-text = "Infinit (9 монет)"
+text = "Infinit (9 coins)"
 size_flags_horizontal = 4
 
 [node name="InfinitStatus" type="Label" parent="VBoxMain/HBoxMain/InfoSide"]
@@ -196,7 +196,7 @@ horizontal_alignment = 1
 
 [node name="TubeBtn" type="Button" parent="VBoxMain/HBoxMain/InfoSide"]
 layout_mode = 2
-text = "Tube (4 монеты)"
+text = "Tube (4 coins)"
 size_flags_horizontal = 4
 
 [node name="TubeStatus" type="Label" parent="VBoxMain/HBoxMain/InfoSide"]
@@ -206,7 +206,7 @@ horizontal_alignment = 1
 
 [node name="CloneBtn" type="Button" parent="VBoxMain/HBoxMain/InfoSide"]
 layout_mode = 2
-text = "Clone (6 монет)"
+text = "Clone (6 coins)"
 size_flags_horizontal = 4
 
 [node name="CloneStatus" type="Label" parent="VBoxMain/HBoxMain/InfoSide"]
@@ -216,7 +216,7 @@ horizontal_alignment = 1
 
 [node name="RewindBtn" type="Button" parent="VBoxMain/HBoxMain/InfoSide"]
 layout_mode = 2
-text = "Rewind (5 монет)"
+text = "Rewind (5 coins)"
 size_flags_horizontal = 4
 
 [node name="RewindStatus" type="Label" parent="VBoxMain/HBoxMain/InfoSide"]
@@ -226,7 +226,7 @@ horizontal_alignment = 1
 
 [node name="ContinueBtn" type="Button" parent="VBoxMain/HBoxMain/InfoSide"]
 layout_mode = 2
-text = "Продолжить"
+text = "Continue"
 size_flags_horizontal = 4
 
 [node name="CoinLayer" type="Control" parent="."]
