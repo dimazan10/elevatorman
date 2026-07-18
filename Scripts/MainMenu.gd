@@ -29,16 +29,16 @@ func _ready() -> void:
 func _setup_discord_button() -> void:
 	var discord_tex = preload("res://Assets/discord_macos_bigsur_icon_190238.webp")
 	discord_btn.icon = discord_tex
-	discord_btn.custom_minimum_size = Vector2(40, 40)
-	discord_btn.size = Vector2(40, 40)
+	discord_btn.custom_minimum_size = Vector2(80, 80)
+	discord_btn.size = Vector2(80, 80)
 	discord_btn.expand_icon = true
 	discord_btn.anchors_preset = Control.PRESET_BOTTOM_RIGHT
 	discord_btn.anchor_left = 1.0
 	discord_btn.anchor_top = 1.0
 	discord_btn.anchor_right = 1.0
 	discord_btn.anchor_bottom = 1.0
-	discord_btn.offset_left = -50.0
-	discord_btn.offset_top = -50.0
+	discord_btn.offset_left = -90.0
+	discord_btn.offset_top = -90.0
 	discord_btn.offset_right = -10.0
 	discord_btn.offset_bottom = -10.0
 	discord_btn.visible = true
