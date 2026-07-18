@@ -29,6 +29,7 @@ var inventory: Array[Dictionary] = [
 	{id = "", icon = null, name = ""},
 	{id = "", icon = null, name = ""},
 ]
+var dark_mode: bool = false
 
 func add_death(floor_num: int) -> int:
 	if not death_counts.has(floor_num):

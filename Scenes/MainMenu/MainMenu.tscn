@@ -83,7 +83,11 @@ expand_mode = 1
 [node name="DiscordButton" type="Button" parent="."]
 visible = false
 
+[node name="DarkModeButton" type="Button" parent="."]
+visible = false
+
 [connection signal="pressed" from="VBoxContainer/ButtonPlay" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonSettings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonQuit" to="VBoxContainer/ButtonQuit" method="_on_pressed"]
 [connection signal="pressed" from="DiscordButton" to="." method="_on_discord_button_pressed"]
+[connection signal="pressed" from="DarkModeButton" to="." method="_on_dark_mode_pressed"]

@@ -6,6 +6,7 @@ extends Control
 @onready var settings_btn := $VBoxContainer/ButtonSettings as TextureButton
 @onready var quit_btn := $VBoxContainer/ButtonQuit as TextureButton
 @onready var discord_btn := $DiscordButton as Button
+@onready var dark_mode_btn := $DarkModeButton as Button
 
 var extra := 60.0
 var max_move := 25.0
@@ -24,6 +25,7 @@ func _ready() -> void:
 	quit_btn.scale = Vector2(1.5, 1.5)
 
 	_setup_discord_button()
+	_setup_dark_mode_button()
 	play_btn.grab_focus.call_deferred()
 
 func _setup_discord_button() -> void:
@@ -73,6 +75,7 @@ func _play_click() -> void:
 
 func _on_play_pressed() -> void:
 	_play_click()
+	GameState.dark_mode = false
 	GameState.current_floor = 1
 	GameState.has_bucket = false
 	GameState.has_collar = false
@@ -89,3 +92,19 @@ func _on_settings_pressed() -> void:
 
 func _on_discord_button_pressed() -> void:
 	OS.shell_open("https://discord.gg/3p8UC7txYK")
+
+func _setup_dark_mode_button() -> void:
+	if OS.is_debug_build():
+		dark_mode_btn.modulate = Color(1, 1, 1, 0.3)
+
+func _on_dark_mode_pressed() -> void:
+	_play_click()
+	GameState.dark_mode = true
+	GameState.current_floor = 1
+	GameState.has_bucket = false
+	GameState.has_collar = false
+	GameState.currency = 0
+	GameState.last_floor_hp = 0
+	StyleManager.reset_score()
+	await get_tree().create_timer(0.15).timeout
+	get_tree().change_scene_to_file("res://Scenes/Game/start.tscn")

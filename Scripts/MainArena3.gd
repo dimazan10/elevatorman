@@ -72,6 +72,8 @@ func _ready() -> void:
 	_scale_arenas()
 	_setup_minimap()
 	_setup_zone_triggers()
+	if GameState.dark_mode:
+		_setup_dark_mode()
 	_hide_enemies()
 	_hide_player()
 	_set_shaft_collision(true)
@@ -264,6 +266,19 @@ func _setup_zone_triggers() -> void:
 		if switch_zone:
 			switch_zone.body_entered.connect(_on_zone_entered.bind("arena_switch"))
 			switch_zone.body_exited.connect(_on_zone_exited.bind("arena_switch"))
+
+func _setup_dark_mode() -> void:
+	var cm := CanvasModulate.new()
+	cm.color = Color(0, 0, 0, 1)
+	add_child(cm)
+	move_child(cm, 0)
+	var light := player_node.get_node_or_null("PlayerLight") as PointLight2D
+	if light:
+		light.texture_scale = 2.5
+		light.energy = 1.5
+		light.range_min_size = 0
+		light.range_max_size = 300
+		light.shadow_enabled = true
 
 func _setup_ui() -> void:
 	var ui := CanvasLayer.new()
