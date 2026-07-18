@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://duvm74ksi552c" path="res://Scripts/ButtonQuit.gd" id="5_ua038"]
 [ext_resource type="Script" uid="uid://bjfteco1ew5lh" path="res://Scripts/MainMenu.gd" id="6_75e0l"]
 [ext_resource type="Texture2D" uid="uid://bryvarg5ckwya" path="res://Assets/MainMenu/Picsart_26-06-23_17-52-38-741.png" id="8_0hjx5"]
+[ext_resource type="Texture2D" path="res://Assets/discord_macos_bigsur_icon_190238.webp" id="9_discord"]
 [ext_resource type="AudioStream" uid="uid://g7lsuis7yl21" path="res://Assets/Sounds/Effects/Click_Button.mp3" id="click_sound"]
 
 [node name="MainMenu" type="Control" unique_id=1026156905]
@@ -80,6 +81,23 @@ grow_vertical = 2
 texture = ExtResource("8_0hjx5")
 expand_mode = 1
 
+[node name="DiscordButton" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -50.0
+offset_top = -50.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("9_discord")
+stretch_mode = 6
+
 [connection signal="pressed" from="VBoxContainer/ButtonPlay" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonSettings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonQuit" to="VBoxContainer/ButtonQuit" method="_on_pressed"]
+[connection signal="pressed" from="DiscordButton" to="." method="_on_discord_button_pressed"]

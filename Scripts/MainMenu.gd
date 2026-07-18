@@ -67,3 +67,6 @@ func _on_settings_pressed() -> void:
 	_play_click()
 	await get_tree().create_timer(0.15).timeout
 	get_tree().change_scene_to_file("res://Scenes/Settings/Settings.tscn")
+
+func _on_discord_button_pressed() -> void:
+	OS.shell_open("https://discord.gg/3p8UC7txYK")
