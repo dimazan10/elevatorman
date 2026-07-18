@@ -276,8 +276,6 @@ func _setup_dark_mode() -> void:
 	if light:
 		light.texture_scale = 2.5
 		light.energy = 1.5
-		light.range_min_size = 0
-		light.range_max_size = 300
 		light.shadow_enabled = true
 
 func _setup_ui() -> void:
