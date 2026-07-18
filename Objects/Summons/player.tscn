@@ -65,7 +65,7 @@ texture = ExtResource("3_fbc33")
 [node name="PlayerCamera" type="Camera2D" parent="." unique_id=15174669]
 unique_name_in_owner = true
 process_mode = 3
-zoom = Vector2(1.2, 1.2)
+zoom = Vector2(0.75, 0.75)
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
 script = ExtResource("2_3y5cq")

@@ -21,7 +21,7 @@ func _ready() -> void:
 	effects_slider.value = GameState.effects_volume
 	effects_label.text = _db_to_pct(GameState.effects_volume)
 	fps_checkbox.button_pressed = GameState.show_fps
-	
+
 	var mobile_checkbox: CheckBox = $VBoxContainer.get_node_or_null("MobileCheckbox")
 	if not mobile_checkbox:
 		mobile_checkbox = CheckBox.new()
@@ -31,8 +31,30 @@ func _ready() -> void:
 		mobile_checkbox.toggled.connect(_on_mobile_checkbox_toggled)
 		$VBoxContainer.add_child(mobile_checkbox)
 		$VBoxContainer.move_child(mobile_checkbox, $VBoxContainer.get_child_count() - 2)  # Before Back button
-	
+
 	mobile_checkbox.button_pressed = GameState.use_mobile_controls
+
+	var fullscreen_checkbox: CheckBox = $VBoxContainer.get_node_or_null("FullscreenCheckbox")
+	if not fullscreen_checkbox:
+		fullscreen_checkbox = CheckBox.new()
+		fullscreen_checkbox.name = "FullscreenCheckbox"
+		fullscreen_checkbox.text = "Полноэкранный режим"
+		fullscreen_checkbox.toggled.connect(_on_fullscreen_toggled)
+		$VBoxContainer.add_child(fullscreen_checkbox)
+		$VBoxContainer.move_child(fullscreen_checkbox, $VBoxContainer.get_child_count() - 2)
+	fullscreen_checkbox.button_pressed = GameState.fullscreen
+
+	var res_option: OptionButton = $VBoxContainer.get_node_or_null("ResolutionOption")
+	if not res_option:
+		res_option = OptionButton.new()
+		res_option.name = "ResolutionOption"
+		for res in GameState.RESOLUTIONS:
+			res_option.add_item(str(res.x) + "x" + str(res.y))
+		res_option.item_selected.connect(_on_resolution_selected)
+		$VBoxContainer.add_child(res_option)
+		$VBoxContainer.move_child(res_option, $VBoxContainer.get_child_count() - 2)
+	res_option.selected = GameState.resolution_index
+
 	master_slider.grab_focus.call_deferred()
 
 func _on_master_slider_value_changed(value: float) -> void:
@@ -56,6 +78,12 @@ func _on_fps_checkbox_toggled(enabled: bool) -> void:
 func _on_mobile_checkbox_toggled(enabled: bool) -> void:
 	GameState.use_mobile_controls = enabled
 	GameState._save_settings()
+
+func _on_fullscreen_toggled(enabled: bool) -> void:
+	GameState.set_fullscreen(enabled)
+
+func _on_resolution_selected(index: int) -> void:
+	GameState.set_resolution(index)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
