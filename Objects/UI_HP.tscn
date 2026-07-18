@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://doss117q2j5gm"]
 
 [ext_resource type="Script" uid="uid://c8jqk3ebwbiu0" path="res://Scripts/HP.gd" id="1_40q8b"]
-[ext_resource type="Texture2D" uid="uid://bl83d5tsdn7sm" path="res://Assets/heart.png" id="2_j0d6q"]
+[ext_resource type="Texture2D" uid="uid://bl83d5tsdn7sm" path="res://Assets/UI/heart.png" id="2_j0d6q"]
 
 [node name="HealthUI" type="CanvasLayer" unique_id=1102730205]
 

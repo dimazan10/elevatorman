@@ -3,7 +3,7 @@ extends HBoxContainer
 const MAX_HEARTS = 5
 
 var pulse_tween: Tween
-var _heart_tex: Texture2D = preload("res://Assets/heart.png")
+var _heart_tex: Texture2D = preload("res://Assets/UI/heart.png")
 var _overflow_label: Label
 
 func _ready() -> void:

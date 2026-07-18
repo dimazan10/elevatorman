@@ -1,6 +1,6 @@
 extends Polygon2D
 
-const TILE_TEXTURE_PATH := "res://Assets/FloorTile.jpg"
+const TILE_TEXTURE_PATH := "res://Assets/Art/FloorTile.jpg"
 const TILE_SIZE := 320.0
 
 func _ready() -> void:

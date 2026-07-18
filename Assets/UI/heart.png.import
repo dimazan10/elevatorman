@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cx3ntt5vf8umc"
-path="res://.godot/imported/oshejnik.jpg-7361a3d8caad7372f9c4aaba2464faff.ctex"
+uid="uid://bl83d5tsdn7sm"
+path="res://.godot/imported/heart.png-5f1c737939d7f893370a5833bdb99f64.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/oshejnik.jpg"
-dest_files=["res://.godot/imported/oshejnik.jpg-7361a3d8caad7372f9c4aaba2464faff.ctex"]
+source_file="res://Assets/UI/heart.png"
+dest_files=["res://.godot/imported/heart.png-5f1c737939d7f893370a5833bdb99f64.ctex"]
 
 [params]
 
