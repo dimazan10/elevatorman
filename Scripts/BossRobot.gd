@@ -48,6 +48,8 @@ func _ready() -> void:
 	if computer:
 		computer.aiming_changed.connect(_on_computer_aiming_changed)
 
+	_play_arrival_sequence()
+
 func _process(delta: float) -> void:
 	if not _boss_active or not _spawn_active or _player_at_computer:
 		return
@@ -116,6 +118,19 @@ func _on_computer_aiming_changed(is_aiming: bool) -> void:
 		_enemies.clear()
 	else:
 		_spawn_timer = 6.0
+
+func _play_arrival_sequence() -> void:
+	var hole_start := get_node_or_null("HoleStart/FloorElevator") as Sprite2D
+	if not hole_start:
+		return
+	var anim := hole_start.get_node_or_null("AnimationPlayer") as AnimationPlayer
+	if not anim:
+		return
+	anim.play("RESET")
+	await anim.animation_finished
+	anim.play("DownUp")
+	await anim.animation_finished
+	anim.play("Open")
 
 func activate_boss() -> void:
 	_boss_active = true

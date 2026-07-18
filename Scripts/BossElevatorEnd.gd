@@ -15,9 +15,9 @@ func _on_body_entered(body: Node2D) -> void:
 	_hide_player()
 	anim.stop()
 	anim.play("Close")
-	await get_tree().create_timer(1.0).timeout
-	anim.play("Up")
-	await get_tree().create_timer(2.0).timeout
+	await anim.animation_finished
+	anim.play("DownClose")
+	await anim.animation_finished
 	await FadeTransition.fade_out()
 	get_tree().change_scene_to_file("res://Scenes/Game/credits.tscn")
 
