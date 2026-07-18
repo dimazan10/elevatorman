@@ -275,8 +275,10 @@ func _setup_dark_mode() -> void:
 	var light := player_node.get_node_or_null("PlayerLight") as PointLight2D
 	if light:
 		light.light_mask = 7
-		light.texture_scale = 2.5
+		light.texture_scale = 8.0
 		light.energy = 1.5
+		light.range_z_min = -100
+		light.range_z_max = 100
 		light.shadow_enabled = true
 	player_node.light_mask = 7
 	player_node.visibility_layer = 7
