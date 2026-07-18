@@ -5,6 +5,7 @@ extends Control
 @onready var play_btn := $VBoxContainer/ButtonPlay as TextureButton
 @onready var settings_btn := $VBoxContainer/ButtonSettings as TextureButton
 @onready var quit_btn := $VBoxContainer/ButtonQuit as TextureButton
+@onready var discord_btn := $DiscordButton as TextureButton
 
 var extra := 60.0
 var max_move := 25.0
@@ -16,13 +17,31 @@ func _ready() -> void:
 	bg.offset_top -= extra
 	bg.offset_right += extra
 	bg.offset_bottom += extra
-	
+
 	# Увеличиваем кнопки в 1.5 раза
 	play_btn.scale = Vector2(1.5, 1.5)
 	settings_btn.scale = Vector2(1.5, 1.5)
 	quit_btn.scale = Vector2(1.5, 1.5)
-	
+
+	_setup_discord_button()
 	play_btn.grab_focus.call_deferred()
+
+func _setup_discord_button() -> void:
+	discord_btn.texture_normal = preload("res://Assets/discord_macos_bigsur_icon_190238.webp")
+	discord_btn.custom_minimum_size = Vector2(40, 40)
+	discord_btn.size = Vector2(40, 40)
+	discord_btn.expand_mode = 3
+	discord_btn.stretch_mode = 5
+	discord_btn.anchors_preset = Control.PRESET_BOTTOM_RIGHT
+	discord_btn.anchor_left = 1.0
+	discord_btn.anchor_top = 1.0
+	discord_btn.anchor_right = 1.0
+	discord_btn.anchor_bottom = 1.0
+	discord_btn.offset_left = -50.0
+	discord_btn.offset_top = -50.0
+	discord_btn.offset_right = -10.0
+	discord_btn.offset_bottom = -10.0
+	discord_btn.visible = true
 
 func _animate_logo() -> void:
 	var tw = create_tween().set_loops()
