@@ -21,19 +21,19 @@ func _ready() -> void:
 func _start_story() -> void:
 	_label.text = ""
 	_sub_label.text = ""
-	await _type_text(_label, STORY_TEXT, 0.03)
+	await _type_text(_label, STORY_TEXT, 0.05)
 	await get_tree().create_timer(3.0).timeout
 	await _fade_label(_label)
 	_phase = 1
 	_label.text = ""
 	_sub_label.text = ""
-	await _type_text(_label, THANKS_TEXT, 0.05)
+	await _type_text(_label, THANKS_TEXT, 0.07)
 	await get_tree().create_timer(3.0).timeout
 	await _fade_label(_label)
 	_phase = 2
 	_label.text = ""
 	_sub_label.text = ""
-	await _type_text(_label, CREDITS_TEXT, 0.03)
+	await _type_text(_label, CREDITS_TEXT, 0.05)
 	await get_tree().create_timer(5.0).timeout
 	_go_to_menu()
 
