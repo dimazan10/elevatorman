@@ -13,7 +13,7 @@ func _ready() -> void:
 	add_to_group("style_manager")
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.keycode == KEY_F3 and event.pressed and not event.echo:
+	if OS.is_debug_build() and event is InputEventKey and event.keycode == KEY_F3 and event.pressed and not event.echo:
 		_show_danger_debug = not _show_danger_debug
 		_DANGER_ZONE.show_debug = _show_danger_debug
 		for dz in get_tree().get_nodes_in_group("danger_zone"):

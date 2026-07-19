@@ -77,6 +77,8 @@ func _process(_delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		get_tree().quit()
+	if OS.is_debug_build() and event is InputEventKey and event.keycode == KEY_F5 and event.pressed:
+		get_tree().change_scene_to_file("res://Scenes/Game/credits.tscn")
 
 func _play_click() -> void:
 	var cs = get_node_or_null("ClickSound")

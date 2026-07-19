@@ -183,10 +183,11 @@ func _toggle_noclip() -> void:
 		modulate = Color(1, 1, 1, 1)
 
 func _physics_process(delta: float) -> void:
-	var f1_down := Input.is_key_pressed(KEY_F1)
-	if f1_down and not _f1_held:
-		_toggle_noclip()
-	_f1_held = f1_down
+	if OS.is_debug_build():
+		var f1_down := Input.is_key_pressed(KEY_F1)
+		if f1_down and not _f1_held:
+			_toggle_noclip()
+		_f1_held = f1_down
 
 	if _is_dying:
 		velocity = Vector2.ZERO
