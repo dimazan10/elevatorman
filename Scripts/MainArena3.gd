@@ -41,6 +41,10 @@ var _floor_start_time: float = 0.0
 var _turret_data: Array[Dictionary] = []
 var _minimap: Control = null
 var _minimap_centers: Array[Vector2] = []
+var _temporary_dark_mode := false
+var _temporary_dark_canvas: CanvasModulate
+var _temporary_dark_items: Array[Dictionary] = []
+var _temporary_light_state: Dictionary = {}
 const _ZONE_PRIORITY := {
 	"main_arena": 1,
 	"arena_none": 1,
@@ -151,6 +155,8 @@ func _add_pusher_to_wall(wall: Node) -> Node:
 	return pusher
 
 func _on_zone_entered(body: Node2D, zone_name: String) -> void:
+	if _pause_manager and _pause_manager.is_paused():
+		return
 	if body.is_in_group("player"):
 		if zone_name not in _player_zones:
 			_player_zones.append(zone_name)
@@ -161,6 +167,8 @@ func _on_zone_entered(body: Node2D, zone_name: String) -> void:
 		player_zone_changed.emit(_current_player_zone)
 
 func _on_zone_exited(body: Node2D, zone_name: String) -> void:
+	if _pause_manager and _pause_manager.is_paused():
+		return
 	if body.is_in_group("player"):
 		_player_zones.erase(zone_name)
 		var best := ""
@@ -181,7 +189,7 @@ func _on_player_zone_changed(zone: String) -> void:
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		if not is_instance_valid(enemy):
 			continue
-		if enemy is RigidBody2D:
+		if enemy.is_in_group("always_active"):
 			continue
 		var enemy_zone := ""
 		if enemy.has_meta("zone_name"):
@@ -191,38 +199,41 @@ func _on_player_zone_changed(zone: String) -> void:
 		if enemy_zone == old_zone and enemy_zone != zone:
 			var spawn_pos = enemy.get_meta("spawn_position", enemy.global_position)
 			enemy.global_position = spawn_pos
-			if enemy is RigidBody2D:
-				enemy.freeze = true
-				enemy.linear_velocity = Vector2.ZERO
-			else:
-				enemy.set_physics_process(false)
-				_disable_collision_shapes(enemy)
-				_stop_enemy_audio(enemy)
-				for child in enemy.get_children():
-					if child is Timer and child.has_method("stop"):
-						child.stop()
-					if child is AnimatedSprite2D:
-						child.stop()
-				if "velocity" in enemy:
-					enemy.velocity = Vector2.ZERO
+			_set_enemy_active(enemy, false)
 		elif enemy_zone == zone and enemy_zone != old_zone:
-			if enemy is RigidBody2D:
-				enemy.freeze = false
-				_enable_collision_shapes(enemy)
-			else:
-				enemy.set_physics_process(true)
-				_enable_collision_shapes(enemy)
-				for child in enemy.get_children():
-					if child is Timer and child.has_method("start"):
-						if child.has_method("stop") and child.is_stopped():
-							child.start()
-					if child is AnimatedSprite2D:
-						if child.sprite_frames and child.sprite_frames.has_animation("walk"):
-							child.play("walk")
-						elif child.sprite_frames and child.sprite_frames.has_animation("idle"):
-							child.play("idle")
+			_set_enemy_active(enemy, true)
 			if enemy.has_method("on_zone_entered"):
 				enemy.on_zone_entered()
+
+func _set_enemy_active(enemy: Node, active: bool) -> void:
+	if enemy.is_in_group("always_active"):
+		return
+	if enemy is RigidBody2D:
+		enemy.freeze = not active
+		if not active:
+			enemy.linear_velocity = Vector2.ZERO
+			enemy.angular_velocity = 0.0
+	enemy.set_physics_process(active)
+	if active:
+		_enable_collision_shapes(enemy)
+		for child in enemy.get_children():
+			if child is Timer and child.has_method("start") and child.has_method("stop") and child.is_stopped():
+				child.start()
+			if child is AnimatedSprite2D:
+				if child.sprite_frames and child.sprite_frames.has_animation("walk"):
+					child.play("walk")
+				elif child.sprite_frames and child.sprite_frames.has_animation("idle"):
+					child.play("idle")
+	else:
+		_disable_collision_shapes(enemy)
+		_stop_enemy_audio(enemy)
+		for child in enemy.get_children():
+			if child is Timer and child.has_method("stop"):
+				child.stop()
+			if child is AnimatedSprite2D:
+				child.stop()
+		if "velocity" in enemy:
+			enemy.velocity = Vector2.ZERO
 
 func _spawn_teleport_effect(pos: Vector2) -> void:
 	var tp := TELEPORT.instantiate()
@@ -283,6 +294,68 @@ func _setup_dark_mode() -> void:
 	player_node.light_mask = 7
 	player_node.visibility_layer = 7
 	_set_all_layers(self)
+
+func _enable_temporary_dark_mode() -> void:
+	if GameState.dark_mode or _temporary_dark_mode:
+		return
+	_temporary_dark_mode = true
+	_temporary_dark_items.clear()
+	_temporary_dark_canvas = CanvasModulate.new()
+	_temporary_dark_canvas.color = Color(0, 0, 0, 1)
+	add_child(_temporary_dark_canvas)
+	move_child(_temporary_dark_canvas, 0)
+	_store_and_set_dark_layers(self)
+
+	var light := player_node.get_node_or_null("PlayerLight") as PointLight2D
+	if light:
+		_temporary_light_state = {
+			"light_mask": light.light_mask,
+			"texture_scale": light.texture_scale,
+			"energy": light.energy,
+			"range_z_min": light.range_z_min,
+			"range_z_max": light.range_z_max,
+			"shadow_enabled": light.shadow_enabled,
+		}
+		light.light_mask = 7
+		light.texture_scale = 2.5
+		light.energy = 1.5
+		light.range_z_min = -100
+		light.range_z_max = 100
+		light.shadow_enabled = true
+
+func _disable_temporary_dark_mode() -> void:
+	if not _temporary_dark_mode:
+		return
+	for item_state in _temporary_dark_items:
+		var item := item_state["item"] as CanvasItem
+		if is_instance_valid(item):
+			item.light_mask = item_state["light_mask"]
+			item.visibility_layer = item_state["visibility_layer"]
+	if is_instance_valid(_temporary_dark_canvas):
+		_temporary_dark_canvas.queue_free()
+	var light := player_node.get_node_or_null("PlayerLight") as PointLight2D
+	if light and not _temporary_light_state.is_empty():
+		light.light_mask = _temporary_light_state["light_mask"]
+		light.texture_scale = _temporary_light_state["texture_scale"]
+		light.energy = _temporary_light_state["energy"]
+		light.range_z_min = _temporary_light_state["range_z_min"]
+		light.range_z_max = _temporary_light_state["range_z_max"]
+		light.shadow_enabled = _temporary_light_state["shadow_enabled"]
+	_temporary_dark_items.clear()
+	_temporary_light_state.clear()
+	_temporary_dark_mode = false
+
+func _store_and_set_dark_layers(node: Node) -> void:
+	for child in node.get_children():
+		if child is CanvasItem:
+			_temporary_dark_items.append({
+				"item": child,
+				"light_mask": child.light_mask,
+				"visibility_layer": child.visibility_layer,
+			})
+			child.light_mask = 7
+			child.visibility_layer = 7
+		_store_and_set_dark_layers(child)
 
 func _set_all_layers(node: Node) -> void:
 	for child in node.get_children():
@@ -448,18 +521,7 @@ func _update_turret_positions() -> void:
 					break
 
 func _start_combat_timer() -> void:
-	for enemy in get_tree().get_nodes_in_group("enemy"):
-		enemy.show()
-		enemy.z_index = 6
-		enemy.set_physics_process(true)
-		enemy.collision_mask |= 2
-		_enable_collision_shapes(enemy)
-		for child in enemy.get_children():
-			if child is Timer and child.has_method("start"):
-				if child.has_method("stop") and child.is_stopped():
-					child.start()
-		if enemy is RigidBody2D:
-			enemy.freeze = false
+	_show_enemies()
 	combat_timer = Timer.new()
 	combat_timer.name = "CombatTimer"
 	combat_timer.wait_time = 15.0
@@ -467,6 +529,8 @@ func _start_combat_timer() -> void:
 	combat_timer.timeout.connect(_on_combat_timeout)
 	add_child(combat_timer)
 	combat_timer.start()
+	if _quest_mode == QuestMode.CLASSIC and _switch_count == 3:
+		_enable_temporary_dark_mode()
 	_rotation_speed = 0.0
 	for sa in _secondary_arenas:
 		sa.rotation_speed = 0.0
@@ -577,6 +641,7 @@ func _update_quest_text(state: String) -> void:
 func _on_combat_timeout() -> void:
 	if lift_state != LiftState.COMBAT:
 		return
+	_disable_temporary_dark_mode()
 	_rotation_speed = 0.5
 	for sa in _secondary_arenas:
 		sa.rotation_speed = 0.5
@@ -699,32 +764,16 @@ func _hide_enemies() -> void:
 			if child is Timer:
 				if child.has_method("stop"):
 					child.stop()
-		if enemy is RigidBody2D:
+		if enemy is RigidBody2D and not enemy.is_in_group("always_active"):
 			enemy.freeze = true
 
 func _show_enemies() -> void:
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		enemy.show()
 		enemy.z_index = 6
-		if enemy is RigidBody2D:
-			enemy.freeze = false
-			_enable_collision_shapes(enemy)
-			enemy.set_physics_process(true)
-			continue
+		enemy.collision_mask |= 2
 		var enemy_zone: String = enemy.get_meta("zone_name", "") if enemy.has_meta("zone_name") else ""
-		if enemy_zone == _current_player_zone:
-			enemy.set_physics_process(true)
-			_enable_collision_shapes(enemy)
-			for child in enemy.get_children():
-				if child is Timer and child.has_method("start"):
-					if child.has_method("stop") and child.is_stopped():
-						child.start()
-		else:
-			enemy.set_physics_process(false)
-			_disable_collision_shapes(enemy)
-			for child in enemy.get_children():
-				if child is Timer and child.has_method("stop"):
-					child.stop()
+		_set_enemy_active(enemy, enemy_zone == _current_player_zone)
 
 func _disable_collision_shapes(node: Node) -> void:
 	if node is CollisionShape2D:
@@ -1028,30 +1077,4 @@ func _on_pause_state_changed(is_paused: bool) -> void:
 	else:
 		_current_player_zone = _paused_saved_zone
 		_last_player_zone = _paused_saved_zone
-		for enemy in get_tree().get_nodes_in_group("enemy"):
-			if not is_instance_valid(enemy):
-				continue
-			if enemy is RigidBody2D:
-				continue
-			var enemy_zone: String = enemy.get_meta("zone_name", "") if enemy.has_meta("zone_name") else ""
-			if enemy_zone == _paused_saved_zone:
-				if enemy is RigidBody2D:
-					enemy.freeze = false
-					_enable_collision_shapes(enemy)
-				else:
-					enemy.set_physics_process(true)
-					_enable_collision_shapes(enemy)
-					for child in enemy.get_children():
-						if child is Timer and child.has_method("start"):
-							if child.has_method("stop") and child.is_stopped():
-								child.start()
-			else:
-				if enemy is RigidBody2D:
-					enemy.freeze = true
-					_disable_collision_shapes(enemy)
-				else:
-					enemy.set_physics_process(false)
-					_disable_collision_shapes(enemy)
-					for child in enemy.get_children():
-						if child is Timer and child.has_method("stop"):
-							child.stop()
+		_show_enemies()
