@@ -5,9 +5,9 @@ var _exiting := false
 var _label: Label
 var _sub_label: Label
 
-const STORY_TEXT := "Наш главный герой, несмотря на все сложности,\nсмог добраться до вершины небоскрёба\nи силой своей лампы осветить весь этот\nнапуганный, погружёнённый во тьму город.\n\nСвет, окутавший город, стал новой надеждой\nна светлое будущее для всего человечества."
-const THANKS_TEXT := "Спасибо за игру\n♥"
-const CREDITS_TEXT := "Разработчики игры:\nDimazan\nFFost\n\nТе кто помог с разработкой:\nCHUMNOi"
+const STORY_TEXT := "Our main hero, despite all the hardships,\nmanaged to reach the top of the skyscraper\nand, with the power of his lamp, illuminate\nthe entire frightened city shrouded in darkness.\n\nThe light that enveloped the city became a new hope\nfor a brighter future for all humankind."
+const THANKS_TEXT := "Thank you for playing\n♥"
+const CREDITS_TEXT := "Game developers:\nDimazan\nFFost\n\nSpecial thanks:\nCHUMNOi"
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
