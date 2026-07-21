@@ -16,6 +16,9 @@
 [ext_resource type="Texture2D" uid="uid://csha62md44m3r" path="res://Assets/SpritesElevator/Lift2.png" id="16_38eov"]
 [ext_resource type="Script" uid="uid://cvfnr058a8e3m" path="res://Scripts/BossElevatorEnd.gd" id="18_bosend"]
 [ext_resource type="Script" uid="uid://cdtgrr6mn0hia" path="res://Scripts/BossTrigger.gd" id="19_trig"]
+[ext_resource type="Script" uid="uid://dmnu0ljptldgf" path="res://Scripts/BossCutsceneManager.gd" id="20_cutscene"]
+[ext_resource type="Script" uid="uid://d3tkxjkdmak4p" path="res://Scripts/ElevatorExitZone.gd" id="21_exit"]
+[ext_resource type="Script" path="res://Scripts/HoleEndCutscene.gd" id="22_holeend"]
 
 [sub_resource type="RectangleShape2D" id="RectShape_wall_h"]
 size = Vector2(1160, 20)
@@ -768,7 +771,7 @@ collision_mask = 0
 [node name="CollisionShape" type="CollisionShape2D" parent="Floor_Rectangle/DoorWall1" unique_id=2090649535]
 shape = SubResource("RectangleShape2D_door")
 
-[node name="DoorTrigger" type="Area2D" parent="Floor_Rectangle" unique_id=681062249]
+[node name="DoorTrigger" type="Area2D" parent="Floor_Rectangle" unique_id=681062249 groups=["gate_trigger"]]
 position = Vector2(1090.0001, -1.0000005)
 rotation = 1.5707964
 scale = Vector2(1.8, 0.599)
@@ -782,7 +785,7 @@ shape = SubResource("RectangleShape2D_vhfxq")
 color = Color(0, 1, 0, 0.3)
 polygon = PackedVector2Array(-120, -80, 120, -80, 120, 80, -120, 80)
 
-[node name="DoorTrigger2" type="Area2D" parent="Floor_Rectangle" unique_id=859663453]
+[node name="DoorTrigger2" type="Area2D" parent="Floor_Rectangle" unique_id=859663453 groups=["gate_trigger"]]
 position = Vector2(2042.9999, -0.9999999)
 rotation = 1.5707964
 scale = Vector2(1.8, 0.599)
@@ -796,8 +799,18 @@ shape = SubResource("RectangleShape2D_vhfxq")
 color = Color(0, 1, 0, 0.3)
 polygon = PackedVector2Array(-120, -80, 120, -80, 120, 80, -120, 80)
 
+[node name="BossCutsceneTrigger" type="Area2D" parent="Floor_Rectangle" unique_id=123456789]
+position = Vector2(500, 0)
+script = ExtResource("20_cutscene")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Floor_Rectangle/BossCutsceneTrigger" unique_id=987654321]
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_vhfxq")
+
+[node name="PlayerSpawn" type="Marker2D" parent="Floor_Rectangle" unique_id=567890123]
+
 [node name="ArenaSwitch" type="AnimatableBody2D" parent="." unique_id=418966575]
-position = Vector2(1089, 1145.5)
+position = Vector2(12, 2889)
 script = ExtResource("10_cf8pt")
 
 [node name="Pivot" type="Node2D" parent="ArenaSwitch" unique_id=268876278]
@@ -947,7 +960,6 @@ texture = ExtResource("2_roof")
 [node name="ElevatorArea" type="Area2D" parent="HoleStart/FloorElevator" unique_id=585586480]
 position = Vector2(-1.7341766, 146.85342)
 scale = Vector2(-0.86139643, 0.35211897)
-script = ExtResource("14_iswnu")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="HoleStart/FloorElevator/ElevatorArea" unique_id=1449731972]
 position = Vector2(2.0132155, 147.1204)
@@ -959,6 +971,14 @@ shape = SubResource("CircleShape2D_detect")
 position = Vector2(0, 50)
 scale = Vector2(0.32, 1)
 shape = SubResource("RectShape_wall_h")
+
+[node name="ExitZone" type="Area2D" parent="HoleStart/FloorElevator" unique_id=624204696]
+position = Vector2(0, 98.47775)
+scale = Vector2(-0.6066122, 0.3729616)
+script = ExtResource("21_exit")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="HoleStart/FloorElevator/ExitZone" unique_id=797915941]
+shape = SubResource("CircleShape2D_detect")
 
 [node name="HoleEnd" type="Sprite2D" parent="." unique_id=1424549872]
 position = Vector2(646, 1166.0001)
@@ -1008,7 +1028,6 @@ texture = ExtResource("2_roof")
 [node name="ElevatorArea" type="Area2D" parent="HoleEnd/FloorElevator" unique_id=520806912]
 position = Vector2(-1.7341766, 146.85342)
 scale = Vector2(-0.86139643, 0.35211897)
-script = ExtResource("14_iswnu")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="HoleEnd/FloorElevator/ElevatorArea" unique_id=1498485319]
 position = Vector2(2.0132155, 147.1204)
@@ -1021,6 +1040,13 @@ script = ExtResource("18_bosend")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="HoleEnd/FloorElevator/TransportArea" unique_id=34141522]
 shape = SubResource("CircleShape2D_transport")
+
+[node name="CutsceneTrigger" type="Area2D" parent="HoleEnd/FloorElevator"]
+script = ExtResource("22_holeend")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="HoleEnd/FloorElevator/CutsceneTrigger"]
+position = Vector2(-1.7341614, 146.85342)
+shape = SubResource("CircleShape2D_detect")
 
 [node name="Top" type="StaticBody2D" parent="HoleEnd/FloorElevator" unique_id=1287890261]
 position = Vector2(1.7341309, -10.366119)

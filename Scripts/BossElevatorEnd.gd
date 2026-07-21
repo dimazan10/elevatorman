@@ -2,14 +2,21 @@ extends Area2D
 
 const FadeTransition := preload("res://Scripts/FadeTransition.gd")
 
-@onready var anim := $"../AnimationPlayer"
+var anim: AnimationPlayer
 var transporting := false
 
 func _ready() -> void:
+	var boss := get_tree().current_scene
+	if boss:
+		anim = boss.get_node("HoleEnd/FloorElevator/AnimationPlayer") as AnimationPlayer
 	body_entered.connect(_on_body_entered)
 
 func _on_body_entered(body: Node2D) -> void:
 	if not body.is_in_group("player") or transporting:
+		return
+	var boss := get_tree().current_scene
+	var robot := boss.get_node_or_null("Robot") if boss else null
+	if robot and robot.current_hp > 0:
 		return
 	transporting = true
 	_hide_player()

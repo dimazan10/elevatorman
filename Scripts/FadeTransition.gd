@@ -1,10 +1,16 @@
 extends Node
 
+static func _clear_fades(current: Node) -> void:
+	for child in current.get_children():
+		if child.name == "FadeLayer":
+			child.queue_free()
+
 static func fade_out(fade_duration: float = 0.8):
 	var tree := Engine.get_main_loop() as SceneTree
 	if not tree: return
 	var current := tree.current_scene
 	if not current: return
+	_clear_fades(current)
 	var layer := CanvasLayer.new()
 	layer.layer = 128
 	layer.name = "FadeLayer"
@@ -19,12 +25,14 @@ static func fade_out(fade_duration: float = 0.8):
 	tween.set_trans(Tween.TRANS_SINE)
 	tween.tween_property(rect, "modulate", Color(1, 1, 1, 1.0), fade_duration)
 	await tween.finished
+	layer.queue_free()
 
 static func fade_in(fade_duration: float = 0.8):
 	var tree := Engine.get_main_loop() as SceneTree
 	if not tree: return
 	var current := tree.current_scene
 	if not current: return
+	_clear_fades(current)
 	var layer := CanvasLayer.new()
 	layer.layer = 128
 	layer.name = "FadeLayer"

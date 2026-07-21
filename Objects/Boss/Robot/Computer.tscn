@@ -22,7 +22,7 @@ shape = SubResource("RectangleShape2D_sxpk0")
 collision_layer = 0
 
 [node name="ZoneShape" type="CollisionShape2D" parent="InteractZone" unique_id=1789573460]
-position = Vector2(74, 50)
+position = Vector2(74, 75)
 shape = SubResource("RectangleShape2D_sxpk0")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1207252703]

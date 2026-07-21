@@ -13,7 +13,6 @@ var _player_camera: Camera2D = null
 var _camera_zoom_orig: Vector2
 var _camera_pos_orig: Vector2
 var _crosshair_pos := Vector2.ZERO
-var _player: Node2D = null
 var _shoot_audio: AudioStreamPlayer2D = null
 
 @export var camera_zoom_target: Vector2 = Vector2(0.55, 0.55)
@@ -25,7 +24,7 @@ func _ready() -> void:
 	_shoot_audio.stream = load("res://Assets/Enemies/Boss/Sprite_Gun/Shoot.mp3")
 	add_child(_shoot_audio)
 	_prebuffer_audio.call_deferred()
-	$InteractZone.body_entered.connect(_on_zone_entered)
+	_gun = get_node_or_null("../Gun")
 
 func _prebuffer_audio() -> void:
 	_shoot_audio.play()
@@ -33,32 +32,39 @@ func _prebuffer_audio() -> void:
 	_shoot_audio.stop()
 	_shoot_audio.stop()
 
-func _find_gun() -> Node2D:
-	for child in get_parent().get_children():
-		if child is StaticBody2D and child.has_method("is_loaded"):
-			return child
-	return null
+const INTERACT_RANGE := 150.0
 
-func _on_zone_entered(body: Node2D) -> void:
+func _process(_delta: float) -> void:
 	if _aiming:
+		_update_crosshair()
 		return
-	if not body.is_in_group("player"):
+
+	if not Input.is_action_just_pressed("ui_accept"):
 		return
-	_gun = _find_gun()
+
+	var player = get_tree().get_first_node_in_group("player")
+	if not player or not is_instance_valid(player):
+		return
+	if global_position.distance_to(player.global_position) > INTERACT_RANGE:
+		return
+
+	if not _gun:
+		_gun = get_node_or_null("../Gun")
 	if not _gun or not _gun.is_loaded():
 		return
-	_player = body
-	_start_aiming()
 
-func _start_aiming() -> void:
+	_start_aiming(player)
+
+func _start_aiming(player: Node2D) -> void:
 	_aiming = true
 	aiming_changed.emit(true)
-	_player.can_move = false
+	player.can_move = false
 
-	_player_camera = _player.get_node_or_null("PlayerCamera") as Camera2D
+	_player_camera = player.get_node_or_null("PlayerCamera") as Camera2D
 	if _player_camera:
 		_camera_zoom_orig = _player_camera.zoom
-		_camera_pos_orig = _player_camera.position
+		_camera_pos_orig = _player_camera.global_position
+		_crosshair_pos = get_global_mouse_position()
 		var tw := create_tween()
 		tw.tween_property(_player_camera, "zoom", camera_zoom_target, camera_zoom_duration).set_ease(Tween.EASE_IN_OUT)
 		tw.parallel().tween_property(_player_camera, "global_position", Vector2(640, 838), camera_zoom_duration)
@@ -66,11 +72,6 @@ func _start_aiming() -> void:
 	_aim_overlay = AIM_OVERLAY.new()
 	_aim_overlay.fire_requested.connect(_on_fire)
 	add_child(_aim_overlay)
-
-func _process(_delta: float) -> void:
-	if not _aiming:
-		return
-	_update_crosshair()
 
 func _update_crosshair() -> void:
 	if not _aim_overlay:
@@ -158,13 +159,12 @@ func _on_fire() -> void:
 	if _player_camera:
 		var tw := create_tween()
 		tw.tween_property(_player_camera, "zoom", _camera_zoom_orig, 0.8).set_ease(Tween.EASE_IN_OUT)
-		tw.parallel().tween_property(_player_camera, "position", _camera_pos_orig, 0.8).set_ease(Tween.EASE_IN_OUT)
+		tw.parallel().tween_property(_player_camera, "global_position", _camera_pos_orig, 0.8).set_ease(Tween.EASE_IN_OUT)
 		tw.tween_callback(_end_aiming)
 
 func _end_aiming() -> void:
 	_player_camera = null
 	_gun = null
-	_player = null
 	_aiming = false
 	aiming_changed.emit(false)
 	var player = get_tree().get_first_node_in_group("player")
