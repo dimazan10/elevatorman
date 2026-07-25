@@ -17,6 +17,7 @@ var show_fps: bool = false
 var use_mobile_controls: bool = false
 var fullscreen: bool = true
 var resolution_index: int = 2
+var language: String = "en"
 var has_bucket: bool = false
 var bucket_charges: int = 2
 var has_collar: bool = false
@@ -78,6 +79,7 @@ func _load_settings() -> void:
 	use_mobile_controls = cfg.get_value("display", "use_mobile_controls", false)
 	fullscreen = cfg.get_value("display", "fullscreen", true)
 	resolution_index = cfg.get_value("display", "resolution_index", 2)
+	language = cfg.get_value("display", "language", "en")
 
 func _save_settings() -> void:
 	var cfg := ConfigFile.new()
@@ -88,6 +90,7 @@ func _save_settings() -> void:
 	cfg.set_value("display", "use_mobile_controls", use_mobile_controls)
 	cfg.set_value("display", "fullscreen", fullscreen)
 	cfg.set_value("display", "resolution_index", resolution_index)
+	cfg.set_value("display", "language", language)
 	cfg.save(SAVE_PATH)
 
 func set_master_volume(db: float) -> void:
@@ -121,6 +124,10 @@ func set_fullscreen(enabled: bool) -> void:
 func set_resolution(index: int) -> void:
 	resolution_index = index
 	_apply_resolution()
+	_save_settings()
+
+func set_language(value: String) -> void:
+	language = value
 	_save_settings()
 
 func unlock_achievement(id: String) -> void:

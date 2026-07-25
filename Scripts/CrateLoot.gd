@@ -93,4 +93,7 @@ func _on_body_entered(body: Node2D) -> void:
 					body.set_slot(i, loot_id, ICONS[loot_id], loot_id.capitalize())
 					break
 
+	var popup := preload("res://Scripts/ItemPickupPopup.gd").new()
+	popup.setup(loot_id, ICONS[loot_id])
+	get_tree().root.add_child(popup)
 	queue_free()

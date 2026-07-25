@@ -24,6 +24,7 @@ audio/buses/default_bus_layout="res://default_bus_layout.tres"
 
 InputSetup="*res://Scripts/InputSetup.gd"
 GameState="*res://Scripts/GameState.gd"
+LocalizationService="*res://Scripts/Localization.gd"
 PauseManager="*res://Scripts/PauseManager.gd"
 StyleManager="*res://Scripts/StyleManager.gd"
 DefaultFont="*res://Scripts/DefaultFont.gd"

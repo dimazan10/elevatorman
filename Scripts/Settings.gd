@@ -25,24 +25,23 @@ func _ready() -> void:
 	var mobile_checkbox: CheckBox = $VBoxContainer.get_node_or_null("MobileCheckbox")
 	if not mobile_checkbox:
 		mobile_checkbox = CheckBox.new()
-		mobile_checkbox = CheckBox.new()
 		mobile_checkbox.name = "MobileCheckbox"
-		mobile_checkbox.text = "Mobile Controls"
 		mobile_checkbox.toggled.connect(_on_mobile_checkbox_toggled)
 		$VBoxContainer.add_child(mobile_checkbox)
 		$VBoxContainer.move_child(mobile_checkbox, $VBoxContainer.get_child_count() - 2)  # Before Back button
 
 	mobile_checkbox.button_pressed = GameState.use_mobile_controls
+	mobile_checkbox.text = Localization.t("mobile_controls")
 
 	var fullscreen_checkbox: CheckBox = $VBoxContainer.get_node_or_null("FullscreenCheckbox")
 	if not fullscreen_checkbox:
 		fullscreen_checkbox = CheckBox.new()
 		fullscreen_checkbox.name = "FullscreenCheckbox"
-		fullscreen_checkbox.text = "Fullscreen"
 		fullscreen_checkbox.toggled.connect(_on_fullscreen_toggled)
 		$VBoxContainer.add_child(fullscreen_checkbox)
 		$VBoxContainer.move_child(fullscreen_checkbox, $VBoxContainer.get_child_count() - 2)
 	fullscreen_checkbox.button_pressed = GameState.fullscreen
+	fullscreen_checkbox.text = Localization.t("fullscreen")
 
 	var res_option: OptionButton = $VBoxContainer.get_node_or_null("ResolutionOption")
 	if not res_option:
@@ -54,6 +53,26 @@ func _ready() -> void:
 		$VBoxContainer.add_child(res_option)
 		$VBoxContainer.move_child(res_option, $VBoxContainer.get_child_count() - 2)
 	res_option.selected = GameState.resolution_index
+
+	var language_label: Label = $VBoxContainer.get_node_or_null("LanguageLabel")
+	var language_option: OptionButton = $VBoxContainer.get_node_or_null("LanguageOption")
+	if not language_label:
+		language_label = Label.new()
+		language_label.name = "LanguageLabel"
+		language_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		$VBoxContainer.add_child(language_label)
+		$VBoxContainer.move_child(language_label, $VBoxContainer.get_child_count() - 2)
+	if not language_option:
+		language_option = OptionButton.new()
+		language_option.name = "LanguageOption"
+		language_option.add_item("English")
+		language_option.add_item("Русский")
+		language_option.item_selected.connect(_on_language_selected)
+		$VBoxContainer.add_child(language_option)
+		$VBoxContainer.move_child(language_option, $VBoxContainer.get_child_count() - 2)
+	language_label.text = Localization.t("language")
+	language_option.selected = 1 if GameState.language == "ru" else 0
+	Localization.apply_to_tree(self)
 
 	master_slider.grab_focus.call_deferred()
 
@@ -84,6 +103,19 @@ func _on_fullscreen_toggled(enabled: bool) -> void:
 
 func _on_resolution_selected(index: int) -> void:
 	GameState.set_resolution(index)
+
+func _on_language_selected(index: int) -> void:
+	GameState.set_language("ru" if index == 1 else "en")
+	Localization.apply_to_tree(get_tree().current_scene)
+	var mobile_checkbox := $VBoxContainer.get_node_or_null("MobileCheckbox") as CheckBox
+	if mobile_checkbox:
+		mobile_checkbox.text = Localization.t("mobile_controls")
+	var fullscreen_checkbox := $VBoxContainer.get_node_or_null("FullscreenCheckbox") as CheckBox
+	if fullscreen_checkbox:
+		fullscreen_checkbox.text = Localization.t("fullscreen")
+	var language_label := $VBoxContainer.get_node_or_null("LanguageLabel") as Label
+	if language_label:
+		language_label.text = Localization.t("language")
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):

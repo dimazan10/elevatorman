@@ -15,13 +15,14 @@ var _achievements_btn: Button = null
 var _btn_texts: Dictionary = {}
 
 const ACHIEVEMENTS := [
-	{"id": "completed_game", "name": "Thanks for Playing", "desc": "Complete the game"},
-	{"id": "no_damage_run", "name": "Perfect Run", "desc": "Complete the game without taking damage"},
-	{"id": "dark_mode_clear", "name": "Hope for a Bright Future", "desc": "Complete the game in dark mode"},
-	{"id": "dark_mode_no_damage", "name": "That Was Easy", "desc": "Complete the game in dark mode without taking damage"},
+	{"id": "completed_game", "name_key": "achievement_completed_name", "desc_key": "achievement_completed_desc"},
+	{"id": "no_damage_run", "name_key": "achievement_perfect_name", "desc_key": "achievement_perfect_desc"},
+	{"id": "dark_mode_clear", "name_key": "achievement_dark_name", "desc_key": "achievement_dark_desc"},
+	{"id": "dark_mode_no_damage", "name_key": "achievement_dark_perfect_name", "desc_key": "achievement_dark_perfect_desc"},
 ]
 
 func _ready() -> void:
+	Localization.apply_to_tree(self)
 	CursorManager.setup_buttons(self)
 	_animate_logo()
 	bg.offset_left -= extra
@@ -114,7 +115,7 @@ func _setup_dark_mode_button() -> void:
 
 func _setup_achievements_button() -> void:
 	_achievements_btn = Button.new()
-	_achievements_btn.text = "Achievements"
+	_achievements_btn.text = Localization.t("achievements")
 	_achievements_btn.custom_minimum_size = Vector2(140, 40)
 	_achievements_btn.anchors_preset = Control.PRESET_BOTTOM_LEFT
 	_achievements_btn.anchor_left = 0.0
@@ -177,7 +178,7 @@ func _on_achievements_pressed() -> void:
 	panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	_achievements_panel.add_child(panel)
 	var title := Label.new()
-	title.text = "ACHIEVEMENTS"
+	title.text = Localization.t("achievements").to_upper()
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.position = Vector2(0, 10)
 	title.size = Vector2(500, 35)
@@ -185,7 +186,7 @@ func _on_achievements_pressed() -> void:
 	title.add_theme_color_override("font_color", Color.GOLD)
 	panel.add_child(title)
 	var close_btn := Button.new()
-	close_btn.text = "Close"
+	close_btn.text = Localization.t("close")
 	close_btn.position = Vector2(190, 355)
 	close_btn.size = Vector2(100, 30)
 	close_btn.pressed.connect(_on_achievements_close)
@@ -208,12 +209,12 @@ func _on_achievements_pressed() -> void:
 		info.add_theme_constant_override("separation", 2)
 		row.add_child(info)
 		var name_label := Label.new()
-		name_label.text = ach["name"]
+		name_label.text = Localization.t(ach["name_key"])
 		name_label.add_theme_font_size_override("font_size", 16)
 		name_label.add_theme_color_override("font_color", Color.WHITE if unlocked else Color(0.6, 0.6, 0.6))
 		info.add_child(name_label)
 		var desc_label := Label.new()
-		desc_label.text = ach["desc"]
+		desc_label.text = Localization.t(ach["desc_key"])
 		desc_label.add_theme_font_size_override("font_size", 12)
 		desc_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7) if unlocked else Color(0.4, 0.4, 0.4))
 		info.add_child(desc_label)

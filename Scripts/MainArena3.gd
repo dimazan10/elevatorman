@@ -327,10 +327,10 @@ func _disable_temporary_dark_mode() -> void:
 	if not _temporary_dark_mode:
 		return
 	for item_state in _temporary_dark_items:
-		var item := item_state["item"] as CanvasItem
-		if is_instance_valid(item):
-			item.light_mask = item_state["light_mask"]
-			item.visibility_layer = item_state["visibility_layer"]
+		var saved_item = item_state["item"]
+		if is_instance_valid(saved_item) and saved_item is CanvasItem:
+			saved_item.light_mask = item_state["light_mask"]
+			saved_item.visibility_layer = item_state["visibility_layer"]
 	if is_instance_valid(_temporary_dark_canvas):
 		_temporary_dark_canvas.get_parent().remove_child(_temporary_dark_canvas)
 		_temporary_dark_canvas.queue_free()
@@ -403,7 +403,7 @@ func _setup_ui() -> void:
 	floor_label.size = Vector2(600, 100)
 	floor_label.set_anchors_and_offsets_preset(Control.PRESET_CENTER, Control.PRESET_MODE_KEEP_SIZE)
 	floor_label.modulate = Color(1, 1, 1, 0)
-	floor_label.text = "Floor " + str(GameState.current_floor)
+	floor_label.text = Localization.t("floor", [GameState.current_floor])
 	ui.add_child(floor_label)
 
 	quest_label = Label.new()
@@ -416,7 +416,7 @@ func _setup_ui() -> void:
 	quest_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
 	quest_label.offset_top = 10
 	quest_label.offset_bottom = 50
-	quest_label.text = "Activate 3 levers" if _quest_mode == QuestMode.CLASSIC else "Activate 2 levers"
+	quest_label.text = Localization.t("activate_three") if _quest_mode == QuestMode.CLASSIC else Localization.t("activate_two")
 	ui.add_child(quest_label)
 
 	var music = AudioStreamPlayer.new()
@@ -628,19 +628,19 @@ func _update_quest_text(state: String) -> void:
 		QuestMode.CLASSIC:
 			match state:
 				"done":
-					quest_label.text = "Go to the elevator"
+					quest_label.text = Localization.t("go_elevator")
 				_:
-					quest_label.text = "Activate 3 levers"
+					quest_label.text = Localization.t("activate_three")
 		QuestMode.TIME_ATTACK:
 			match state:
 				"first_switch":
-					quest_label.text = "Find the second lever"
+					quest_label.text = Localization.t("find_second")
 				"done":
-					quest_label.text = "Go to the elevator"
+					quest_label.text = Localization.t("go_elevator")
 				"reset":
-					quest_label.text = "Activate 2 levers"
+					quest_label.text = Localization.t("activate_two")
 				_:
-					quest_label.text = "Activate 2 levers"
+					quest_label.text = Localization.t("activate_two")
 
 func _on_combat_timeout() -> void:
 	if lift_state != LiftState.COMBAT:
@@ -961,7 +961,7 @@ func _spawn_switches(level: int) -> void:
 func _show_floor_label() -> void:
 	if not floor_label:
 		return
-	floor_label.text = "Floor " + str(GameState.current_floor)
+	floor_label.text = Localization.t("floor", [GameState.current_floor])
 	floor_label.modulate = Color(1, 1, 1, 0)
 	floor_label.show()
 	var tw = create_tween()
@@ -1016,7 +1016,7 @@ func _update_gate() -> void:
 				is_near = true
 				break
 		gate.collision_layer = 2 if is_near else 3
-		gate.get_node("Visual").modulate = Color(1, 1, 1, 0.3 if is_near else 1.0)
+		gate.get_node("Visual").modulate = Color(1, 1, 1, 0.3) if is_near else Color(1, 0.15, 0.15)
 		if is_near and lift_state != LiftState.COMBAT:
 			var sa_owner = _arena_none if _arena_none and _arena_none.is_ancestor_of(gate) else null
 			if not sa_owner:

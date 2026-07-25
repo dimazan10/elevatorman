@@ -72,7 +72,7 @@ func _update_gate() -> void:
 	gate.collision_layer = 2 if is_near else 3
 	var v: Node2D = gate.get_node("Visual")
 	if v:
-		v.modulate = Color(1, 1, 1, 0.3 if is_near else 1.0)
+		v.modulate = Color(1, 1, 1, 0.3) if is_near else Color(1, 0.15, 0.15)
 	if is_near and not _cutscene_active:
 		rotation_speed = min(rotation_speed, 0.05)
 	elif not _cutscene_active:

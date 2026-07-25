@@ -3,7 +3,7 @@ extends Node
 
 const GROUP_MANAGED := "cursor_managed"
 const GROUP_MANAGER := "cursor_manager"
-const VISIBLE_SCENES := ["MainMenu", "Settings", "Shop", "PauseLayer", "DeathScreen"]
+const VISIBLE_SCENES := ["MainMenu", "Settings", "Shop", "PauseLayer", "DeathScreen", "ItemPickupPopup"]
 
 var _cursor_default: Texture2D
 var _cursor_hover: Texture2D

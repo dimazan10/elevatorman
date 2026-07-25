@@ -124,7 +124,7 @@ func _reparent_collision_nodes() -> void:
 func _setup_floor_label() -> void:
 	_floor_label = Label.new()
 	_floor_label.name = "FloorLabel"
-	_floor_label.text = "Floor 4"
+	_floor_label.text = Localization.t("floor", [4])
 	_floor_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_floor_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_floor_label.add_theme_font_size_override("font_size", 48)
@@ -150,7 +150,7 @@ func _setup_quest_ui() -> void:
 	_quest_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
 	_quest_label.offset_top = 10
 	_quest_label.offset_bottom = 50
-	_quest_label.text = "Reach the other elevator"
+	_quest_label.text = Localization.t("reach_elevator")
 	ui.add_child(_quest_label)
 
 func _update_quest_text(text: String) -> void:
@@ -393,7 +393,7 @@ func _hide_floor_label() -> void:
 func _show_floor_label() -> void:
 	if not _floor_label:
 		return
-	_floor_label.text = "Floor 4"
+	_floor_label.text = Localization.t("floor", [4])
 	_floor_label.modulate = Color(1, 1, 1, 0)
 	_floor_label.show()
 	var tw = create_tween()
