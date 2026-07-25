@@ -6,6 +6,7 @@ const GRENADE_SCENE = preload("res://Objects/Summons/Grenade.tscn")
 @export var throw_cooldown: float = 2.0
 @export var throw_range_min: float = 150.0
 @export var throw_range_max: float = 400.0
+@export var separation_force: float = 140.0
 
 var _player_ref: Node2D = null
 var _enraged := false
@@ -19,6 +20,7 @@ var _is_throwing: bool = false
 var _throw_anim_timer: float = 0.0
 
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
+@onready var separation_zone: Area2D = $SeparationZone
 
 func _ready() -> void:
 	add_to_group("enemy")
@@ -57,7 +59,9 @@ func _physics_process(delta: float) -> void:
 		return
 
 	var dir := global_position.direction_to(_player_ref.global_position)
-	velocity = dir * speed * _speed_multiplier
+	velocity = dir * speed * _speed_multiplier + _get_separation_vector() * separation_force
+	if not velocity.is_finite():
+		velocity = Vector2.ZERO
 	move_and_slide()
 
 	if velocity.length() > 10:
@@ -113,3 +117,14 @@ func set_target(new_target: Node2D) -> void:
 
 func apply_knockback(impulse: Vector2) -> void:
 	_knockback = impulse
+
+func _get_separation_vector() -> Vector2:
+	var separation := Vector2.ZERO
+	for body in separation_zone.get_overlapping_bodies():
+		if body == self or not body.is_in_group("enemy") or not body is Node2D:
+			continue
+		var diff: Vector2 = global_position - (body as Node2D).global_position
+		var distance_sq: float = diff.length_squared()
+		if distance_sq > 0.000001 and diff.is_finite():
+			separation += diff / distance_sq
+	return separation.normalized() if separation.length_squared() > 0.0 else Vector2.ZERO

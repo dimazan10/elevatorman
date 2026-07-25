@@ -2,6 +2,8 @@ extends AnimatableBody2D
 
 const FadeTransition := preload("res://Scripts/FadeTransition.gd")
 
+@export var default_rotation_speed: float = 0.5
+@export var stop_when_gate_open: bool = false
 var rotation_speed: float = 0.5
 var _cutscene_active := false
 var _combat_locked := false
@@ -10,6 +12,7 @@ var _combat_locked := false
 var _gate_triggers: Array[Node2D] = []
 
 func _ready() -> void:
+	rotation_speed = default_rotation_speed
 	refresh_gate_triggers()
 
 func refresh_gate_triggers() -> void:
@@ -97,6 +100,6 @@ func _update_gate() -> void:
 	if v:
 		v.modulate = Color(0.15, 1, 0.15, 0.3) if is_near else Color(1, 0.15, 0.15)
 	if is_near and not _cutscene_active:
-		rotation_speed = min(rotation_speed, 0.05)
+		rotation_speed = 0.0 if stop_when_gate_open else min(default_rotation_speed, 0.05)
 	elif not _cutscene_active:
-		rotation_speed = 0.5
+		rotation_speed = default_rotation_speed

@@ -42,7 +42,7 @@ radius = 99
 
 [node name="DrunkKiller" type="CharacterBody2D" unique_id=676731580 groups=["enemy"]]
 collision_layer = 4
-collision_mask = 3
+collision_mask = 7
 scale = Vector2(1.4, 1.4)
 script = ExtResource("2_ljk35")
 speed = 400.0
@@ -84,6 +84,8 @@ position = Vector2(0, 7)
 shape = SubResource("CircleShape2D_7es6t")
 
 [node name="SeparationZone" type="Area2D" parent="." unique_id=2079041027]
+collision_layer = 0
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SeparationZone" unique_id=1309323044]
 shape = SubResource("CircleShape2D_dqplg")

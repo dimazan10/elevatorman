@@ -24,6 +24,7 @@ var _cached_separation := Vector2.ZERO
 var _arena: Node
 var _zone_active := true
 var _enrage_tween: Tween
+var _enraged_enemies: Array[Node] = []
 
 var _melody_player: AudioStreamPlayer2D
 var _horn_player: AudioStreamPlayer2D
@@ -137,6 +138,8 @@ func on_zone_entered() -> void:
 func set_zone_active(active: bool) -> void:
 	_zone_active = active
 	if active:
+		if _animated_sprite and _animated_sprite.sprite_frames and _animated_sprite.sprite_frames.has_animation(&"walk"):
+			_animated_sprite.play(&"walk")
 		return
 	velocity = Vector2.ZERO
 	_melody_playing = false
@@ -151,6 +154,7 @@ func set_zone_active(active: bool) -> void:
 	if _enrage_tween and _enrage_tween.is_valid():
 		_enrage_tween.kill()
 		_enrage_tween = null
+	_clear_enrage()
 
 func _process_wandering(delta: float) -> void:
 	_change_dir_timer -= delta
@@ -158,7 +162,9 @@ func _process_wandering(delta: float) -> void:
 		_direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
 		_change_dir_timer = randf_range(0.8, _change_dir_interval)
 
-	velocity = _direction * speed
+	velocity = _direction * speed + _cached_separation * separation_force
+	if not velocity.is_finite():
+		velocity = Vector2.ZERO
 	move_and_slide()
 
 	if velocity.length() > 10:
@@ -195,22 +201,24 @@ func _trigger_enrage() -> void:
 	_enrage_tween.tween_interval(enrage_duration)
 	_enrage_tween.tween_callback(_end_enrage)
 
+	_enraged_enemies.clear()
 	for enemy in get_tree().get_nodes_in_group("enemy"):
-		if enemy == self:
+		if enemy == self or not enemy.is_physics_processing():
 			continue
 		if enemy.has_method("set_enraged"):
 			enemy.set_enraged(true)
+			_enraged_enemies.append(enemy)
 
 func _end_enrage() -> void:
 	_enrage_tween = null
-	if not _zone_active:
-		return
+	_clear_enrage()
+
+func _clear_enrage() -> void:
 	_enraged_visual = false
-	for enemy in get_tree().get_nodes_in_group("enemy"):
-		if enemy == self:
-			continue
-		if enemy.has_method("set_enraged"):
+	for enemy in _enraged_enemies:
+		if is_instance_valid(enemy) and enemy.has_method("set_enraged"):
 			enemy.set_enraged(false)
+	_enraged_enemies.clear()
 
 func _on_player_health_changed(new_health: int) -> void:
 	if _player_prev_lives >= 0 and new_health < _player_prev_lives:
@@ -228,12 +236,10 @@ func _handle_separation(delta: float) -> void:
 				continue
 			var other := body as Node2D
 			var diff: Vector2 = global_position - other.global_position
-			var distance_sq := diff.length_squared()
-			if distance_sq > 0.000001 and diff.is_finite():
+			var distance_sq: float = diff.length_squared()
+			if distance_sq > 0.000001 and distance_sq < 22500.0 and diff.is_finite():
 				sep += diff / distance_sq
 		_cached_separation = sep.normalized() if sep.length_squared() > 0.0 else Vector2.ZERO
-	if _cached_separation != Vector2.ZERO:
-		global_position += _cached_separation * separation_force * delta
 
 func apply_knockback(impulse: Vector2) -> void:
 	velocity = impulse * 0.5

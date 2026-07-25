@@ -814,6 +814,8 @@ shape = SubResource("RectangleShape2D_vhfxq")
 [node name="ArenaSwitch" type="AnimatableBody2D" parent="." unique_id=418966575]
 position = Vector2(12, 2889)
 script = ExtResource("10_cf8pt")
+default_rotation_speed = 1.5
+stop_when_gate_open = true
 
 [node name="Pivot" type="Node2D" parent="ArenaSwitch" unique_id=268876278]
 position = Vector2(640, 360)
