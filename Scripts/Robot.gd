@@ -44,15 +44,11 @@ const LASER_RANGE := 3500.0
 const LASER_TRACK_SPEED := 1.5
 
 const CIRCLE_SCENE := preload("res://Objects/Boss/Robot/AttackCircle.tscn")
-const BOX_SCENE := preload("res://Objects/Boss/Robot/Box.tscn")
 const ROCKET_SCENE := preload("res://Objects/Boss/Robot/Rocket.tscn")
-const PATRON_COUNT := 4
 const ROCKET_COOLDOWN := 10.0
 const ROCKET_COUNT_MIN := 6
 const ROCKET_COUNT_MAX := 8
 const ROCKET_MIN_DISTANCE := 150.0
-var _box_fall_zone: Node2D
-var _patron_attack_counter := 0
 var _player_near_robot := false
 
 var _warning_active := false
@@ -69,7 +65,6 @@ func _ready() -> void:
 	$WaistBone/AnimationPlayer.play("Idle")
 	$WaistBone/AnimationPlayer.animation_finished.connect(_on_animation_finished)
 
-	_box_fall_zone = get_parent().get_node_or_null("BoxFallZone") as Node2D
 	_rocket_fall_zone = get_parent().get_node_or_null("RocketFallZone") as Node2D
 
 	_audio = AudioStreamPlayer2D.new()
@@ -277,7 +272,6 @@ func _die() -> void:
 	died.emit()
 	_hide_warnings()
 	_warning_active = false
-	_patron_attack_counter = 0
 	current_state = State.IDLE
 	_attack_cooldown = INF
 	_circles_spawned = true
@@ -353,15 +347,6 @@ func _process(delta: float) -> void:
 			_spawn_attack_circles()
 			_shake_camera(1.5, 20.0)
 			_circles_spawned = true
-			if not _player_near_robot and _box_fall_zone:
-				if get_tree().get_first_node_in_group("patron"):
-					_patron_attack_counter = 0
-				else:
-					_patron_attack_counter += 1
-				var patron_threshold: int = 3 if current_hp <= 2 else 4
-				if _patron_attack_counter >= patron_threshold:
-					_patron_attack_counter = 0
-					_spawn_falling_box()
 
 	_update_laser(delta)
 
@@ -541,21 +526,6 @@ func _spawn_circle(pos: Vector2, radius: float, color: Color, is_blue: bool) -> 
 	await fade.finished
 	if is_instance_valid(area):
 		area.queue_free()
-
-func _spawn_falling_box() -> void:
-	var zone_shape := _box_fall_zone.get_node_or_null("CollisionShape2D") as CollisionShape2D
-	if not zone_shape:
-		return
-	var rect: Rect2 = zone_shape.shape.get_rect()
-	var zpos := _box_fall_zone.global_position
-	var zscale := _box_fall_zone.global_scale
-	var global_rect := Rect2(zpos + rect.position * zscale, rect.size * zscale)
-	var box := BOX_SCENE.instantiate()
-	box.global_position = Vector2(
-		randf_range(global_rect.position.x, global_rect.position.x + global_rect.size.x),
-		randf_range(global_rect.position.y, global_rect.position.y + global_rect.size.y)
-	)
-	get_parent().add_child(box)
 
 func _play_rocket_sound() -> void:
 	var audio := AudioStreamPlayer.new()

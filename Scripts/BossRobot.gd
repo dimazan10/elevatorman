@@ -8,6 +8,11 @@ const BossHPBar := preload("res://Scripts/BossHPBar.gd")
 const DRUNK_KILLER := preload("res://Objects/Summons/DrunkKiller.tscn")
 const SPIDER := preload("res://Objects/Summons/Spider.tscn")
 const TELEPORT := preload("res://Objects/Summons/Teleport.tscn")
+const PATRON_BOX := preload("res://Objects/Boss/Robot/Box.tscn")
+const FIRST_PATRON_SPAWN_INTERVAL := 20.0
+const PATRON_SPAWN_INTERVAL := 35.0
+const ENEMY_SPAWN_MIN_DISTANCE := 320.0
+const ENEMY_SPAWN_ATTEMPTS := 12
 
 enum LiftState { NONE, START, EXITING, COMBAT, RETURNING }
 var lift_state := LiftState.NONE
@@ -24,6 +29,8 @@ var _boss_active := false
 var _boss_entrance_locked := false
 var _floor_label: Label
 var _quest_label: Label
+var _patron_timer_label: Label
+var _patron_spawn_timer := FIRST_PATRON_SPAWN_INTERVAL
 
 func _ready() -> void:
 	add_to_group("pausable")
@@ -96,6 +103,7 @@ func _set_all_dark_layers(node: Node) -> void:
 		_set_all_dark_layers(child)
 
 func _process(delta: float) -> void:
+	_update_patron_spawn(delta)
 	if not _boss_active or not _spawn_active or _player_at_computer:
 		return
 	_spawn_timer -= delta
@@ -153,6 +161,19 @@ func _setup_quest_ui() -> void:
 	_quest_label.offset_bottom = 50
 	_quest_label.text = Localization.t("reach_elevator")
 	ui.add_child(_quest_label)
+
+	_patron_timer_label = Label.new()
+	_patron_timer_label.name = "PatronTimer"
+	_patron_timer_label.add_theme_font_size_override("font_size", 20)
+	_patron_timer_label.add_theme_color_override("font_color", Color(1.0, 0.8, 0.25))
+	_patron_timer_label.add_theme_constant_override("outline_size", 3)
+	_patron_timer_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	_patron_timer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_patron_timer_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+	_patron_timer_label.offset_top = 52
+	_patron_timer_label.offset_bottom = 84
+	_patron_timer_label.hide()
+	ui.add_child(_patron_timer_label)
 
 func _update_quest_text(text: String) -> void:
 	if not _quest_label:
@@ -261,6 +282,7 @@ func is_boss_active() -> bool:
 func activate_boss() -> void:
 	lock_boss_entrance()
 	_boss_active = true
+	_patron_spawn_timer = FIRST_PATRON_SPAWN_INTERVAL
 	var robot := get_node_or_null("Robot")
 	if robot and robot.has_method("set_can_attack"):
 		robot.set_can_attack(true)
@@ -288,7 +310,10 @@ func _on_robot_hp_changed(current_hp: int, max_hp: int) -> void:
 	_is_low_hp = current_hp <= 1
 
 func _on_boss_died() -> void:
+	_boss_active = false
 	_spawn_active = false
+	if _patron_timer_label:
+		_patron_timer_label.hide()
 	for e in _enemies:
 		if is_instance_valid(e):
 			e.queue_free()
@@ -354,10 +379,18 @@ func _spawn_enemies() -> void:
 		var zpos := zone.global_position
 		var zscale := zone.global_scale
 		var global_rect := Rect2(zpos + rect.position * zscale, rect.size * zscale)
-		var pos := Vector2(
-			randf_range(global_rect.position.x, global_rect.position.x + global_rect.size.x),
-			randf_range(global_rect.position.y, global_rect.position.y + global_rect.size.y)
-		)
+		var pos := Vector2.ZERO
+		var found_safe_position := false
+		for _attempt in ENEMY_SPAWN_ATTEMPTS:
+			pos = Vector2(
+				randf_range(global_rect.position.x, global_rect.position.x + global_rect.size.x),
+				randf_range(global_rect.position.y, global_rect.position.y + global_rect.size.y)
+			)
+			if not is_instance_valid(_player_node) or pos.distance_squared_to(_player_node.global_position) >= ENEMY_SPAWN_MIN_DISTANCE * ENEMY_SPAWN_MIN_DISTANCE:
+				found_safe_position = true
+				break
+		if not found_safe_position:
+			continue
 		_spawn_teleport_effect(pos)
 		var enemy := (DRUNK_KILLER if randi() % 2 == 0 else SPIDER).instantiate()
 		enemy.set_meta("spawn_position", pos)
@@ -369,6 +402,40 @@ func _spawn_enemies() -> void:
 		tw.tween_callback(func():
 			_despawn_enemy(enemy)
 		)
+
+func _update_patron_spawn(delta: float) -> void:
+	if not _patron_timer_label:
+		return
+	if not _boss_active:
+		_patron_timer_label.hide()
+		return
+	_patron_timer_label.show()
+	if get_tree().get_first_node_in_group("patron"):
+		_patron_spawn_timer = PATRON_SPAWN_INTERVAL
+		_patron_timer_label.text = "ПАТРОН ГОТОВ" if GameState.language == "ru" else "AMMO READY"
+		return
+	_patron_spawn_timer = maxf(0.0, _patron_spawn_timer - delta)
+	var seconds := ceili(_patron_spawn_timer)
+	_patron_timer_label.text = ("ПАТРОН ЧЕРЕЗ: %02d" if GameState.language == "ru" else "AMMO IN: %02d") % seconds
+	if _patron_spawn_timer <= 0.0:
+		_spawn_patron_box()
+		_patron_spawn_timer = PATRON_SPAWN_INTERVAL
+
+func _spawn_patron_box() -> void:
+	var zone := get_node_or_null("BoxFallZone") as Node2D
+	if not zone:
+		return
+	var shape := zone.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if not shape or not shape.shape is RectangleShape2D:
+		return
+	var rect := (shape.shape as RectangleShape2D).get_rect()
+	var global_rect := Rect2(zone.global_position + rect.position * zone.global_scale, rect.size * zone.global_scale)
+	var box := PATRON_BOX.instantiate()
+	box.global_position = Vector2(
+		randf_range(global_rect.position.x, global_rect.position.x + global_rect.size.x),
+		randf_range(global_rect.position.y, global_rect.position.y + global_rect.size.y)
+	)
+	add_child(box)
 
 func _despawn_enemy(enemy: Node2D) -> void:
 	if not is_instance_valid(enemy):

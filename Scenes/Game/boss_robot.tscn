@@ -616,7 +616,7 @@ position = Vector2(640, 1000)
 script = ExtResource("19_trig")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="BossTrigger" unique_id=1386498637]
-scale = Vector2(2, 1)
+scale = Vector2(2, 5)
 shape = SubResource("RectShape_wall_h")
 
 [node name="BoxFallZone" type="Node2D" parent="." unique_id=1386498635]

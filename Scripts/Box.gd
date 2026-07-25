@@ -2,6 +2,7 @@ extends Node2D
 
 const PATRON_SCENE := preload("res://Objects/Boss/Robot/Patron.tscn")
 const EARTHQUAKE_SOUND := preload("res://Assets/Enemies/Boss/Sprite_Robot/earthquake_sound.mp3")
+const PATRON_SPAWN_SOUND := preload("res://Assets/Enemies/Boss/Sprite_Gun/Shoot.mp3")
 @onready var _anim := $Sprite2D/AnimationPlayer
 
 func _ready():
@@ -25,4 +26,11 @@ func _on_anim_finished(anim: String):
 		var patron = PATRON_SCENE.instantiate()
 		patron.global_position = global_position
 		get_parent().add_child(patron)
+		var spawn_audio := AudioStreamPlayer2D.new()
+		spawn_audio.stream = PATRON_SPAWN_SOUND
+		spawn_audio.bus = &"Effects"
+		spawn_audio.global_position = global_position
+		get_parent().add_child(spawn_audio)
+		spawn_audio.play()
+		spawn_audio.finished.connect(spawn_audio.queue_free)
 		queue_free()
