@@ -913,8 +913,8 @@ color = Color(0.4, 0.4, 0.5, 1)
 polygon = PackedVector2Array(-307.5, -10, 307.5, -10, 307.5, 10, -307.5, 10)
 
 [node name="Area2" type="Sprite2D" parent="ArenaSwitch/Pivot" unique_id=1401615314]
-position = Vector2(-6.5, 208.5)
-scale = Vector2(1.1826156, 1.1953748)
+position = Vector2(-2.0000377, 27.499966)
+scale = Vector2(1.2105265, 1.2001594)
 texture = ExtResource("13_545on")
 
 [node name="HoleStart" type="Sprite2D" parent="." unique_id=1415433335]
