@@ -1,9 +1,6 @@
 [gd_scene format=3 uid="uid://b6duhj6uwaea6"]
 
-[ext_resource type="Texture2D" uid="uid://by8oviwm7j405" path="res://Assets/MainMenu/BGMainMenu.png" id="1_cdkru"]
-[ext_resource type="Texture2D" uid="uid://bs8e807t0wque" path="res://Assets/MainMenu/buttonQuit.png" id="2_kpx3y"]
-[ext_resource type="Texture2D" uid="uid://cvxfj208woj2x" path="res://Assets/MainMenu/buttonPlay.png" id="3_ua038"]
-[ext_resource type="Texture2D" uid="uid://bmgioa6x7knpu" path="res://Assets/MainMenu/buttonSettings.png" id="4_vapy7"]
+[ext_resource type="Texture2D" uid="uid://c41xjoc48iiju" path="res://Assets/Art/ChatGPT Image 25 июл. 2026 г., 19_29_04.png" id="3_ua038"]
 [ext_resource type="Script" uid="uid://duvm74ksi552c" path="res://Scripts/ButtonQuit.gd" id="5_ua038"]
 [ext_resource type="Script" uid="uid://bjfteco1ew5lh" path="res://Scripts/MainMenu.gd" id="6_75e0l"]
 [ext_resource type="Texture2D" uid="uid://bryvarg5ckwya" path="res://Assets/MainMenu/Picsart_26-06-23_17-52-38-741.png" id="8_0hjx5"]
@@ -23,20 +20,20 @@ metadata/_edit_use_anchors_ = true
 stream = ExtResource("click_sound")
 bus = &"Effects"
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=1892877604]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1612058038]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.003
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = -0.01340625
+anchor_top = -0.008333334
+anchor_right = 1.0125
+anchor_bottom = 1.0041667
 offset_left = 0.15999985
 offset_top = -6.0
 offset_right = 4.0
 offset_bottom = 6.999939
 mouse_filter = 2
-texture = ExtResource("1_cdkru")
+texture = ExtResource("3_ua038")
 expand_mode = 1
-stretch_mode = 6
 metadata/_edit_use_anchors_ = true
 
 [node name="DarkModeButton" type="Button" parent="TextureRect" unique_id=1157692041]
@@ -46,14 +43,16 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -434.0
-offset_top = -418.99994
-offset_right = -394.0
-offset_bottom = -378.99994
+offset_left = -1144.0
+offset_top = -302.99994
+offset_right = -1041.0
+offset_bottom = -259.99994
 grow_horizontal = 0
 grow_vertical = 0
+text = "DarkMode"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=599235801]
+clip_contents = true
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -63,22 +62,31 @@ offset_top = 124.0
 offset_right = 247.0
 offset_bottom = 252.0
 grow_vertical = 2
-theme_override_constants/separation = 16
+offset_transform_enabled = true
+theme_override_constants/separation = 12
+alignment = 1
 
-[node name="ButtonPlay" type="TextureButton" parent="VBoxContainer" unique_id=268296133]
+[node name="ButtonPlay" type="Button" parent="VBoxContainer" unique_id=641028879]
 layout_mode = 2
-texture_normal = ExtResource("3_ua038")
-stretch_mode = 6
+theme_type_variation = &"FlatButton"
+theme_override_colors/font_color = Color(0.9971836, 1, 0.30101857, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 25
+text = "Play"
 
-[node name="ButtonSettings" type="TextureButton" parent="VBoxContainer" unique_id=1861754611]
+[node name="ButtonSettings" type="Button" parent="VBoxContainer" unique_id=742577076]
 layout_mode = 2
-texture_normal = ExtResource("4_vapy7")
-stretch_mode = 6
+theme_type_variation = &"FlatButton"
+theme_override_colors/font_color = Color(0.9971836, 1, 0.30101857, 1)
+theme_override_font_sizes/font_size = 25
+text = "Settings"
 
-[node name="ButtonQuit" type="TextureButton" parent="VBoxContainer" unique_id=2065043417]
+[node name="ButtonQuit" type="Button" parent="VBoxContainer" unique_id=1573123614]
 layout_mode = 2
-texture_normal = ExtResource("2_kpx3y")
-stretch_mode = 6
+theme_type_variation = &"FlatButton"
+theme_override_colors/font_color = Color(0.9971836, 1, 0.30101857, 1)
+theme_override_font_sizes/font_size = 25
+text = "Exit"
 script = ExtResource("5_ua038")
 
 [node name="Logo" type="TextureRect" parent="." unique_id=294415747]

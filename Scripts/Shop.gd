@@ -264,7 +264,7 @@ func _on_continue() -> void:
 	if not _collected:
 		GameState.currency += GameState.last_floor_hp
 		_collected = true
-	if GameState.current_floor >= 3:
+	if GameState.current_floor >= 4:
 		GameState.check_achievements_on_completion()
 		GameState.current_floor = 1
 		GameState.has_bucket = false
@@ -272,6 +272,9 @@ func _on_continue() -> void:
 		GameState.currency = 0
 		StyleManager.reset_score()
 		get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
+	elif GameState.current_floor == 3:
+		GameState.current_floor += 1
+		get_tree().change_scene_to_file("res://Scenes/Game/boss_robot.tscn")
 	else:
 		GameState.current_floor += 1
 		get_tree().change_scene_to_file("res://Scenes/Game/game.tscn")

@@ -2,9 +2,9 @@ extends Control
 
 @onready var bg := $TextureRect
 @onready var logo := $Logo
-@onready var play_btn := $VBoxContainer/ButtonPlay as TextureButton
-@onready var settings_btn := $VBoxContainer/ButtonSettings as TextureButton
-@onready var quit_btn := $VBoxContainer/ButtonQuit as TextureButton
+@onready var play_btn := $VBoxContainer/ButtonPlay as Button
+@onready var settings_btn := $VBoxContainer/ButtonSettings as Button
+@onready var quit_btn := $VBoxContainer/ButtonQuit as Button
 @onready var discord_btn := $DiscordButton as Button
 @onready var dark_mode_btn := $TextureRect/DarkModeButton as Button
 
@@ -12,6 +12,7 @@ var extra := 60.0
 var max_move := 25.0
 var _achievements_panel: Control = null
 var _achievements_btn: Button = null
+var _btn_texts: Dictionary = {}
 
 const ACHIEVEMENTS := [
 	{"id": "completed_game", "name": "Thanks for Playing", "desc": "Complete the game"},
@@ -36,6 +37,7 @@ func _ready() -> void:
 	_setup_discord_button()
 	_setup_dark_mode_button()
 	_setup_achievements_button()
+	_setup_button_brackets([play_btn, settings_btn, quit_btn])
 	play_btn.grab_focus.call_deferred()
 
 func _setup_discord_button() -> void:
@@ -125,6 +127,31 @@ func _setup_achievements_button() -> void:
 	_achievements_btn.offset_bottom = -10.0
 	_achievements_btn.pressed.connect(_on_achievements_pressed)
 	add_child(_achievements_btn)
+
+func _setup_button_brackets(buttons: Array) -> void:
+	for btn: Button in buttons:
+		_btn_texts[btn] = {"text": btn.text, "hover": false}
+		var sb := StyleBoxEmpty.new()
+		btn.add_theme_stylebox_override("normal", sb)
+		btn.add_theme_stylebox_override("hover", sb)
+		btn.add_theme_stylebox_override("pressed", sb)
+		btn.add_theme_stylebox_override("focus", sb)
+		btn.add_theme_color_override("font_hover_color", btn.get_theme_color("font_color"))
+		btn.add_theme_color_override("font_focus_color", btn.get_theme_color("font_color"))
+		btn.add_theme_color_override("font_pressed_color", btn.get_theme_color("font_color"))
+		btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		btn.mouse_entered.connect(_on_btn_hover_changed.bind(btn, true))
+		btn.mouse_exited.connect(_on_btn_hover_changed.bind(btn, false))
+
+func _on_btn_hover_changed(btn: Button, hovered: bool) -> void:
+	_btn_texts[btn]["hover"] = hovered
+	_update_bracket(btn)
+
+func _update_bracket(btn: Button) -> void:
+	var data: Dictionary = _btn_texts.get(btn, {})
+	var original: String = data.get("text", "")
+	var highlighted: bool = data.get("hover", false)
+	btn.text = "> " + original + " <" if highlighted else original
 
 func _on_achievements_pressed() -> void:
 	_play_click()

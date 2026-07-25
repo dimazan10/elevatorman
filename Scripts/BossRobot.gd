@@ -21,6 +21,8 @@ var _enemies: Array[Node2D] = []
 var _is_low_hp := false
 var _player_at_computer := false
 var _boss_active := false
+var _floor_label: Label
+var _quest_label: Label
 
 func _ready() -> void:
 	add_to_group("pausable")
@@ -61,6 +63,9 @@ func _ready() -> void:
 	if hole_start:
 		_anim = hole_start.get_node_or_null("AnimationPlayer") as AnimationPlayer
 
+	_setup_floor_label()
+	_setup_quest_ui()
+
 	_arrival_sequence()
 
 func _process(delta: float) -> void:
@@ -90,6 +95,48 @@ func _reparent_collision_nodes() -> void:
 				if child:
 					child.reparent(hole_end)
 
+func _setup_floor_label() -> void:
+	_floor_label = Label.new()
+	_floor_label.name = "FloorLabel"
+	_floor_label.text = "Floor 4"
+	_floor_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_floor_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_floor_label.add_theme_font_size_override("font_size", 48)
+	_floor_label.add_theme_color_override("font_color", Color(1, 1, 1, 0.8))
+	_floor_label.position = Vector2(640, 360) - _floor_label.size * 0.5
+	_floor_label.set_anchors_preset(Control.PRESET_CENTER)
+	_floor_label.modulate = Color(1, 1, 1, 0)
+	_floor_label.hide()
+	add_child(_floor_label)
+
+func _setup_quest_ui() -> void:
+	var ui := CanvasLayer.new()
+	ui.name = "QuestUI"
+	ui.layer = 128
+	add_child(ui)
+	_quest_label = Label.new()
+	_quest_label.name = "QuestLabel"
+	_quest_label.add_theme_font_size_override("font_size", 24)
+	_quest_label.add_theme_color_override("font_color", Color.GOLD)
+	_quest_label.add_theme_constant_override("outline_size", 3)
+	_quest_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	_quest_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_quest_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+	_quest_label.offset_top = 10
+	_quest_label.offset_bottom = 50
+	_quest_label.text = "Reach the other elevator"
+	ui.add_child(_quest_label)
+
+func _update_quest_text(text: String) -> void:
+	if not _quest_label:
+		return
+	_quest_label.text = text
+	var tw := create_tween()
+	tw.tween_property(_quest_label, "modulate:a", 0.0, 0.15)
+	tw.tween_property(_quest_label, "scale", Vector2(1.2, 1.2), 0.1)
+	tw.tween_property(_quest_label, "modulate:a", 1.0, 0.15)
+	tw.tween_property(_quest_label, "scale", Vector2(1.0, 1.0), 0.1)
+
 func _arrival_sequence() -> void:
 	lift_state = LiftState.START
 
@@ -108,6 +155,8 @@ func _arrival_sequence() -> void:
 	if not _anim:
 		return
 
+	_show_floor_label()
+
 	_anim.play("RESET")
 	_anim.seek(0, true)
 	_anim.stop()
@@ -116,12 +165,24 @@ func _arrival_sequence() -> void:
 	_anim.play("Open")
 	await _anim.animation_finished
 
+	_hide_floor_label()
+
 	if hole_start:
 		hole_start.self_modulate = Color(1, 1, 1, 1)
 
 	if _player_node:
 		_show_player(_player_node)
 		_player_node.can_move = true
+
+	_restore_bucket_state()
+	_restore_collar_state()
+	_restore_inventory_state()
+
+	_quest_label.modulate = Color(1, 1, 1, 0)
+	_quest_label.scale = Vector2(0.8, 0.8)
+	var tw := create_tween()
+	tw.tween_property(_quest_label, "modulate:a", 1.0, 0.4)
+	tw.tween_property(_quest_label, "scale", Vector2(1.0, 1.0), 0.3)
 
 	var exit_zone := get_node_or_null("HoleStart/ExitZone") as Area2D
 	if exit_zone:
@@ -160,6 +221,8 @@ func start_exit_sequence() -> void:
 						if shape is CollisionShape2D:
 							shape.set_deferred("disabled", true)
 
+	_update_quest_text("Defeat the boss")
+
 	lift_state = LiftState.COMBAT
 
 	if _player_node:
@@ -186,6 +249,7 @@ func _on_boss_died() -> void:
 		if is_instance_valid(e):
 			e.queue_free()
 	_enemies.clear()
+	_update_quest_text("Enter the elevator")
 	_open_exit()
 	var music := get_node_or_null("BossMusic") as AudioStreamPlayer
 	if not music:
@@ -295,7 +359,49 @@ func _on_computer_aiming_changed(is_aiming: bool) -> void:
 		_spawn_timer = 6.0
 
 func _hide_floor_label() -> void:
-	pass
+	if not _floor_label:
+		return
+	var tw = create_tween()
+	tw.tween_property(_floor_label, "modulate:a", 0.0, 0.5)
+
+func _show_floor_label() -> void:
+	if not _floor_label:
+		return
+	_floor_label.text = "Floor 4"
+	_floor_label.modulate = Color(1, 1, 1, 0)
+	_floor_label.show()
+	var tw = create_tween()
+	tw.tween_property(_floor_label, "modulate:a", 1.0, 0.5)
+
+func _restore_bucket_state() -> void:
+	if not GameState.has_bucket:
+		return
+	if not is_instance_valid(_player_node):
+		return
+	if _player_node.has_method("_setup_bucket"):
+		_player_node._setup_bucket()
+		if _player_node._bucket:
+			_player_node._bucket.charges = GameState.bucket_charges
+
+func _restore_collar_state() -> void:
+	if not GameState.has_collar:
+		return
+	if not is_instance_valid(_player_node):
+		return
+	if _player_node.has_method("_setup_collar"):
+		_player_node._setup_collar()
+		if _player_node._collar:
+			_player_node._collar.charges = GameState.collar_charges
+
+func _restore_inventory_state() -> void:
+	if not is_instance_valid(_player_node):
+		return
+	if not _player_node.has_method("set_slot"):
+		return
+	for i in range(GameState.inventory.size()):
+		var slot = GameState.inventory[i]
+		if slot.id != "":
+			_player_node.set_slot(i, slot.id, slot.icon, slot.name)
 
 func _hide_player() -> void:
 	if not _player_node:

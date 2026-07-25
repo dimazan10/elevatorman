@@ -659,7 +659,7 @@ func _on_combat_timeout() -> void:
 	await anim.animation_finished
 	$Hole/FloorElevator.self_modulate = Color(1, 1, 1, 1)
 
-const MAX_FLOOR := 3
+const MAX_FLOOR := 4
 
 func _save_floor_state() -> void:
 	GameState.has_bucket = false
