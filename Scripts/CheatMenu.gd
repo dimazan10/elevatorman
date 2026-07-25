@@ -245,6 +245,25 @@ func _ready() -> void:
 
 	y += 42
 
+	var section4 = Label.new()
+	section4.text = "-- Boss --"
+	section4.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	section4.position = Vector2(0, y)
+	section4.size = Vector2(400, 20)
+	section4.add_theme_font_size_override("font_size", 13)
+	section4.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
+	_panel.add_child(section4)
+	y += 22
+
+	var boss_hp_btn = Button.new()
+	boss_hp_btn.text = "Boss -1 HP"
+	boss_hp_btn.position = Vector2(20, y)
+	boss_hp_btn.size = Vector2(170, 30)
+	boss_hp_btn.pressed.connect(_damage_boss)
+	boss_hp_btn.add_theme_color_override("font_color", Color.RED)
+	_panel.add_child(boss_hp_btn)
+	y += 42
+
 	var return_btn = Button.new()
 	return_btn.text = "Next Floor"
 	return_btn.position = Vector2(20, y)
@@ -426,6 +445,22 @@ func _return_elevator() -> void:
 	if arena.has_method("start_restart"):
 		arena.lift_state = 5
 		arena.start_restart()
+
+func _damage_boss() -> void:
+	var robot = get_tree().current_scene.get_node_or_null("Robot")
+	if not robot or not robot.has_method("take_damage_to_part"):
+		_error_label.text = "Boss not found in current scene"
+		return
+	if robot.current_hp <= 0:
+		_error_label.text = "Boss already dead"
+		return
+	var hp_before: int = robot.current_hp
+	for part in ["Waist", "Torso", "Head"]:
+		robot.take_damage_to_part(part)
+		if robot.current_hp < hp_before:
+			_error_label.text = "Damaged " + part
+			return
+	_error_label.text = "All parts already damaged"
 
 func _spawn_creature(scene_path: String) -> void:
 	var player = get_tree().get_first_node_in_group("player")
