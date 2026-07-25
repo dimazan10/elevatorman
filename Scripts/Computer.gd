@@ -34,30 +34,41 @@ func _prebuffer_audio() -> void:
 	_shoot_audio.stop()
 	_shoot_audio.stop()
 
-func _input(event: InputEvent) -> void:
-	if not _player or _aiming or not event.is_action_pressed("ui_accept"):
-		return
-	_gun = get_node_or_null("../Gun")
-	if not _gun or not _gun.is_loaded():
-		return
-	_start_aiming()
-	get_viewport().set_input_as_handled()
+func _find_gun() -> Node2D:
+	var gun = get_node_or_null("../Gun")
+	if gun and gun.has_method("is_loaded"):
+		return gun
+	if get_parent():
+		for child in get_parent().get_children():
+			if child.has_method("is_loaded"):
+				return child
+	return null
 
 func _on_zone_entered(body: Node2D) -> void:
 	if not body.is_in_group("player"):
 		return
 	_player = body
+	_gun = _find_gun()
+	if _gun and _gun.is_loaded() and not _aiming:
+		_start_aiming()
 
 func _on_zone_exited(body: Node2D) -> void:
 	if body == _player:
 		_player = null
 
 func _start_aiming() -> void:
+	if _aiming:
+		return
 	_aiming = true
 	aiming_changed.emit(true)
-	_player.can_move = false
+	
+	if not is_instance_valid(_player):
+		_player = get_tree().get_first_node_in_group("player")
+		
+	if is_instance_valid(_player):
+		_player.can_move = false
+		_player_camera = _player.get_node_or_null("PlayerCamera") as Camera2D
 
-	_player_camera = _player.get_node_or_null("PlayerCamera") as Camera2D
 	if _player_camera:
 		_camera_zoom_orig = _player_camera.zoom
 		_camera_pos_orig = _player_camera.global_position
@@ -71,30 +82,40 @@ func _start_aiming() -> void:
 	add_child(_aim_overlay)
 
 func _process(_delta: float) -> void:
-	if not _aiming:
+	if _aiming:
+		_update_crosshair()
 		return
-	_update_crosshair()
+
+	if not is_instance_valid(_player):
+		var p = get_tree().get_first_node_in_group("player") as Node2D
+		if p and global_position.distance_to(p.global_position) < 180.0:
+			_player = p
+
+	if is_instance_valid(_player) and global_position.distance_to(_player.global_position) < 180.0:
+		_gun = _find_gun()
+		if _gun and _gun.is_loaded():
+			_start_aiming()
 
 func _update_crosshair() -> void:
 	if not _aim_overlay:
 		return
-	var input_dir := Vector2.ZERO
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
 		var mouse_pos = get_global_mouse_position()
-		_crosshair_pos = _crosshair_pos.lerp(mouse_pos, get_process_delta_time() * 4.0)
+		_crosshair_pos = _crosshair_pos.lerp(mouse_pos, get_process_delta_time() * 16.0)
 	else:
-		input_dir = Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down")
+		var input_dir := Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down")
 		if input_dir.length() > 0.2:
-			_crosshair_pos += input_dir * 300.0 * get_process_delta_time()
+			_crosshair_pos += input_dir * 500.0 * get_process_delta_time()
 
 	var camera := get_viewport().get_camera_2d()
 	if camera:
 		var viewport := get_viewport()
-		var top_left: Vector2 = camera.global_position - Vector2(viewport.size) / (2.0 * camera.zoom)
-		var bottom_right: Vector2 = camera.global_position + Vector2(viewport.size) / (2.0 * camera.zoom)
+		var vp_size := Vector2(viewport.get_visible_rect().size)
+		var top_left: Vector2 = camera.global_position - vp_size / (2.0 * camera.zoom)
+		var bottom_right: Vector2 = camera.global_position + vp_size / (2.0 * camera.zoom)
 		_crosshair_pos.x = clamp(_crosshair_pos.x, top_left.x, bottom_right.x)
 		_crosshair_pos.y = clamp(_crosshair_pos.y, top_left.y, bottom_right.y)
-		var screen_pos: Vector2 = (_crosshair_pos - camera.global_position) * camera.zoom + Vector2(viewport.size) / 2.0
+		var screen_pos: Vector2 = (_crosshair_pos - camera.global_position) * camera.zoom + vp_size / 2.0
 		_aim_overlay.set_crosshair_pos(screen_pos)
 	else:
 		_aim_overlay.set_crosshair_pos(_crosshair_pos)
@@ -113,9 +134,10 @@ func _rotate_barrel() -> void:
 	var target_angle = (_crosshair_pos - pivot.global_position).angle() + PI / 2
 	var max_angle = _gun.get_max_angle()
 	var parent := pivot.get_parent()
-	var desired_local = target_angle - parent.global_rotation
+	var parent_rot := parent.global_rotation if parent else 0.0
+	var desired_local = target_angle - parent_rot
 	desired_local = clamp(desired_local, -max_angle, max_angle)
-	pivot.rotation = lerp_angle(pivot.rotation, desired_local, get_process_delta_time() * 2.0)
+	pivot.rotation = lerp_angle(pivot.rotation, desired_local, get_process_delta_time() * 10.0)
 
 func _spawn_patron_out(pos: Vector2) -> void:
 	var pivot := _gun.get_barrel_pivot() as Node2D
