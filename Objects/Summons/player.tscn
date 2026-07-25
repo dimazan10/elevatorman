@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://dbb1tfykxqqjn" path="res://Assets/Sprites_Player/Death/gg_death7-removebg-preview.png" id="10_4457i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
-size = Vector2(20, 40)
+size = Vector2(20, 29)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_s1fef"]
 animations = [{
@@ -49,6 +49,7 @@ collision_mask = 9
 script = ExtResource("1_y0qk3")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="." unique_id=88380255]
+position = Vector2(0, 3.5)
 shape = SubResource("RectangleShape2D_player")
 
 [node name="PlayerLight" type="PointLight2D" parent="." unique_id=1601938696]
