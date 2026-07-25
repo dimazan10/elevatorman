@@ -396,8 +396,12 @@ func die() -> void:
 		_infinit_revive()
 		return
 	_is_dying = true
-	GameState.has_collar = false
-	GameState.collar_charges = 3
+	if not GameState.bucket_persistent:
+		GameState.has_bucket = false
+		GameState.bucket_charges = 2
+	if not GameState.collar_persistent:
+		GameState.has_collar = false
+		GameState.collar_charges = 3
 	var light = get_node_or_null("PlayerLight")
 	if light:
 		light.visible = false

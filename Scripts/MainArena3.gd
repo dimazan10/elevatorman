@@ -210,11 +210,14 @@ func _on_player_zone_changed(zone: String) -> void:
 func _set_enemy_active(enemy: Node, active: bool) -> void:
 	if enemy.is_in_group("always_active"):
 		return
+	if enemy.has_method("set_zone_active"):
+		enemy.set_zone_active(active)
 	if enemy is RigidBody2D:
 		enemy.freeze = not active
 		if not active:
 			enemy.linear_velocity = Vector2.ZERO
 			enemy.angular_velocity = 0.0
+	enemy.set_process(active)
 	enemy.set_physics_process(active)
 	if active:
 		_enable_collision_shapes(enemy)
@@ -675,15 +678,19 @@ const MAX_FLOOR := 4
 
 func _save_floor_state() -> void:
 	GameState.has_bucket = false
+	GameState.bucket_persistent = false
 	GameState.has_collar = false
+	GameState.collar_persistent = false
 	if not is_instance_valid(player_node):
 		return
 	if player_node.has_method("_try_bucket_hit") and player_node._bucket:
 		GameState.has_bucket = true
 		GameState.bucket_charges = player_node._bucket.charges
+		GameState.bucket_persistent = true
 	if player_node.has_method("_try_collar_hit") and player_node._collar:
 		GameState.has_collar = true
 		GameState.collar_charges = player_node._collar.charges
+		GameState.collar_persistent = true
 	if player_node.has_method("get_inventory"):
 		GameState.inventory = player_node.get_inventory().duplicate(true)
 	GameState.last_floor_hp = player_node.current_lives if "current_lives" in player_node else 0

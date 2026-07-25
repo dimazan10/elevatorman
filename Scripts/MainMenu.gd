@@ -93,7 +93,9 @@ func _on_play_pressed() -> void:
 	GameState.dark_mode = false
 	GameState.current_floor = 1
 	GameState.has_bucket = false
+	GameState.bucket_persistent = false
 	GameState.has_collar = false
+	GameState.collar_persistent = false
 	GameState.currency = 0
 	GameState.last_floor_hp = 0
 	GameState.took_damage_this_run = false
@@ -231,7 +233,9 @@ func _on_dark_mode_pressed() -> void:
 	GameState.dark_mode = true
 	GameState.current_floor = 1
 	GameState.has_bucket = false
+	GameState.bucket_persistent = false
 	GameState.has_collar = false
+	GameState.collar_persistent = false
 	GameState.currency = 0
 	GameState.last_floor_hp = 0
 	GameState.took_damage_this_run = false

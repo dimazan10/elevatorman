@@ -73,6 +73,7 @@ func _on_body_entered(body: Node2D) -> void:
 			body._bucket = bucket
 			GameState.has_bucket = true
 			GameState.bucket_charges = 2
+			GameState.bucket_persistent = false
 		"collar":
 			if body.has_node("Collar"):
 				return
@@ -87,6 +88,7 @@ func _on_body_entered(body: Node2D) -> void:
 			body._collar = collar
 			GameState.has_collar = true
 			GameState.collar_charges = 3
+			GameState.collar_persistent = false
 		_:
 			for i in range(body.inventory.size()):
 				if body.inventory[i].id == "":

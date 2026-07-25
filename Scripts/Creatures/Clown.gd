@@ -22,6 +22,8 @@ var _melody_playing: bool = false
 var _separation_timer := 0.0
 var _cached_separation := Vector2.ZERO
 var _arena: Node
+var _zone_active := true
+var _enrage_tween: Tween
 
 var _melody_player: AudioStreamPlayer2D
 var _horn_player: AudioStreamPlayer2D
@@ -47,6 +49,7 @@ func _ready() -> void:
 	var players := get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
 		_player_ref = players[0]
+		add_collision_exception_with(_player_ref)
 		if _player_ref.has_signal("health_changed"):
 			_player_ref.health_changed.connect(_on_player_health_changed)
 			_player_prev_lives = _player_ref.current_lives if "current_lives" in _player_ref else -1
@@ -112,6 +115,9 @@ func _setup_audio() -> void:
 	add_child(_laugh_player)
 
 func _physics_process(delta: float) -> void:
+	if not _zone_active:
+		velocity = Vector2.ZERO
+		return
 	_enrage_timer -= delta
 
 	match current_state:
@@ -127,6 +133,24 @@ func _physics_process(delta: float) -> void:
 func on_zone_entered() -> void:
 	_is_waiting = false
 	_melody_playing = false
+
+func set_zone_active(active: bool) -> void:
+	_zone_active = active
+	if active:
+		return
+	velocity = Vector2.ZERO
+	_melody_playing = false
+	if _animated_sprite:
+		_animated_sprite.stop()
+	if _melody_player:
+		_melody_player.stop()
+	if _horn_player:
+		_horn_player.stop()
+	if _laugh_player:
+		_laugh_player.stop()
+	if _enrage_tween and _enrage_tween.is_valid():
+		_enrage_tween.kill()
+		_enrage_tween = null
 
 func _process_wandering(delta: float) -> void:
 	_change_dir_timer -= delta
@@ -163,11 +187,13 @@ func _check_enrage() -> void:
 		_trigger_enrage()
 
 func _trigger_enrage() -> void:
+	if not _zone_active:
+		return
 	_horn_player.play()
 	_enraged_visual = true
-	var tween := create_tween()
-	tween.tween_interval(enrage_duration)
-	tween.tween_callback(_end_enrage)
+	_enrage_tween = create_tween()
+	_enrage_tween.tween_interval(enrage_duration)
+	_enrage_tween.tween_callback(_end_enrage)
 
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		if enemy == self:
@@ -176,6 +202,9 @@ func _trigger_enrage() -> void:
 			enemy.set_enraged(true)
 
 func _end_enrage() -> void:
+	_enrage_tween = null
+	if not _zone_active:
+		return
 	_enraged_visual = false
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		if enemy == self:

@@ -236,6 +236,7 @@ func _on_bucket_buy() -> void:
 		GameState.currency -= 4
 		GameState.has_bucket = true
 		GameState.bucket_charges = 2
+		GameState.bucket_persistent = true
 	currency_label.text = str(GameState.currency)
 	_update_bucket_ui()
 	_update_item_ui()
@@ -244,6 +245,7 @@ func _on_collar_buy() -> void:
 	if GameState.currency >= PRICE_COLLAR and not GameState.has_collar:
 		GameState.currency -= PRICE_COLLAR
 		GameState.has_collar = true
+		GameState.collar_persistent = true
 	currency_label.text = str(GameState.currency)
 	_update_bucket_ui()
 	_update_item_ui()
@@ -268,7 +270,9 @@ func _on_continue() -> void:
 		GameState.check_achievements_on_completion()
 		GameState.current_floor = 1
 		GameState.has_bucket = false
+		GameState.bucket_persistent = false
 		GameState.has_collar = false
+		GameState.collar_persistent = false
 		GameState.currency = 0
 		StyleManager.reset_score()
 		get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")

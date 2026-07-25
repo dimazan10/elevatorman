@@ -27,6 +27,7 @@ func _ready() -> void:
 	var players := get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
 		_player_ref = players[0]
+		add_collision_exception_with(_player_ref)
 	_throw_timer = randf_range(1.0, throw_cooldown)
 	anim.play("idle")
 

@@ -45,6 +45,7 @@ func _ready() -> void:
 	if players.size() > 0:
 		_player_ref = players[0]
 		target = _player_ref
+		add_collision_exception_with(_player_ref)
 	
 	burst_timer.one_shot = true
 	burst_timer.timeout.connect(_on_burst_timer_timeout)

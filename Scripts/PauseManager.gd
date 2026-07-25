@@ -27,6 +27,9 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if get_tree().root.get_node_or_null("DeathScreen"):
+		get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("pause_game"):
 		if not get_tree().get_nodes_in_group("pausable").is_empty():
 			toggle_pause()
@@ -95,7 +98,9 @@ func _on_exit() -> void:
 	paused_state_changed.emit(false)
 	GameState.current_floor = 1
 	GameState.has_bucket = false
+	GameState.bucket_persistent = false
 	GameState.has_collar = false
+	GameState.collar_persistent = false
 	GameState.death_counts = {}
 	StyleManager.reset_score()
 	get_tree().change_scene_to_file("res://Scenes/MainMenu/MainMenu.tscn")
