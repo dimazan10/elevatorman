@@ -19,6 +19,9 @@ func _ready():
 
 func _on_anim_finished(anim: String):
 	if anim == "DownFallBox":
+		if get_tree().get_first_node_in_group("patron"):
+			queue_free()
+			return
 		var patron = PATRON_SCENE.instantiate()
 		patron.global_position = global_position
 		get_parent().add_child(patron)

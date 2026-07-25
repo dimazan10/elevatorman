@@ -354,8 +354,12 @@ func _process(delta: float) -> void:
 			_shake_camera(1.5, 20.0)
 			_circles_spawned = true
 			if not _player_near_robot and _box_fall_zone:
-				_patron_attack_counter += 1
-				if _patron_attack_counter >= PATRON_COUNT:
+				if get_tree().get_first_node_in_group("patron"):
+					_patron_attack_counter = 0
+				else:
+					_patron_attack_counter += 1
+				var patron_threshold: int = 3 if current_hp <= 2 else 4
+				if _patron_attack_counter >= patron_threshold:
 					_patron_attack_counter = 0
 					_spawn_falling_box()
 
