@@ -43,7 +43,6 @@ func _ready() -> void:
 	music.stream = load("res://Assets/Enemies/Boss/Sprite_Robot/Music.mp3")
 	music.bus = &"Music"
 	add_child(music)
-	music.play()
 
 	for name in ["SpawnZoneLeft", "SpawnZoneRight"]:
 		var zone := get_node_or_null(name) as Node2D

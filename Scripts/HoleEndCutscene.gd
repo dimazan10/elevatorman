@@ -14,6 +14,10 @@ func _on_body_entered(body: Node2D) -> void:
 	monitoring = false
 
 	var boss := get_tree().current_scene
+	var music := boss.get_node_or_null("BossMusic") as AudioStreamPlayer
+	if music and not music.playing:
+		music.play()
+
 	var robot := boss.get_node_or_null("Robot") as Node2D
 	var player := body as Node2D
 
