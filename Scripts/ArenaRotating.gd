@@ -73,3 +73,5 @@ func _update_gate() -> void:
 	var v: Node2D = gate.get_node("Visual")
 	if v:
 		v.modulate = Color(1, 1, 1, 0.3 if is_near else 1.0)
+	if is_near and not _cutscene_active:
+		rotation_speed = 0.0
