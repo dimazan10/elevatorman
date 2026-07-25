@@ -16,7 +16,7 @@ var _crosshair_pos := Vector2.ZERO
 var _player: Node2D = null
 var _shoot_audio: AudioStreamPlayer2D = null
 
-@export var camera_zoom_target: Vector2 = Vector2(0.55, 0.55)
+@export var camera_zoom_target: Vector2 = Vector2(0.4, 0.4)
 @export var camera_zoom_duration: float = 1.0
 
 func _ready() -> void:
