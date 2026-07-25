@@ -3,12 +3,14 @@ extends CanvasLayer
 signal fire_requested
 
 var _crosshair_pos := Vector2(640, 360)
+var _crosshair: Node2D
 
 func _ready() -> void:
 	layer = 131
 
 	var ch := Node2D.new()
 	ch.name = "Crosshair"
+	_crosshair = ch
 	var h := ColorRect.new()
 	h.name = "H"
 	h.size = Vector2(40, 4)
@@ -48,15 +50,13 @@ func set_crosshair_pos(pos: Vector2) -> void:
 	_crosshair_pos = pos
 
 func set_crosshair_angle(angle: float) -> void:
-	var ch := get_node_or_null("Crosshair") as Node2D
-	if ch:
-		ch.rotation = angle
+	if _crosshair:
+		_crosshair.rotation = angle
 
 func _process(_delta: float) -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	var ch := get_node_or_null("Crosshair") as Node2D
-	if ch:
-		ch.global_position = _crosshair_pos
+	if _crosshair:
+		_crosshair.global_position = _crosshair_pos
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept") or (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed):

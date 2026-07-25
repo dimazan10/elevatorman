@@ -12,6 +12,7 @@ var _change_dir_interval := 0.0
 var _change_dir_timer := 0.0
 var _reset_timer: float = 0.0
 const RESET_TIME := 55.0
+var _player: Node2D
 
 func _ready() -> void:
 	add_to_group("switch")
@@ -20,9 +21,9 @@ func _ready() -> void:
 	$Lag.hide()
 
 func _disable_player_collision() -> void:
-	var player := get_tree().get_first_node_in_group("player")
-	if player:
-		add_collision_exception_with(player)
+	_player = get_tree().get_first_node_in_group("player") as Node2D
+	if _player:
+		add_collision_exception_with(_player)
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player") and not _activated:
@@ -54,13 +55,14 @@ func _physics_process(delta: float) -> void:
 			deactivate()
 			return
 
-	var player := get_tree().get_first_node_in_group("player") as Node2D
-	if not player:
+	if not is_instance_valid(_player):
+		_player = get_tree().get_first_node_in_group("player") as Node2D
+	if not _player:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
 
-	var dist := global_position.distance_to(player.global_position)
+	var dist := global_position.distance_to(_player.global_position)
 
 	if not _chasing and dist < 200.0:
 		_on_wake_up()

@@ -45,6 +45,8 @@ var _temporary_dark_mode := false
 var _temporary_dark_canvas: CanvasModulate
 var _temporary_dark_items: Array[Dictionary] = []
 var _temporary_light_state: Dictionary = {}
+var _gates: Array[StaticBody2D] = []
+var _gate_triggers: Array[Node2D] = []
 const _ZONE_PRIORITY := {
 	"main_arena": 1,
 	"arena_none": 1,
@@ -536,7 +538,10 @@ func _start_combat_timer() -> void:
 		_enable_temporary_dark_mode()
 	_rotation_speed = 0.0
 	for sa in _secondary_arenas:
-		sa.rotation_speed = 0.0
+		if sa.has_method("set_combat_locked"):
+			sa.set_combat_locked(true)
+		else:
+			sa.rotation_speed = 0.0
 	_update_gate()
 
 func _connect_switch() -> void:
@@ -648,6 +653,8 @@ func _on_combat_timeout() -> void:
 	_disable_temporary_dark_mode()
 	_rotation_speed = 0.5
 	for sa in _secondary_arenas:
+		if sa.has_method("set_combat_locked"):
+			sa.set_combat_locked(false)
 		sa.rotation_speed = 0.5
 	for s in get_tree().get_nodes_in_group("switch"):
 		if is_instance_valid(s):
@@ -906,6 +913,23 @@ func _generate_world() -> void:
 					if not _arena_pushers.has(arena_switch):
 						_arena_pushers[arena_switch] = []
 					_arena_pushers[arena_switch].append(p)
+	_refresh_gate_cache()
+
+func _refresh_gate_cache() -> void:
+	_gates.clear()
+	_gate_triggers.clear()
+	var main_gate := _arena_rotator.get_node_or_null("ArenaScaler/Walls/W4/Gate") as StaticBody2D
+	if main_gate:
+		_gates.append(main_gate)
+	for arena in _secondary_arenas:
+		var gate := arena.get_node_or_null("Pivot/Walls/W4/Gate") as StaticBody2D
+		if gate:
+			_gates.append(gate)
+		if arena.has_method("refresh_gate_triggers"):
+			arena.refresh_gate_triggers()
+	for trigger in get_tree().get_nodes_in_group("gate_trigger"):
+		if trigger is Node2D:
+			_gate_triggers.append(trigger)
 
 func _setup_minimap() -> void:
 	var cl := CanvasLayer.new()
@@ -992,31 +1016,25 @@ func _set_shaft_collision(enabled: bool) -> void:
 var _rotation_speed := 0.5
 
 func _update_gate() -> void:
-	var gates := [_arena_rotator.get_node("ArenaScaler/Walls/W4/Gate") as StaticBody2D]
-	for sa in _secondary_arenas:
-		var g = sa.get_node_or_null("Pivot/Walls/W4/Gate") as StaticBody2D
-		if g:
-			gates.append(g)
-
 	var in_corridor = _current_player_zone == "corridor"
 	if lift_state != LiftState.COMBAT:
 		for sa in _secondary_arenas:
 			sa.rotation_speed = 1.0 if in_corridor else 0.5
 
 	var main_near = false
-	for gate in gates:
+	for gate in _gates:
 		if lift_state == LiftState.COMBAT:
 			gate.collision_layer = 3
 			gate.get_node("Visual").modulate = Color(1, 0.15, 0.15)
 			continue
 		var gate_pos = gate.global_position
 		var is_near = false
-		for t in get_tree().get_nodes_in_group("gate_trigger"):
+		for t in _gate_triggers:
 			if gate_pos.distance_to(t.global_position) < 80.0:
 				is_near = true
 				break
 		gate.collision_layer = 2 if is_near else 3
-		gate.get_node("Visual").modulate = Color(1, 1, 1, 0.3) if is_near else Color(1, 0.15, 0.15)
+		gate.get_node("Visual").modulate = Color(0.15, 1, 0.15, 0.3) if is_near else Color(1, 0.15, 0.15)
 		if is_near and lift_state != LiftState.COMBAT:
 			var sa_owner = _arena_none if _arena_none and _arena_none.is_ancestor_of(gate) else null
 			if not sa_owner:

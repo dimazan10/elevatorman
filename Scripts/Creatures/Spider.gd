@@ -83,9 +83,10 @@ func _get_separation_vector() -> Vector2:
 		if body == self or body == _player_ref:
 			continue
 		if body is CharacterBody2D or body.is_in_group("enemy"):
-			var diff = global_position - body.global_position
-			if diff.length() > 0.001 and diff.is_finite():
-				sep += diff.normalized() / diff.length()
+			var diff: Vector2 = global_position - (body as Node2D).global_position
+			var distance_sq: float = diff.length_squared()
+			if distance_sq > 0.000001 and diff.is_finite():
+				sep += diff / distance_sq
 	if sep.length() > 0:
 		sep = sep.normalized()
 	return sep

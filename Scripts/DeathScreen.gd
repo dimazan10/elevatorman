@@ -15,16 +15,17 @@ func _ready():
 	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	root_ctrl.add_child(overlay)
 
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root_ctrl.add_child(center)
+
 	var vbox := VBoxContainer.new()
 	vbox.name = "VBox"
-	vbox.set_anchors_preset(Control.PRESET_CENTER)
-	vbox.offset_left = -200
-	vbox.offset_top = -100
-	vbox.offset_right = 200
-	vbox.offset_bottom = 100
+	vbox.custom_minimum_size = Vector2(400, 0)
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	vbox.add_theme_constant_override("separation", 20)
-	root_ctrl.add_child(vbox)
+	center.add_child(vbox)
 
 	var label := Label.new()
 	label.text = Localization.t("light_fades")

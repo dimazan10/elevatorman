@@ -9,7 +9,7 @@ friction = 0.0
 bounce = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5kt4o"]
-radius = 25.0
+radius = 32.5
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_danger_ball"]
 radius = 87.5

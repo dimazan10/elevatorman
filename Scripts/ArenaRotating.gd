@@ -4,6 +4,19 @@ const FadeTransition := preload("res://Scripts/FadeTransition.gd")
 
 var rotation_speed: float = 0.5
 var _cutscene_active := false
+var _combat_locked := false
+@onready var _pivot := $Pivot as Node2D
+@onready var _gate := $Pivot/Walls/W4/Gate as StaticBody2D
+var _gate_triggers: Array[Node2D] = []
+
+func _ready() -> void:
+	refresh_gate_triggers()
+
+func refresh_gate_triggers() -> void:
+	_gate_triggers.clear()
+	for trigger in get_tree().get_nodes_in_group("gate_trigger"):
+		if trigger is Node2D:
+			_gate_triggers.append(trigger)
 
 func start_boss_cutscene() -> void:
 	if _cutscene_active:
@@ -40,6 +53,12 @@ func start_boss_cutscene() -> void:
 	if player:
 		_unlock_player(player)
 
+func set_combat_locked(locked: bool) -> void:
+	_combat_locked = locked
+	if _combat_locked:
+		rotation_speed = 0.0
+	_update_gate()
+
 func _lock_player(p: Node2D) -> void:
 	p.set_meta("orig_process", p.process_mode)
 	p.process_mode = Node.PROCESS_MODE_DISABLED
@@ -50,29 +69,33 @@ func _unlock_player(p: Node2D) -> void:
 		p.remove_meta("orig_process")
 
 func _physics_process(delta: float) -> void:
-	if _cutscene_active:
+	if _cutscene_active or _combat_locked:
 		_update_gate()
 		return
-	var pivot: Node2D = $Pivot
-	if not pivot:
+	if not _pivot:
 		return
-	pivot.rotation = fmod(pivot.rotation + delta * rotation_speed, TAU)
+	_pivot.rotation = fmod(_pivot.rotation + delta * rotation_speed, TAU)
 	_update_gate()
 
 func _update_gate() -> void:
-	var gate: StaticBody2D = $Pivot/Walls/W4/Gate
-	if not gate:
+	if not _gate:
 		return
-	var gate_pos: Vector2 = gate.global_position
+	if _combat_locked:
+		_gate.collision_layer = 3
+		var combat_visual := _gate.get_node_or_null("Visual") as Node2D
+		if combat_visual:
+			combat_visual.modulate = Color(1, 0.15, 0.15)
+		return
+	var gate_pos: Vector2 = _gate.global_position
 	var is_near: bool = false
-	for t in get_tree().get_nodes_in_group("gate_trigger"):
+	for t in _gate_triggers:
 		if gate_pos.distance_to(t.global_position) < 80.0:
 			is_near = true
 			break
-	gate.collision_layer = 2 if is_near else 3
-	var v: Node2D = gate.get_node("Visual")
+	_gate.collision_layer = 2 if is_near else 3
+	var v: Node2D = _gate.get_node("Visual")
 	if v:
-		v.modulate = Color(1, 1, 1, 0.3) if is_near else Color(1, 0.15, 0.15)
+		v.modulate = Color(0.15, 1, 0.15, 0.3) if is_near else Color(1, 0.15, 0.15)
 	if is_near and not _cutscene_active:
 		rotation_speed = min(rotation_speed, 0.05)
 	elif not _cutscene_active:

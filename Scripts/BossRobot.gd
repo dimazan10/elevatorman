@@ -21,6 +21,7 @@ var _enemies: Array[Node2D] = []
 var _is_low_hp := false
 var _player_at_computer := false
 var _boss_active := false
+var _boss_entrance_locked := false
 var _floor_label: Label
 var _quest_label: Label
 
@@ -258,10 +259,27 @@ func is_boss_active() -> bool:
 	return _boss_active
 
 func activate_boss() -> void:
+	lock_boss_entrance()
 	_boss_active = true
 	var robot := get_node_or_null("Robot")
 	if robot and robot.has_method("set_can_attack"):
 		robot.set_can_attack(true)
+
+func lock_boss_entrance() -> void:
+	if _boss_entrance_locked:
+		return
+	_boss_entrance_locked = true
+	for door_path in ["Floor_Rectangle/DoorWall0", "Floor_Rectangle/DoorWall1"]:
+		var door := get_node_or_null(door_path) as StaticBody2D
+		if door:
+			door.collision_layer = 3
+	for trigger_path in ["Floor_Rectangle/DoorTrigger", "Floor_Rectangle/DoorTrigger2"]:
+		var trigger := get_node_or_null(trigger_path) as Area2D
+		if trigger:
+			trigger.monitoring = false
+			var visual := trigger.get_node_or_null("Visual") as Polygon2D
+			if visual:
+				visual.color = Color(1, 0.15, 0.15, 1)
 
 func _on_robot_hp_changed(current_hp: int, max_hp: int) -> void:
 	if not _spawn_active:

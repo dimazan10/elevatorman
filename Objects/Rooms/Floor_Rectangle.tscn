@@ -94,6 +94,7 @@ scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_vhfxq")
 
 [node name="Visual" type="Polygon2D" parent="DoorTrigger" unique_id=1341674622]
+visible = false
 color = Color(0, 1, 0, 0.3)
 polygon = PackedVector2Array(-120, -80, 120, -80, 120, 80, -120, 80)
 
@@ -108,5 +109,6 @@ scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_vhfxq")
 
 [node name="Visual" type="Polygon2D" parent="DoorTrigger2" unique_id=277678022]
+visible = false
 color = Color(0, 1, 0, 0.3)
 polygon = PackedVector2Array(-120, -80, 120, -80, 120, 80, -120, 80)

@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://hip1hh2hvj6o" path="res://Assets/Enemies/Turret/TurettaA.png" id="2_wqwmc"]
 [ext_resource type="Texture2D" uid="uid://on86kypqogg7" path="res://Assets/Enemies/Turret/imageB.png" id="3_2ok68"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_wqwmc"]
-radius = 37.01351
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wqwmc"]
+size = Vector2(85, 85)
 
 [node name="Turret" type="StaticBody2D" unique_id=1544638915]
 scale = Vector2(1.3, 1.3)
@@ -42,6 +42,6 @@ texture = ExtResource("3_2ok68")
 [node name="Timer" type="Timer" parent="." unique_id=1777100531]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1695616179]
-visible = false
+scale = Vector2(0.6, 0.6)
+shape = SubResource("RectangleShape2D_wqwmc")
 disabled = true
-shape = SubResource("CircleShape2D_wqwmc")

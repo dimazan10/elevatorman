@@ -15,8 +15,8 @@
 [ext_resource type="Texture2D" uid="uid://dexbhomt5lpxu" path="res://Assets/Enemies/Boss/Sprite_Robot/Red_Warning.png" id="14"]
 [ext_resource type="Texture2D" uid="uid://fendb8w7w51v" path="res://Assets/Enemies/Boss/Sprite_Robot/Blue_Warning.png" id="15"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_hitbox"]
-radius = 200.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hitbox"]
+size = Vector2(400, 400)
 
 [sub_resource type="RectangleShape2D" id="RectShape_body"]
 size = Vector2(500, 500)
@@ -1027,7 +1027,7 @@ script = ExtResource("13_robot")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=488923082]
 position = Vector2(-2, 110)
-shape = SubResource("CircleShape2D_hitbox")
+shape = SubResource("RectangleShape2D_hitbox")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1806095310]
 collision_mask = 4

@@ -7,6 +7,7 @@ const GAMEPAD_ICON_SCALE := 0.1
 var bars: Array[ColorRect] = []
 var bar_tweens: Array[Tween] = []
 var _dash_icon: TextureRect
+var _player: Node
 
 @onready var container: Control = $DashContainer
 
@@ -19,9 +20,9 @@ func _ready() -> void:
 	bar_tweens.resize(MAX_CHARGES)
 	container.modulate = Color(1, 1, 1, 0)
 
-	var player := get_tree().get_first_node_in_group("player")
-	if player:
-		player.dash_used.connect(_on_dash_used)
+	_player = get_tree().get_first_node_in_group("player")
+	if _player:
+		_player.dash_used.connect(_on_dash_used)
 	Input.joy_connection_changed.connect(_on_joy_connection_changed)
 
 func _on_dash_used(index: int) -> void:
@@ -40,13 +41,14 @@ func _on_dash_used(index: int) -> void:
 	bar_tweens[index].tween_property(bar, "modulate", Color(1, 1, 1, 1), 0.12)
 
 func _process(delta: float) -> void:
-	var player := get_tree().get_first_node_in_group("player")
-	if not player:
+	if not is_instance_valid(_player):
+		_player = get_tree().get_first_node_in_group("player")
+	if not _player:
 		return
 
 	var any_cooldown := false
 	for i in range(MAX_CHARGES):
-		if player.dash_cooldowns[i] > 0:
+		if _player.dash_cooldowns[i] > 0:
 			any_cooldown = true
 			break
 

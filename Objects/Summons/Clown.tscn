@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://Scripts/Creatures/Clown.gd" id="1_clown"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_clown"]
-radius = 20.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_clown"]
+size = Vector2(95, 97)
 
 [node name="Clown" type="CharacterBody2D"]
 collision_layer = 4
@@ -11,4 +11,4 @@ collision_mask = 1
 script = ExtResource("1_clown")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_clown")
+shape = SubResource("RectangleShape2D_clown")

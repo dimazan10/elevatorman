@@ -19,10 +19,14 @@ var _zone_name: String = ""
 var _is_waiting: bool = false
 var _player_prev_lives: int = -1
 var _melody_playing: bool = false
+var _separation_timer := 0.0
+var _cached_separation := Vector2.ZERO
+var _arena: Node
 
 var _melody_player: AudioStreamPlayer2D
 var _horn_player: AudioStreamPlayer2D
 var _laugh_player: AudioStreamPlayer2D
+var _animated_sprite: AnimatedSprite2D
 
 enum State { WANDERING, STUNNED }
 var current_state: State = State.WANDERING
@@ -32,6 +36,7 @@ const ENRAGE_TINT := Color(1.8, 0.5, 0.5)
 const MELODY_PATH := "res://Assets/Enemies/Clown/SoundEffect/melody-clown-in-the-circus.mp3"
 const HORN_PATH := "res://Assets/Enemies/Clown/SoundEffect/festive-horn-single-close-sonorous.mp3"
 const LAUGH_PATH := "res://Assets/Enemies/Clown/SoundEffect/komik-hohochet--gromko.mp3"
+const SEPARATION_UPDATE_INTERVAL := 0.1
 
 func _ready() -> void:
 	add_to_group("enemy")
@@ -51,6 +56,7 @@ func _ready() -> void:
 
 	_setup_animated_sprite()
 	_setup_audio()
+	_arena = get_tree().current_scene
 
 func _setup_animated_sprite() -> void:
 	var anim := AnimatedSprite2D.new()
@@ -84,6 +90,7 @@ func _setup_animated_sprite() -> void:
 	frames.set_animation_loop(&"walk", true)
 	anim.sprite_frames = frames
 	anim.play(&"walk")
+	_animated_sprite = anim
 
 func _setup_audio() -> void:
 	_melody_player = AudioStreamPlayer2D.new()
@@ -116,7 +123,6 @@ func _physics_process(delta: float) -> void:
 				current_state = State.WANDERING
 
 	_handle_separation(delta)
-	queue_redraw()
 
 func on_zone_entered() -> void:
 	_is_waiting = false
@@ -132,18 +138,16 @@ func _process_wandering(delta: float) -> void:
 	move_and_slide()
 
 	if velocity.length() > 10:
-		var anim := get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
-		if anim and anim.is_playing():
-			anim.flip_h = velocity.x < 0
+		if _animated_sprite and _animated_sprite.is_playing():
+			_animated_sprite.flip_h = velocity.x < 0
 
 	_update_melody()
 	_check_enrage()
 
 func _update_melody() -> void:
-	var main = get_tree().current_scene
 	var player_zone := ""
-	if main and main.has_method("get_player_zone"):
-		player_zone = main.get_player_zone()
+	if is_instance_valid(_arena) and _arena.has_method("get_player_zone"):
+		player_zone = _arena.get_player_zone()
 
 	var same_zone := player_zone == _zone_name and _zone_name != ""
 	if same_zone and not _melody_playing:
@@ -186,16 +190,21 @@ func _on_player_health_changed(new_health: int) -> void:
 	_player_prev_lives = new_health
 
 func _handle_separation(delta: float) -> void:
-	var sep := Vector2.ZERO
-	for body in get_tree().get_nodes_in_group("enemy"):
-		if body == self or not body is Node2D:
-			continue
-		var other := body as Node2D
-		var diff: Vector2 = global_position - other.global_position
-		if diff.length() > 0.001 and diff.is_finite():
-			sep += diff.normalized() / diff.length()
-	if sep.length() > 0:
-		global_position += sep.normalized() * separation_force * delta
+	_separation_timer -= delta
+	if _separation_timer <= 0.0:
+		_separation_timer = SEPARATION_UPDATE_INTERVAL
+		var sep := Vector2.ZERO
+		for body in get_tree().get_nodes_in_group("enemy"):
+			if body == self or not body is Node2D:
+				continue
+			var other := body as Node2D
+			var diff: Vector2 = global_position - other.global_position
+			var distance_sq := diff.length_squared()
+			if distance_sq > 0.000001 and diff.is_finite():
+				sep += diff / distance_sq
+		_cached_separation = sep.normalized() if sep.length_squared() > 0.0 else Vector2.ZERO
+	if _cached_separation != Vector2.ZERO:
+		global_position += _cached_separation * separation_force * delta
 
 func apply_knockback(impulse: Vector2) -> void:
 	velocity = impulse * 0.5

@@ -158,10 +158,11 @@ func calculate_separation_vector() -> Vector2:
 	for body in overlapping_bodies:
 		# Нас интересуют только другие враги DrunkKiller (но не мы сами и не игрок)
 		if body != self and body.is_in_group("enemy") or body is CharacterBody2D and body != _player_ref and body != self:
-			var diff = global_position - body.global_position
+			var diff: Vector2 = global_position - (body as Node2D).global_position
 			# Чем ближе к нам чужой враг, тем сильнее мы от него толкаемся
-			if diff.length() > 0.001 and diff.is_finite():
-				separation += diff.normalized() / diff.length()
+			var distance_sq: float = diff.length_squared()
+			if distance_sq > 0.000001 and diff.is_finite():
+				separation += diff / distance_sq
 				
 	return separation.normalized() if separation.length_squared() > 0 else Vector2.ZERO
 

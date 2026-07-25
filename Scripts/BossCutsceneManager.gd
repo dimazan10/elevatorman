@@ -17,6 +17,8 @@ func _on_body_entered(body: Node2D) -> void:
 
 	if boss and boss.has_method("is_boss_active") and boss.is_boss_active():
 		return
+	if boss and boss.has_method("lock_boss_entrance"):
+		boss.lock_boss_entrance()
 
 	body.process_mode = Node.PROCESS_MODE_DISABLED
 
