@@ -11,7 +11,7 @@ func _on_body_entered(body: Node2D) -> void:
 	if _triggered or not body.is_in_group("player"):
 		return
 	_triggered = true
-	monitoring = false
+	set_deferred("monitoring", false)
 
 	var boss := get_tree().current_scene
 	var music := boss.get_node_or_null("BossMusic") as AudioStreamPlayer
