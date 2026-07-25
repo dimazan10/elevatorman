@@ -332,7 +332,9 @@ func _disable_temporary_dark_mode() -> void:
 			item.light_mask = item_state["light_mask"]
 			item.visibility_layer = item_state["visibility_layer"]
 	if is_instance_valid(_temporary_dark_canvas):
+		_temporary_dark_canvas.get_parent().remove_child(_temporary_dark_canvas)
 		_temporary_dark_canvas.queue_free()
+	_temporary_dark_canvas = null
 	var light := player_node.get_node_or_null("PlayerLight") as PointLight2D
 	if light and not _temporary_light_state.is_empty():
 		light.light_mask = _temporary_light_state["light_mask"]
@@ -521,6 +523,7 @@ func _update_turret_positions() -> void:
 					break
 
 func _start_combat_timer() -> void:
+	lift_state = LiftState.COMBAT
 	_show_enemies()
 	combat_timer = Timer.new()
 	combat_timer.name = "CombatTimer"
@@ -534,6 +537,7 @@ func _start_combat_timer() -> void:
 	_rotation_speed = 0.0
 	for sa in _secondary_arenas:
 		sa.rotation_speed = 0.0
+	_update_gate()
 
 func _connect_switch() -> void:
 	var switches := get_tree().get_nodes_in_group("switch")
@@ -650,6 +654,7 @@ func _on_combat_timeout() -> void:
 			s.queue_free()
 	_set_shaft_collision(true)
 	lift_state = LiftState.RETURNING
+	_update_gate()
 	$Hole/FloorElevator/RoofElevator2.z_index = 3
 	$Hole/FloorElevator/Door1.visible = true
 	$Hole/FloorElevator/Door2.visible = true

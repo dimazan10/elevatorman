@@ -213,7 +213,7 @@ func _on_melee_zone_body_entered(body: Node2D) -> void:
 			var kb_vec = body.global_position - global_position
 			var knockback_dir = kb_vec.normalized() if kb_vec.length() > 0.001 else Vector2.DOWN
 			var knockback_force = 500.0
-			var stun_duration = 1.0
+			var stun_duration = 0.3
 			body.apply_stun_and_knockback(knockback_dir * knockback_force, stun_duration)
 		
 		if body.has_method("take_damage"):

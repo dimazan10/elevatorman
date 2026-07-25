@@ -86,7 +86,7 @@ shape = SubResource("RectangleShape2D_door")
 [node name="DoorTrigger" type="Area2D" parent="." unique_id=681062249]
 position = Vector2(1090.0001, -1.0000005)
 rotation = 1.5707964
-scale = Vector2(1.8, 0.599)
+scale = Vector2(1.0, 0.599)
 script = ExtResource("1_huqpp")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="DoorTrigger" unique_id=1035025865]
@@ -100,7 +100,7 @@ polygon = PackedVector2Array(-120, -80, 120, -80, 120, 80, -120, 80)
 [node name="DoorTrigger2" type="Area2D" parent="." unique_id=859663453]
 position = Vector2(2042.9999, -0.9999999)
 rotation = 1.5707964
-scale = Vector2(1.8, 0.599)
+scale = Vector2(1.0, 0.599)
 script = ExtResource("1_huqpp")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="DoorTrigger2" unique_id=509183032]
