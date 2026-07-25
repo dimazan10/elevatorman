@@ -197,30 +197,38 @@ func _open_exit() -> void:
 	var hole_end := get_node_or_null("HoleEnd") as Sprite2D
 	if not hole_end:
 		return
+
 	var elevator := hole_end.get_node_or_null("FloorElevator") as Sprite2D
-	if not elevator:
-		return
+	if elevator:
+		elevator.self_modulate = Color(1, 1, 1, 1)
+		var roof2 := elevator.get_node_or_null("RoofElevator2") as Sprite2D
+		if roof2:
+			roof2.z_index = 3
+		var door1 := elevator.get_node_or_null("Door1") as Sprite2D
+		if door1:
+			door1.show()
+		var door2 := elevator.get_node_or_null("Door2") as Sprite2D
+		if door2:
+			door2.show()
 
-	elevator.self_modulate = Color(1, 1, 1, 1)
-	var roof2 := elevator.get_node_or_null("RoofElevator2") as Sprite2D
-	if roof2:
-		roof2.z_index = 3
-	var door1 := elevator.get_node_or_null("Door1") as Sprite2D
-	if door1:
-		door1.show()
-	var door2 := elevator.get_node_or_null("Door2") as Sprite2D
-	if door2:
-		door2.show()
+		var anim := elevator.get_node_or_null("AnimationPlayer") as AnimationPlayer
+		if anim:
+			anim.stop()
+			anim.play("RESET")
+			anim.seek(0, true)
+			anim.stop()
+			anim.play("Open")
 
-	var anim := elevator.get_node_or_null("AnimationPlayer") as AnimationPlayer
-	if anim:
-		anim.stop()
-		anim.play("RESET")
-		anim.seek(0, true)
-		anim.stop()
-		anim.play("Open")
+	for name in ["ElevatorArea", "TransportArea", "Top", "RightUpper", "LeftUpper"]:
+		var child := hole_end.get_node_or_null(name)
+		if child is StaticBody2D or child is Area2D:
+			child.set_process(true)
+			child.set_physics_process(true)
+			for shape in child.get_children():
+				if shape is CollisionShape2D:
+					shape.set_deferred("disabled", false)
 
-	var transport := elevator.get_node_or_null("TransportArea") as Area2D
+	var transport := hole_end.get_node_or_null("TransportArea") as Area2D
 	if transport:
 		transport.monitoring = true
 
