@@ -200,15 +200,29 @@ func _open_exit() -> void:
 	var elevator := hole_end.get_node_or_null("FloorElevator") as Sprite2D
 	if not elevator:
 		return
+
+	elevator.self_modulate = Color(1, 1, 1, 1)
+	var roof2 := elevator.get_node_or_null("RoofElevator2") as Sprite2D
+	if roof2:
+		roof2.z_index = 3
 	var door1 := elevator.get_node_or_null("Door1") as Sprite2D
-	var door2 := elevator.get_node_or_null("Door2") as Sprite2D
 	if door1:
 		door1.show()
+	var door2 := elevator.get_node_or_null("Door2") as Sprite2D
 	if door2:
 		door2.show()
+
 	var anim := elevator.get_node_or_null("AnimationPlayer") as AnimationPlayer
 	if anim:
+		anim.stop()
+		anim.play("RESET")
+		anim.seek(0, true)
+		anim.stop()
 		anim.play("Open")
+
+	var transport := elevator.get_node_or_null("TransportArea") as Area2D
+	if transport:
+		transport.monitoring = true
 
 
 func _spawn_enemies() -> void:
