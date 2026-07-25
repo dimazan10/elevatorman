@@ -56,6 +56,8 @@ func _ready() -> void:
 		computer.aiming_changed.connect(_on_computer_aiming_changed)
 
 	_player_node = get_tree().get_first_node_in_group("player") as Node2D
+	if GameState.dark_mode:
+		_setup_dark_mode()
 
 	_reparent_collision_nodes()
 
@@ -67,6 +69,30 @@ func _ready() -> void:
 	_setup_quest_ui()
 
 	_arrival_sequence()
+
+func _setup_dark_mode() -> void:
+	var canvas_modulate := CanvasModulate.new()
+	canvas_modulate.color = Color(0, 0, 0, 1)
+	add_child(canvas_modulate)
+	move_child(canvas_modulate, 0)
+	var light := _player_node.get_node_or_null("PlayerLight") as PointLight2D
+	if light:
+		light.light_mask = 7
+		light.texture_scale = 2.5
+		light.energy = 1.5
+		light.range_z_min = -100
+		light.range_z_max = 100
+		light.shadow_enabled = true
+	_player_node.light_mask = 7
+	_player_node.visibility_layer = 7
+	_set_all_dark_layers(self)
+
+func _set_all_dark_layers(node: Node) -> void:
+	for child in node.get_children():
+		if child is CanvasItem:
+			child.light_mask = 7
+			child.visibility_layer = 7
+		_set_all_dark_layers(child)
 
 func _process(delta: float) -> void:
 	if not _boss_active or not _spawn_active or _player_at_computer:
